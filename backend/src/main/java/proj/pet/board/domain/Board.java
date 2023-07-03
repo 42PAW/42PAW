@@ -1,20 +1,21 @@
 package proj.pet.board.domain;
 
-import static jakarta.persistence.GenerationType.AUTO;
-import static lombok.AccessLevel.PROTECTED;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import proj.pet.category.domain.BoardCategoryFilter;
 import proj.pet.member.domain.Member;
+import proj.pet.report.domain.Report;
+import proj.pet.social.domain.Comment;
+import proj.pet.social.domain.Reaction;
+import proj.pet.social.domain.Scrap;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.AUTO;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Table(name = "BOARD")
@@ -26,8 +27,8 @@ public class Board {
 	@GeneratedValue(strategy = AUTO)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false)
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "member_id", nullable = false, updatable = false, insertable = false)
 	private Member member;
 
 	@Column(name = "visible_scope", nullable = false)
@@ -44,4 +45,22 @@ public class Board {
 
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt;
+
+	@OneToMany(mappedBy = "board", fetch = LAZY)
+	private List<BoardImage> images;
+
+	@OneToMany(mappedBy = "board", fetch = LAZY)
+	private List<BoardCategoryFilter> categoryFilters;
+
+	@OneToMany(mappedBy = "board", fetch = LAZY)
+	private List<Scrap> scrapedList;
+
+	@OneToMany(mappedBy = "board", fetch = LAZY)
+	private List<Comment> comments;
+
+	@OneToMany(mappedBy = "board", fetch = LAZY)
+	private List<Reaction> reactions;
+
+	@OneToMany(mappedBy = "board", fetch = LAZY)
+	private List<Report> reportedList;
 }

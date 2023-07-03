@@ -19,7 +19,7 @@ public class Block {
 	private MemberCompositeKey id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false)
+	@JoinColumn(name = "member_id", nullable = false, insertable = false, updatable = false)
 	private Member from;
 
 	@ManyToOne(fetch = FetchType.LAZY)

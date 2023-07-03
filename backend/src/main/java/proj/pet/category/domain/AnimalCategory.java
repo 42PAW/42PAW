@@ -1,15 +1,14 @@
 package proj.pet.category.domain;
 
-import static jakarta.persistence.GenerationType.AUTO;
-import static lombok.AccessLevel.PROTECTED;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.AUTO;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Table(name = "animal_category")
@@ -23,5 +22,11 @@ public class AnimalCategory {
 
 	@Column(name = "species", nullable = false, length = 30)
 	private String species;
+
+	@OneToMany(mappedBy = "animalCategory", fetch = LAZY)
+	private List<MemberCategoryFilter> memberCategoryFilterList;
+
+	@OneToMany(mappedBy = "animalCategory", fetch = LAZY)
+	private List<BoardCategoryFilter> boardCategoryFilterList;
 
 }

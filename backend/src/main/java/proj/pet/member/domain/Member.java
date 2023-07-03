@@ -3,11 +3,16 @@ package proj.pet.member.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import proj.pet.category.domain.MemberCategoryFilter;
+import proj.pet.report.domain.Report;
+import proj.pet.social.domain.Comment;
+import proj.pet.social.domain.Reaction;
+import proj.pet.social.domain.Scrap;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static jakarta.persistence.FetchType.EAGER;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.AUTO;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -45,6 +50,30 @@ public class Member {
 	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
 
-	@OneToMany(mappedBy = "from", fetch = EAGER)
+	@OneToMany(mappedBy = "from", fetch = LAZY)
 	private List<Block> blocks;
+
+	@OneToMany(mappedBy = "from", fetch = LAZY)
+	private List<Follow> followings;
+
+	@OneToMany(mappedBy = "to", fetch = LAZY)
+	private List<Follow> followers;
+
+	@OneToMany(mappedBy = "member", fetch = LAZY)
+	private List<MemberCategoryFilter> memberCategoryFilters;
+
+	@OneToMany(mappedBy = "member", fetch = LAZY)
+	private List<Scrap> scraps;
+
+	@OneToMany(mappedBy = "member", fetch = LAZY)
+	private List<Comment> comments;
+
+	@OneToMany(mappedBy = "member", fetch = LAZY)
+	private List<Reaction> reactions;
+
+	@OneToMany(mappedBy = "from", fetch = LAZY)
+	private List<Report> reportList;
+
+	@OneToMany(mappedBy = "to", fetch = LAZY)
+	private List<Report> reportedList;
 }

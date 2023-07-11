@@ -1,19 +1,24 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense } from "react";
-import HomePage from "./pages/HomePage";
+import Layout from "./pages/Layout";
 import MainPage from "./pages/Mainpage";
-import MainPage2 from "./pages/Mainpage2";
-import MainPage3 from "./pages/Mainpage3";
+import ProfilePage from "./pages/ProfilePage";
+import NoticePage from "./pages/NoticePage";
+import UploadPage from "./pages/UploadPage";
+import SignInPage from "./pages/SignInPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Suspense>
         <Routes>
-          <Route path="/home" element={<HomePage />}></Route>
-          <Route path="/main" element={<MainPage />}></Route>
-          <Route path="/main2" element={<MainPage2 />}></Route>
-          <Route path="/main3" element={<MainPage3 />}></Route>
+          <Route path="/" element={<Layout />}>
+            <Route path="main" element={<MainPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="notice" element={<NoticePage />} />
+            <Route path="upload" element={<UploadPage />} />
+            <Route path="signin" element={<SignInPage />} />
+          </Route>
         </Routes>
       </Suspense>
     </BrowserRouter>

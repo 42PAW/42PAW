@@ -1,6 +1,7 @@
+import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
-const MainPage2 = () => {
+const Layout = () => {
   return (
     <WrapperStyled>
       <BannerStyled>
@@ -16,30 +17,19 @@ const MainPage2 = () => {
           <SubBannerLeftSectionStyled>
             <div>PETS SAVE THE WORLD!</div>
           </SubBannerLeftSectionStyled>
-          <SubBannerCenterSectionStyled>
-            <li>HOME</li>
-            <li>NOTICE</li>
-            <li>MY PROFILE</li>
-          </SubBannerCenterSectionStyled>
+          <nav>
+            <SubBannerCenterSectionStyled>
+              <li>HOME</li>
+              <li>NOTICE</li>
+              <li>MY PROFILE</li>
+            </SubBannerCenterSectionStyled>
+          </nav>
           <SubBannerRightSectionStyled>
             <button>SEARCH</button>
             <img src="/src/assets/burger.png" />
           </SubBannerRightSectionStyled>
         </SubBannerStyled>
-        <MainAreaStyled>
-          <MainStyled>
-            <BoardCardStyled>
-              <img src="/src/assets/oduck.png" />
-            </BoardCardStyled>
-            <ReactionBoxStyled>
-              <img src="/src/assets/like.png" />
-              <div>120</div>
-              <img src="/src/assets/comment.png" />
-              <div>8</div>
-              <img src="/src/assets/scrap.png" />
-            </ReactionBoxStyled>
-          </MainStyled>
-        </MainAreaStyled>
+        <Outlet />
       </BodyStyled>
     </WrapperStyled>
   );
@@ -88,7 +78,7 @@ const BodyStyled = styled.div`
   flex-direction: column;
   height: 92vh;
   width: 90vw;
-  background-color: aliceblue;
+  background-color: #ffffff;
   border: 1px solid #929292;
 `;
 
@@ -112,6 +102,7 @@ const SubBannerLeftSectionStyled = styled.div`
 const SubBannerCenterSectionStyled = styled.ul`
   display: flex;
   width: 300px;
+  padding: 0;
   justify-content: space-between;
   list-style-type: none;
   font-weight: 500;
@@ -126,6 +117,7 @@ const SubBannerRightSectionStyled = styled.div`
     height: 40px;
     border-radius: 100px;
     background-color: #ffffff;
+    font-family: "Nunito Sans";
   }
   img {
     margin-left: 20px;
@@ -133,48 +125,4 @@ const SubBannerRightSectionStyled = styled.div`
   }
 `;
 
-const MainAreaStyled = styled.main`
-  display: flex;
-  width: 90vw;
-  height: 100vh;
-`;
-
-const MainStyled = styled.div`
-  display: flex;
-  align-items: center;
-  width: 55vw;
-  border-right: 1px solid #929292;
-`;
-
-const BoardCardStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 700px;
-  height: 900px;
-  border: 2px solid #929292;
-  border-radius: 10px;
-  margin-left: 180px;
-  img {
-    margin-top: 80px;
-    width: 650px;
-  }
-`;
-
-const ReactionBoxStyled = styled.div`
-  margin-right: 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 200px;
-  margin-top: 650px;
-  img {
-    width: 50px;
-    margin-top: 10px;
-  }
-  div:nth-child(2) {
-    margin-top: 5px;
-  }
-`;
-
-export default MainPage2;
+export default Layout;

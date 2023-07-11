@@ -21,8 +21,6 @@ const Mainpage = () => {
 
 const MainAreaStyled = styled.main`
   display: flex;
-  width: 90vw;
-  height: 100vh;
 `;
 
 const MainStyled = styled.div`

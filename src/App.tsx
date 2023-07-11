@@ -7,10 +7,12 @@ import NoticePage from "./pages/NoticePage";
 import UploadPage from "./pages/UploadPage";
 import SignInPage from "./pages/SignInPage";
 
+import LoadingAnimation from "./components/loading/LoadingAnimation";
+
 function App() {
   return (
     <BrowserRouter>
-      <Suspense>
+      <Suspense fallback={<LoadingAnimation />}>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="main" element={<MainPage />} />

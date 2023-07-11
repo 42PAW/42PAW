@@ -1,128 +1,128 @@
-import { Outlet } from "react-router-dom";
 import styled from "styled-components";
-
+import { isRightSectionOpenedState } from "../recoil/atom";
+import { useRecoilState } from "recoil";
 const Layout = () => {
+  const [isRightSectionOpened, setIsRightSectionOpened] =
+    useRecoilState<boolean>(isRightSectionOpenedState);
+
+  const handleSearchSection = () => {
+    setIsRightSectionOpened(true);
+  };
+
   return (
     <WrapperStyled>
-      <BannerStyled>
-        <BannerLeftSectionStyled>
-          <img src="/src/assets/logo2.png" />
-        </BannerLeftSectionStyled>
-        <BannerRightSectionStyled>
-          <img src="/src/assets/profile.jpg" />
-        </BannerRightSectionStyled>
-      </BannerStyled>
-      <BodyStyled>
-        <SubBannerStyled>
-          <SubBannerLeftSectionStyled>
-            <div>PETS SAVE THE WORLD!</div>
-          </SubBannerLeftSectionStyled>
-          <nav>
-            <SubBannerCenterSectionStyled>
-              <li>HOME</li>
-              <li>NOTICE</li>
-              <li>MY PROFILE</li>
-            </SubBannerCenterSectionStyled>
-          </nav>
-          <SubBannerRightSectionStyled>
-            <button>SEARCH</button>
-            <img src="/src/assets/burger.png" />
-          </SubBannerRightSectionStyled>
-        </SubBannerStyled>
-        <Outlet />
-      </BodyStyled>
+      <LeftMenuStyled>
+        <img src="/src/assets/dogLogo.png" />
+        <nav>
+          <MenuListStyled>
+            <li>
+              <img src="/src/assets/home.png" />
+            </li>
+            <li>
+              <img src="/src/assets/notice.png" />
+            </li>
+            <li>
+              <img src="/src/assets/profile.png" />
+            </li>
+            <li onClick={handleSearchSection}>
+              <img src="/src/assets/search.png" />
+            </li>
+          </MenuListStyled>
+        </nav>
+        <ProfileImageStyled src="/src/assets/profileImage.jpg" />
+        <div>로그아웃</div>
+      </LeftMenuStyled>
+      <MainAreaStyled
+        isRightSectionOpened={isRightSectionOpened}
+      ></MainAreaStyled>
+      <RightSectionStyled
+        isRightSectionOpened={isRightSectionOpened}
+      ></RightSectionStyled>
     </WrapperStyled>
   );
 };
 
 const WrapperStyled = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background-image: linear-gradient(to bottom left, #bdbdbd, #f4e0c8);
+  background-image: linear-gradient(
+    to bottom left,
+    #878abe 40%,
+    #d1c1cd,
+    #e6dade
+  );
   font-family: "Nunito Sans";
 `;
 
-const BannerStyled = styled.div`
+const LeftMenuStyled = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  height: 8vh;
-  width: 100vw;
-`;
-
-const BannerLeftSectionStyled = styled.div`
-  display: flex;
-  align-items: center;
-  img {
-    margin-left: -80px;
-    margin-top: -40px;
-    width: 300px;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 130px;
+  border-right: 1px solid #fdfdfd39;
+  div {
+    background-color: #dbdcfe;
+    border-radius: 30px;
+    color: #ffffff;
+    padding: 7px 10px;
+    font-size: 15px;
+    margin-top: 100px;
+  }
+  & > img {
+    margin-top: 30px;
+    margin-bottom: 100px;
+    width: 50px;
   }
 `;
 
-const BannerRightSectionStyled = styled.div`
+const MenuListStyled = styled.ul`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-right: 100px;
+  list-style-type: none;
+  padding: 0;
   img {
-    width: 70px;
+    padding: 10px 10px;
+    margin-top: 30px;
+    width: 25px;
+  }
+  img:hover {
+    background-color: #fdfdfd39;
     border-radius: 100%;
   }
 `;
 
-const BodyStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 92vh;
-  width: 90vw;
+const ProfileImageStyled = styled.img`
+  width: 40px;
+  border-radius: 100%;
+  margin: 0;
+`;
+
+const MainAreaStyled = styled.main<{ isRightSectionOpened: boolean }>`
+  width: 800px;
+  height: 800px;
   background-color: #ffffff;
-  border: 1px solid #929292;
+  margin-left: ${(props) => (props.isRightSectionOpened ? "100px" : "270px")};
+  transition: margin-left 0.8s ease-in-out;
+  border-radius: 30px;
 `;
 
-const SubBannerStyled = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 10vh;
-  width: 90vw;
-`;
-
-const SubBannerLeftSectionStyled = styled.div`
-  display: flex;
-  align-items: center;
-  div {
-    margin-left: 50px;
-    font-weight: bold;
-  }
-`;
-
-const SubBannerCenterSectionStyled = styled.ul`
-  display: flex;
-  width: 300px;
-  padding: 0;
-  justify-content: space-between;
-  list-style-type: none;
-  font-weight: 500;
-`;
-
-const SubBannerRightSectionStyled = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 50px;
-  button {
-    width: 200px;
-    height: 40px;
-    border-radius: 100px;
-    background-color: #ffffff;
-    font-family: "Nunito Sans";
-  }
-  img {
-    margin-left: 20px;
-    width: 25px;
-  }
+const RightSectionStyled = styled.div<{
+  isRightSectionOpened: boolean;
+}>`
+  opacity: ${(props) => (props.isRightSectionOpened ? 1 : 0)};
+  width: 350px;
+  height: 800px;
+  background-color: #fdfdfd39;
+  margin-left: 50px;
+  border-radius: 30px;
+  transition: opacity 1s ease-in-out;
+  border: 2px dashed #ffffff;
 `;
 
 export default Layout;

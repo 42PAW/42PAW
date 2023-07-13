@@ -6,7 +6,15 @@
 
 html,
 body {
-  width: 100vw;
-  height: 100vh;
   margin: 0;
+  height: 100vh;
+  width: 100vw;
+  color: #4a494ed5;
+  font-family: "Nunito Sans";
+  background-image: linear-gradient(
+    to bottom left,
+    #878abe 40%,
+    #d1c1cd,
+    #e6dade
+  );
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import TypingEffect from "../components/TypingEffect";
 
 const SignInPage = () => {
   const [visibleSection, setvisibleSection] = useState(0);
@@ -63,7 +64,6 @@ const WrapperStyled = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background-image: linear-gradient(to bottom left, #bdbdbd, #f4e0c8);
   font-family: "Nunito Sans";
 `;
 

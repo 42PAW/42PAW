@@ -6,7 +6,7 @@ import ProfilePage from "./pages/ProfilePage";
 import NoticePage from "./pages/NoticePage";
 import UploadPage from "./pages/UploadPage";
 import SignInPage from "./pages/SignInPage";
-
+import ProfileCard from "./components/ProfileCard";
 import LoadingAnimation from "./components/loading/LoadingAnimation";
 
 function App() {
@@ -17,6 +17,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route path="main" element={<MainPage />} />
             <Route path="profile" element={<ProfilePage />} />
+            <Route path="profilecard" element={<ProfileCard />} />
             <Route path="notice" element={<NoticePage />} />
             <Route path="upload" element={<UploadPage />} />
             <Route path="signin" element={<SignInPage />} />

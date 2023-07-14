@@ -33,8 +33,38 @@ const ProfileTemplate = () => {
           </ProfileHeaderRightSectionStyled>
         </ProfileHeaderStyled>
         <ProfileBodyStyled>
-          <img src="/src/assets/profileImage.jpg" />
-          <img src="/src/assets/profileImage.jpg" />
+          <PhotoCategoryToggleStyled>
+            <button>
+              <img src="/src/assets/feedW.png" />
+            </button>
+            <button>
+              <img src="/src/assets/scrapW.png" />
+            </button>
+          </PhotoCategoryToggleStyled>
+          <PhotoZoneWrapperStyled>
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+            <img src="/src/assets/oduck.png" />
+          </PhotoZoneWrapperStyled>
         </ProfileBodyStyled>
       </ProfileWrapperStyled>
     </>
@@ -53,7 +83,7 @@ const ProfileWrapperStyled = styled.div`
 const ProfileHeaderStyled = styled.div`
   display: flex;
   align-items: center;
-  background-color: #e6dade;
+  background-color: transparent;
   border-top-left-radius: 50px;
   border-top-right-radius: 50px;
   justify-content: space-between;
@@ -78,9 +108,9 @@ const ProfileHeaderLeftSectionStyled = styled.div`
     margin-top: 10%;
   }
   div:nth-child(3) {
-    color: #929292;
-    font-size: 90%;
-    margin-top: 4%;
+    color: #4a494ed5;
+    font-size: 80%;
+    margin-top: 2%;
   }
   img {
     margin-top: 2%;
@@ -120,30 +150,47 @@ const CaptionSectionStyled = styled.div`
 
 const ProfileBodyStyled = styled.div`
   height: 80%;
-  background-color: #fdfdfd39;
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
-  overflow-y: scroll;
+  img {
+    width: 50%;
+  }
+`;
+
+const PhotoCategoryToggleStyled = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  height: 7%;
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: #4a494ed5;
+    border: none;
+    border-top: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    font-size: 100%;
+    width: 50%;
+  }
+  button:nth-child(1) {
+    border-right: 1px solid #ffffff;
+  }
+  button:hover {
+    background-color: #fdfdfd39;
+  }
+  img {
+    width: 7%;
+  }
 `;
 
 const PhotoZoneWrapperStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 75%;
-  width: 100%;
-  /* background-color: red; */
-`;
-
-const PhotoZoneStyled = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 95%;
-  width: 100%;
+  height: 93%;
+  border-bottom-left-radius: 50px;
+  border-bottom-right-radius: 50px;
+  overflow-y: scroll;
   img {
-    width: 90%;
-    border-radius: 30px;
+    width: 50%;
   }
 `;
 

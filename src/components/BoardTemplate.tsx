@@ -19,7 +19,24 @@ const BoardTemplate = () => {
             <PhotoZoneStyled>
               <img src="/src/assets/oduck.png" />
             </PhotoZoneStyled>
+            <ButtonZoneStyled>
+              <LikeCommentContainerStyled>
+                <img src="/src/assets/like.png" />
+                <img src="/src/assets/comment.png" />
+              </LikeCommentContainerStyled>
+              <PhotoIndexDotsStyled>
+                <img src="/src/assets/filledDot.png" />
+              </PhotoIndexDotsStyled>
+              <ScrapButtonStyled>
+                <img src="/src/assets/scrap.png" />
+              </ScrapButtonStyled>
+            </ButtonZoneStyled>
           </PhotoZoneWrapperStyled>
+          <BoardContentContainerStyled>
+            <DivOne>좋아요 24개, 댓글 5개</DivOne>
+            <DivTwo>캡션</DivTwo>
+            <DivThree>댓글</DivThree>
+          </BoardContentContainerStyled>
         </BoardBodyStyled>
       </BoardWrapperStyled>
     </>
@@ -85,9 +102,8 @@ const PhotoZoneWrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 75%;
+  height: 70%;
   width: 100%;
-  /* background-color: red; */
 `;
 
 const PhotoZoneStyled = styled.div`
@@ -96,10 +112,84 @@ const PhotoZoneStyled = styled.div`
   justify-content: center;
   height: 95%;
   width: 100%;
+  padding-top: 2%;
   img {
     width: 90%;
     border-radius: 30px;
   }
+`;
+
+const ButtonZoneStyled = styled.div`
+  /* background-color: red; */
+  height: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const LikeCommentContainerStyled = styled.div`
+  display: flex;
+  align-items: center;
+  width: 33.3%;
+  img:nth-child(1) {
+    margin-left: 20%;
+  }
+  img {
+    margin-left: 5%;
+    width: 10%;
+  }
+`;
+
+const PhotoIndexDotsStyled = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 33.3%;
+  img {
+    width: 3%;
+  }
+`;
+
+const ScrapButtonStyled = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 33.3%;
+  img {
+    width: 10%;
+    margin-right: 20%;
+  }
+`;
+
+const BoardContentContainerStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 20%;
+  width: 100%;
+`;
+
+const DivOne = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 20%;
+  /* background-color: green; */
+  padding-left: 7%;
+`;
+
+const DivTwo = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 40%;
+  padding-left: 7%;
+  /* background-color: yellow; */
+`;
+
+const DivThree = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 40%;
+  padding-left: 7%;
+  /* background-color: blue; */
 `;
 
 export default BoardTemplate;

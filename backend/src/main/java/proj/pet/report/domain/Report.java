@@ -41,7 +41,7 @@ public class Report {
 	@Column(name = "reason", nullable = false)
 	private ReportReason reason;
 
-	@Column(name = "content", nullable = false, length = 255)
+	@Column(name = "content", length = 255)
 	private String content;
 
 	@Column(name = "created_at", nullable = false)

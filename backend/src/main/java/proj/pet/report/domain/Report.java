@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.board.domain.Board;
 import proj.pet.member.domain.Member;
+import proj.pet.social.domain.Comment;
 
 import java.time.LocalDateTime;
 
@@ -33,6 +34,10 @@ public class Report {
 	@JoinColumn(name = "board_id", nullable = false, updatable = false, insertable = false)
 	private Board board;
 
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "comment_id", nullable = false, updatable = false, insertable = false)
+	private Comment comment;
+
 	@Column(name = "reason", nullable = false)
 	private ReportReason reason;
 
@@ -41,5 +46,4 @@ public class Report {
 
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt;
-
 }

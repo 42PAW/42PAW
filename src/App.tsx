@@ -20,8 +20,8 @@ function App() {
             <Route path="profilecard" element={<ProfileCard />} />
             <Route path="notice" element={<NoticePage />} />
             <Route path="upload" element={<UploadPage />} />
-            <Route path="signin" element={<SignInPage />} />
           </Route>
+          <Route path="signin" element={<SignInPage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

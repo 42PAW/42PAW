@@ -47,9 +47,10 @@ const BoardWrapperStyled = styled.div`
   border-radius: 50px;
   margin-top: 3%;
   margin-bottom: 3%;
-  height: 90vh;
+  height: 800px;
   width: 90%;
   box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.25);
+  min-height: 800px;
 `;
 
 const BoardHeaderStyled = styled.div`

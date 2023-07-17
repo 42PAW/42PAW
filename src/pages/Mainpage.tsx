@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import BoardTemplate from "../components/BoardTemplate";
+
 const Mainpage = () => {
   return (
     <WrapperStyled>
@@ -23,9 +24,11 @@ const Mainpage = () => {
 };
 
 const WrapperStyled = styled.div`
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
 `;
 
 const SortButtonContainerStyled = styled.div`
@@ -33,8 +36,10 @@ const SortButtonContainerStyled = styled.div`
   position: absolute;
   background-color: #fdfdfd39;
   border-radius: 30px;
-  width: 10%;
+  width: 12%;
   height: 3%;
+  min-width: 195px;
+  min-height: 25px;
   button:nth-child(1) {
     background-color: #d1c1cd;
   }
@@ -45,6 +50,7 @@ const SortButtonContainerStyled = styled.div`
     border: none;
     height: 100%;
     width: 33.3%;
+    font-size: 30%;
   }
 `;
 

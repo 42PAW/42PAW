@@ -30,7 +30,8 @@ const RightSectionStyled = styled.div<{
   flex-direction: column;
   align-items: center;
   width: 30%;
-  height: 90%;
+  height: 80%;
+  min-width: 533px;
   background-color: #fdfdfd39;
   margin-left: 50px;
   border-radius: 30px;

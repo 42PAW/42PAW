@@ -4,7 +4,6 @@ import { isRightSectionOpenedState } from "../recoil/atom";
 import { useRecoilState } from "recoil";
 import LeftMenuSection from "../components/LeftMenuSection";
 import RightSection from "../components/RightSection";
-
 const Layout = () => {
   const [isRightSectionOpened] = useRecoilState<boolean>(
     isRightSectionOpenedState
@@ -22,6 +21,7 @@ const Layout = () => {
 };
 
 const WrapperStyled = styled.div`
+  min-height: 800px;
   display: flex;
   align-items: center;
   height: 100vh;
@@ -30,12 +30,13 @@ const WrapperStyled = styled.div`
 
 const MainAreaStyled = styled.main<{ isRightSectionOpened: boolean }>`
   width: 35%;
-  height: 99.9%;
+  height: 100%;
   background-color: transparent;
   margin-left: ${(props) => (props.isRightSectionOpened ? "15%" : "25%")};
   transition: margin-left 0.8s ease-in-out;
-  overflow-y: scroll;
-  min-width: 529px;
+  min-width: 570px;
+  /* min-height: 1028px; */
+  /* background-color: blue; */
 `;
 
 export default Layout;

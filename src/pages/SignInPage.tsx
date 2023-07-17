@@ -65,6 +65,7 @@ const WrapperStyled = styled.div`
   height: 100vh;
   width: 100vw;
   font-family: "Nunito Sans";
+  color: #ffffff;
 `;
 
 const ProfileCardStyled = styled.div`
@@ -98,6 +99,8 @@ const NicknameSectionStyled = styled.div`
     padding-left: 20px;
     outline: none;
     margin-bottom: 200px;
+    background-color: #fdfdfd39;
+    color: #ffffff;
   }
   & > :nth-child(3) {
   }

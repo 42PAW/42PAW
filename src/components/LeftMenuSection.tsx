@@ -41,6 +41,9 @@ const LeftMenuSection = () => {
             <li>
               <img src="/src/assets/upload.png" />
             </li>
+            <li>
+              <img src="/src/assets/categoryW.png" />
+            </li>
           </MenuListStyled>
           <ProfileImageStyled src="/src/assets/profileImage.jpg" />
         </nav>
@@ -51,14 +54,12 @@ const LeftMenuSection = () => {
 };
 
 const LeftMenuStyled = styled.div`
-  min-width: 91px;
+  min-width: 95px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin: 0;
-  padding: 0;
-  height: 100vh;
+  height: 100%;
   width: 6%;
   border-right: 1px solid #fdfdfd39;
   div {
@@ -67,7 +68,6 @@ const LeftMenuStyled = styled.div`
     color: #ffffff;
     padding: 7px 10px;
     font-size: 15px;
-    margin-top: 100px;
   }
   nav {
     display: flex;
@@ -77,8 +77,8 @@ const LeftMenuStyled = styled.div`
 `;
 
 const LogoImageStyled = styled.img`
-  margin-top: 50px;
   width: 50px;
+  margin-top: 30%;
 `;
 
 const MenuListStyled = styled.ul`
@@ -89,7 +89,7 @@ const MenuListStyled = styled.ul`
   padding: 0;
   img {
     padding: 10px 10px;
-    margin-top: 30px;
+
     width: 25px;
   }
   img:hover {
@@ -101,14 +101,14 @@ const MenuListStyled = styled.ul`
 const ProfileImageStyled = styled.img`
   width: 50%;
   border-radius: 100%;
-  margin-top: 20px;
+
   &:hover {
     opacity: 0.8;
   }
 `;
 
 const LoginButtonStyled = styled.div`
-  margin-bottom: 40px;
+  margin-bottom: 30%;
 `;
 
 export default LeftMenuSection;

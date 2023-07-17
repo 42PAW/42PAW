@@ -1,8 +1,11 @@
 package proj.pet.report.domain;
 
 public enum ReportReason {
-	AD,
-	SEXUAL,
-	VIOLENCE,
-	EXTERNAL_IMAGE,
+	WRONG_ANIMAL_CATEGORY,
+	INSULTS,
+	AD_SPAM,
+	INAPPROPRIATE_NICKNAME,
+	SEXUAL_VIOLENCE,
+	IRRELEVANT,
+	ETC
 }

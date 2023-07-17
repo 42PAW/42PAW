@@ -13,7 +13,7 @@ const LeftMenuSection = () => {
     setIsRightSectionOpened(true);
   };
   const moveToMain = () => {
-    navigate("/main");
+    navigate("/");
   };
   const moveToMyProfile = () => {
     navigate("/profile");
@@ -54,20 +54,20 @@ const LeftMenuSection = () => {
 };
 
 const LeftMenuStyled = styled.div`
-  min-width: 95px;
+  /* background-color: black; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 100%;
-  width: 6%;
-  border-right: 1px solid #fdfdfd39;
+  height: 100vh;
+  min-height: 860px;
+  min-width: 80px;
+  border-right: 1px solid var(--transparent);
   div {
-    background-color: #dbdcfe;
-    border-radius: 30px;
-    color: #ffffff;
     padding: 7px 10px;
-    font-size: 15px;
+    color: var(--white);
+    border: 1px solid var(--white);
+    border-radius: 30px;
   }
   nav {
     display: flex;
@@ -77,7 +77,7 @@ const LeftMenuStyled = styled.div`
 `;
 
 const LogoImageStyled = styled.img`
-  width: 50px;
+  width: 40px;
   margin-top: 30%;
 `;
 
@@ -85,6 +85,9 @@ const MenuListStyled = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 330px;
+  margin-top: -20px;
+  justify-content: space-between;
   list-style-type: none;
   padding: 0;
   img {
@@ -93,22 +96,22 @@ const MenuListStyled = styled.ul`
     width: 25px;
   }
   img:hover {
-    background-color: #fdfdfd39;
+    background-color: var(--transparent);
     border-radius: 100%;
   }
 `;
 
 const ProfileImageStyled = styled.img`
-  width: 50%;
+  margin-top: 10px;
+  width: 50px;
   border-radius: 100%;
-
   &:hover {
     opacity: 0.8;
   }
 `;
 
 const LoginButtonStyled = styled.div`
-  margin-bottom: 30%;
+  margin-bottom: 20%;
 `;
 
 export default LeftMenuSection;

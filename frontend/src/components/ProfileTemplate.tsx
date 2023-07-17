@@ -77,7 +77,7 @@ const ProfileWrapperStyled = styled.div`
   margin-bottom: 3%;
   height: 90vh;
   width: 90%;
-  box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--default-shadow);
 `;
 
 const ProfileHeaderStyled = styled.div`

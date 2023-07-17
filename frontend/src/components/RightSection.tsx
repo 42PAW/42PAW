@@ -29,16 +29,16 @@ const RightSectionStyled = styled.div<{
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 30%;
-  height: 80%;
-  min-width: 533px;
+  width: 550px;
+  height: 100%;
+  min-width: 0px;
   background-color: #fdfdfd39;
-  margin-left: 50px;
   border-radius: 30px;
-  transition: opacity 1s ease-in-out;
   box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.25);
+  margin-left: 20px;
+  margin-right: ${(props) => (props.isRightSectionOpened ? "0px" : "-570px")};
   opacity: ${(props) => (props.isRightSectionOpened ? 1 : 0)};
-  min-width: 165px;
+  transition: opacity 1s ease-in-out, margin-right 1s ease-in-out;
 `;
 
 const CloseButtonContainerStyled = styled.div`
@@ -56,7 +56,7 @@ const CloseButtonStyled = styled.button`
   border: none;
   margin-right: 1%;
   img {
-    width: 50%;
+    width: 20px;
   }
 `;
 

@@ -4,11 +4,11 @@ import BoardTemplate from "../components/BoardTemplate";
 const Mainpage = () => {
   return (
     <WrapperStyled>
-      <SortButtonContainerStyled>
+      {/* <SortButtonContainerStyled>
         <button>기본순</button>
         <button>인기순</button>
         <button>팔로우순</button>
-      </SortButtonContainerStyled>
+      </SortButtonContainerStyled> */}
       <BoardTemplate></BoardTemplate>
       <BoardTemplate></BoardTemplate>
       <BoardTemplate></BoardTemplate>
@@ -28,7 +28,6 @@ const WrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
 `;
 
 const SortButtonContainerStyled = styled.div`

@@ -1,4 +1,4 @@
-package proj.pet.social.domain;
+package proj.pet.reaction.domain;
 
 public enum ReactionType {
 	NONE,

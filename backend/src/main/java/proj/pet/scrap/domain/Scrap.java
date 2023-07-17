@@ -1,4 +1,4 @@
-package proj.pet.social.domain;
+package proj.pet.scrap.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,30 +8,27 @@ import proj.pet.member.domain.Member;
 
 import java.time.LocalDateTime;
 
-import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.AUTO;
 import static lombok.AccessLevel.PROTECTED;
 
-@NoArgsConstructor(access = PROTECTED)
 @Entity
+@Table(name = "scrap")
+@NoArgsConstructor(access = PROTECTED)
 @Getter
-public class Reaction {
+public class Scrap {
 
 	@Id
 	@GeneratedValue(strategy = AUTO)
 	private Long id;
 
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "board_id", nullable = false, updatable = false, insertable = false)
-	private Board board;
-
-	@ManyToOne(fetch = LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", nullable = false, updatable = false, insertable = false)
 	private Member member;
 
-	@Column(name = "reaction_type", nullable = false)
-	private ReactionType reactionType;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "board_id", nullable = false, updatable = false, insertable = false)
+	private Board board;
 
-	@Column(name = "created_at", nullable = false)
+	@Column(name = "created_at", nullable = false, updatable = false, insertable = false)
 	private LocalDateTime createdAt;
 }

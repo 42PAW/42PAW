@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.board.domain.Board;
+import proj.pet.comment.domain.Comment;
 import proj.pet.member.domain.Member;
-import proj.pet.social.domain.Comment;
 
 import java.time.LocalDateTime;
 

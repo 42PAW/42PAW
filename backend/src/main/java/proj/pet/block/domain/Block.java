@@ -1,8 +1,9 @@
-package proj.pet.member.domain;
+package proj.pet.block.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import proj.pet.member.domain.Member;
 import proj.pet.utils.domain.MemberCompositeKey;
 
 import java.time.LocalDateTime;

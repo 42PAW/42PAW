@@ -1,4 +1,4 @@
-package proj.pet.social.domain;
+package proj.pet.comment.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

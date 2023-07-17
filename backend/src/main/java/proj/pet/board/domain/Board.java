@@ -4,11 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.category.domain.BoardCategoryFilter;
+import proj.pet.comment.domain.Comment;
 import proj.pet.member.domain.Member;
+import proj.pet.reaction.domain.Reaction;
 import proj.pet.report.domain.Report;
-import proj.pet.social.domain.Comment;
-import proj.pet.social.domain.Reaction;
-import proj.pet.social.domain.Scrap;
+import proj.pet.scrap.domain.Scrap;
 
 import java.time.LocalDateTime;
 import java.util.List;

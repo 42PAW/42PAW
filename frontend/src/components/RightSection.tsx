@@ -30,12 +30,11 @@ const RightSectionStyled = styled.div<{
   flex-direction: column;
   align-items: center;
   width: 550px;
-  height: 100%;
-  min-width: 0px;
-  background-color: #fdfdfd39;
-  border-radius: 30px;
-  box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.25);
+  height: 90%;
   margin-left: 20px;
+  border-radius: 30px;
+  background-color: var(--transparent);
+  box-shadow: var(--default-shadow);
   margin-right: ${(props) => (props.isRightSectionOpened ? "0px" : "-570px")};
   opacity: ${(props) => (props.isRightSectionOpened ? 1 : 0)};
   transition: opacity 1s ease-in-out, margin-right 1s ease-in-out;

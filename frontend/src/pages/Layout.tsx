@@ -1,14 +1,21 @@
+import { Outlet, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import LeftMenuSection from "../components/LeftMenuSection";
 import RightSection from "../components/RightSection";
-import { Outlet } from "react-router-dom";
+import BoardSortToggle from "../components/BoardSortToggle";
 
 const Layout = () => {
+  const location = useLocation();
+
+  /**메인 화면일 때만 게시글 정렬 버튼 보여주기*/
+  const showSortButtonContainer: boolean = location.pathname === "/";
+
   return (
     <WrapperStyled>
       <LeftMenuSection />
       <MainAreaWrapperStyled>
         <MainAreaStyled>
+          {showSortButtonContainer && <BoardSortToggle />}
           <Outlet />
         </MainAreaStyled>
         <RightSection />
@@ -36,6 +43,7 @@ const MainAreaWrapperStyled = styled.div`
 const MainAreaStyled = styled.main`
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 687px;
   height: 100vh;
   min-height: 860px;

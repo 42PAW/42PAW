@@ -24,7 +24,7 @@ body {
   font-family: var(--main-font);
   background-image: linear-gradient(
     to bottom left,
-    #878abe 40%,
+    #878abe6f 40%,
     #d1c1cd,
     #e6dade
   );

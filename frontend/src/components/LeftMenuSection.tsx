@@ -112,6 +112,11 @@ const ProfileImageStyled = styled.img`
 
 const LoginButtonStyled = styled.div`
   margin-bottom: 20%;
+  &:hover {
+    background-color: var(--white);
+    color: var(--pink);
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
 `;
 
 export default LeftMenuSection;

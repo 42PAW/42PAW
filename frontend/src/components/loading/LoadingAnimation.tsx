@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components";
 
 const LoadingAnimation = () => {
-  return <RainbowProgressBar />;
+  return <LoadingAnimationStyled />;
 };
 
 const rainbowAnimation = keyframes`
@@ -11,7 +11,7 @@ const rainbowAnimation = keyframes`
 `;
 
 // Create the styled-component
-const RainbowProgressBar = styled.div`
+const LoadingAnimationStyled = styled.div`
   position: absolute;
   left: 0;
   right: 0;
@@ -21,15 +21,12 @@ const RainbowProgressBar = styled.div`
   height: 4px;
   background: linear-gradient(
     124deg,
-    #ff2400,
-    #e81d1d,
-    #e8b71d,
-    #e3e81d,
-    #1de840,
-    #1ddde8,
-    #2b1de8,
-    #dd00f3,
-    #dd00f3
+    #3b1784,
+    #d1c1cd,
+    #e6dade,
+    #3b1784,
+    #d1c1cd,
+    #e6dade
   );
   background-size: 900% 900%;
   animation: ${rainbowAnimation} 9s ease infinite;

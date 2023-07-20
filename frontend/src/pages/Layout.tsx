@@ -41,6 +41,7 @@ const MainAreaWrapperStyled = styled.div`
 `;
 
 const MainAreaStyled = styled.main`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;

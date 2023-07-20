@@ -97,7 +97,7 @@ const MenuListStyled = styled.ul`
   }
   img:hover {
     background-color: var(--transparent);
-    border-radius: 100%;
+    border-radius: 30%;
   }
 `;
 

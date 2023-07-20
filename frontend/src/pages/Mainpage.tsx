@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import BoardTemplate from "../components/BoardTemplate";
+import LoadingCircleAnimation from "../components/loading/LoadingCircleAnimation";
 
 const Mainpage = () => {
   return (
@@ -14,6 +15,7 @@ const Mainpage = () => {
       <BoardTemplate></BoardTemplate>
       <BoardTemplate></BoardTemplate>
       <BoardTemplate></BoardTemplate>
+      <LoadingCircleAnimation />
     </WrapperStyled>
   );
 };

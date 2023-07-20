@@ -1,15 +1,15 @@
 import styled from "styled-components";
 
-const ProfileCard = () => {
+const ProfileModal = () => {
   return (
     <WrapperStyled>
-      <ProfileCardStyled>
+      <ProfileModalStyled>
         <>
-          <ProfileCardImageStyled src="/src/assets/profileImage.jpg" />
-          <ProfileCardTitleStyled>오덕애비</ProfileCardTitleStyled>
-          <ProfileCardCaptionStyled>
+          <ProfileModalImageStyled src="/src/assets/profileImage.jpg" />
+          <ProfileModalTitleStyled>오덕애비</ProfileModalTitleStyled>
+          <ProfileModalCaptionStyled>
             반갑습니다. 강아지가 세상을 구한다!
-          </ProfileCardCaptionStyled>
+          </ProfileModalCaptionStyled>
         </>
         <>
           <ButtonWrapperStyled>
@@ -29,7 +29,7 @@ const ProfileCard = () => {
             </SecondButtonsStyled>
           </ButtonWrapperStyled>
         </>
-      </ProfileCardStyled>
+      </ProfileModalStyled>
     </WrapperStyled>
   );
 };
@@ -44,7 +44,7 @@ const WrapperStyled = styled.div`
   justify-content: center;
 `;
 
-const ProfileCardStyled = styled.div`
+const ProfileModalStyled = styled.div`
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -56,19 +56,19 @@ const ProfileCardStyled = styled.div`
   box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.25);
 `;
 
-const ProfileCardImageStyled = styled.img`
+const ProfileModalImageStyled = styled.img`
   margin-top: 70px;
   width: 50%;
   border-radius: 100%;
 `;
 
-const ProfileCardTitleStyled = styled.div`
+const ProfileModalTitleStyled = styled.div`
   margin-top: 20px;
   font-size: 200%;
   color: #4a494ed5;
 `;
 
-const ProfileCardCaptionStyled = styled.div`
+const ProfileModalCaptionStyled = styled.div`
   margin-top: 10px;
   font-size: 100%;
   color: #929292;
@@ -140,4 +140,4 @@ const SecondButtonsStyled = styled.div`
   }
 `;
 
-export default ProfileCard;
+export default ProfileModal;

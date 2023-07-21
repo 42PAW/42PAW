@@ -34,6 +34,9 @@ public class Member {
 	@Column(name = "oauth_id", nullable = false)
 	private String oauthId;
 
+	@Column(name = "profile_image_url")
+	private String profileImageUrl;
+
 	@Column(name = "nickname", nullable = false, length = 12)
 	private String nickname;
 

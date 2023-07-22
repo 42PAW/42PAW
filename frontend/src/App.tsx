@@ -1,12 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import Layout from "./pages/Layout";
-import MainPage from "./pages/Mainpage";
-import ProfilePage from "./pages/ProfilePage";
-import NoticePage from "./pages/NoticePage";
-import UploadPage from "./pages/UploadPage";
-import SignInPage from "./pages/SignInPage/SignInPage";
 import LoadingAnimation from "./components/loading/LoadingAnimation";
+
+const MainPage = lazy(() => import("./pages/Mainpage"));
+const NoticePage = lazy(() => import("./pages/NoticePage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const UploadPage = lazy(() => import("./pages/UploadPage"));
+const SignInPage = lazy(() => import("./pages/SignInPage/SignInPage"));
 
 function App() {
   return (
@@ -18,8 +19,8 @@ function App() {
             <Route path="notice" element={<NoticePage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="upload" element={<UploadPage />} />
+            <Route path="signin" element={<SignInPage />} />
           </Route>
-          <Route path="/signin" element={<SignInPage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

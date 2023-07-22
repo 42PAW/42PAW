@@ -1,21 +1,24 @@
 import { Outlet, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import LeftMenuSection from "../components/LeftMenuSection";
-import RightSection from "../components/RightSection";
+import RightSection from "../components/RightSection/RightSection";
 import BoardSortToggle from "../components/BoardSortToggle";
 
 const Layout = () => {
   const location = useLocation();
 
   /**메인 화면일 때만 게시글 정렬 버튼 보여주기*/
-  const showSortButtonContainer: boolean = location.pathname === "/";
+  const isMainPage: boolean = location.pathname === "/";
+  const isSignInPage: boolean = location.pathname === "/signin";
 
-  return (
+  return isSignInPage ? (
+    <Outlet />
+  ) : (
     <WrapperStyled>
       <LeftMenuSection />
       <MainAreaWrapperStyled>
         <MainAreaStyled>
-          {showSortButtonContainer && <BoardSortToggle />}
+          {isMainPage && <BoardSortToggle />}
           <Outlet />
         </MainAreaStyled>
         <RightSection />

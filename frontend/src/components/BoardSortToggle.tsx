@@ -12,7 +12,7 @@ const BoardSortToggle = () => {
 
   return (
     <BoardSortToggleWrapperStyled>
-      <BoardSortToggleStyled buttonToggled={buttonToggled}>
+      <BoardSortToggleStyled $buttonToggled={buttonToggled}>
         <button onClick={() => handleToggle("default")}>기본순</button>
         <button onClick={() => handleToggle("hot")}>인기순</button>
         <button onClick={() => handleToggle("follow")}>팔로우순</button>
@@ -27,7 +27,7 @@ const BoardSortToggleWrapperStyled = styled.div`
   position: absolute;
 `;
 
-const BoardSortToggleStyled = styled.div<{ buttonToggled: number }>`
+const BoardSortToggleStyled = styled.div<{ $buttonToggled: number }>`
   position: relative;
   width: 195px;
   height: 30px;
@@ -46,7 +46,7 @@ const BoardSortToggleStyled = styled.div<{ buttonToggled: number }>`
     height: 30px;
     width: 65px;
     margin-top: -30px;
-    margin-left: ${({ buttonToggled }) => buttonToggled * 65}px;
+    margin-left: ${({ $buttonToggled }) => $buttonToggled * 65}px;
     transition: margin-left 0.5s ease-in-out;
     border-radius: 30px;
     background-color: var(--pink);

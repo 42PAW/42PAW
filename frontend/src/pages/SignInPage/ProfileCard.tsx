@@ -29,7 +29,7 @@ const ProfileCard = ({
 
   return (
     <>
-      <ProfileCardStyled>
+      <ProfileCardStyled sectionObserver={sectionObserver}>
         <ProfileCardNicknameStyled>{nickname}</ProfileCardNicknameStyled>
         <ProfileCardEmptyImageStyled>
           <img src={imagePreview ? imagePreview : "/src/assets/userG.png"} />
@@ -51,14 +51,14 @@ const ProfileCard = ({
   );
 };
 
-const ProfileCardStyled = styled.div`
+const ProfileCardStyled = styled.div<{ sectionObserver: number }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 450px;
   height: 600px;
+  border-radius: 30px;
   background-color: var(--white);
-  border-radius: 40px;
   box-shadow: var(--default-shadow);
 `;
 

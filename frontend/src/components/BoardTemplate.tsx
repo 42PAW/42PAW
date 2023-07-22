@@ -136,6 +136,9 @@ const LikeCommentContainerStyled = styled.div`
     margin-left: 10%;
     width: 13%;
   }
+  img:hover {
+    opacity: 0.7;
+  }
 `;
 
 const PhotoIndexDotsStyled = styled.div`
@@ -156,6 +159,9 @@ const ScrapButtonStyled = styled.div`
   img {
     width: 13%;
     margin-right: 15%;
+  }
+  img:hover {
+    opacity: 0.7;
   }
 `;
 

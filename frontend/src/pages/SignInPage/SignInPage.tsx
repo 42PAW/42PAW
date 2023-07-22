@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ProfileCard from "./ProfileCard";
+import AnimalButtonContainer from "./AnimalButtonContainer";
+import confetti from "https://esm.run/canvas-confetti@1";
+import { useNavigate } from "react-router-dom";
 
 interface ISectionStateInfo {
   isFirstSectionVisible: boolean;
@@ -9,6 +12,8 @@ interface ISectionStateInfo {
   isSecondSectionDisplayed: boolean;
   isThirdSectionVisible: boolean;
   isThirdSectionDisplayed: boolean;
+  isFourthSectionVisible: boolean;
+  isFourthSectionDisplayed: boolean;
 }
 
 const SignInPage: React.FC = () => {
@@ -19,10 +24,20 @@ const SignInPage: React.FC = () => {
     isSecondSectionDisplayed: false,
     isThirdSectionVisible: false,
     isThirdSectionDisplayed: false,
+    isFourthSectionVisible: false,
+    isFourthSectionDisplayed: false,
   });
   const [sectionObserver, setSectionObserver] = useState<number>(0);
   const [nickname, setNickname] = useState<string>("");
   const [caption, setCaption] = useState<string>("");
+  const navigator = useNavigate();
+
+  /**마지막 섹션에서 메인 페이지로 자동 리다이렉션 */
+  if (sectionObserver === 4) {
+    setTimeout(() => {
+      navigator("/");
+    }, 3000);
+  }
 
   useEffect(() => {
     setSectionState({ ...sectionState, isFirstSectionVisible: true });
@@ -40,7 +55,8 @@ const SignInPage: React.FC = () => {
       | React.KeyboardEvent<HTMLInputElement>
       | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    /**onClick 작동 시 event 값은 undefined. */
+    if (event === undefined) return;
+
     const e = event.keyCode ?? 13;
     if (e === 13) {
       setNickname(event.currentTarget.value);
@@ -84,17 +100,48 @@ const SignInPage: React.FC = () => {
     }, 500);
   };
 
-  // const terminateCaptionSection = (
-  //   event: React.KeyboardEvent<HTMLInputElement>
-  // ) => {
-  //   if (event.keyCode === 13) {
-  //     setNickname(event.currentTarget.value);
-  //     setvisibleSection(4);
-  //     setTimeout(() => {
-  //       setdisplayNone(4);
-  //     }, 1000);
-  //   }
-  // };
+  const terminateCaptionSection = (
+    event?:
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    if (event === undefined) return;
+
+    const e = event.keyCode ?? 13;
+    if (e === 13) {
+      setCaption(event.currentTarget.value);
+      setSectionState({ ...sectionState, isThirdSectionVisible: false });
+      setSectionObserver(sectionObserver + 1);
+      setTimeout(() => {
+        setSectionState({
+          ...sectionState,
+          isThirdSectionDisplayed: false,
+          isFourthSectionDisplayed: true,
+        });
+        setTimeout(() => {
+          setSectionState({
+            ...sectionState,
+            isThirdSectionDisplayed: false,
+            isFourthSectionDisplayed: true,
+            isFourthSectionVisible: true,
+          });
+        }, 500);
+      }, 500);
+    }
+  };
+
+  const terminateAnimalCategorySection = () => {
+    setSectionState({ ...sectionState, isFourthSectionVisible: false });
+    setSectionObserver(sectionObserver + 1);
+    confetti({
+      particleCount: 300,
+      spread: 200,
+    });
+    setSectionState({
+      ...sectionState,
+      isFourthSectionDisplayed: false,
+    });
+  };
 
   return (
     <WrapperStyled>
@@ -123,15 +170,30 @@ const SignInPage: React.FC = () => {
         <h1>
           자신을 잘 표현하는 <br /> 소개를 적어 주세요
         </h1>
-        <InputBoxStyled
-          type="text"
-          value={caption}
-          onChange={handleCaptionChange}
-          onKeyDown={terminateNicknameSection}
-          maxLength={20}
-        ></InputBoxStyled>
+        <InputContainerStyled>
+          <InputBoxStyled
+            type="text"
+            value={caption}
+            onChange={handleCaptionChange}
+            onKeyDown={terminateCaptionSection}
+            maxLength={20}
+          ></InputBoxStyled>
+          <InputButtonStyled onClick={terminateCaptionSection}>
+            <img src="/src/assets/arrowW.png" />
+          </InputButtonStyled>
+        </InputContainerStyled>
       </CaptionSectionStyled>
+      <AnimalCategorySectionStyled $sectionState={sectionState}>
+        <h1>
+          만나고 싶은 동물 친구들을 <br /> 선택해 주세요.
+        </h1>
+        <AnimalButtonContainer />
+        <InputButtonStyled onClick={terminateAnimalCategorySection}>
+          <img src="/src/assets/arrowW.png" />
+        </InputButtonStyled>
+      </AnimalCategorySectionStyled>
       <ProfileCardWrapperStyled $sectionObserver={sectionObserver}>
+        <h1>환영합니다, {nickname} 님!</h1>
         <ProfileCard
           nickname={nickname}
           caption={caption}
@@ -232,7 +294,7 @@ const CaptionSectionStyled = styled.div<{ $sectionState: ISectionStateInfo }>`
     props.$sectionState.isThirdSectionDisplayed ? "flex" : "none"};
   flex-direction: column;
   align-items: center;
-  margin-bottom: 350px;
+  margin-bottom: 550px;
   opacity: ${(props) => (props.$sectionState.isThirdSectionVisible ? 1 : 0)};
   transition: ${(props) =>
     props.$sectionState.isThirdSectionVisible
@@ -241,24 +303,33 @@ const CaptionSectionStyled = styled.div<{ $sectionState: ISectionStateInfo }>`
   h1 {
     font-size: 60px;
   }
-  input {
-    width: 600px;
-    height: 80px;
-    border: none;
-    border-radius: 25px;
-    font-size: 50px;
-    padding-left: 20px;
-    outline: none;
-    margin-bottom: 200px;
-    background-color: var(--transparent);
-    color: var(--white);
+`;
+
+const AnimalCategorySectionStyled = styled.div<{
+  $sectionState: ISectionStateInfo;
+}>`
+  display: ${(props) =>
+    props.$sectionState.isFourthSectionDisplayed ? "flex" : "none"};
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 150px;
+  opacity: ${(props) => (props.$sectionState.isFourthSectionVisible ? 1 : 0)};
+  transition: ${(props) =>
+    props.$sectionState.isFourthSectionVisible
+      ? "opacity 1s ease"
+      : "opacity 0s ease"};
+  h1 {
+    font-size: 60px;
   }
 `;
 
 const ProfileCardWrapperStyled = styled.div<{
   $sectionObserver: number;
 }>`
-  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: ${(props) => (props.$sectionObserver === 4 ? "none" : "absolute")};
   top: 100%;
   margin-top: ${(props) => {
     switch (props.$sectionObserver) {
@@ -268,9 +339,18 @@ const ProfileCardWrapperStyled = styled.div<{
         return "-360px";
       case 2:
         return "-500px";
+      case 3:
+        return "0px";
+      case 4:
+        return "0px";
     }
   }};
   transition: margin-top 2s ease-in-out;
+  h1 {
+    display: ${(props) => (props.$sectionObserver === 4 ? "flex" : "none")};
+    font-size: 60px;
+    margin-top: -80px;
+  }
 `;
 
 export default SignInPage;

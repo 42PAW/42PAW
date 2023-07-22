@@ -1,6 +1,7 @@
 import styled from "styled-components";
+import { ICommentInfo } from "../../../types/interface/right.section.interface";
 
-const CommentContainer = (commentInfo: any) => {
+const CommentItem = (commentInfo: ICommentInfo) => {
   const {
     commentId,
     memberId,
@@ -12,26 +13,28 @@ const CommentContainer = (commentInfo: any) => {
   } = commentInfo;
 
   return (
-    <CommentContainerStyled>
+    <CommentItemStyled>
       <UserImageContainerStyled>
         <img src={profileImage} />
       </UserImageContainerStyled>
-      <CommentContainerRightStyled>
+      <CommentItemRightStyled>
         <NicknameToggleContainerStyled>
-          <NicknameContainerStyled>{memberName}</NicknameContainerStyled>
+          <NicknameContainerStyled>
+            {memberName}
+            <span>{createdAt}</span>
+          </NicknameContainerStyled>
           <ToggleButtonStyled>
             <img src="/src/assets/optionW.png" />
           </ToggleButtonStyled>
         </NicknameToggleContainerStyled>
         <CommentContentContainerStyled>{comment}</CommentContentContainerStyled>
-      </CommentContainerRightStyled>
-    </CommentContainerStyled>
+      </CommentItemRightStyled>
+    </CommentItemStyled>
   );
 };
 
-const CommentContainerStyled = styled.div`
+const CommentItemStyled = styled.div`
   display: flex;
-  /* background-color: blue; */
   padding-left: 10px;
 `;
 
@@ -41,20 +44,18 @@ const UserImageContainerStyled = styled.div`
   justify-content: center;
   width: 70px;
   height: 70px;
-  /* background-color: yellow; */
   img {
-    width: 80%;
-    height: 70%;
+    width: 45px;
+    height: 45px;
     border-radius: 100%;
     border: 1px solid var(--transparent);
   }
 `;
 
-const CommentContainerRightStyled = styled.div`
+const CommentItemRightStyled = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* background-color: purple; */
   margin-left: 10px;
   margin-right: 10px;
 `;
@@ -64,7 +65,6 @@ const NicknameToggleContainerStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* background-color: cyan; */
   height: 30px;
   font-size: 15px;
   color: var(--white);
@@ -72,15 +72,18 @@ const NicknameToggleContainerStyled = styled.div`
 `;
 
 const NicknameContainerStyled = styled.div`
-  /* background-color: orange; */
-  width: 40%;
+  width: 60%;
   font-size: 14px;
+  span {
+    margin-left: 5px;
+    font-weight: 300;
+    font-size: 11px;
+  }
 `;
 
 const ToggleButtonStyled = styled.button`
   height: 35px;
   width: 35px;
-  /* background-color: black; */
   background-color: transparent;
   border: none;
   img {
@@ -93,11 +96,10 @@ const ToggleButtonStyled = styled.button`
 `;
 
 const CommentContentContainerStyled = styled.div`
-  /* background-color: skyblue; */
   width: 90%;
   font-size: 13px;
   color: var(--white);
   line-height: 21px;
 `;
 
-export default CommentContainer;
+export default CommentItem;

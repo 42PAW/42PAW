@@ -24,6 +24,7 @@ body {
   font-size: 12px;
   color: var(--grey);
   font-family: var(--main-font);
+  text-align: justify;
   background-image: linear-gradient(
     to bottom left,
     #878abe6f 40%,

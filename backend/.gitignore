@@ -147,8 +147,9 @@ gradle-app.setting
 /data
 /database/data
 .idea
-/**/resources/application-*.yml
-!/**/resources/application-test.yml
-/**/static/docs/**/*.html
+.vscode/
+.env
+application*.yml
+!application-test.yml
 
 bin

@@ -57,6 +57,8 @@ dependencies {
 	//AWS
 	implementation 'org.springframework.cloud:spring-cloud-dependencies:2021.0.8'
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation 'javax.xml.bind:jaxb-api:2.3.1' // java 8 이후 포함되지 않는 파일 업로드 시 사용되던 API
+
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

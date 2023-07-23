@@ -1,25 +1,31 @@
 import styled from "styled-components";
-import { isRightSectionOpenedState } from "../../recoil/atom";
+import {
+  isRightSectionOpenedState,
+  rightSectionContentState,
+} from "../../recoil/atom";
 import { useRecoilState } from "recoil";
 import CommentSection from "./CommentSection/CommentSection";
+import useRightSectionHandler from "../../hooks/useRightSectionHandler";
+import { IRightSectionContentInfo } from "../../types/interface/right.section.interface";
 
 const RightSection = () => {
-  const [isRightSectionOpened, setIsRightSectionOpened] =
-    useRecoilState<boolean>(isRightSectionOpenedState);
-
-  const handleRightSection = () => {
-    setIsRightSectionOpened(!isRightSectionOpened);
-  };
+  const [isRightSectionOpened] = useRecoilState<boolean>(
+    isRightSectionOpenedState
+  );
+  const [rightSectionContent] = useRecoilState<IRightSectionContentInfo>(
+    rightSectionContentState
+  );
+  const { closeRightSection } = useRightSectionHandler();
 
   return (
     <>
       <RightSectionStyled $isRightSectionOpened={isRightSectionOpened}>
         <CloseButtonContainerStyled>
-          <CloseButtonStyled onClick={handleRightSection}>
+          <CloseButtonStyled onClick={closeRightSection}>
             <img src="/src/assets/exitW.png" />
           </CloseButtonStyled>
         </CloseButtonContainerStyled>
-        <CommentSection />
+        {rightSectionContent.comment && <CommentSection />}
       </RightSectionStyled>
     </>
   );

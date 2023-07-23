@@ -1,5 +1,8 @@
 import { atom } from "recoil";
-import { IRightSectionContentInfo } from "../types/interface/right.section.interface";
+import {
+  IRightSectionContentInfo,
+  ICommentInfo,
+} from "../types/interface/right.section.interface";
 
 export const isRightSectionOpenedState = atom<boolean>({
   key: "isRightSectionOpened",
@@ -15,4 +18,9 @@ export const rightSectionContentState = atom<IRightSectionContentInfo>({
     following: false,
     animalFilter: false,
   },
+});
+
+export const currentBoardCommentsState = atom<ICommentInfo[]>({
+  key: "currentBoardComments",
+  default: [],
 });

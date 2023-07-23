@@ -2,47 +2,14 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import CommentItem from "./CommentItem";
 import { ICommentInfo } from "../../../types/interface/right.section.interface";
-
-const result = [
-  {
-    commentId: 1,
-    memberId: 1,
-    memberName: "아롱이형님",
-    comment: "귀여워용",
-    statement: "아롱이 오빠입니다.",
-    profileImage:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTurkvsYjocf2Q7vABaQVzie2dfD43EUua-g65ue8ciZSAFLD17JBjcv5h1vOhcY7bkVOI&usqp=CAU",
-    createdAt: "2023.07.23",
-  },
-  {
-    commentId: 2,
-    memberId: 2,
-    memberName: "하루애비",
-    statement: "하루 오빠입니다.",
-    comment:
-      "저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?저도 보러 가도 될까요?",
-    profileImage:
-      "https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg",
-    createdAt: "2023.07.23",
-  },
-  {
-    commentId: 3,
-    memberId: 3,
-    memberName: "폴라베어",
-    statement: "코카콜라를 좋아합니다.",
-    comment: "곰사진은 없나요?",
-    profileImage: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-    createdAt: "2023.07.24",
-  },
-];
+import { useRecoilState } from "recoil";
+import { currentBoardCommentsState } from "../../../recoil/atom";
 
 const CommentSection = () => {
-  const [currentBoardComments, setCurrentBoardComments] = useState<
-    ICommentInfo[] | undefined
-  >(undefined);
-  // useEffect(() => {
-  //   setCurrentBoardComments(result);
-  // }, []);
+  const [currentBoardComments] = useRecoilState<ICommentInfo[]>(
+    currentBoardCommentsState
+  );
+
   return (
     <WrapperStyled>
       <CommentItemWrapperStyled>

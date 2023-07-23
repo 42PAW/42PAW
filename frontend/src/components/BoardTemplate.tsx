@@ -1,6 +1,29 @@
 import styled from "styled-components";
+import { axiosGetBoardComments } from "../api/axios/axios.custom";
+import useRightSectionHandler from "../hooks/useRightSectionHandler";
+import { currentBoardCommentsState } from "../recoil/atom";
+import { useSetRecoilState } from "recoil";
+import { ICommentInfo } from "../types/interface/right.section.interface";
 
 const BoardTemplate = () => {
+  const setCurrentBoardComments = useSetRecoilState<ICommentInfo[]>(
+    currentBoardCommentsState
+  );
+  const { openCommentSection } = useRightSectionHandler();
+  async function getCommentsData(boardId: number) {
+    try {
+      const result = await axiosGetBoardComments(boardId);
+      setCurrentBoardComments(result);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  const handleCommentClick = (boardId: number) => {
+    getCommentsData(boardId);
+    openCommentSection();
+  };
+
   return (
     <>
       <BoardWrapperStyled>
@@ -23,7 +46,10 @@ const BoardTemplate = () => {
           <ButtonZoneStyled>
             <LikeCommentContainerStyled>
               <img src="/src/assets/like.png" />
-              <img src="/src/assets/comment.png" />
+              <img
+                src="/src/assets/comment.png"
+                onClick={() => handleCommentClick(1)}
+              />
             </LikeCommentContainerStyled>
             <PhotoIndexDotsStyled>
               <img src="/src/assets/filledDot.png" />

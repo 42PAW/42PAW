@@ -1,24 +1,10 @@
 import styled from "styled-components";
-import { isRightSectionOpenedState } from "../recoil/atom";
-import { useSetRecoilState } from "recoil";
-import { useNavigate } from "react-router-dom";
+import useNavigateCustom from "../hooks/useNavigateCustom";
+import useRightSectionHandler from "../hooks/useRightSectionHandler";
 
 const LeftMenuSection = () => {
-  const setIsRightSectionOpened = useSetRecoilState<boolean>(
-    isRightSectionOpenedState
-  );
-  const navigate = useNavigate();
-
-  const handleRightSection = () => {
-    setIsRightSectionOpened(true);
-  };
-  const moveToMain = () => {
-    navigate("/");
-  };
-  const moveToMyProfile = () => {
-    navigate("/profile");
-    setIsRightSectionOpened(false);
-  };
+  const { moveToMain, moveToMyProfile } = useNavigateCustom();
+  const { openSearchSection } = useRightSectionHandler();
 
   return (
     <>
@@ -35,7 +21,7 @@ const LeftMenuSection = () => {
             <li onClick={moveToMyProfile}>
               <img src="/src/assets/profile.png" />
             </li>
-            <li onClick={handleRightSection}>
+            <li onClick={openSearchSection}>
               <img src="/src/assets/search.png" />
             </li>
             <li>

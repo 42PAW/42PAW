@@ -11,10 +11,10 @@ const LoadingCircleAnimation = () => {
 };
 
 const LoadingCircleAnimationStyled = styled.div`
-  position: relative;
-  margin: 20px auto;
-  width: 50px;
-  height: 50px;
+  position: absolute;
+  top: 50%;
+  width: 70px;
+  height: 70px;
 
   &:before {
     content: "";

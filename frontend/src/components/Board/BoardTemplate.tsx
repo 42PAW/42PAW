@@ -4,8 +4,25 @@ import useRightSectionHandler from "../../hooks/useRightSectionHandler";
 import { currentBoardCommentsState } from "../../recoil/atom";
 import { useSetRecoilState } from "recoil";
 import { CommentInfoDTO } from "../../types/dto/board.dto";
+import { IBoardInfo } from "../../types/interface/board.interface";
+import BoardPhotoBox from "./BoardPhotoBox";
 
-const BoardTemplate = () => {
+const BoardTemplate = (board: IBoardInfo) => {
+  const {
+    boardId,
+    memberName,
+    profileImage,
+    images,
+    categories,
+    reactionCount,
+    commentCount,
+    isScrapped,
+    isReacted,
+    content,
+    previewComment,
+    createdAt,
+  } = board;
+
   const setCurrentBoardComments = useSetRecoilState<CommentInfoDTO[]>(
     currentBoardCommentsState
   );
@@ -19,19 +36,18 @@ const BoardTemplate = () => {
       throw error;
     }
   };
-
   const handleCommentClick = (boardId: number) => {
     openCommentSection();
     getCommentsData(boardId);
   };
-
+  console.log("before", images);
   return (
     <>
       <BoardWrapperStyled>
         <BoardHeaderStyled>
           <BoardProfileStyled>
-            <img src="/src/assets/profileImage.jpg" />
-            <div>오덕애비</div>
+            <img src={profileImage} />
+            <div>{memberName}</div>
             <div></div>
           </BoardProfileStyled>
           <BoardOptionButtonStyled>
@@ -39,14 +55,15 @@ const BoardTemplate = () => {
           </BoardOptionButtonStyled>
         </BoardHeaderStyled>
         <BoardBodyStyled>
-          <PhotoZoneWrapperStyled>
-            <PhotoZoneStyled>
-              <img src="/src/assets/oduck.png" />
-            </PhotoZoneStyled>
-          </PhotoZoneWrapperStyled>
+          <BoardPhotoBox boardImages={images} />
           <ButtonZoneStyled>
             <LikeCommentContainerStyled>
-              <img src="/src/assets/like.png" />
+              {isReacted ? (
+                <img src="/src/assets/likeR.png" />
+              ) : (
+                <img src="/src/assets/like.png" />
+              )}
+
               <img
                 src="/src/assets/comment.png"
                 onClick={() => handleCommentClick(1)}
@@ -56,16 +73,25 @@ const BoardTemplate = () => {
               <img src="/src/assets/filledDot.png" />
             </PhotoIndexDotsStyled>
             <ScrapButtonStyled>
-              <img src="/src/assets/scrap.png" />
+              {isScrapped ? (
+                <img src="/src/assets/scrapB.png" />
+              ) : (
+                <img src="/src/assets/scrap.png" />
+              )}
             </ScrapButtonStyled>
           </ButtonZoneStyled>
           <BoardContentContainerStyled>
-            <DivOne>좋아요 24개, 댓글 5개</DivOne>
-            <DivTwo>오늘 날씨도 좋은데 오덕이는 집에만 있네😂</DivTwo>
+            <DivOne>
+              <div>
+                좋아요 {reactionCount}개, 댓글 {commentCount}개
+              </div>
+              <span>{createdAt}</span>
+            </DivOne>
+            <DivTwo>{content}</DivTwo>
             <DivThree>
               <div>아롱사태</div>
-              <div>오덕이 귀엽다 내일 만나러 갈게!</div>
-              <div onClick={() => handleCommentClick(1)}>...댓글 더 보기</div>
+              <div>{previewComment}</div>
+              <div onClick={() => handleCommentClick(1)}>..댓글 더 보기</div>
             </DivThree>
           </BoardContentContainerStyled>
         </BoardBodyStyled>
@@ -76,10 +102,10 @@ const BoardTemplate = () => {
 
 const BoardWrapperStyled = styled.div`
   width: 90%;
-  min-height: 660px;
+  min-height: 640px;
   margin-top: 3%;
   margin-bottom: 3%;
-  border-radius: 50px;
+  border-radius: 30px;
   box-shadow: var(--default-shadow);
 `;
 
@@ -87,8 +113,8 @@ const BoardHeaderStyled = styled.div`
   display: flex;
   justify-content: space-between;
   height: 10%;
-  border-top-left-radius: 50px;
-  border-top-right-radius: 50px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
   background-color: var(--transparent);
 `;
 
@@ -123,25 +149,9 @@ const BoardOptionButtonStyled = styled.button`
 
 const BoardBodyStyled = styled.div`
   height: 90%;
-  border-bottom-left-radius: 50px;
-  border-bottom-right-radius: 50px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
   background-color: var(--white);
-`;
-
-const PhotoZoneWrapperStyled = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const PhotoZoneStyled = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  img {
-    width: 100%;
-  }
 `;
 
 const ButtonZoneStyled = styled.div`
@@ -206,9 +216,13 @@ const BoardContentContainerStyled = styled.div`
 
 const DivOne = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   font-size: 100%;
   font-weight: bold;
+  span {
+    font-weight: 400;
+    font-size: 11px;
+  }
 `;
 
 const DivTwo = styled.div`

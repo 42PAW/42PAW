@@ -1,6 +1,22 @@
 import instance from "./axios.instance";
 import axios from "axios";
 
+const axiosGetBoardsURL =
+  "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/boards";
+export const axiosGetBoards = async (
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    const response = await axios.get(axiosGetBoardsURL, {
+      params: { size: size, page: page },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const axiosGetBoardCommentsURL =
   "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/boards/";
 export const axiosGetBoardComments = async (boardId: number): Promise<any> => {

@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { ICommentInfo } from "../../../types/interface/right.section.interface";
+import { CommentInfoDTO } from "../../../types/dto/board.dto";
 
-const CommentItem = (commentInfo: ICommentInfo) => {
+const CommentItem = (commentInfo: CommentInfoDTO) => {
   const {
     commentId,
     memberId,

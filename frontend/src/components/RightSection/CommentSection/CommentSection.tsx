@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
 import CommentItem from "./CommentItem";
-import { ICommentInfo } from "../../../types/interface/right.section.interface";
+import { CommentInfoDTO } from "../../../types/dto/board.dto";
 import { useRecoilState } from "recoil";
 import { currentBoardCommentsState } from "../../../recoil/atom";
 
 const CommentSection = () => {
-  const [currentBoardComments] = useRecoilState<ICommentInfo[]>(
+  const [currentBoardComments] = useRecoilState<CommentInfoDTO[]>(
     currentBoardCommentsState
   );
 

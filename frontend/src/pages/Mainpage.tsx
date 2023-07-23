@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import BoardTemplate from "../components/BoardTemplate";
+import BoardTemplate from "../components/Board/BoardTemplate";
 import LoadingCircleAnimation from "../components/loading/LoadingCircleAnimation";
 
 const Mainpage = () => {

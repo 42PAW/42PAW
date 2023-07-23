@@ -1,8 +1,6 @@
 import { atom } from "recoil";
-import {
-  IRightSectionContentInfo,
-  ICommentInfo,
-} from "../types/interface/right.section.interface";
+import { IRightSectionContentInfo } from "../types/interface/right.section.interface";
+import { CommentInfoDTO } from "../types/dto/board.dto";
 
 export const isRightSectionOpenedState = atom<boolean>({
   key: "isRightSectionOpened",
@@ -20,7 +18,7 @@ export const rightSectionContentState = atom<IRightSectionContentInfo>({
   },
 });
 
-export const currentBoardCommentsState = atom<ICommentInfo[]>({
+export const currentBoardCommentsState = atom<CommentInfoDTO[]>({
   key: "currentBoardComments",
   default: [],
 });

@@ -1,27 +1,28 @@
 import styled from "styled-components";
-import { axiosGetBoardComments } from "../api/axios/axios.custom";
-import useRightSectionHandler from "../hooks/useRightSectionHandler";
-import { currentBoardCommentsState } from "../recoil/atom";
+import { axiosGetBoardComments } from "../../api/axios/axios.custom";
+import useRightSectionHandler from "../../hooks/useRightSectionHandler";
+import { currentBoardCommentsState } from "../../recoil/atom";
 import { useSetRecoilState } from "recoil";
-import { ICommentInfo } from "../types/interface/right.section.interface";
+import { CommentInfoDTO } from "../../types/dto/board.dto";
 
 const BoardTemplate = () => {
-  const setCurrentBoardComments = useSetRecoilState<ICommentInfo[]>(
+  const setCurrentBoardComments = useSetRecoilState<CommentInfoDTO[]>(
     currentBoardCommentsState
   );
   const { openCommentSection } = useRightSectionHandler();
-  async function getCommentsData(boardId: number) {
+
+  const getCommentsData = async (boardId: number) => {
     try {
       const result = await axiosGetBoardComments(boardId);
       setCurrentBoardComments(result);
     } catch (error) {
       throw error;
     }
-  }
+  };
 
   const handleCommentClick = (boardId: number) => {
-    getCommentsData(boardId);
     openCommentSection();
+    getCommentsData(boardId);
   };
 
   return (
@@ -64,7 +65,7 @@ const BoardTemplate = () => {
             <DivThree>
               <div>아롱사태</div>
               <div>오덕이 귀엽다 내일 만나러 갈게!</div>
-              <div>...댓글 더 보기</div>
+              <div onClick={() => handleCommentClick(1)}>...댓글 더 보기</div>
             </DivThree>
           </BoardContentContainerStyled>
         </BoardBodyStyled>
@@ -75,7 +76,7 @@ const BoardTemplate = () => {
 
 const BoardWrapperStyled = styled.div`
   width: 90%;
-  min-height: 870px;
+  min-height: 660px;
   margin-top: 3%;
   margin-bottom: 3%;
   border-radius: 50px;
@@ -102,7 +103,7 @@ const BoardProfileStyled = styled.div`
   }
   div {
     margin-left: 5%;
-    font-size: 150%;
+    font-size: 120%;
     color: var(--white);
   }
 `;
@@ -159,6 +160,7 @@ const LikeCommentContainerStyled = styled.div`
     margin-left: 15%;
   }
   img {
+    cursor: pointer;
     margin-left: 10%;
     width: 13%;
   }
@@ -178,6 +180,7 @@ const PhotoIndexDotsStyled = styled.div`
 `;
 
 const ScrapButtonStyled = styled.div`
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -204,23 +207,28 @@ const BoardContentContainerStyled = styled.div`
 const DivOne = styled.div`
   display: flex;
   flex-direction: column;
+  font-size: 100%;
+  font-weight: bold;
 `;
 
 const DivTwo = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 2%;
+  font-size: 100%;
 `;
 
 const DivThree = styled.div`
   display: flex;
   flex-direction: row;
   margin-top: 3%;
+  font-size: 100%;
   div:nth-child(1) {
     margin-right: 1%;
     font-weight: bold;
   }
   div:nth-child(3) {
+    cursor: pointer;
     margin-left: 2%;
     color: var(--lightgrey);
   }

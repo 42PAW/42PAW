@@ -48,7 +48,7 @@ const MainAreaStyled = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 687px;
+  width: 500px;
   height: 100vh;
   min-height: 860px;
 `;

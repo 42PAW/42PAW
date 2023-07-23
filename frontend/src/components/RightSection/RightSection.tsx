@@ -5,6 +5,7 @@ import {
 } from "../../recoil/atom";
 import { useRecoilState } from "recoil";
 import CommentSection from "./CommentSection/CommentSection";
+import SearchSection from "./SearchSection/SearchSection";
 import useRightSectionHandler from "../../hooks/useRightSectionHandler";
 import { IRightSectionContentInfo } from "../../types/interface/right.section.interface";
 
@@ -25,7 +26,10 @@ const RightSection = () => {
             <img src="/src/assets/exitW.png" />
           </CloseButtonStyled>
         </CloseButtonContainerStyled>
-        {rightSectionContent.comment && <CommentSection />}
+        <RightSectionBodyStyled>
+          {rightSectionContent.comment && <CommentSection />}
+          {rightSectionContent.search && <SearchSection />}
+        </RightSectionBodyStyled>
       </RightSectionStyled>
     </>
   );
@@ -35,17 +39,18 @@ const RightSectionStyled = styled.div<{
   $isRightSectionOpened: boolean;
 }>`
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: center;
-  width: 550px;
+  width: 490px;
   height: 70%;
   max-height: 860px;
   min-height: 783px;
   margin-left: 20px;
-  border-radius: 15px;
+  border-radius: 30px;
   background-color: var(--transparent);
   box-shadow: var(--default-shadow);
-  margin-right: ${(props) => (props.$isRightSectionOpened ? "0px" : "-570px")};
+  margin-right: ${(props) => (props.$isRightSectionOpened ? "0px" : "-480px")};
   opacity: ${(props) => (props.$isRightSectionOpened ? 1 : 0)};
   transition: opacity 1s ease-in-out, margin-right 1s ease-in-out;
 `;
@@ -76,4 +81,12 @@ const CloseButtonStyled = styled.button`
   }
 `;
 
+const RightSectionBodyStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+`;
 export default RightSection;

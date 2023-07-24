@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import proj.pet.block.service.BlockFacadeService;
 
-@RestController("/blocks")
+@RestController("/v1/blocks")
 @RequiredArgsConstructor
 public class BlockController {
 

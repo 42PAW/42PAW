@@ -2,7 +2,6 @@ package proj.pet.board.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import proj.pet.board.dto.BoardCommentsResponseDto;
 import proj.pet.board.dto.BoardCreateRequestDto;
 import proj.pet.board.dto.BoardsResponseDto;
 
@@ -22,11 +21,6 @@ public class BoardFacadeServiceImpl implements BoardFacadeService {
 
 	@Override
 	public BoardsResponseDto getFollowingsBoards() {
-		return null;
-	}
-
-	@Override
-	public BoardCommentsResponseDto getBoardComments(Long boardId) {
 		return null;
 	}
 

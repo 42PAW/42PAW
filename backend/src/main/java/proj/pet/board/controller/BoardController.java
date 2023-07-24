@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import proj.pet.board.dto.BoardCommentsResponseDto;
 import proj.pet.board.dto.BoardCreateRequestDto;
 import proj.pet.board.dto.BoardsResponseDto;
 import proj.pet.board.service.BoardFacadeService;
@@ -31,11 +30,6 @@ public class BoardController {
 	@GetMapping("/followings")
 	public BoardsResponseDto getFollowingsBoards() {
 		return boardFacadeService.getFollowingsBoards();
-	}
-
-	@GetMapping("/{boardId}/comments")
-	public BoardCommentsResponseDto getBoardComments(@PathVariable("boardId") Long boardId) {
-		return boardFacadeService.getBoardComments(boardId);
 	}
 
 	@PostMapping("/")

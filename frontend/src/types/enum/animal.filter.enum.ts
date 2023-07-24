@@ -1,13 +1,3 @@
-export enum ReportReason {
-  WRONG_ANIMAL = "WRONG_ANIMAL",
-  INSULTS = "INSULTS",
-  AD_SPAM = "AD_SPAM",
-  INAPPROPRIATE_NICKNAME = "INAPPROPRIATE_NICKNAME",
-  SEXUAL = "SEXUAL",
-  VIOLENCE = "VIOLENCE",
-  IRRELEVANT = "IRRELEVANT",
-}
-
 export enum AnimalSpecies {
   DOG = "DOG",
   CAT = "CAT",

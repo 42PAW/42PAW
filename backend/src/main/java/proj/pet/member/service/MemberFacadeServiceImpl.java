@@ -29,11 +29,6 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 	}
 
 	@Override
-	public MemberScrapsResponse getMemberScraps(UserSession userSession) {
-		return null;
-	}
-
-	@Override
 	public MemberBoardsResponse getMyBoards(UserSession userSession) {
 		return null;
 	}

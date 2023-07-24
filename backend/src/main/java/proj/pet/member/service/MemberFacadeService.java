@@ -7,7 +7,6 @@ public interface MemberFacadeService {
 	MemberCreateResponse createMember(MemberCreateRequest memberCreateRequest);
 	MemberProfileChangeResponse changeMemberProfile(MemberProfileChangeRequest memberProfileChangeRequest);
 	MemberNicknameValidateResponse validateMemberNickname(String nickname);
-	MemberScrapsResponse getMemberScraps(UserSession userSession);
 	MemberBoardsResponse getMyBoards(UserSession userSession);
 	MemberBoardsResponse getMemberBoards(Long memberId);
 	MemberSearchResponse searchMemberByNickname(String nickname);

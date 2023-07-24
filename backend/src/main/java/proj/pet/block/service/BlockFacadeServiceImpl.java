@@ -10,7 +10,7 @@ public class BlockFacadeServiceImpl implements BlockFacadeService {
 	private final BlockService blockService;
 
 	@Override
-	public void createBlock() {
+	public void createBlock(Long memberId) {
 
 	}
 

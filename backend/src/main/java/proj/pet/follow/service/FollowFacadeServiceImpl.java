@@ -12,7 +12,7 @@ public class FollowFacadeServiceImpl implements FollowFacadeService {
 	private final FollowQueryService followQueryService;
 
 	@Override
-	public void createFollow() {
+	public void createFollow(Long followingId) {
 
 	}
 

@@ -1,10 +1,12 @@
 package proj.pet.follow.controller;
 
+import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import proj.pet.follow.dto.FollowResponseDto;
 import proj.pet.follow.service.FollowFacadeService;
@@ -16,8 +18,8 @@ public class FollowController {
 	private final FollowFacadeService followFacadeService;
 
 	@PostMapping("/")
-	public void createFollow() {
-		followFacadeService.createFollow();
+	public void createFollow(@RequestBody HashMap<String, Long> body) {
+		followFacadeService.createFollow(body.get("memberId"));
 	}
 
 	@DeleteMapping("/members/{memberId}")

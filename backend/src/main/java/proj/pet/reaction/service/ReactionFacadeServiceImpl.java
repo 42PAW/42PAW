@@ -10,7 +10,7 @@ public class ReactionFacadeServiceImpl implements ReactionFacadeService {
 	private final ReactionService reactionService;
 
 	@Override
-	public void createReaction() {
+	public void createReaction(Long boardId) {
 	}
 
 	@Override

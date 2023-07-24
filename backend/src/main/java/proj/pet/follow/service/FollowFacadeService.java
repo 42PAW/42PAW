@@ -4,7 +4,7 @@ import proj.pet.follow.dto.FollowResponseDto;
 
 public interface FollowFacadeService {
 
-	void createFollow();
+	void createFollow(Long followingId);
 
 	void deleteFollow(Long memberId);
 

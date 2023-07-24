@@ -44,16 +44,6 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 	}
 
 	@Override
-	public MemberFollowResponse getMemberFollowers(Long memberId) {
-		return null;
-	}
-
-	@Override
-	public MemberFollowResponse getMemberFollowings(Long memberId) {
-		return null;
-	}
-
-	@Override
 	public MemberSearchResponse searchMemberByNickname(String nickname) {
 		return null;
 	}

@@ -38,6 +38,7 @@ public class S3TestController {
 		awsS3Service.uploadImageToBucket(profileImageData, affixUuid(dto.getNickname()));
 	}
 
+	// 비즈니스 로직
 	private String affixUuid(String originalFilename) {
 		return UUID.randomUUID().toString().concat(originalFilename);
 	}

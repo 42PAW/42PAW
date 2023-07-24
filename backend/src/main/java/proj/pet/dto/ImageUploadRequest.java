@@ -1,4 +1,4 @@
-package proj.pet.cloud.controller;
+package proj.pet.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import proj.pet.member.validation.NicknameValidation;
 
 @AllArgsConstructor
 @Getter
-public class ImageUploadDto {
+public class ImageUploadRequest {
 
 	@NicknameValidation
 	private final String nickname;

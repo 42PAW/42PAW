@@ -1,4 +1,4 @@
-package proj.pet.cloud.config;
+package proj.pet.cloud.aws.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

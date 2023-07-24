@@ -1,4 +1,4 @@
-package proj.pet.cloud.controller;
+package proj.pet.cloud.aws.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import proj.pet.cloud.service.AwsS3Service;
+import proj.pet.cloud.aws.config.AwsS3Properties;
+import proj.pet.cloud.aws.domain.AwsS3Manager;
+import proj.pet.dto.ImageUploadRequest;
 
 import java.util.UUID;
 
@@ -20,12 +22,13 @@ public class S3TestController {
 	 * TODO: 이미지 사이즈 외부변수화 및 다른 계층에서 관리
 	 */
 	private static final long IMAGE_BYTE_SIZE_LIMIT = 1024L * 1024L * 100L;
-	private final AwsS3Service awsS3Service;
+	private final AwsS3Properties s3Properties;
+	private final AwsS3Manager awsS3Manager;
 
 	@PostMapping(
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE
 	)
-	public void uploadImageFile(@Valid ImageUploadDto dto) {
+	public void uploadImageFile(@Valid ImageUploadRequest dto) {
 		/**
 		 * 이 부분은 Facade가 진행할 부분입니다.
 		 */
@@ -35,7 +38,8 @@ public class S3TestController {
 			throw new RuntimeException("이미지 사이즈가 너무 큽니다."); // TODO: Custom Exception
 		}
 		System.out.println("적합한 용량입니다!");
-		awsS3Service.uploadImageToBucket(profileImageData, affixUuid(dto.getNickname()));
+		String bucketPath = s3Properties.getBoardImageBucket();
+		awsS3Manager.uploadFileToBucket(bucketPath, profileImageData, affixUuid(dto.getNickname()));
 	}
 
 	// 비즈니스 로직

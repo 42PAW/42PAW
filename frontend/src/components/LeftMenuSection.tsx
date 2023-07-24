@@ -4,8 +4,10 @@ import useNavigateCustom from "../hooks/useNavigateCustom";
 import useRightSectionHandler from "../hooks/useRightSectionHandler";
 
 const LeftMenuSection = () => {
-  const { moveToMain, moveToMyProfile } = useNavigateCustom();
-  const { openSearchSection } = useRightSectionHandler();
+  const { moveToMain, moveToNotice, moveToMyProfile, moveToUpload } =
+    useNavigateCustom();
+  const { openSearchSection, openAnimalFilterSection } =
+    useRightSectionHandler();
 
   return (
     <>
@@ -14,22 +16,22 @@ const LeftMenuSection = () => {
         <nav>
           <MenuListStyled>
             <li onClick={moveToMain}>
-              <img src="/src/assets/home.png" />
+              <img alt="Main" src="/src/assets/home.png" />
             </li>
-            <li>
-              <img src="/src/assets/notice.png" />
+            <li onClick={moveToNotice}>
+              <img alt="Notice" src="/src/assets/notice.png" />
             </li>
             <li onClick={moveToMyProfile}>
-              <img src="/src/assets/profile.png" />
+              <img alt="MyProfile" src="/src/assets/profile.png" />
             </li>
             <li onClick={openSearchSection}>
-              <img src="/src/assets/search.png" />
+              <img alt="Search" src="/src/assets/search.png" />
             </li>
-            <li>
-              <img src="/src/assets/upload.png" />
+            <li onClick={moveToUpload}>
+              <img alt="Upload" src="/src/assets/upload.png" />
             </li>
-            <li>
-              <img src="/src/assets/categoryW.png" />
+            <li onClick={openAnimalFilterSection}>
+              <img alt="AnimalFilter" src="/src/assets/categoryW.png" />
             </li>
           </MenuListStyled>
           <ProfileImageStyled src="/src/assets/profileImage.jpg" />
@@ -41,7 +43,6 @@ const LeftMenuSection = () => {
 };
 
 const LeftMenuStyled = styled.div`
-  /* background-color: black; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;

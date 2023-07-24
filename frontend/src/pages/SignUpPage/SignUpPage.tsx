@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ProfileCard from "./ProfileCard";
-import AnimalButtonContainer from "./AnimalButtonContainer";
+import AnimalButtonContainer from "../../components/AnimalButtonContainer";
 import confetti from "https://esm.run/canvas-confetti@1";
-import { useNavigate } from "react-router-dom";
 
 interface ISectionStateInfo {
   isFirstSectionVisible: boolean;
@@ -313,6 +313,8 @@ const AnimalCategorySectionStyled = styled.div<{
   flex-direction: column;
   align-items: center;
   margin-bottom: 150px;
+  width: 30%;
+  min-width: 650px;
   opacity: ${(props) => (props.$sectionState.isFourthSectionVisible ? 1 : 0)};
   transition: ${(props) =>
     props.$sectionState.isFourthSectionVisible
@@ -320,6 +322,9 @@ const AnimalCategorySectionStyled = styled.div<{
       : "opacity 0s ease"};
   h1 {
     font-size: 60px;
+  }
+  img {
+    margin-top: 100px;
   }
 `;
 

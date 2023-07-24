@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { AnimalSpecies } from "../../types/enum/animal.filter.enum";
+import { AnimalSpecies } from "../types/enum/animal.filter.enum";
 
 const renderAnimalSpecies = (buttonName: string) => {
   if (buttonName === AnimalSpecies.DOG) return "🐶 강아지";
@@ -40,20 +40,18 @@ const AnimalButtonContainer = () => {
   };
 
   return (
-    <>
-      <AnimalButtonContainerStyled>
-        {buttons.map((buttonName) => (
-          <AnimalButtonStyled
-            key={buttonName}
-            onClick={() => handleButtonClick(buttonName)}
-            selectedAnimals={selectedAnimals}
-            buttonName={buttonName}
-          >
-            {renderAnimalSpecies(buttonName)}
-          </AnimalButtonStyled>
-        ))}
-      </AnimalButtonContainerStyled>
-    </>
+    <AnimalButtonContainerStyled>
+      {buttons.map((buttonName) => (
+        <AnimalButtonStyled
+          key={buttonName}
+          onClick={() => handleButtonClick(buttonName)}
+          selectedAnimals={selectedAnimals}
+          buttonName={buttonName}
+        >
+          {renderAnimalSpecies(buttonName)}
+        </AnimalButtonStyled>
+      ))}
+    </AnimalButtonContainerStyled>
   );
 };
 
@@ -62,8 +60,7 @@ const AnimalButtonContainerStyled = styled.div`
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  width: 800px;
-  margin-bottom: 40px;
+  width: 100%;
 `;
 
 const AnimalButtonStyled = styled.button<{
@@ -74,13 +71,13 @@ const AnimalButtonStyled = styled.button<{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 60px;
-  width: 170px;
+  height: 70%;
+  width: 23%;
   margin: 10px 0px;
   border-radius: 50px;
   border: none;
   font-weight: 600;
-  font-size: 17px;
+  font-size: 145%;
   color: ${(props) =>
     props.selectedAnimals.has(props.buttonName)
       ? "var(--white)"

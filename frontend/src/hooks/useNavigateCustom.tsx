@@ -17,6 +17,13 @@ const useNavigateCustom = () => {
     navigator("/");
   };
 
+  const moveToNotice = () => {
+    // 라우트 전환 시, BoardCategory를 default로 전환해 주지 않으면 이전 카테고리 게시글이 남아있는 현상을 방지
+    setBoardCategory(BoardCategory.DEFAULT);
+    setIsRightSectionOpened(false);
+    navigator("/notice");
+  };
+
   const moveToMyProfile = () => {
     // 라우트 전환 시, BoardCategory를 default로 전환해 주지 않으면 이전 카테고리 게시글이 남아있는 현상을 방지
     setBoardCategory(BoardCategory.DEFAULT);
@@ -24,9 +31,18 @@ const useNavigateCustom = () => {
     navigator("/profile");
   };
 
+  const moveToUpload = () => {
+    // 라우트 전환 시, BoardCategory를 default로 전환해 주지 않으면 이전 카테고리 게시글이 남아있는 현상을 방지
+    setBoardCategory(BoardCategory.DEFAULT);
+    setIsRightSectionOpened(false);
+    navigator("/upload");
+  };
+
   return {
     moveToMain,
+    moveToNotice,
     moveToMyProfile,
+    moveToUpload,
   };
 };
 

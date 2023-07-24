@@ -6,6 +6,7 @@ import {
 import { useRecoilState } from "recoil";
 import CommentSection from "./CommentSection/CommentSection";
 import SearchSection from "./SearchSection/SearchSection";
+import AnimalFilterSection from "./AnimalFilterSection/AnimalFilterSection";
 import useRightSectionHandler from "../../hooks/useRightSectionHandler";
 import { IRightSectionContentInfo } from "../../types/interface/right.section.interface";
 
@@ -29,6 +30,7 @@ const RightSection = () => {
         <RightSectionBodyStyled>
           {rightSectionContent.comment && <CommentSection />}
           {rightSectionContent.search && <SearchSection />}
+          {rightSectionContent.animalFilter && <AnimalFilterSection />}
         </RightSectionBodyStyled>
       </RightSectionStyled>
     </>

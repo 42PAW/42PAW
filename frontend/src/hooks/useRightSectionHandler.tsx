@@ -1,4 +1,4 @@
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import {
   isRightSectionOpenedState,
   rightSectionContentState,
@@ -10,8 +10,9 @@ const useRightSectionHandler = () => {
   const setIsRightSectionOpened = useSetRecoilState<boolean>(
     isRightSectionOpenedState
   );
-  const [rightSectionContent, setRightSectionContent] =
-    useRecoilState<IRightSectionContentInfo>(rightSectionContentState);
+  const setRightSectionContent = useSetRecoilState<IRightSectionContentInfo>(
+    rightSectionContentState
+  );
 
   const openSearchSection = () => {
     setRightSectionContent({
@@ -20,6 +21,16 @@ const useRightSectionHandler = () => {
       follower: false,
       following: false,
       animalFilter: false,
+    });
+    setIsRightSectionOpened(true);
+  };
+  const openAnimalFilterSection = () => {
+    setRightSectionContent({
+      search: false,
+      comment: false,
+      follower: false,
+      following: false,
+      animalFilter: true,
     });
     setIsRightSectionOpened(true);
   };
@@ -39,6 +50,7 @@ const useRightSectionHandler = () => {
 
   return {
     openSearchSection,
+    openAnimalFilterSection,
     openCommentSection,
     closeRightSection,
   };

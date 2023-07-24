@@ -1,30 +1,31 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { AnimalSpecies } from "../../types/enum/animal.filter.enum";
 
 const renderAnimalSpecies = (buttonName: string) => {
-  if (buttonName === "DOG") return "🐶 강아지";
-  if (buttonName === "CAT") return "🐱 고양이";
-  if (buttonName === "FISH") return "🐠 물고기";
-  if (buttonName === "BIRD") return "🐤 새";
-  if (buttonName === "SMALLANIMAL") return "🐹 소동물";
-  if (buttonName === "REPTILES") return "🐍 파충류";
-  if (buttonName === "AMPHIBIAN") return "🐸 양서류";
-  if (buttonName === "INSECT") return "🐝 곤충";
+  if (buttonName === AnimalSpecies.DOG) return "🐶 강아지";
+  if (buttonName === AnimalSpecies.CAT) return "🐱 고양이";
+  if (buttonName === AnimalSpecies.FISH) return "🐠 물고기";
+  if (buttonName === AnimalSpecies.BIRD) return "🐤 새";
+  if (buttonName === AnimalSpecies.SMALLANIMAL) return "🐹 소동물";
+  if (buttonName === AnimalSpecies.REPTILES) return "🐍 파충류";
+  if (buttonName === AnimalSpecies.AMPHIBIAN) return "🐸 양서류";
+  if (buttonName === AnimalSpecies.INSECT) return "🐝 곤충";
 };
 
 const AnimalButtonContainer = () => {
   const [selectedAnimals, setSelectedAnimals] = useState<Set<string>>(
-    new Set(["CAT", "DOG"])
+    new Set([AnimalSpecies.DOG, AnimalSpecies.CAT])
   );
   const buttons: string[] = [
-    "DOG",
-    "CAT",
-    "FISH",
-    "BIRD",
-    "SMALLANIMAL",
-    "REPTILES",
-    "AMPHIBIAN",
-    "INSECT",
+    AnimalSpecies.DOG,
+    AnimalSpecies.CAT,
+    AnimalSpecies.FISH,
+    AnimalSpecies.BIRD,
+    AnimalSpecies.SMALLANIMAL,
+    AnimalSpecies.REPTILES,
+    AnimalSpecies.AMPHIBIAN,
+    AnimalSpecies.INSECT,
   ];
 
   const handleButtonClick = (buttonName: string) => {

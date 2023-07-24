@@ -2,11 +2,10 @@ import { useState } from "react";
 import styled from "styled-components";
 import { IBoardImages } from "../../types/interface/board.interface";
 
-const BoardPhotoBox = (boardImages: IBoardImages[]) => {
+const BoardPhotoBox = ({ boardImages }: { boardImages: IBoardImages[] }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [photoIndex, setPhotoIndex] = useState<number>(0);
-  const imagesLength = boardImages.boardImages.length;
-
+  const imagesLength = boardImages.length;
   const handleShowButtons = (state: string) => {
     if (state === "show") {
       setIsHovered(true);
@@ -30,7 +29,7 @@ const BoardPhotoBox = (boardImages: IBoardImages[]) => {
       onMouseLeave={() => handleShowButtons("hide")}
     >
       <PhotoZoneStyled $photoIndex={photoIndex}>
-        {boardImages.boardImages.map((boardImage) => (
+        {boardImages.map((boardImage) => (
           <img key={boardImage.index} src={boardImage.imageUrl} />
         ))}
       </PhotoZoneStyled>

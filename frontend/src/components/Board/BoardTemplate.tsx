@@ -41,7 +41,6 @@ const BoardTemplate = (board: IBoardInfo) => {
     openCommentSection();
     getCommentsData(boardId);
   };
-  console.log("before", images);
   return (
     <>
       <BoardWrapperStyled>
@@ -67,7 +66,7 @@ const BoardTemplate = (board: IBoardInfo) => {
 
               <img
                 src="/src/assets/comment.png"
-                onClick={() => handleCommentClick(1)}
+                onClick={() => handleCommentClick(boardId)}
               />
             </LikeCommentContainerStyled>
             <ScrapButtonStyled>

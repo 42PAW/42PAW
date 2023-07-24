@@ -19,6 +19,7 @@ const BoardTemplate = (board: IBoardInfo) => {
     isScrapped,
     isReacted,
     content,
+    previewCommentUser,
     previewComment,
     createdAt,
   } = board;
@@ -69,9 +70,6 @@ const BoardTemplate = (board: IBoardInfo) => {
                 onClick={() => handleCommentClick(1)}
               />
             </LikeCommentContainerStyled>
-            <PhotoIndexDotsStyled>
-              <img src="/src/assets/filledDot.png" />
-            </PhotoIndexDotsStyled>
             <ScrapButtonStyled>
               {isScrapped ? (
                 <img src="/src/assets/scrapB.png" />
@@ -89,7 +87,7 @@ const BoardTemplate = (board: IBoardInfo) => {
             </DivOne>
             <DivTwo>{content}</DivTwo>
             <DivThree>
-              <div>아롱사태</div>
+              <div>{previewCommentUser}</div>
               <div>{previewComment}</div>
               <div onClick={() => handleCommentClick(1)}>..댓글 더 보기</div>
             </DivThree>
@@ -171,21 +169,11 @@ const LikeCommentContainerStyled = styled.div`
   }
   img {
     cursor: pointer;
-    margin-left: 10%;
+    margin-left: 7%;
     width: 13%;
   }
   img:hover {
     opacity: 0.7;
-  }
-`;
-
-const PhotoIndexDotsStyled = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 33.3%;
-  img {
-    width: 3%;
   }
 `;
 

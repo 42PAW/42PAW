@@ -1,4 +1,4 @@
-export enum EReportReason {
+export enum ReportReason {
   WRONG_ANIMAL = "WRONG_ANIMAL",
   INSULTS = "INSULTS",
   AD_SPAM = "AD_SPAM",

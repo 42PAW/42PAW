@@ -52,7 +52,7 @@ const RightSectionStyled = styled.div<{
   box-shadow: var(--default-shadow);
   margin-right: ${(props) => (props.$isRightSectionOpened ? "0px" : "-480px")};
   opacity: ${(props) => (props.$isRightSectionOpened ? 1 : 0)};
-  transition: opacity 1s ease-in-out, margin-right 1s ease-in-out;
+  transition: opacity 0.5s ease-in-out, margin-right 0.5s ease-in-out;
 `;
 
 const CloseButtonContainerStyled = styled.div`

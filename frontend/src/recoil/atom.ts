@@ -1,10 +1,26 @@
 import { atom } from "recoil";
 import { IRightSectionContentInfo } from "../types/interface/right.section.interface";
 import { BoardsInfoDTO, CommentInfoDTO } from "../types/dto/board.dto";
+import { BoardCategory } from "../types/enum/board.category.enum";
 
 export const defaultBoardsState = atom<BoardsInfoDTO>({
   key: "defaultBoardsInfo",
   default: undefined,
+});
+
+export const trendingBoardsState = atom<BoardsInfoDTO>({
+  key: "trendingBoardsInfo",
+  default: undefined,
+});
+
+export const followingBoardsState = atom<BoardsInfoDTO>({
+  key: "followingBoardsInfo",
+  default: undefined,
+});
+
+export const boardCategoryState = atom<BoardCategory>({
+  key: "boardCategory",
+  default: BoardCategory.DEFAULT,
 });
 
 export const currentBoardCommentsState = atom<CommentInfoDTO[]>({

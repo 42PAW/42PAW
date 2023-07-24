@@ -9,6 +9,7 @@ export interface IBoardInfo {
   isScrapped: boolean;
   isReacted: boolean;
   content: string;
+  previewCommentUser: string;
   previewComment: string;
   createdAt: string;
 }

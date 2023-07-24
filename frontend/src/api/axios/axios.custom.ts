@@ -17,6 +17,38 @@ export const axiosGetBoards = async (
   }
 };
 
+const axiosGetTrendingBoardsURL =
+  "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/boards/hot";
+export const axiosGetTrendingBoards = async (
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    const response = await axios.get(axiosGetTrendingBoardsURL, {
+      params: { size: size, page: page },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetFollowingBoardsURL =
+  "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/boards/following";
+export const axiosGetFollowingBoards = async (
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    const response = await axios.get(axiosGetFollowingBoardsURL, {
+      params: { size: size, page: page },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const axiosGetBoardCommentsURL =
   "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/boards/";
 export const axiosGetBoardComments = async (boardId: number): Promise<any> => {

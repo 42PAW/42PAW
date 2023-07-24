@@ -19,7 +19,6 @@ const CommentSection = () => {
               commentId={comment.commentId}
               memberId={comment.memberId}
               memberName={comment.memberName}
-              statement={comment.statement}
               comment={comment.comment}
               profileImage={comment.profileImage}
               createdAt={comment.createdAt}

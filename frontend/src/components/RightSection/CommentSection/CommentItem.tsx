@@ -2,15 +2,8 @@ import styled from "styled-components";
 import { CommentInfoDTO } from "../../../types/dto/board.dto";
 
 const CommentItem = (commentInfo: CommentInfoDTO) => {
-  const {
-    commentId,
-    memberId,
-    memberName,
-    comment,
-    statement,
-    profileImage,
-    createdAt,
-  } = commentInfo;
+  const { commentId, memberId, memberName, comment, profileImage, createdAt } =
+    commentInfo;
 
   return (
     <CommentItemStyled>

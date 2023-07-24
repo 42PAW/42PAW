@@ -104,7 +104,7 @@ const BoardWrapperStyled = styled.div`
   margin-top: 3%;
   margin-bottom: 3%;
   border-radius: 30px;
-  box-shadow: var(--default-shadow);
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
 `;
 
 const BoardHeaderStyled = styled.div`

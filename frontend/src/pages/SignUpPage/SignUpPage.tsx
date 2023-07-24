@@ -16,7 +16,7 @@ interface ISectionStateInfo {
   isFourthSectionDisplayed: boolean;
 }
 
-const SignInPage: React.FC = () => {
+const SignUpPage: React.FC = () => {
   const [sectionState, setSectionState] = useState<ISectionStateInfo>({
     isFirstSectionVisible: false,
     isFirstSectionDisplayed: true,
@@ -353,4 +353,4 @@ const ProfileCardWrapperStyled = styled.div<{
   }
 `;
 
-export default SignInPage;
+export default SignUpPage;

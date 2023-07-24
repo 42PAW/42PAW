@@ -7,7 +7,7 @@ const MainPage = lazy(() => import("./pages/Mainpage"));
 const NoticePage = lazy(() => import("./pages/NoticePage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const UploadPage = lazy(() => import("./pages/UploadPage"));
-const SignInPage = lazy(() => import("./pages/SignInPage/SignInPage"));
+const SignUpPage = lazy(() => import("./pages/SignUpPage/SignUpPage"));
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
             <Route path="notice" element={<NoticePage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="upload" element={<UploadPage />} />
-            <Route path="signin" element={<SignInPage />} />
+            <Route path="sign-up" element={<SignUpPage />} />
           </Route>
         </Routes>
       </Suspense>

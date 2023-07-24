@@ -9,7 +9,7 @@ const Layout = () => {
 
   /**메인 화면일 때만 게시글 정렬 버튼 보여주기*/
   const isMainPage: boolean = location.pathname === "/";
-  const isSignInPage: boolean = location.pathname === "/signin";
+  const isSignInPage: boolean = location.pathname === "/sign-up";
 
   return isSignInPage ? (
     <Outlet />

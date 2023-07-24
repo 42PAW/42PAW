@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 import useNavigateCustom from "../hooks/useNavigateCustom";
 import useRightSectionHandler from "../hooks/useRightSectionHandler";
 

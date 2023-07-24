@@ -1,11 +1,12 @@
-package proj.pet.report.service;
+package proj.pet.reaction.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import proj.pet.utils.annotations.QueryService;
 
-@QueryService
+@Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ReportQueryServiceImpl implements ReportQueryService {
+public class ReactionQueryServiceImpl implements ReactionQueryService {
+
 }

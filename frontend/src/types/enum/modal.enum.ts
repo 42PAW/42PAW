@@ -1,5 +1,5 @@
 export enum ModalType {
-  REPORT = "REPORT",
-  BAN = "BAN",
-  DELETE = "DELETE",
+  BAN = "banModal",
+  REPORT = "reportModal",
+  DELETE = "deleteModal",
 }

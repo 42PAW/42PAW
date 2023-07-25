@@ -6,6 +6,7 @@ import { useSetRecoilState } from "recoil";
 import { CommentInfoDTO } from "../../types/dto/board.dto";
 import { IBoardInfo } from "../../types/interface/board.interface";
 import BoardPhotoBox from "./BoardPhotoBox";
+import OptionButton from "../OptionButton";
 
 const BoardTemplate = (board: IBoardInfo) => {
   const {
@@ -51,7 +52,7 @@ const BoardTemplate = (board: IBoardInfo) => {
             <div></div>
           </BoardProfileStyled>
           <BoardOptionButtonStyled>
-            <img src="src/assets/optionW.png" />
+            <OptionButton />
           </BoardOptionButtonStyled>
         </BoardHeaderStyled>
         <BoardBodyStyled>
@@ -131,16 +132,16 @@ const BoardProfileStyled = styled.div`
   }
 `;
 
-const BoardOptionButtonStyled = styled.button`
+const BoardOptionButtonStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: 40%;
-  background-color: transparent;
+  width: 9%;
   border: none;
-  img {
-    width: 13%;
-    margin-right: 10%;
+  margin-right: 3%;
+  z-index: 2;
+  &:focus {
+    opacity: 0.6;
   }
 `;
 

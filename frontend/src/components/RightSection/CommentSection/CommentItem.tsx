@@ -1,9 +1,22 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { CommentInfoDTO } from "../../../types/dto/board.dto";
+import CustomModal from "../../modals/ModalLayout";
+import OptionButton from "../../OptionButton";
 
 const CommentItem = (commentInfo: CommentInfoDTO) => {
   const { commentId, memberId, memberName, comment, profileImage, createdAt } =
     commentInfo;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <CommentItemStyled>
@@ -16,12 +29,14 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
             {memberName}
             <span>{createdAt}</span>
           </NicknameContainerStyled>
-          <ToggleButtonStyled>
-            <img src="/src/assets/optionW.png" />
-          </ToggleButtonStyled>
+          <OptionButton />
         </NicknameToggleContainerStyled>
         <CommentContentContainerStyled>{comment}</CommentContentContainerStyled>
       </CommentItemRightStyled>
+      <CustomModal isOpen={isModalOpen} onClose={closeModal}>
+        <h2>Modal Content</h2>
+        <p>This is the modal content. Click outside the modal to close it.</p>
+      </CustomModal>
     </CommentItemStyled>
   );
 };
@@ -56,35 +71,22 @@ const CommentItemRightStyled = styled.div`
 const NicknameToggleContainerStyled = styled.div`
   margin-top: 8px;
   display: flex;
+  position: relative;
   align-items: center;
   justify-content: space-between;
   height: 30px;
   font-size: 15px;
   color: var(--white);
-  font-weight: bold;
 `;
 
 const NicknameContainerStyled = styled.div`
   width: 60%;
   font-size: 14px;
+  font-weight: bold;
   span {
     margin-left: 5px;
     font-weight: 300;
     font-size: 11px;
-  }
-`;
-
-const ToggleButtonStyled = styled.button`
-  height: 35px;
-  width: 35px;
-  background-color: transparent;
-  border: none;
-  img {
-    cursor: pointer;
-    width: 100%;
-  }
-  img:hover {
-    opacity: 0.7;
   }
 `;
 

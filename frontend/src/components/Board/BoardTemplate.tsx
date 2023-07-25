@@ -139,7 +139,6 @@ const BoardOptionButtonStyled = styled.div`
   width: 9%;
   border: none;
   margin-right: 3%;
-  z-index: 2;
   &:focus {
     opacity: 0.6;
   }

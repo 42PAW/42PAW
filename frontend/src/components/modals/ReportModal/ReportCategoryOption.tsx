@@ -31,6 +31,7 @@ const LabelStyled = styled.label<{ $isSelected: boolean }>`
   cursor: pointer;
   position: relative;
   padding-left: 25px;
+  font-size: 12px;
   &::before {
     content: "";
     position: absolute;

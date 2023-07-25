@@ -104,7 +104,7 @@ const SwipeButtonStyled = styled.button<{
   img:hover {
     opacity: 0.9;
   }
-  left: ${(props) => (props.$isLeft ? "0%" : "87%")};
+  left: ${(props) => (props.$isLeft ? "0%" : "89%")};
   right: ${(props) => (props.$isLeft ? "87%" : "0%")};
 `;
 

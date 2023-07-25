@@ -1,22 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { CommentInfoDTO } from "../../../types/dto/board.dto";
-import CustomModal from "../../modals/ModalLayout";
 import OptionButton from "../../OptionButton";
 
 const CommentItem = (commentInfo: CommentInfoDTO) => {
   const { commentId, memberId, memberName, comment, profileImage, createdAt } =
     commentInfo;
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <CommentItemStyled>
@@ -29,14 +18,14 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
             {memberName}
             <span>{createdAt}</span>
           </NicknameContainerStyled>
-          <OptionButton />
+          <OptionButton
+            commentId={commentId}
+            memberId={memberId}
+            memberName={memberName}
+          />
         </NicknameToggleContainerStyled>
         <CommentContentContainerStyled>{comment}</CommentContentContainerStyled>
       </CommentItemRightStyled>
-      <CustomModal isOpen={isModalOpen} onClose={closeModal}>
-        <h2>Modal Content</h2>
-        <p>This is the modal content. Click outside the modal to close it.</p>
-      </CustomModal>
     </CommentItemStyled>
   );
 };

@@ -2,17 +2,23 @@
 import { ReactNode } from "react";
 import styled from "styled-components";
 
-interface ModalProps {
+interface IModalLayoutProps {
+  modalName: string;
   isOpen: boolean;
-  onClose: () => void;
+  closeModal: (modalName: string) => void;
   children: ReactNode;
 }
 
-const ModalLayout: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const ModalLayout: React.FC<IModalLayoutProps> = ({
+  modalName,
+  isOpen,
+  closeModal,
+  children,
+}) => {
   if (!isOpen) return null;
 
   return (
-    <ModalOverlay onClick={onClose}>
+    <ModalOverlay onClick={() => closeModal(modalName)}>
       <ModalContainer onClick={(e: React.MouseEvent) => e.stopPropagation()}>
         {children}
       </ModalContainer>
@@ -37,9 +43,7 @@ const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: var(--white);
-  padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 15px;
   box-shadow: var(--default-shadow);
 `;
 

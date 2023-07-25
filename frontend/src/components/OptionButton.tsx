@@ -1,19 +1,54 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { followingBoardsState } from "../recoil/atom";
+import BanModal from "./modals/BanModal";
+import { ICurrentModalStateInfo } from "../types/interface/modal.interface";
 
-const OptionButton = () => {
+interface IOptionButtonProps {
+  commentId: number;
+  memberId: number;
+  memberName: string;
+}
+
+const OptionButton: React.FC<IOptionButtonProps> = ({
+  commentId,
+  memberId,
+  memberName,
+}) => {
   const [isToggled, setIsToggled] = useState(false);
-  const handleToggleOff = () => {
+  const [modal, setModal] = useState<ICurrentModalStateInfo>({
+    banModal: false,
+    reportModal: false,
+    deleteModal: false,
+  });
+
+  useEffect(() => {
     setIsToggled(false);
+  }, [modal]);
+
+  const handleToggle = (state: string) => {
+    if (state === "ON") {
+      setIsToggled(false);
+    }
+    if (state === "OFF") {
+      setIsToggled(!isToggled);
+    }
   };
-  const handleToggleOn = () => {
-    setIsToggled(!isToggled);
+  const openModal = (modalName: string) => {
+    setModal({
+      ...modal,
+      [modalName]: true,
+    });
+  };
+  const closeModal = (modalName: string) => {
+    setModal({
+      ...modal,
+      [modalName]: false,
+    });
   };
 
   return (
-    <WrapperStyled onMouseLeave={handleToggleOff}>
-      <ToggleStyled onClick={handleToggleOn}>
+    <WrapperStyled onMouseLeave={() => handleToggle("ON")}>
+      <ToggleStyled onClick={() => handleToggle("OFF")}>
         <img src="/src/assets/optionW.png" />
       </ToggleStyled>
       <MenuStyled
@@ -24,13 +59,20 @@ const OptionButton = () => {
       >
         <MenuList>
           <MenuItemStyled>
-            <MenuLinkStyled>차단</MenuLinkStyled>
+            <MenuLinkStyled onClick={() => openModal("banModal")}>
+              차단
+            </MenuLinkStyled>
           </MenuItemStyled>
           <MenuItemStyled>
             <MenuLinkStyled>신고</MenuLinkStyled>
           </MenuItemStyled>
         </MenuList>
       </MenuStyled>
+      <BanModal
+        isModalOpen={modal.banModal}
+        closeModal={closeModal}
+        banUserName={memberName}
+      />
     </WrapperStyled>
   );
 };
@@ -43,8 +85,8 @@ const WrapperStyled = styled.div`
 `;
 
 const ToggleStyled = styled.button`
-  height: 40px;
-  width: 40px;
+  height: 35px;
+  width: 35px;
   background-color: transparent;
   border: none;
   img {
@@ -91,6 +133,7 @@ const MenuLinkStyled = styled.div`
   transition: all 0.2s;
   &:hover {
     font-size: 12px;
+    font-weight: bold;
   }
 `;
 

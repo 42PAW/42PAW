@@ -1,0 +1,69 @@
+import ModalLayout from "./ModalLayout";
+import { styled } from "styled-components";
+
+interface IBanModalProps {
+  isModalOpen: boolean;
+  closeModal: (modalName: string) => void;
+  banUserName: string;
+}
+
+const BanModal: React.FC<IBanModalProps> = ({
+  isModalOpen,
+  closeModal,
+  banUserName,
+}) => {
+  return (
+    <ModalLayout
+      modalName="banModal"
+      isOpen={isModalOpen}
+      closeModal={closeModal}
+    >
+      <WrapperStyled>
+        <h1>차단하기</h1>
+        <img src="/src/assets/ban.png" />
+        <ContentStyled>{banUserName} 님을 차단하시겠습니까?</ContentStyled>
+        <button>차단</button>
+      </WrapperStyled>
+    </ModalLayout>
+  );
+};
+
+const WrapperStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  height: 160px;
+  background-color: var(--white);
+  border-radius: 15px;
+  color: var(--lightgrey);
+  h1 {
+    font-size: 16px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+  }
+  img {
+    width: 25px;
+  }
+  button {
+    cursor: pointer;
+    margin-top: 15px;
+    height: 30px;
+    width: 70px;
+    border: none;
+    background-color: var(--lightgrey);
+    color: var(--white);
+    border: 1px solid var(--lightgrey);
+    border-radius: 5px;
+  }
+  button:hover {
+    opacity: 0.7;
+  }
+`;
+
+const ContentStyled = styled.div`
+  margin-top: 18px;
+  font-size: 12px;
+  text-align: center;
+`;
+export default BanModal;

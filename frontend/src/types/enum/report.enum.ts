@@ -6,4 +6,5 @@ export enum ReportReason {
   SEXUAL = "SEXUAL",
   VIOLENCE = "VIOLENCE",
   IRRELEVANT = "IRRELEVANT",
+  ETC = "ETC",
 }

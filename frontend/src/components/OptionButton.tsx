@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import BanModal from "./modals/BanModal";
+import ReportModal from "./modals/ReportModal/ReportModal";
 import { ICurrentModalStateInfo } from "../types/interface/modal.interface";
 
 interface IOptionButtonProps {
@@ -10,6 +11,7 @@ interface IOptionButtonProps {
   memberName: string;
 }
 
+/**게시글 및 댓글 오른쪽 상단 ... 버튼. 타인 게시물 댓글에서는 신고 차단, 내 게시물에서는 삭제가 나타남*/
 const OptionButton: React.FC<IOptionButtonProps> = ({
   boardId,
   commentId,
@@ -66,7 +68,9 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
             </MenuLinkStyled>
           </MenuItemStyled>
           <MenuItemStyled>
-            <MenuLinkStyled>신고</MenuLinkStyled>
+            <MenuLinkStyled onClick={() => openModal("reportModal")}>
+              신고
+            </MenuLinkStyled>
           </MenuItemStyled>
         </MenuList>
       </MenuStyled>
@@ -75,6 +79,7 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
         closeModal={closeModal}
         banUserName={memberName}
       />
+      <ReportModal isModalOpen={modal.reportModal} closeModal={closeModal} />
     </WrapperStyled>
   );
 };

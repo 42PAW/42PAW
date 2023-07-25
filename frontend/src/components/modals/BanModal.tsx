@@ -32,14 +32,13 @@ const WrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 250px;
-  height: 160px;
+  height: 150px;
   background-color: var(--white);
   border-radius: 15px;
   color: var(--lightgrey);
   h1 {
     font-size: 16px;
-    margin-top: 15px;
+    margin-top: 16px;
     margin-bottom: 5px;
   }
   img {
@@ -47,17 +46,18 @@ const WrapperStyled = styled.div`
   }
   button {
     cursor: pointer;
-    margin-top: 15px;
+    margin-top: 10px;
     height: 30px;
     width: 70px;
     border: none;
     background-color: var(--lightgrey);
     color: var(--white);
-    border: 1px solid var(--lightgrey);
+    border: none;
     border-radius: 5px;
   }
   button:hover {
-    opacity: 0.7;
+    background-color: var(--red);
+    transition: background-color 0.2s ease-in-out;
   }
 `;
 
@@ -65,5 +65,6 @@ const ContentStyled = styled.div`
   margin-top: 18px;
   font-size: 12px;
   text-align: center;
+  padding: 0px 20px;
 `;
 export default BanModal;

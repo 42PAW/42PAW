@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import styled from "styled-components";
 
 interface IModalLayoutProps {
+  /**closeModal의 인자로 들어가며, 닫을 모달을 알려주기 위한 string*/
   modalName: string;
   isOpen: boolean;
   closeModal: (modalName: string) => void;

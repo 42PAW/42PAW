@@ -52,7 +52,7 @@ const BoardTemplate = (board: IBoardInfo) => {
             <div></div>
           </BoardProfileStyled>
           <BoardOptionButtonStyled>
-            <OptionButton />
+            <OptionButton boardId={boardId} memberName={memberName} />
           </BoardOptionButtonStyled>
         </BoardHeaderStyled>
         <BoardBodyStyled>

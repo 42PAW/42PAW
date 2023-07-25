@@ -4,12 +4,14 @@ import BanModal from "./modals/BanModal";
 import { ICurrentModalStateInfo } from "../types/interface/modal.interface";
 
 interface IOptionButtonProps {
-  commentId: number;
-  memberId: number;
+  boardId?: number;
+  commentId?: number;
+  memberId?: number;
   memberName: string;
 }
 
 const OptionButton: React.FC<IOptionButtonProps> = ({
+  boardId,
   commentId,
   memberId,
   memberName,

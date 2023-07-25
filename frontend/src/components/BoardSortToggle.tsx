@@ -71,7 +71,7 @@ const BoardSortToggleStyled = styled.div<{ $buttonToggled: number }>`
     margin-left: ${({ $buttonToggled }) => $buttonToggled * 65}px;
     transition: margin-left 0.3s ease-in-out;
     border-radius: 30px;
-    background-color: var(--pink);
+    background-color: var(--lightpurple);
   }
 `;
 

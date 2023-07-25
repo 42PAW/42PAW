@@ -1,9 +1,10 @@
-import ModalLayout from "./ModalLayout";
 import { styled } from "styled-components";
+import ModalLayout from "./ModalLayout";
+import { ModalType } from "../../types/enum/modal.enum";
 
 interface IBanModalProps {
   isModalOpen: boolean;
-  closeModal: (modalName: string) => void;
+  closeModal: (modalName: ModalType) => void;
   banUserName: string;
 }
 
@@ -14,7 +15,7 @@ const BanModal: React.FC<IBanModalProps> = ({
 }) => {
   return (
     <ModalLayout
-      modalName="banModal"
+      modalName={ModalType.BAN}
       isOpen={isModalOpen}
       closeModal={closeModal}
     >

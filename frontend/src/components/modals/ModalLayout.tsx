@@ -1,12 +1,13 @@
 // Modal.js
 import { ReactNode } from "react";
 import styled from "styled-components";
+import { ModalType } from "../../types/enum/modal.enum";
 
 interface IModalLayoutProps {
   /**closeModal의 인자로 들어가며, 닫을 모달을 알려주기 위한 string*/
-  modalName: string;
+  modalName: ModalType;
   isOpen: boolean;
-  closeModal: (modalName: string) => void;
+  closeModal: (modalName: ModalType) => void;
   children: ReactNode;
 }
 

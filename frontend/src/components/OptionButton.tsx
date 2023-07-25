@@ -3,7 +3,7 @@ import styled from "styled-components";
 import BanModal from "./modals/BanModal";
 import ReportModal from "./modals/ReportModal/ReportModal";
 import { ICurrentModalStateInfo } from "../types/interface/modal.interface";
-
+import { ModalType } from "../types/enum/modal.enum";
 interface IOptionButtonProps {
   boardId?: number;
   commentId?: number;
@@ -37,13 +37,13 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
       setIsToggled(!isToggled);
     }
   };
-  const openModal = (modalName: string) => {
+  const openModal = (modalName: ModalType) => {
     setModal({
       ...modal,
       [modalName]: true,
     });
   };
-  const closeModal = (modalName: string) => {
+  const closeModal = (modalName: ModalType) => {
     setModal({
       ...modal,
       [modalName]: false,
@@ -63,12 +63,12 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
       >
         <MenuList>
           <MenuItemStyled>
-            <MenuLinkStyled onClick={() => openModal("banModal")}>
+            <MenuLinkStyled onClick={() => openModal(ModalType.BAN)}>
               차단
             </MenuLinkStyled>
           </MenuItemStyled>
           <MenuItemStyled>
-            <MenuLinkStyled onClick={() => openModal("reportModal")}>
+            <MenuLinkStyled onClick={() => openModal(ModalType.REPORT)}>
               신고
             </MenuLinkStyled>
           </MenuItemStyled>

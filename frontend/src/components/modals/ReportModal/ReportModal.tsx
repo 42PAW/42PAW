@@ -3,10 +3,11 @@ import { styled } from "styled-components";
 import ModalLayout from "../ModalLayout";
 import ReportCategoryOption from "./ReportCategoryOption";
 import { ReportReason } from "../../../types/enum/report.enum";
+import { ModalType } from "../../../types/enum/modal.enum";
 
 interface IReportModalProps {
   isModalOpen: boolean;
-  closeModal: (modalName: string) => void;
+  closeModal: (modalName: ModalType) => void;
 }
 
 const reportOptions = [
@@ -56,7 +57,7 @@ const ReportModal: React.FC<IReportModalProps> = ({
 
   return (
     <ModalLayout
-      modalName="reportModal"
+      modalName={ModalType.REPORT}
       isOpen={isModalOpen}
       closeModal={closeModal}
     >

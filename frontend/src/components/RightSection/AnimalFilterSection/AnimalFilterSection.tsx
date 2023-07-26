@@ -25,8 +25,8 @@ const WrapperStyled = styled.div`
 const CategoryIconContainerStyled = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 20px;
-  margin-left: 25px;
+  margin-top: 30px;
+  margin-left: 15%;
   margin-bottom: 50px;
   color: var(--white);
   font-weight: bold;
@@ -40,7 +40,7 @@ const CategoryIconContainerStyled = styled.div`
 const SubmitButtonStyled = styled.button`
   cursor: pointer;
   margin-top: 50px;
-  width: 90px;
+  width: 100px;
   height: 40px;
   border-radius: 10px;
   border: 2px solid var(--white);

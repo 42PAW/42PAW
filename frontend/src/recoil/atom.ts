@@ -46,6 +46,16 @@ export const rightSectionContentState = atom<IRightSectionContentInfo>({
   },
 });
 
+export const currentBoardIdState = atom<number | null>({
+  key: "currentBoardId",
+  default: null,
+});
+
+export const currentCommentIdState = atom<number | null>({
+  key: "currentCommentId",
+  default: null,
+});
+
 export const currentOpenModalState = atom<ICurrentModalStateInfo>({
   key: "currenOpentModal",
   default: {

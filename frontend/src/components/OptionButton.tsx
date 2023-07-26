@@ -3,7 +3,11 @@ import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { ModalType } from "../types/enum/modal.enum";
 import useModal from "../hooks/useModal";
-import { banUserInfoState } from "../recoil/atom";
+import {
+  banUserInfoState,
+  currentBoardIdState,
+  currentCommentIdState,
+} from "../recoil/atom";
 import { IBanUserInfo } from "../types/interface/user.interface";
 
 interface IOptionButtonProps {
@@ -22,6 +26,12 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
 }) => {
   const [isToggled, setIsToggled] = useState(false);
   const setBanUserInfo = useSetRecoilState<IBanUserInfo>(banUserInfoState);
+  const setCurrentBoardId = useSetRecoilState<number | null>(
+    currentBoardIdState
+  );
+  const setCurrentCommentId = useSetRecoilState<number | null>(
+    currentCommentIdState
+  );
   const { openModal } = useModal();
   const banUser = { memberId: memberId, userName: memberName };
 
@@ -37,6 +47,14 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
     setBanUserInfo(banUser);
     openModal(ModalType.BAN);
   };
+  const handleDelete = () => {
+    if (boardId) {
+      setCurrentBoardId(boardId);
+    } else if (commentId) {
+      setCurrentCommentId(commentId);
+    }
+    openModal(ModalType.DELETE);
+  };
 
   return (
     <WrapperStyled onMouseLeave={() => handleToggle("ON")}>
@@ -50,14 +68,17 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
         }}
       >
         <MenuList onClick={() => handleToggle("OFF")}>
-          <MenuItemStyled>
-            <MenuLinkStyled onClick={handleBan}>차단</MenuLinkStyled>
-          </MenuItemStyled>
-          <MenuItemStyled>
-            <MenuLinkStyled onClick={() => openModal(ModalType.REPORT)}>
+          <MenuItemWrapperStyled>
+            <MenuItemStyled onClick={handleBan}>차단</MenuItemStyled>
+          </MenuItemWrapperStyled>
+          <MenuItemWrapperStyled>
+            <MenuItemStyled onClick={() => openModal(ModalType.REPORT)}>
               신고
-            </MenuLinkStyled>
-          </MenuItemStyled>
+            </MenuItemStyled>
+          </MenuItemWrapperStyled>
+          <MenuItemWrapperStyled>
+            <MenuItemStyled onClick={handleDelete}>삭제</MenuItemStyled>
+          </MenuItemWrapperStyled>
         </MenuList>
       </MenuStyled>
     </WrapperStyled>
@@ -108,9 +129,9 @@ const MenuList = styled.ul`
   padding: 0;
 `;
 
-const MenuItemStyled = styled.li``;
+const MenuItemWrapperStyled = styled.li``;
 
-const MenuLinkStyled = styled.div`
+const MenuItemStyled = styled.div`
   cursor: pointer;
   font-size: 10px;
   padding: 5px 5px;

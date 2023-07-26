@@ -17,7 +17,7 @@ import {
 import { useEffect } from "react";
 import { BoardCategory } from "../types/enum/board.category.enum";
 
-const Mainpage = () => {
+const MainPage = () => {
   const [defaultBoards, setDefaultBoards] =
     useRecoilState<BoardsInfoDTO>(defaultBoardsState);
   const [trendingBoards, setTrendingBoards] =
@@ -98,4 +98,4 @@ const WrapperStyled = styled.div`
   overflow-y: scroll;
 `;
 
-export default Mainpage;
+export default MainPage;

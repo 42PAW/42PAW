@@ -4,6 +4,7 @@ import { currentOpenModalState } from "../../recoil/atom";
 import BanModal from "./BanModal/BanModal";
 import ReportModal from "./ReportModal/ReportModal";
 import ProfileCardModal from "./ProfileCardModal/ProfileCardModal";
+import DeleteModal from "./DeleteModal/DeleteModal";
 
 const ModalContainer = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
@@ -14,6 +15,7 @@ const ModalContainer = () => {
       {currentOpenModal.banModal && <BanModal />}
       {currentOpenModal.reportModal && <ReportModal />}
       {currentOpenModal.profileCardModal && <ProfileCardModal />}
+      {currentOpenModal.deleteModal && <DeleteModal />}
     </>
   );
 };

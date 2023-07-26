@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import BanModal from "./modals/BanModal";
-import ReportModal from "./modals/ReportModal/ReportModal";
-import { ICurrentModalStateInfo } from "../types/interface/modal.interface";
 import { ModalType } from "../types/enum/modal.enum";
 import useModal from "../hooks/useModal";
-import { currentOpenModalState } from "../recoil/atom";
-import { useRecoilState } from "recoil";
+import { banUserInfoState } from "../recoil/atom";
+import { IBanUserInfo } from "../types/interface/user.interface";
 
 interface IOptionButtonProps {
   boardId?: number;
@@ -23,10 +21,9 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
   memberName,
 }) => {
   const [isToggled, setIsToggled] = useState(false);
-  const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
-    currentOpenModalState
-  );
+  const setBanUserInfo = useSetRecoilState<IBanUserInfo>(banUserInfoState);
   const { openModal } = useModal();
+  const banUser = { memberId: memberId, userName: memberName };
 
   const handleToggle = (state: string) => {
     if (state === "ON") {
@@ -35,6 +32,10 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
     if (state === "OFF") {
       setIsToggled(!isToggled);
     }
+  };
+  const handleBan = () => {
+    setBanUserInfo(banUser);
+    openModal(ModalType.BAN);
   };
 
   return (
@@ -50,9 +51,7 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
       >
         <MenuList onClick={() => handleToggle("OFF")}>
           <MenuItemStyled>
-            <MenuLinkStyled onClick={() => openModal(ModalType.BAN)}>
-              차단
-            </MenuLinkStyled>
+            <MenuLinkStyled onClick={handleBan}>차단</MenuLinkStyled>
           </MenuItemStyled>
           <MenuItemStyled>
             <MenuLinkStyled onClick={() => openModal(ModalType.REPORT)}>
@@ -61,11 +60,6 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
           </MenuItemStyled>
         </MenuList>
       </MenuStyled>
-      <BanModal
-        isModalOpen={currentOpenModal.banModal}
-        banUserName={memberName}
-      />
-      <ReportModal isModalOpen={currentOpenModal.reportModal} />
     </WrapperStyled>
   );
 };

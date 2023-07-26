@@ -1,19 +1,25 @@
 import { styled } from "styled-components";
-import ModalLayout from "./ModalLayout";
-import { ModalType } from "../../types/enum/modal.enum";
+import ModalLayout from "../ModalLayout";
+import { ModalType } from "../../../types/enum/modal.enum";
+import { currentOpenModalState } from "../../../recoil/atom";
+import { useRecoilState } from "recoil";
+import { ICurrentModalStateInfo } from "../../../types/interface/modal.interface";
+import { banUserInfoState } from "../../../recoil/atom";
+import { IBanUserInfo } from "../../../types/interface/user.interface";
 
-interface IBanModalProps {
-  isModalOpen: boolean;
-  banUserName: string;
-}
-
-const BanModal: React.FC<IBanModalProps> = ({ isModalOpen, banUserName }) => {
+const BanModal: React.FC = () => {
+  const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
+    currentOpenModalState
+  );
+  const [banUserInfo] = useRecoilState<IBanUserInfo>(banUserInfoState);
   return (
-    <ModalLayout modalName={ModalType.BAN} isOpen={isModalOpen}>
+    <ModalLayout modalName={ModalType.BAN} isOpen={currentOpenModal.banModal}>
       <WrapperStyled>
         <h1>차단하기</h1>
         <img src="/src/assets/ban.png" />
-        <ContentStyled>{banUserName} 님을 차단하시겠습니까?</ContentStyled>
+        <ContentStyled>
+          {banUserInfo.userName} 님을 차단하시겠습니까?
+        </ContentStyled>
         <button>차단</button>
       </WrapperStyled>
     </ModalLayout>

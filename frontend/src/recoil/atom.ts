@@ -3,6 +3,7 @@ import { IRightSectionContentInfo } from "../types/interface/right.section.inter
 import { ICurrentModalStateInfo } from "../types/interface/modal.interface";
 import { BoardsInfoDTO, CommentInfoDTO } from "../types/dto/board.dto";
 import { BoardCategory } from "../types/enum/board.category.enum";
+import { IBanUserInfo } from "../types/interface/user.interface";
 
 export const defaultBoardsState = atom<BoardsInfoDTO>({
   key: "defaultBoardsInfo",
@@ -51,5 +52,13 @@ export const currentOpenModalState = atom<ICurrentModalStateInfo>({
     banModal: false,
     reportModal: false,
     deleteModal: false,
+    profileCardModal: false,
+  },
+});
+
+export const banUserInfoState = atom<IBanUserInfo>({
+  key: "banUserInfo",
+  default: {
+    userName: "",
   },
 });

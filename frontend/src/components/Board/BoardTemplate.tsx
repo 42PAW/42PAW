@@ -29,7 +29,6 @@ const BoardTemplate = (board: IBoardInfo) => {
     currentBoardCommentsState
   );
   const { openCommentSection } = useRightSectionHandler();
-
   const getCommentsData = async (boardId: number) => {
     try {
       const result = await axiosGetBoardComments(boardId);

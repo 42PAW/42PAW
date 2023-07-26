@@ -4,10 +4,11 @@ import ModalLayout from "../ModalLayout";
 import ReportCategoryOption from "./ReportCategoryOption";
 import { ReportReason } from "../../../types/enum/report.enum";
 import { ModalType } from "../../../types/enum/modal.enum";
+import { currentOpenModalState } from "../../../recoil/atom";
+import { useRecoilState } from "recoil";
+import { ICurrentModalStateInfo } from "../../../types/interface/modal.interface";
 
-interface IReportModalProps {
-  isModalOpen: boolean;
-}
+interface IReportModalProps {}
 
 const reportOptions = [
   {
@@ -44,7 +45,10 @@ const reportOptions = [
   },
 ];
 
-const ReportModal: React.FC<IReportModalProps> = ({ isModalOpen }) => {
+const ReportModal: React.FC<IReportModalProps> = ({}) => {
+  const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
+    currentOpenModalState
+  );
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const handleSelectCategory = (category: ReportReason) => {
@@ -52,7 +56,10 @@ const ReportModal: React.FC<IReportModalProps> = ({ isModalOpen }) => {
   };
 
   return (
-    <ModalLayout modalName={ModalType.REPORT} isOpen={isModalOpen}>
+    <ModalLayout
+      modalName={ModalType.REPORT}
+      isOpen={currentOpenModal.reportModal}
+    >
       <WrapperStyled>
         <h1>신고하기</h1>
         <img src="/src/assets/report.png" />

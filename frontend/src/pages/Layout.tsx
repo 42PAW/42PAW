@@ -3,6 +3,7 @@ import styled from "styled-components";
 import LeftMenuSection from "../components/LeftMenuSection";
 import RightSection from "../components/RightSection/RightSection";
 import BoardSortToggle from "../components/BoardSortToggle";
+import ModalContainer from "../components/modals/ModalContainer";
 
 const Layout = () => {
   const location = useLocation();
@@ -23,6 +24,7 @@ const Layout = () => {
         </MainAreaStyled>
         <RightSection />
       </MainAreaWrapperStyled>
+      <ModalContainer />
     </WrapperStyled>
   );
 };

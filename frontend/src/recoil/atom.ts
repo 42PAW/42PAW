@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import { IRightSectionContentInfo } from "../types/interface/right.section.interface";
+import { ICurrentModalStateInfo } from "../types/interface/modal.interface";
 import { BoardsInfoDTO, CommentInfoDTO } from "../types/dto/board.dto";
 import { BoardCategory } from "../types/enum/board.category.enum";
 
@@ -41,5 +42,14 @@ export const rightSectionContentState = atom<IRightSectionContentInfo>({
     follower: false,
     following: false,
     animalFilter: false,
+  },
+});
+
+export const currentOpenModalState = atom<ICurrentModalStateInfo>({
+  key: "currenOpentModal",
+  default: {
+    banModal: false,
+    reportModal: false,
+    deleteModal: false,
   },
 });

@@ -7,7 +7,6 @@ import { ModalType } from "../../../types/enum/modal.enum";
 
 interface IReportModalProps {
   isModalOpen: boolean;
-  closeModal: (modalName: ModalType) => void;
 }
 
 const reportOptions = [
@@ -45,10 +44,7 @@ const reportOptions = [
   },
 ];
 
-const ReportModal: React.FC<IReportModalProps> = ({
-  isModalOpen,
-  closeModal,
-}) => {
+const ReportModal: React.FC<IReportModalProps> = ({ isModalOpen }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const handleSelectCategory = (category: ReportReason) => {
@@ -56,11 +52,7 @@ const ReportModal: React.FC<IReportModalProps> = ({
   };
 
   return (
-    <ModalLayout
-      modalName={ModalType.REPORT}
-      isOpen={isModalOpen}
-      closeModal={closeModal}
-    >
+    <ModalLayout modalName={ModalType.REPORT} isOpen={isModalOpen}>
       <WrapperStyled>
         <h1>신고하기</h1>
         <img src="/src/assets/report.png" />

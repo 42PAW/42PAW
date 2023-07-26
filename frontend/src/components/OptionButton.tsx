@@ -4,6 +4,10 @@ import BanModal from "./modals/BanModal";
 import ReportModal from "./modals/ReportModal/ReportModal";
 import { ICurrentModalStateInfo } from "../types/interface/modal.interface";
 import { ModalType } from "../types/enum/modal.enum";
+import useModal from "../hooks/useModal";
+import { currentOpenModalState } from "../recoil/atom";
+import { useRecoilState } from "recoil";
+
 interface IOptionButtonProps {
   boardId?: number;
   commentId?: number;
@@ -19,15 +23,10 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
   memberName,
 }) => {
   const [isToggled, setIsToggled] = useState(false);
-  const [modal, setModal] = useState<ICurrentModalStateInfo>({
-    banModal: false,
-    reportModal: false,
-    deleteModal: false,
-  });
-
-  useEffect(() => {
-    setIsToggled(false);
-  }, [modal]);
+  const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
+    currentOpenModalState
+  );
+  const { openModal } = useModal();
 
   const handleToggle = (state: string) => {
     if (state === "ON") {
@@ -36,18 +35,6 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
     if (state === "OFF") {
       setIsToggled(!isToggled);
     }
-  };
-  const openModal = (modalName: ModalType) => {
-    setModal({
-      ...modal,
-      [modalName]: true,
-    });
-  };
-  const closeModal = (modalName: ModalType) => {
-    setModal({
-      ...modal,
-      [modalName]: false,
-    });
   };
 
   return (
@@ -61,7 +48,7 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
           visibility: isToggled ? "visible" : "hidden",
         }}
       >
-        <MenuList>
+        <MenuList onClick={() => handleToggle("OFF")}>
           <MenuItemStyled>
             <MenuLinkStyled onClick={() => openModal(ModalType.BAN)}>
               차단
@@ -75,11 +62,10 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
         </MenuList>
       </MenuStyled>
       <BanModal
-        isModalOpen={modal.banModal}
-        closeModal={closeModal}
+        isModalOpen={currentOpenModal.banModal}
         banUserName={memberName}
       />
-      <ReportModal isModalOpen={modal.reportModal} closeModal={closeModal} />
+      <ReportModal isModalOpen={currentOpenModal.reportModal} />
     </WrapperStyled>
   );
 };

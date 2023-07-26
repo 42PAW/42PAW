@@ -4,21 +4,12 @@ import { ModalType } from "../../types/enum/modal.enum";
 
 interface IBanModalProps {
   isModalOpen: boolean;
-  closeModal: (modalName: ModalType) => void;
   banUserName: string;
 }
 
-const BanModal: React.FC<IBanModalProps> = ({
-  isModalOpen,
-  closeModal,
-  banUserName,
-}) => {
+const BanModal: React.FC<IBanModalProps> = ({ isModalOpen, banUserName }) => {
   return (
-    <ModalLayout
-      modalName={ModalType.BAN}
-      isOpen={isModalOpen}
-      closeModal={closeModal}
-    >
+    <ModalLayout modalName={ModalType.BAN} isOpen={isModalOpen}>
       <WrapperStyled>
         <h1>차단하기</h1>
         <img src="/src/assets/ban.png" />

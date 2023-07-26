@@ -7,6 +7,8 @@ import { CommentInfoDTO } from "../../types/dto/board.dto";
 import { IBoardInfo } from "../../types/interface/board.interface";
 import BoardPhotoBox from "./BoardPhotoBox";
 import OptionButton from "../OptionButton";
+import useModal from "../../hooks/useModal";
+import { ModalType } from "../../types/enum/modal.enum";
 
 const BoardTemplate = (board: IBoardInfo) => {
   const {
@@ -29,6 +31,7 @@ const BoardTemplate = (board: IBoardInfo) => {
     currentBoardCommentsState
   );
   const { openCommentSection } = useRightSectionHandler();
+  const { openModal } = useModal();
   const getCommentsData = async (boardId: number) => {
     try {
       const result = await axiosGetBoardComments(boardId);
@@ -41,14 +44,17 @@ const BoardTemplate = (board: IBoardInfo) => {
     openCommentSection();
     getCommentsData(boardId);
   };
+  const handleOpenProfile = () => {
+    openModal(ModalType.PROFILECARD);
+  };
+
   return (
     <>
       <BoardWrapperStyled>
         <BoardHeaderStyled>
-          <BoardProfileStyled>
+          <BoardProfileStyled onClick={handleOpenProfile}>
             <img src={profileImage} />
             <div>{memberName}</div>
-            <div></div>
           </BoardProfileStyled>
           <BoardOptionButtonStyled>
             <OptionButton boardId={boardId} memberName={memberName} />
@@ -86,7 +92,7 @@ const BoardTemplate = (board: IBoardInfo) => {
             </DivOne>
             <DivTwo>{content}</DivTwo>
             <DivThree>
-              <div>{previewCommentUser}</div>
+              <div onClick={handleOpenProfile}>{previewCommentUser}</div>
               <div>{previewComment}</div>
               <div onClick={() => handleCommentClick(1)}>..댓글 더 보기</div>
             </DivThree>
@@ -121,10 +127,12 @@ const BoardProfileStyled = styled.div`
   margin-left: 6%;
   width: 40%;
   img {
+    cursor: pointer;
     width: 20%;
     border-radius: 100%;
   }
   div {
+    cursor: pointer;
     margin-left: 5%;
     font-size: 120%;
     color: var(--white);
@@ -224,6 +232,7 @@ const DivThree = styled.div`
   margin-top: 3%;
   font-size: 100%;
   div:nth-child(1) {
+    cursor: pointer;
     margin-right: 1%;
     font-weight: bold;
   }

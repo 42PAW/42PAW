@@ -30,7 +30,7 @@ const WrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 150px;
+  height: 149px;
   background-color: var(--white);
   border-radius: 15px;
   color: var(--lightgrey);

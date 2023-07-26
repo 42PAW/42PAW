@@ -4,8 +4,6 @@ import { ModalType } from "../../../types/enum/modal.enum";
 import { currentOpenModalState } from "../../../recoil/atom";
 import { useRecoilState } from "recoil";
 import { ICurrentModalStateInfo } from "../../../types/interface/modal.interface";
-import { banUserInfoState } from "../../../recoil/atom";
-import { IBanUserInfo } from "../../../types/interface/user.interface";
 
 const ProfileCardModal = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
@@ -75,7 +73,7 @@ const ButtonContainerStyled = styled.div`
     cursor: pointer;
     height: 40px;
     width: 100px;
-    border-radius: 30px;
+    border-radius: 10px;
     border: none;
     &:nth-child(1) {
       background-color: var(--purple);

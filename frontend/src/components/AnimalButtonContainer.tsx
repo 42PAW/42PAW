@@ -13,7 +13,13 @@ const renderAnimalSpecies = (buttonName: string) => {
   if (buttonName === AnimalSpecies.INSECT) return "🐝 곤충";
 };
 
-const AnimalButtonContainer = () => {
+interface AnimalButtonContainerProps {
+  columns: number;
+}
+
+const AnimalButtonContainer = ({
+  columns,
+}: AnimalButtonContainerProps): JSX.Element => {
   const [selectedAnimals, setSelectedAnimals] = useState<Set<string>>(
     new Set([AnimalSpecies.DOG, AnimalSpecies.CAT])
   );
@@ -40,7 +46,7 @@ const AnimalButtonContainer = () => {
   };
 
   return (
-    <AnimalButtonContainerStyled>
+    <AnimalButtonContainerStyled $columns={columns}>
       {buttons.map((buttonName) => (
         <AnimalButtonStyled
           key={buttonName}
@@ -55,12 +61,12 @@ const AnimalButtonContainer = () => {
   );
 };
 
-const AnimalButtonContainerStyled = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
+const AnimalButtonContainerStyled = styled.div<{ $columns: number }>`
+  display: grid;
+  grid-template-columns: repeat(${(props) => props.$columns}, 130px);
+  grid-auto-rows: 55px;
+  grid-row-gap: 15px;
+  grid-column-gap: 25px;
 `;
 
 const AnimalButtonStyled = styled.button<{
@@ -71,9 +77,6 @@ const AnimalButtonStyled = styled.button<{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 70%;
-  width: 23%;
-  margin: 10px 0px;
   border-radius: 50px;
   border: none;
   font-weight: 600;

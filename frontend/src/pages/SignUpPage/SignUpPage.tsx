@@ -187,7 +187,7 @@ const SignUpPage: React.FC = () => {
         <h1>
           만나고 싶은 동물 친구들을 <br /> 선택해 주세요.
         </h1>
-        <AnimalButtonContainer />
+        <AnimalButtonContainer columns={4} />
         <InputButtonStyled onClick={terminateAnimalCategorySection}>
           <img src="/src/assets/arrowW.png" />
         </InputButtonStyled>

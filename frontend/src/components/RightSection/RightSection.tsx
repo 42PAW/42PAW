@@ -45,9 +45,9 @@ const RightSectionStyled = styled.div<{
   flex-direction: column;
   align-items: center;
   width: 490px;
-  height: 70%;
+  height: 100%;
   max-height: 860px;
-  min-height: 783px;
+
   margin-left: 20px;
   border-radius: 30px;
   background-color: var(--transparent);

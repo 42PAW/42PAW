@@ -1,35 +1,80 @@
 import styled from "styled-components";
 
+const profileInfo = {
+  memberName: "아롱이형님",
+  nicknameUpdatedAt: "2023-01-23",
+  profileImage: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+  statement: "아롱이의 오빠입니다.\n잘 부탁 합니다.",
+  followingCount: 23,
+  followerCount: 42,
+  boardCount: 47,
+};
+
+const imgs = [
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+];
+
+function CountInfo({ boardCount, followerCount, followingCount }) {
+  return (
+    <CountInfoContainer>
+      <ul>
+        <li>
+          게시물
+          <span>{boardCount}</span>
+        </li>
+        <li>
+          팔로워
+          <span>{followerCount}</span>
+        </li>
+        <li>
+          팔로잉
+          <span>{followingCount}</span>
+        </li>
+      </ul>
+    </CountInfoContainer>
+  );
+}
+
 const ProfileTemplate = () => {
   return (
     <>
       <ProfileWrapperStyled>
         <ProfileHeaderStyled>
           <ProfileHeaderLeftSectionStyled>
-            <div>오덕애비</div>
             <img src="/src/assets/profileImage.jpg" />
             <div>프로필 수정</div>
           </ProfileHeaderLeftSectionStyled>
           <ProfileHeaderRightSectionStyled>
-            <FollowerSectionStyled>
-              <div>
-                게시물
-                <br />
-                47
-              </div>
-              <div>
-                팔로워
-                <br />
-                678
-              </div>
-              <div>
-                팔로잉 <br />
-                279
-              </div>
-            </FollowerSectionStyled>
-            <CaptionSectionStyled>
-              강아지는 항상 옳다. 오덕아 사랑해!
-            </CaptionSectionStyled>
+            <div className="memberName">{profileInfo.memberName}</div>
+            {/* <FollowerSectionStyled> */}
+            <CountInfo
+              boardCount={profileInfo.boardCount}
+              followerCount={profileInfo.followerCount}
+              followingCount={profileInfo.followingCount}
+            />
+            {/* </FollowerSectionStyled> */}
+            <CaptionSectionStyled>{profileInfo.statement}</CaptionSectionStyled>
           </ProfileHeaderRightSectionStyled>
         </ProfileHeaderStyled>
         <ProfileBodyStyled>
@@ -42,28 +87,9 @@ const ProfileTemplate = () => {
             </button>
           </PhotoCategoryToggleStyled>
           <PhotoZoneWrapperStyled>
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
-            <img src="/src/assets/oduck.png" />
+            {imgs.map((prop) => (
+              <img src={prop} />
+            ))}
           </PhotoZoneWrapperStyled>
         </ProfileBodyStyled>
       </ProfileWrapperStyled>
@@ -71,13 +97,44 @@ const ProfileTemplate = () => {
   );
 };
 
+/* 게시물, 팔로워, 팔로잉 수 */
+const CountInfoContainer = styled.div`
+  display: flex;
+  align-items: center;
+
+  ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      flex-direction: column;
+      margin-right: 80px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      span {
+        margin-left: 5px;
+      }
+    }
+  }
+`;
+
 const ProfileWrapperStyled = styled.div`
-  border-radius: 50px;
-  margin-top: 3%;
+  border-radius: 20px;
   margin-bottom: 3%;
-  height: 90vh;
-  width: 90%;
+  height: 100vh;
+  width: calc(100% - 40px);
+  margin: 0 auto;
+  min-width: 500px; /* 최소 폭 지정 */
+  max-width: 935px; /* 최대 폭 지정 */
   box-shadow: var(--default-shadow);
+  display: flex; /* Add flex display */
+  flex-direction: column; /* Set flex direction to column */
 `;
 
 const ProfileHeaderStyled = styled.div`
@@ -86,12 +143,16 @@ const ProfileHeaderStyled = styled.div`
   background-color: transparent;
   border-top-left-radius: 50px;
   border-top-right-radius: 50px;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 100%;
-  height: 20%;
+  height: 150px;
   img {
     width: 30%;
     border-radius: 100%;
+  }
+
+  @media (min-width: 768px) {
+    height: 230px;
   }
 `;
 
@@ -102,35 +163,38 @@ const ProfileHeaderLeftSectionStyled = styled.div`
   width: 30%;
   height: 100%;
   margin-left: 4%;
-  div:nth-child(1) {
+  div {
     color: #4a494ed5;
-    font-size: 120%;
-    margin-top: 10%;
-  }
-  div:nth-child(3) {
-    color: #4a494ed5;
-    font-size: 80%;
-    margin-top: 2%;
+    font-size: 1.6rem;
+    margin-top: 15px;
   }
   img {
-    margin-top: 2%;
-    width: 60%;
-    border-radius: 100%;
+    margin-top: 40px;
+    width: 120px;
   }
 `;
 
 const ProfileHeaderRightSectionStyled = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   width: 60%;
   height: 100%;
+  font-size: 1.6rem;
   margin-right: 5%;
+  justify-content: space-around;
+  .memberName {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 40px;
+    color: #4a494ed5;
+    font-size: 2rem;
+  }
 `;
 
 const FollowerSectionStyled = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: center;
   height: 55%;
   width: 100%;
@@ -141,20 +205,21 @@ const FollowerSectionStyled = styled.div`
 
 const CaptionSectionStyled = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
   border-radius: 30px;
   height: 40%;
   width: 100%;
 `;
 
 const ProfileBodyStyled = styled.div`
-  height: 80%;
-  border-bottom-left-radius: 50px;
-  border-bottom-right-radius: 50px;
+  flex: 1;
+  overflow: hidden;
   img {
     width: 50%;
   }
+  //   height: calc(100% - {ProfileHeaderStyled.height});
+  //   border-bottom-left-radius: 50px;
+  //   border-bottom-right-radius: 50px;
 `;
 
 const PhotoCategoryToggleStyled = styled.div`
@@ -185,12 +250,16 @@ const PhotoCategoryToggleStyled = styled.div`
 `;
 
 const PhotoZoneWrapperStyled = styled.div`
-  height: 93%;
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
   overflow-y: scroll;
   img {
-    width: 50%;
+    width: calc(33.3% - 6px);
+    margin: 3px;
+    border-radius: 1%;
   }
 `;
 

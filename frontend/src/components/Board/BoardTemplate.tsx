@@ -104,11 +104,11 @@ const BoardTemplate = (board: IBoardInfo) => {
 };
 
 const BoardWrapperStyled = styled.div`
-  width: 90%;
-  min-height: 640px;
+  width: 93%;
   margin-top: 3%;
-  margin-bottom: 3%;
+  margin-bottom: 5%;
   border-radius: 30px;
+  padding-bottom: 10%;
   box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
 `;
 
@@ -134,7 +134,7 @@ const BoardProfileStyled = styled.div`
   div {
     cursor: pointer;
     margin-left: 5%;
-    font-size: 120%;
+    font-size: 110%;
     color: var(--white);
   }
 `;
@@ -152,7 +152,7 @@ const BoardOptionButtonStyled = styled.div`
 `;
 
 const BoardBodyStyled = styled.div`
-  height: 90%;
+  height: 98.2%;
   border-bottom-left-radius: 30px;
   border-bottom-right-radius: 30px;
   background-color: var(--white);
@@ -205,7 +205,7 @@ const BoardContentContainerStyled = styled.div`
   margin-top: 1.5%;
   margin-left: 5%;
   margin-right: 5%;
-  font-size: 14px;
+  font-size: 13px;
 `;
 
 const DivOne = styled.div`

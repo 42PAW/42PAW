@@ -65,8 +65,8 @@ const WrapperStyled = styled.div`
   position: relative;
   align-items: center;
   width: 100%;
-  height: 78%;
-  background-color: black;
+  background-color: var(--white);
+  aspect-ratio: 1 / 1;
 `;
 
 const PhotoZoneStyled = styled.div<{ $photoIndex: number }>`

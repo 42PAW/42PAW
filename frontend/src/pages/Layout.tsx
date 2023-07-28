@@ -22,7 +22,9 @@ const Layout = () => {
           {isMainPage && <BoardSortToggle />}
           <Outlet />
         </MainAreaStyled>
-        <RightSection />
+        <RightSectionContainer>
+          <RightSection />
+        </RightSectionContainer>
       </MainAreaWrapperStyled>
       <ModalContainer />
     </WrapperStyled>
@@ -41,18 +43,22 @@ const MainAreaWrapperStyled = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-width: 1257px;
-  min-height: 860px;
+  height: 100%;
 `;
 
 const MainAreaStyled = styled.main`
-  position: relative;
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: center;
   width: 500px;
-  height: 100vh;
-  min-height: 860px;
+  height: 100%;
+`;
+
+const RightSectionContainer = styled.div`
+  @media (max-width: 1023px) {
+    display: none;
+  }
 `;
 
 export default Layout;

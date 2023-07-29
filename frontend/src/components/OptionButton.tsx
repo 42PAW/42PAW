@@ -10,10 +10,16 @@ import {
 } from "../recoil/atom";
 import { IBanUserInfo } from "../types/interface/user.interface";
 
+/**
+ * @boardId (optional) 신고, 차단, 삭제할 게시물의 id
+ * @commendId (optional) 신고, 차단, 삭제할 댓글의 id
+ * @memberId 신고, 차단, 삭제할 댓글 혹은 게시물의 유저 id
+ * @memberName 차단 모달에 띄위게 될 차단 유저명
+ */
 interface IOptionButtonProps {
   boardId?: number;
   commentId?: number;
-  memberId?: number;
+  memberId: number;
   memberName: string;
 }
 

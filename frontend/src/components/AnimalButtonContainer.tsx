@@ -13,6 +13,9 @@ const renderAnimalSpecies = (buttonName: string) => {
   if (buttonName === AnimalSpecies.INSECT) return "🐝 곤충";
 };
 
+/**
+ * @columns 버튼 컨테이너 열의 개수
+ */
 interface AnimalButtonContainerProps {
   columns: number;
 }

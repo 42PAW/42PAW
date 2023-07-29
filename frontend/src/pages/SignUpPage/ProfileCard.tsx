@@ -1,6 +1,11 @@
 import styled from "styled-components";
 import { ChangeEvent, useState } from "react";
 
+/**
+ * @nickname 유저가 설정한 닉네임
+ * @caption 유저가 설정한 캡션
+ * @sectionObserver ImageSection에서만 프로필 설정 변경 벼튼을 활성화
+ */
 interface IProfileCardProps {
   nickname: string;
   caption: string;

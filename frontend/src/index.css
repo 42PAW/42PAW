@@ -27,7 +27,7 @@ body {
   margin: 0;
   height: 100%;
   overflow: auto;
-  font-size: 12px;
+  font-size: 10px;
   color: var(--grey);
   font-family: "Noto Sans KR", sans-serif;
   text-align: justify;

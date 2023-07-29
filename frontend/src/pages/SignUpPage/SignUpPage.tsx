@@ -5,6 +5,10 @@ import ProfileCard from "./ProfileCard";
 import AnimalButtonContainer from "../../components/AnimalButtonContainer";
 import confetti from "https://esm.run/canvas-confetti@1";
 
+/**
+ * @isSectionVisible 해당 섹션의 opacity transition을 조절하기 위한 boolean
+ * @isSectionDisplayed 해당 섹션을 display 값의 flex, none으로 구분하기 위한 boolean
+ */
 interface ISectionStateInfo {
   isFirstSectionVisible: boolean;
   isFirstSectionDisplayed: boolean;

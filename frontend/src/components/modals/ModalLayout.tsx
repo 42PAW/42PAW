@@ -1,11 +1,14 @@
 import { ReactNode } from "react";
-import { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { ModalType } from "../../types/enum/modal.enum";
 import useModal from "../../hooks/useModal";
 
+/**
+ * @modalName 닫으려는 타깃 모달명
+ * @isOpen 타깃 모달이 열렸는지에 대한 boolean
+ * @children 모달 레이아웃 안에 전달돼 렌더링할 요소
+ */
 interface IModalLayoutProps {
-  /**closeModal의 인자로 들어가며, 닫을 모달을 알려주기 위한 string*/
   modalName: ModalType;
   isOpen: boolean;
   children: ReactNode;
@@ -17,7 +20,6 @@ const ModalLayout: React.FC<IModalLayoutProps> = ({
   children,
 }) => {
   const { closeModal } = useModal();
-  const [isOpened, setIsOpened] = useState<boolean>(false);
 
   if (!isOpen) return null;
   return (

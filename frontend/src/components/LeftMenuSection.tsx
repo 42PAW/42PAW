@@ -65,7 +65,8 @@ const LeftMenuStyled = styled.div`
     align-items: center;
   }
   @media (max-width: 1023px) {
-    overflow: scroll;
+    overflow-x: scroll;
+    overflow-y: hidden;
     background-color: #e6dade9f;
     margin-top: -50px;
     top: 100%;

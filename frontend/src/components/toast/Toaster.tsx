@@ -16,12 +16,12 @@ const Toast: React.FC = () => {
     return () => clearTimeout(timer);
   }, [toastMessages]);
 
-  const closeAllToasts = () => {
+  const closeAllToasts = async () => {
     const updatedToasts = toastMessages.map((toast) => ({
       ...toast,
       isPopped: false,
     }));
-    setToastMessages(updatedToasts);
+    await setToastMessages(updatedToasts);
     setTimeout(() => {
       resetToastMessage();
     }, 200);

@@ -4,6 +4,7 @@ import { ICurrentModalStateInfo } from "../types/interface/modal.interface";
 import { BoardsInfoDTO, CommentInfoDTO } from "../types/dto/board.dto";
 import { BoardCategory } from "../types/enum/board.category.enum";
 import { IBanUserInfo } from "../types/interface/user.interface";
+import { IToastInfo } from "../types/interface/toast.interface";
 
 /**현재까지 불러온 기본 정렬 게시물 목록*/
 export const defaultBoardsState = atom<BoardsInfoDTO>({
@@ -74,6 +75,11 @@ export const currentOpenModalState = atom<ICurrentModalStateInfo>({
     deleteModal: false,
     profileCardModal: false,
   },
+});
+
+export const toastMessagesState = atom<IToastInfo[]>({
+  key: "toastMessages",
+  default: [],
 });
 
 /**현재 밴할 대상인 유저 */

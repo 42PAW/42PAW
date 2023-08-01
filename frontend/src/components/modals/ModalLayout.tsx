@@ -60,7 +60,8 @@ const ModalOverlay = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  animation: ${fadeIn} 0.2s ease-in-out;
+  animation: ${fadeIn} 0.2s;
+  backdrop-filter: blur(5px);
 `;
 
 const ModalContainer = styled.div`
@@ -69,7 +70,7 @@ const ModalContainer = styled.div`
   align-items: center;
   border-radius: 15px;
   box-shadow: var(--modal-shadow);
-  animation: ${fadeIn} 0.2s ease-in-out;
+  animation: ${fadeIn} 0.2s;
 `;
 
 export default ModalLayout;

@@ -9,6 +9,7 @@ import {
   currentCommentIdState,
 } from "../../../recoil/atom";
 import useModal from "../../../hooks/useModal";
+import useToaster from "../../../hooks/useToaster";
 
 const DeleteModal = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
@@ -19,9 +20,11 @@ const DeleteModal = () => {
     currentCommentIdState
   );
   const { closeModal } = useModal();
+  const { popToast } = useToaster();
 
   const handleDelete = () => {
     closeModal(ModalType.DELETE);
+    popToast("해당 글이 삭제되었습니다.");
   };
 
   return (

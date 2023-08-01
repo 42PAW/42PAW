@@ -205,6 +205,7 @@ const BoardContentContainerStyled = styled.div`
   margin-top: 1.5%;
   margin-left: 5%;
   margin-right: 5%;
+  margin-bottom: 1%;
   font-size: 13px;
 `;
 

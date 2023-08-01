@@ -30,7 +30,7 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
   memberId,
   memberName,
 }) => {
-  const [isToggled, setIsToggled] = useState(false);
+  const [isToggled, setIsToggled] = useState<boolean>(false);
   const setBanUserInfo = useSetRecoilState<IBanUserInfo>(banUserInfoState);
   const setCurrentBoardId = useSetRecoilState<number | null>(
     currentBoardIdState

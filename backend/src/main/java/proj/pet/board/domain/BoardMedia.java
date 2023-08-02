@@ -26,4 +26,7 @@ public class BoardMedia {
 
 	@Column(name = "index", nullable = false)
 	private Integer index;
+
+	@Column(name = "media_type", nullable = false)
+	private MediaType mediaType;
 }

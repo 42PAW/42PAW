@@ -20,11 +20,11 @@ public class Follow {
 	private MemberCompositeKey id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member from;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "target_member_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "target_member_id", nullable = false, updatable = false)
 	private Member to;
 
 	@Column(name = "followed_at", nullable = false)

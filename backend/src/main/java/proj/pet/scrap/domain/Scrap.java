@@ -22,13 +22,13 @@ public class Scrap {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member member;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "board_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "board_id", nullable = false, updatable = false)
 	private Board board;
 
-	@Column(name = "created_at", nullable = false, updatable = false, insertable = false)
+	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 }

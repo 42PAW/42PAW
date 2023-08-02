@@ -28,7 +28,7 @@ public class Board {
 	private Long id;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "member_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member member;
 
 	@Column(name = "visible_scope", nullable = false)

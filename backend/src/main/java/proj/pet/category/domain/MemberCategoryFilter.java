@@ -19,11 +19,11 @@ public class MemberCategoryFilter {
 
 	@MapsId("consumerId")
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "consumer_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "consumer_id", nullable = false, updatable = false)
 	private Member member;
 
 	@MapsId("providerId")
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "provider_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "provider_id", nullable = false, updatable = false)
 	private AnimalCategory animalCategory;
 }

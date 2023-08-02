@@ -23,19 +23,19 @@ public class Report {
 	private Long id;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "member_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member from;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "reported_member_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "reported_member_id", nullable = false, updatable = false)
 	private Member to;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "board_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "board_id", nullable = false, updatable = false)
 	private Board board;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "comment_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "comment_id", nullable = false, updatable = false)
 	private Comment comment;
 
 	@Column(name = "reason", nullable = false)

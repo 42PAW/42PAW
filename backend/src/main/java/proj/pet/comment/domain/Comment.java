@@ -23,11 +23,11 @@ public class Comment {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "board_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "board_id", nullable = false, updatable = false)
 	private Board board;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member member;
 
 	@OneToMany(mappedBy = "comment",

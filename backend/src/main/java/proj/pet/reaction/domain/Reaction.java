@@ -22,11 +22,11 @@ public class Reaction {
 	private Long id;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "board_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "board_id", nullable = false, updatable = false)
 	private Board board;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "member_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member member;
 
 	@Column(name = "reaction_type", nullable = false)

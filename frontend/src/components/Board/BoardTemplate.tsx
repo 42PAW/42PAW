@@ -107,7 +107,7 @@ const BoardWrapperStyled = styled.div`
   width: 93%;
   margin-top: 3%;
   margin-bottom: 5%;
-  border-radius: 30px;
+  border-radius: 25px;
   padding-bottom: 10%;
   box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
 `;
@@ -116,8 +116,8 @@ const BoardHeaderStyled = styled.div`
   display: flex;
   justify-content: space-between;
   height: 10%;
-  border-top-left-radius: 30px;
-  border-top-right-radius: 30px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
   background-color: var(--transparent);
 `;
 
@@ -134,7 +134,7 @@ const BoardProfileStyled = styled.div`
   div {
     cursor: pointer;
     margin-left: 5%;
-    font-size: 110%;
+    font-size: 1.3rem;
     color: var(--white);
   }
 `;
@@ -153,8 +153,8 @@ const BoardOptionButtonStyled = styled.div`
 
 const BoardBodyStyled = styled.div`
   height: 98.2%;
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
   background-color: var(--white);
 `;
 
@@ -230,7 +230,7 @@ const DivTwo = styled.div`
 const DivThree = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 3%;
+  margin-top: 2%;
   font-size: 100%;
   div:nth-child(1) {
     cursor: pointer;

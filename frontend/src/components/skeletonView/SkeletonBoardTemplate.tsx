@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const SkeletonBoardTemplate = () => {
   return (
@@ -40,13 +40,22 @@ const SkeletonBoardTemplate = () => {
   );
 };
 
+const waveAnimation = keyframes`
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+`;
+
 const BoardWrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 95%;
-  min-height: 600px;
-  margin-top: 5%;
+  width: 93%;
+  min-height: 660px;
+  margin-top: 3%;
+  margin-bottom: 5%;
+  background-color: var(--transparent);
+  border-radius: 25px;
 `;
 
 const BoardHeaderStyled = styled.div`
@@ -68,14 +77,18 @@ const SkeletonProfileImageStyled = styled.div`
   height: 35px;
   border-radius: 100%;
   margin-left: 3%;
-  background-color: var(--transparent);
+  background: linear-gradient(270deg, var(--lightpurple), var(--lightpink));
+  background-size: 200% 200%;
+  animation: ${waveAnimation} 3s ease infinite;
 `;
 
 const SkeletonUserNameStyled = styled.div`
   width: 80px;
   height: 20px;
   margin-left: 10px;
-  background-color: var(--transparent);
+  background: linear-gradient(270deg, var(--lightpurple), var(--lightpink));
+  background-size: 200% 200%;
+  animation: ${waveAnimation} 3s ease infinite;
 `;
 
 const BoardBodyStyled = styled.div`
@@ -92,8 +105,10 @@ const SkeletonPhotoBoxStyled = styled.div`
   position: relative;
   align-items: center;
   height: 78%;
-  width: 90%;
-  background-color: var(--transparent);
+  width: 100%;
+  background: linear-gradient(270deg, var(--lightpurple), var(--lightpink));
+  background-size: 200% 200%;
+  animation: ${waveAnimation} 2s ease infinite;
 `;
 
 export default SkeletonBoardTemplate;

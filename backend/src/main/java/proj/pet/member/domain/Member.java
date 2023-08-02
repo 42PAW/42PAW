@@ -43,7 +43,7 @@ public class Member {
 	private String statement;
 
 	@Column(name = "role", nullable = false)
-	private Role role;
+	private MemberRole memberRole;
 
 	@Column(name = "nickname_updated_at", nullable = false)
 	private LocalDateTime nicknameUpdatedAt;

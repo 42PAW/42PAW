@@ -1,6 +1,6 @@
 package proj.pet.member.domain;
 
-public enum Role {
+public enum MemberRole {
 	USER,
 	ADMIN,
 }

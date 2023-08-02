@@ -4,13 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.member.domain.Member;
-<<<<<<< Updated upstream
+import proj.pet.reaction.domain.Reaction;
 import proj.pet.utils.domain.IdDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
-=======
-import proj.pet.reaction.domain.Reaction;
->>>>>>> Stashed changes
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,6 +44,12 @@ public class Board extends IdDomain implements Validatable {
 
 	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
+	@OneToMany(mappedBy = "board",
+			targetEntity = Reaction.class,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Reaction> reactions = new ArrayList<>();
+
 	protected Board(Member member, VisibleScope visibleScope, String content, LocalDateTime now) {
 		this.member = member;
 		this.visibleScope = visibleScope;
@@ -68,10 +71,4 @@ public class Board extends IdDomain implements Validatable {
 			&& this.updatedAt != null
 			&& this.createdAt != null;
 	}
-
-	@OneToMany(mappedBy = "board",
-			targetEntity = Reaction.class,
-			cascade = CascadeType.ALL,
-			orphanRemoval = true)
-	private List<Reaction> reactions = new ArrayList<>();
 }

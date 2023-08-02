@@ -18,6 +18,6 @@ public class RuntimeExceptionThrower {
 
 	public static void checkValidity(Validatable validatable) {
 		if (!validatable.isValid())
-			throw new DomainException(ExceptionStatus.INVALID_ARGUMENT);
+			throw new DomainException(ExceptionStatus.INVARIANT_VIOLENCE);
 	}
 }

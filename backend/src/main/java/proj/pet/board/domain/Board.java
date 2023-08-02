@@ -4,28 +4,27 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.member.domain.Member;
+import proj.pet.utils.domain.IdDomain;
+import proj.pet.utils.domain.RuntimeExceptionThrower;
+import proj.pet.utils.domain.Validatable;
 
 import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.AUTO;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Table(name = "BOARD")
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-public class Board {
-
-	@Id
-	@GeneratedValue(strategy = AUTO)
-	private Long id;
+public class Board extends IdDomain implements Validatable {
 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member member;
 
 	@Column(name = "visible_scope", nullable = false)
+	@Enumerated(EnumType.STRING)
 	private VisibleScope visibleScope;
 
 	/**
@@ -42,4 +41,25 @@ public class Board {
 
 	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
+	protected Board(Member member, VisibleScope visibleScope, String content, LocalDateTime now) {
+		this.member = member;
+		this.visibleScope = visibleScope;
+		this.content = content;
+		this.updatedAt = now;
+		this.createdAt = now;
+		RuntimeExceptionThrower.checkValidity(this);
+	}
+
+	public static Board of(Member member, VisibleScope visibleScope, String content, LocalDateTime now) {
+		return new Board(member, visibleScope, content, now);
+	}
+
+	@Override public boolean isValid() {
+		return this.member != null
+			&& !this.member.isNew()
+			&& this.visibleScope != null
+			&& this.content != null
+			&& this.updatedAt != null
+			&& this.createdAt != null;
+	}
 }

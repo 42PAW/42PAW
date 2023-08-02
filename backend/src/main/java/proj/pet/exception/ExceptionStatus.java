@@ -22,6 +22,7 @@ public enum ExceptionStatus {
 	UNAUTHENTICATED(HttpStatus.FORBIDDEN, "권한이 없는 요청입니다."),
 
 	/*-----------------------------------DOMAIN-----------------------------------*/
+	INVARIANT_VIOLENCE(HttpStatus.BAD_REQUEST, "불변식에 위배되는 생성 매개변수입니다."),
 	INVALID_ARGUMENT(HttpStatus.BAD_REQUEST, "유효하지 않은 입력입니다."),
 	;
 

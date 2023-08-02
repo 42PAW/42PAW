@@ -3,15 +3,9 @@ package proj.pet.board.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import proj.pet.category.domain.BoardCategoryFilter;
-import proj.pet.comment.domain.Comment;
 import proj.pet.member.domain.Member;
-import proj.pet.reaction.domain.Reaction;
-import proj.pet.report.domain.Report;
-import proj.pet.scrap.domain.Scrap;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.AUTO;
@@ -48,22 +42,4 @@ public class Board {
 
 	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
-
-	@OneToMany(mappedBy = "board", fetch = LAZY)
-	private List<BoardImage> images;
-
-	@OneToMany(mappedBy = "board", fetch = LAZY)
-	private List<BoardCategoryFilter> categoryFilters;
-
-	@OneToMany(mappedBy = "board", fetch = LAZY)
-	private List<Scrap> scrapedList;
-
-	@OneToMany(mappedBy = "board", fetch = LAZY)
-	private List<Comment> comments;
-
-	@OneToMany(mappedBy = "board", fetch = LAZY)
-	private List<Reaction> reactions;
-
-	@OneToMany(mappedBy = "board", fetch = LAZY)
-	private List<Report> reportedList;
 }

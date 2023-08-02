@@ -8,10 +8,10 @@ import static jakarta.persistence.GenerationType.AUTO;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Table(name = "board_image")
+@Table(name = "board_media")
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class BoardImage {
+public class BoardMedia {
 
 	@Id
 	@GeneratedValue(strategy = AUTO)
@@ -21,8 +21,8 @@ public class BoardImage {
 	@JoinColumn(name = "board_id", nullable = false, updatable = false)
 	private Board board;
 
-	@Column(name = "image_url", nullable = false)
-	private String imageUrl;
+	@Column(name = "media_url", nullable = false)
+	private String mediaUrl;
 
 	@Column(name = "index", nullable = false)
 	private Integer index;

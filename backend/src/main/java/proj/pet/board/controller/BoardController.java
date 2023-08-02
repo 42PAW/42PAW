@@ -1,23 +1,19 @@
 package proj.pet.board.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import proj.pet.board.dto.BoardCreateRequestDto;
 import proj.pet.board.dto.BoardsResponseDto;
 import proj.pet.board.service.BoardFacadeService;
 
-@RestController("/v1/boards")
+@RestController
+@RequestMapping("/v1/boards")
 @RequiredArgsConstructor
 public class BoardController {
 
 	private final BoardFacadeService boardFacadeService;
 
-	@GetMapping("/")
+	@GetMapping
 	public BoardsResponseDto getMainViewBoards() {
 		return boardFacadeService.getMainViewBoards();
 	}
@@ -32,7 +28,7 @@ public class BoardController {
 		return boardFacadeService.getFollowingsBoards();
 	}
 
-	@PostMapping("/")
+	@PostMapping
 	public void createBoard(@RequestBody BoardCreateRequestDto boardCreateRequestDto) {
 		boardFacadeService.createBoard(boardCreateRequestDto);
 	}

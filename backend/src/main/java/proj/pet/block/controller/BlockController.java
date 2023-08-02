@@ -1,21 +1,19 @@
 package proj.pet.block.controller;
 
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import proj.pet.block.service.BlockFacadeService;
 
-@RestController("/v1/blocks")
+import java.util.Map;
+
+@RestController
+@RequestMapping("/v1/blocks")
 @RequiredArgsConstructor
 public class BlockController {
 
 	private final BlockFacadeService blockFacadeService;
 
-	@PostMapping("/")
+	@PostMapping
 	public void createBlock(@RequestBody Map<String, Long> body) {
 		blockFacadeService.createBlock(body.get("memberId"));
 	}

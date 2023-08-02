@@ -1,17 +1,14 @@
 package proj.pet.follow.controller;
 
-import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import proj.pet.follow.dto.FollowResponseDto;
 import proj.pet.follow.service.FollowFacadeService;
 
-@RestController("/v1/follows")
+import java.util.HashMap;
+
+@RestController
+@RequestMapping("/v1/follows")
 @RequiredArgsConstructor
 public class FollowController {
 

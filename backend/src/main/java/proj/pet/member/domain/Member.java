@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import proj.pet.block.domain.Block;
 import proj.pet.follow.domain.Follow;
 import proj.pet.utils.domain.IdDomain;
+import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
 
 import java.time.LocalDateTime;
@@ -22,20 +23,20 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 public class Member extends IdDomain implements Validatable {
 
-	@Column(name = "oauth_type", nullable = false)
-	private OauthType oauthType;
-
-	@Column(name = "oauth_id", nullable = false)
-	private String oauthId;
-
-	@Column(name = "profile_image_url")
-	private String profileImageUrl;
+	@Embedded
+	private OauthProfile oauthProfile;
 
 	@Column(name = "country", nullable = false)
 	private Country country;
 
+	@Column(name = "profile_image_url")
+	private String profileImageUrl;
+
 	@Column(name = "nickname", nullable = false, length = 12)
 	private String nickname;
+
+	@Column(name = "nickname_updated_at", nullable = false)
+	private LocalDateTime nicknameUpdatedAt;
 
 	@Column(name = "statement", length = 30)
 	private String statement;
@@ -43,9 +44,6 @@ public class Member extends IdDomain implements Validatable {
 	@Column(name = "role", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private MemberRole memberRole;
-
-	@Column(name = "nickname_updated_at", nullable = false)
-	private LocalDateTime nicknameUpdatedAt;
 
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt;
@@ -73,9 +71,8 @@ public class Member extends IdDomain implements Validatable {
 
 
 	@Builder
-	public Member(OauthType oauthType, String oauthId, String profileImageUrl, Country country, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
-		this.oauthType = oauthType;
-		this.oauthId = oauthId;
+	public Member(OauthProfile oauthProfile, String profileImageUrl, Country country, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
+		this.oauthProfile = oauthProfile;
 		this.profileImageUrl = profileImageUrl;
 		this.country = country;
 		this.nickname = nickname;
@@ -83,11 +80,11 @@ public class Member extends IdDomain implements Validatable {
 		this.memberRole = memberRole;
 		this.nicknameUpdatedAt = now;
 		this.createdAt = now;
+		RuntimeExceptionThrower.checkValidity(this);
 	}
 
 	@Override public boolean isValid() {
-		return oauthType != null
-				&& oauthId != null
+		return oauthProfile != null
 				&& country != null
 				&& nickname != null
 				&& memberRole != null

@@ -42,6 +42,10 @@ public class Scrap extends IdDomain implements Validatable {
 	}
 
 	@Override public boolean isValid() {
-		return false;
+		return member != null
+				&& !member.isNew()
+				&& board != null
+				&& !board.isNew()
+				&& createdAt != null;
 	}
 }

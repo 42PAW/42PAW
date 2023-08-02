@@ -34,6 +34,8 @@ const ReportCategoryOption: React.FC<ReportCategoryOptionProps> = ({
 };
 
 const LabelStyled = styled.label<{ $isSelected: boolean }>`
+  display: flex;
+  align-items: center;
   cursor: pointer;
   position: relative;
   padding-left: 25px;
@@ -42,12 +44,12 @@ const LabelStyled = styled.label<{ $isSelected: boolean }>`
     content: "";
     position: absolute;
     left: 0;
-    width: 10px;
-    height: 10px;
-    border: 2px solid #cccccc;
+    width: 8px;
+    height: 8px;
+    border: 2px solid var(--grey);
     border-radius: 50%;
     background-color: ${(props) =>
-      props.$isSelected ? "var(--purple)" : "transparent"};
+      props.$isSelected ? "var(--grey)" : "transparent"};
     transition: background-color 0.2s ease;
   }
 `;

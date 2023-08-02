@@ -89,7 +89,7 @@ const WrapperStyled = styled.div`
   width: 270px;
   background-color: var(--white);
   border-radius: 15px;
-  color: var(--lightgrey);
+  color: var(--grey);
   h1 {
     font-size: 16px;
     margin-top: 28px;
@@ -102,9 +102,9 @@ const WrapperStyled = styled.div`
     cursor: pointer;
     margin-top: 30px;
     height: 30px;
-    width: 70px;
+    width: 90px;
     border: none;
-    background-color: var(--lightgrey);
+    background-color: var(--grey);
     color: var(--white);
     border: none;
     border-radius: 5px;
@@ -128,14 +128,14 @@ const CategoryContatinerStyled = styled.div`
 const EtcInputStyled = styled.input`
   margin-top: 5px;
   border: none;
-  border-bottom: 0.7px solid var(--lightgrey);
+  border-bottom: 0.7px solid var(--grey);
   width: 170px;
   height: 25px;
   outline: none;
-  color: var(--lightgrey);
+  color: var(--grey);
   font-size: 12px;
   &::placeholder {
-    color: var(--placeholder);
+    color: var(--lightgrey);
     font-size: 12px;
   }
 `;

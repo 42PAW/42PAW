@@ -2,7 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { isRightSectionOpenedState } from "../recoil/atom";
-import LeftMenuSection from "../components/LeftMenuSection";
+import LeftMenuSection from "../components/LeftMenuSection/LeftMenuSection";
 import RightSection from "../components/RightSection/RightSection";
 import BoardSortToggle from "../components/BoardSortToggle";
 import ModalContainer from "../components/modals/ModalContainer";
@@ -46,6 +46,9 @@ const WrapperStyled = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
+  @media (max-width: 1023px) {
+    flex-direction: column;
+  }
 `;
 
 const MainAreaWrapperStyled = styled.div`

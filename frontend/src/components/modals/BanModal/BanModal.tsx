@@ -43,7 +43,7 @@ const WrapperStyled = styled.div`
   height: 149px;
   background-color: var(--white);
   border-radius: 15px;
-  color: var(--lightgrey);
+  color: var(--grey);
   h1 {
     font-size: 16px;
     margin-top: 16px;
@@ -56,12 +56,13 @@ const WrapperStyled = styled.div`
     cursor: pointer;
     margin-top: 10px;
     height: 30px;
-    width: 70px;
+    width: 90px;
     border: none;
-    background-color: var(--lightgrey);
+    background-color: var(--grey);
     color: var(--white);
     border: none;
     border-radius: 5px;
+    margin-bottom: 10px;
   }
   button:hover {
     background-color: var(--red);
@@ -70,7 +71,7 @@ const WrapperStyled = styled.div`
 `;
 
 const ContentStyled = styled.div`
-  margin-top: 18px;
+  margin-top: 10px;
   font-size: 12px;
   text-align: center;
   padding: 0px 20px;

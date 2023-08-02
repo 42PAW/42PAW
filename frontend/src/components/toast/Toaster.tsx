@@ -12,7 +12,7 @@ const Toast: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       closeAllToasts();
-    }, 3000);
+    }, 2500);
     return () => clearTimeout(timer);
   }, [toastMessages]);
 
@@ -66,12 +66,12 @@ const ToastWrapperStyled = styled.div<{
   $isToastPopped: boolean;
 }>`
   position: fixed;
-  top: ${({ $index }) => 60 * $index + 20}px;
+  top: ${({ $index }) => 50 * $index + 20}px;
   right: 20px;
-  background-color: var(--white);
-  color: var(--lightgrey);
+  background-color: #fae4e3;
+  color: #dd4e48;
   padding: 5px 20px;
-  border-radius: 4px;
+  border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 9999;
   transition: opacity 0.3s ease-in-out;

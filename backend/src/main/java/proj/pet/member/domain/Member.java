@@ -1,7 +1,6 @@
 package proj.pet.member.domain;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.block.domain.Block;
@@ -70,8 +69,7 @@ public class Member extends IdDomain implements Validatable {
 	private List<Follow> followers = new ArrayList<>();
 
 
-	@Builder
-	public Member(OauthProfile oauthProfile, String profileImageUrl, Country country, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
+	private Member(OauthProfile oauthProfile, String profileImageUrl, Country country, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
 		this.oauthProfile = oauthProfile;
 		this.profileImageUrl = profileImageUrl;
 		this.country = country;
@@ -81,6 +79,10 @@ public class Member extends IdDomain implements Validatable {
 		this.nicknameUpdatedAt = now;
 		this.createdAt = now;
 		RuntimeExceptionThrower.checkValidity(this);
+	}
+
+	public static Member of(OauthProfile oauthProfile, String profileImageUrl, Country country, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
+		return new Member(oauthProfile, profileImageUrl, country, nickname, statement, memberRole, now);
 	}
 
 	@Override public boolean isValid() {

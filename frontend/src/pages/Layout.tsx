@@ -1,17 +1,18 @@
 import { Outlet, useLocation } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import LeftMenuSection from "../components/LeftMenuSection";
+import { isRightSectionOpenedState } from "../recoil/atom";
+import LeftMenuSection from "../components/LeftMenuSection/LeftMenuSection";
 import RightSection from "../components/RightSection/RightSection";
 import BoardSortToggle from "../components/BoardSortToggle";
 import ModalContainer from "../components/modals/ModalContainer";
-import { isRightSectionOpenedState } from "../recoil/atom";
-import { useRecoilState } from "recoil";
+import Toaster from "../components/toast/Toaster";
 
 const Layout = () => {
   const location = useLocation();
   const [isRightSectionOpened] = useRecoilState<boolean>(
     isRightSectionOpenedState
-  ); // Initialize isRightSectionOpened state with false
+  );
 
   /**메인 화면일 때만 게시글 정렬 버튼 보여주기*/
   const isMainPage: boolean = location.pathname === "/";
@@ -36,6 +37,7 @@ const Layout = () => {
         </RightSectionContainer>
       </MainAreaWrapperStyled>
       <ModalContainer />
+      <Toaster />
     </WrapperStyled>
   );
 };
@@ -44,6 +46,9 @@ const WrapperStyled = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
+  @media (max-width: 1023px) {
+    flex-direction: column;
+  }
 `;
 
 const MainAreaWrapperStyled = styled.div`

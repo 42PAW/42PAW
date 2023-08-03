@@ -17,6 +17,7 @@ import {
 import { useEffect } from "react";
 import { BoardCategory } from "../types/enum/board.category.enum";
 import SkeletonBoardTemplate from "../components/skeletonView/SkeletonBoardTemplate";
+import LoadingAnimation from "../components/loading/LoadingAnimation";
 
 const MainPage = () => {
   const [defaultBoards, setDefaultBoards] =
@@ -86,7 +87,10 @@ const MainPage = () => {
           />
         ))
       ) : (
-        <SkeletonBoardTemplate />
+        <>
+          <SkeletonBoardTemplate />
+          <LoadingAnimation />
+        </>
       )}
     </WrapperStyled>
   );

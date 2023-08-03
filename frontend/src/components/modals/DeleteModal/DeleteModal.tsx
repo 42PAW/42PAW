@@ -9,6 +9,7 @@ import {
   currentCommentIdState,
 } from "../../../recoil/atom";
 import useModal from "../../../hooks/useModal";
+import useToaster from "../../../hooks/useToaster";
 
 const DeleteModal = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
@@ -19,9 +20,11 @@ const DeleteModal = () => {
     currentCommentIdState
   );
   const { closeModal } = useModal();
+  const { popToast } = useToaster();
 
   const handleDelete = () => {
     closeModal(ModalType.DELETE);
+    popToast("해당 글이 삭제되었습니다.");
   };
 
   return (
@@ -46,22 +49,22 @@ const WrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 120px;
+  height: 140px;
   background-color: var(--white);
   border-radius: 15px;
-  color: var(--lightgrey);
+  color: var(--grey);
   h1 {
     font-size: 16px;
-    margin-top: 16px;
+    margin-top: 24px;
     margin-bottom: 5px;
   }
   button {
     cursor: pointer;
-    margin-top: 10px;
+    margin-top: 13px;
     height: 30px;
-    width: 70px;
+    width: 90px;
     border: none;
-    background-color: var(--lightgrey);
+    background-color: var(--grey);
     color: var(--white);
     border: none;
     border-radius: 5px;

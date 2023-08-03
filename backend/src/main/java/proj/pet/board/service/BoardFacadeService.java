@@ -1,17 +1,18 @@
 package proj.pet.board.service;
 
+import org.springframework.data.domain.PageRequest;
 import proj.pet.board.dto.BoardCreateRequestDto;
 import proj.pet.board.dto.BoardsResponseDto;
+import proj.pet.member.dto.UserSession;
 
 public interface BoardFacadeService {
 
-	BoardsResponseDto getMainViewBoards();
+	BoardsResponseDto getMainViewBoards(PageRequest pageRequest);
 
-	BoardsResponseDto getHotBoards();
+	BoardsResponseDto getHotBoards(PageRequest pageRequest);
+	BoardsResponseDto getMemberBoards(PageRequest pageRequest, Long memberId);
 
-	BoardsResponseDto getFollowingsBoards();
+	void createBoard(UserSession userSession, BoardCreateRequestDto boardCreateRequestDto);
 
-	void createBoard(BoardCreateRequestDto boardCreateRequestDto);
-
-	void deleteBoard(Long boardId);
+	void deleteBoard(UserSession userSession, Long boardId);
 }

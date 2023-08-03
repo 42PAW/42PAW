@@ -33,9 +33,9 @@ public class BoardServiceImpl implements BoardService {
 
 	private final BoardMediaRepository boardMediaRepository;
 
-	@Override public void createBoard(Long memberId, List<AnimalCategory> categoryList, List<BoardMediaDto> mediaDtoList, String content, LocalDateTime now) {
+	@Override public Board createBoard(Long memberId, List<AnimalCategory> categoryList, List<BoardMediaDto> mediaDtoList, String content, LocalDateTime now) {
 		Member member = memberRepository.findById(memberId).orElseThrow();
-		Board board = Board.of(member, VisibleScope.PUBLIC, content, now);
+		Board board = boardRepository.save(Board.of(member, VisibleScope.PUBLIC, content, now));
 		List<BoardCategoryFilter> categoryFilters = categoryList.stream()
 				.map(category -> BoardCategoryFilter.of(board, category))
 				.toList();
@@ -49,7 +49,7 @@ public class BoardServiceImpl implements BoardService {
 				}).collect(Collectors.toList());
 		mediaList = boardMediaRepository.saveAll(mediaList);
 		board.addMediaList(mediaList);
-		boardRepository.save(board);
+		return boardRepository.save(board);
 	}
 
 	@Override public void deleteBoard(Long memberId, Long boardId) {

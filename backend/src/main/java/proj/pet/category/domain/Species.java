@@ -9,6 +9,5 @@ public enum Species {
 	REPTILE,
 	AMPHIBIAN,
 	INSECT,
-
-	;
+	ETC;
 }

@@ -38,6 +38,7 @@ public class BoardMedia extends IdDomain implements Validatable {
 	}
 
 	public static BoardMedia of(Board board, String mediaUrl, Integer index, MediaType mediaType) {
+		System.out.println("board = " + board + ", mediaUrl = " + mediaUrl + ", index = " + index + ", mediaType = " + mediaType);
 		return new BoardMedia(board, mediaUrl, index, mediaType);
 	}
 

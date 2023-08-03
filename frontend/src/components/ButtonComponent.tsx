@@ -18,30 +18,35 @@ const SIZES = {
     --button-radius: 8px;
   `,
   lg: css`
-    --button-font-size: 1.25rem;
+    --button-font-size: 1.6rem;
     --button-padding: 16px 20px;
-    --button-radius: 12px;
-    width: 300px;
-    height: 40px;
+    --button-radius: 10px;
+    --button-width: 300px;
+    --button-height: 40px;
   `,
 };
 
 const Button = ({ handleClick, size, children }: ButtonProps) => {
-  const sizeStyle = SIZES[size];
+  const sizestyle = SIZES[size];
 
   return (
-    <ButtonStyled onClick={handleClick} sizeStyle={sizeStyle}>
+    <ButtonStyled onClick={handleClick} sizestyle={sizestyle}>
       {children}
     </ButtonStyled>
   );
 };
 
-const ButtonStyled = styled.button<{ sizeStyle: ReturnType<typeof css> }>`
-  ${(p) => p.sizeStyle}
+const ButtonStyled = styled.button<{ sizestyle: ReturnType<typeof css> }>`
+  ${(p) => p.sizestyle}
   margin: 0;
   border: none;
   cursor: pointer;
   font-family: "Noto Sans KR", sans-serif;
+  font-size: var(--button-font-size, 1rem);
+  //   padding: var(--button-padding, 12px 16px);
+  border-radius: var(--button-radius, 8px);
+  width: var(--button-width);
+  height: var(--button-height);
   font-size: 1.6rem;
   border-radius: 10px;
   background: var(--button-grey, #ffffff);

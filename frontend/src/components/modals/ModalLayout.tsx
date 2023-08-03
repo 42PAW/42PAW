@@ -17,7 +17,6 @@ const ModalLayout: React.FC<IModalLayoutProps> = ({
   children,
 }) => {
   const { closeModal } = useModal();
-  const [isOpened, setIsOpened] = useState<boolean>(false);
 
   if (!isOpen) return null;
   return (

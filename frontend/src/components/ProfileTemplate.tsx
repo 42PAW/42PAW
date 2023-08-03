@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Button from "./ButtonComponent";
 import { useState } from "react";
 
+/* tmp */
 const profileInfo = {
   memberName: "오덕애비",
   nicknameUpdatedAt: "2023-01-23",
@@ -9,9 +10,10 @@ const profileInfo = {
   statement: "강아지는 항상 옳다. 오덕아 사랑해",
   followingCount: 279,
   followerCount: 678,
-  boardCount: 47,
+  boardCount: 3423434347,
 };
 
+/* tmp */
 const imgs = [
   "/src/assets/oduck.png",
   "/src/assets/oduck.png",
@@ -119,21 +121,20 @@ const CountInfoStyled = styled.div`
     li {
       display: flex;
       flex-direction: column;
-      margin-right: 150px;
+      margin-right: 120px;
 
       &:last-child {
         margin-right: 0;
       }
 
       span {
-        margin-left: 5px;
+        text-align: center;
       }
     }
   }
 `;
 
 const ProfileWrapperStyled = styled.div`
-  //   border-radius: 10px;
   margin-bottom: 3%;
   height: 100vh;
   width: calc(100% - 40px);
@@ -160,7 +161,7 @@ const ProfileHeaderStyled = styled.div`
   }
 
   @media (min-width: 1023px) {
-    height: 250px;
+    height: 230px;
   }
 `;
 
@@ -170,12 +171,7 @@ const ProfileHeaderLeftSectionStyled = styled.div`
   align-items: center;
   width: 20%;
   height: 100%;
-  margin-left: 4%;
-  div {
-    color: #4a494ed5;
-    font-size: 1.6rem;
-    margin-top: 15px;
-  }
+  margin-left: 5%;
   img {
     margin-top: 40px;
     width: 150px;
@@ -193,46 +189,12 @@ const ProfileHeaderRightSectionStyled = styled.div`
   .memberName {
     display: flex;
     margin-top: 40px;
-    color: #4a494ed5;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bold;
   }
 
-  /* Adjust the Button's width to take full width of the container */
   Button {
     align-self: center;
-  }
-`;
-
-// const ProfileHeaderRightSectionStyled = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   align-items: flex-start;
-//   width: 60%;
-//   height: 100%;
-//   font-size: 1.6rem;
-//   margin-right: 5%;
-//   //   justify-content: flex-start;
-//   Button {
-//   }
-//   .memberName {
-//     display: flex;
-//     // justify-content: flex-start;
-//     margin-top: 40px;
-//     color: #4a494ed5;
-//     font-size: 2rem;
-//     font-weight: bold;
-//   }
-// `;
-
-const FollowerSectionStyled = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  height: 55%;
-  width: 100%;
-  div {
-    text-align: center;
   }
 `;
 
@@ -242,9 +204,7 @@ const CaptionSectionStyled = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 30px;
-  //   height: 40%;
   width: 100%;
-  //   margin-bottom: 20px;
 `;
 
 const ProfileBodyStyled = styled.div`
@@ -253,15 +213,13 @@ const ProfileBodyStyled = styled.div`
   img {
     width: 50%;
   }
-  //   height: calc(100% - {ProfileHeaderStyled.height});
-  //   border-bottom-left-radius: 50px;
-  //   border-bottom-right-radius: 50px;
 `;
 
 const PhotoCategoryToggleStyled = styled.div`
   display: flex;
   justify-content: space-evenly;
-  height: 7%;
+  height: 50px;
+  margin-top: 15px;
   button {
     display: flex;
     align-items: center;
@@ -281,14 +239,14 @@ const PhotoCategoryToggleStyled = styled.div`
     background-color: #fdfdfd39;
   }
   img {
-    width: 7%;
+    width: 25px;
   }
 `;
 
 const PhotoZoneWrapperStyled = styled.div`
   display: flex;
   flex-wrap: wrap;
-  max-height: 93%;
+  max-height: calc(100% - 60px);
   //   border-bottom-left-radius: 50px;
   //   border-bottom-right-radius: 50px;
   overflow-y: scroll;

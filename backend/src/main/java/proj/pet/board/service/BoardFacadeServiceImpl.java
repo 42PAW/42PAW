@@ -7,6 +7,8 @@ import proj.pet.board.dto.BoardCreateRequestDto;
 import proj.pet.board.dto.BoardsResponseDto;
 import proj.pet.member.dto.UserSession;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class BoardFacadeServiceImpl implements BoardFacadeService {
@@ -34,7 +36,7 @@ public class BoardFacadeServiceImpl implements BoardFacadeService {
 		boardService.createBoard(userSession.getMemberId(),
 				boardCreateRequestDto.getCategoryList(),
 				boardCreateRequestDto.getMediaDataList(),
-				boardCreateRequestDto.getContent());
+				boardCreateRequestDto.getContent(), LocalDateTime.now());
 	}
 
 	@Override

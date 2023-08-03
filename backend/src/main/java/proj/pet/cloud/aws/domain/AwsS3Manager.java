@@ -18,17 +18,19 @@ public class AwsS3Manager {
 	/**
 	 * 오직 이미지 파일을 충실히 업로드하는 데에만 집중할 것.
 	 * -> UUID를 심는 부분은 도메인 로직이므로 이름을 인자로 받을 것.
+	 *
 	 * @param bucketPath
 	 * @param file
 	 */
-	public void uploadFileToBucket(String bucketPath, MultipartFile file, String filename) {
+	public String uploadFileToBucket(String bucketPath, MultipartFile file, String filename) {
 		System.out.println("filename = " + filename);
 		try {
-			s3.putObject(createPutObjectRequest(bucketPath, file, filename));
+			s3.putObject(
+					createPutObjectRequest(bucketPath, file, filename));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("업로드 완료!");
+		return bucketPath + "/" + filename;
 	}
 
 	private ObjectMetadata createObjectMetadata(MultipartFile file) {

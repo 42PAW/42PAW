@@ -11,7 +11,6 @@ import proj.pet.board.repository.BoardCategoryFilterRepository;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.BoardCategoryFilter;
-import proj.pet.mapper.BoardMapper;
 import proj.pet.member.domain.Member;
 import proj.pet.member.repository.MemberRepository;
 
@@ -30,8 +29,6 @@ public class BoardServiceImpl implements BoardService {
 	private final BoardCategoryFilterRepository boardCategoryFilterRepository;
 
 	private final BoardMediaManager boardMediaManager;
-
-	private final BoardMapper boardMapper;
 
 	@Override public void createBoard(Long memberId, List<AnimalCategory> categoryList, List<BoardMediaDto> mediaDataList, String content, LocalDateTime now) {
 		Member member = memberRepository.findById(memberId).orElseThrow();

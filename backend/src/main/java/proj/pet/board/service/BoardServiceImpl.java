@@ -33,6 +33,7 @@ public class BoardServiceImpl implements BoardService {
 
 	private final BoardMediaRepository boardMediaRepository;
 
+	// TODO: 책임 분산이 필요할지도? + mediaData의 ContentType이 not null임을 검증해야 함.
 	@Override public Board createBoard(Long memberId, List<AnimalCategory> categoryList, List<BoardMediaDto> mediaDtoList, String content, LocalDateTime now) {
 		Member member = memberRepository.findById(memberId).orElseThrow();
 		Board board = boardRepository.save(Board.of(member, VisibleScope.PUBLIC, content, now));

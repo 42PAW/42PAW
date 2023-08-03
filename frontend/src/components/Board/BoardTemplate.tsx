@@ -2,13 +2,14 @@ import styled from "styled-components";
 import { axiosGetBoardComments } from "../../api/axios/axios.custom";
 import useRightSectionHandler from "../../hooks/useRightSectionHandler";
 import { currentBoardCommentsState } from "../../recoil/atom";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilState } from "recoil";
 import { CommentInfoDTO } from "../../types/dto/board.dto";
 import { IBoardInfo } from "../../types/interface/board.interface";
 import BoardPhotoBox from "./BoardPhotoBox";
 import OptionButton from "../OptionButton";
 import useModal from "../../hooks/useModal";
 import { ModalType } from "../../types/enum/modal.enum";
+import { languageState } from "../../recoil/atom";
 
 const BoardTemplate = (board: IBoardInfo) => {
   const {
@@ -27,11 +28,13 @@ const BoardTemplate = (board: IBoardInfo) => {
     createdAt,
   } = board;
 
+  const [language] = useRecoilState<any>(languageState);
   const setCurrentBoardComments = useSetRecoilState<CommentInfoDTO[]>(
     currentBoardCommentsState
   );
   const { openCommentSection } = useRightSectionHandler();
   const { openModal } = useModal();
+
   const getCommentsData = async (boardId: number) => {
     try {
       const result = await axiosGetBoardComments(boardId);
@@ -86,7 +89,8 @@ const BoardTemplate = (board: IBoardInfo) => {
           <BoardContentContainerStyled>
             <DivOne>
               <div>
-                좋아요 {reactionCount}개, 댓글 {commentCount}개
+                {reactionCount} {language.like}, {commentCount}{" "}
+                {language.comment}
               </div>
               <span>{createdAt}</span>
             </DivOne>
@@ -94,7 +98,9 @@ const BoardTemplate = (board: IBoardInfo) => {
             <DivThree>
               <div onClick={handleOpenProfile}>{previewCommentUser}</div>
               <div>{previewComment}</div>
-              <div onClick={() => handleCommentClick(1)}>..댓글 더 보기</div>
+              <div onClick={() => handleCommentClick(1)}>
+                {language.moreComments}
+              </div>
             </DivThree>
           </BoardContentContainerStyled>
         </BoardBodyStyled>

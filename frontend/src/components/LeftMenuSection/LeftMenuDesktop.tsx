@@ -1,13 +1,15 @@
 import styled from "styled-components";
-
 import useNavigateCustom from "../../hooks/useNavigateCustom";
 import useRightSectionHandler from "../../hooks/useRightSectionHandler";
+import { languageState } from "../../recoil/atom";
+import { useRecoilState } from "recoil";
 
 const LeftMenuDesktop = () => {
   const { moveToMain, moveToNotice, moveToMyProfile, moveToUpload } =
     useNavigateCustom();
   const { openSearchSection, openAnimalFilterSection } =
     useRightSectionHandler();
+  const [language] = useRecoilState<any>(languageState);
 
   return (
     <>
@@ -36,7 +38,7 @@ const LeftMenuDesktop = () => {
           </MenuListStyled>
           <ProfileImageStyled src="/src/assets/profileImage.jpg" />
         </nav>
-        <LoginButtonStyled>로그아웃</LoginButtonStyled>
+        <LoginButtonStyled>{language.logout}</LoginButtonStyled>
       </LeftMenuStyled>
     </>
   );
@@ -51,7 +53,7 @@ const LeftMenuStyled = styled.div`
   align-items: center;
   height: 100%;
   overflow: hidden;
-  min-width: 80px;
+  min-width: 100px;
   border-right: 1px solid var(--transparent);
   div {
     padding: 7px 10px;
@@ -103,6 +105,7 @@ const LoginButtonStyled = styled.div`
   min-width: 45px;
   margin-bottom: 20%;
   margin-top: 20px;
+  font-size: 1rem;
   &:hover {
     background-color: var(--white);
     color: var(--pink);

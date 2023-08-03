@@ -8,7 +8,7 @@ const renderAnimalSpecies = (buttonName: string) => {
   if (buttonName === AnimalSpecies.FISH) return "🐠 물고기";
   if (buttonName === AnimalSpecies.BIRD) return "🐤 새";
   if (buttonName === AnimalSpecies.SMALLANIMAL) return "🐹 소동물";
-  if (buttonName === AnimalSpecies.REPTILES) return "🐍 파충류";
+  if (buttonName === AnimalSpecies.REPTILE) return "🐍 파충류";
   if (buttonName === AnimalSpecies.AMPHIBIAN) return "🐸 양서류";
   if (buttonName === AnimalSpecies.INSECT) return "🐝 곤충";
 };
@@ -32,7 +32,7 @@ const AnimalButtonContainer = ({
     AnimalSpecies.FISH,
     AnimalSpecies.BIRD,
     AnimalSpecies.SMALLANIMAL,
-    AnimalSpecies.REPTILES,
+    AnimalSpecies.REPTILE,
     AnimalSpecies.AMPHIBIAN,
     AnimalSpecies.INSECT,
   ];

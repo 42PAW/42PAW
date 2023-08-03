@@ -16,21 +16,21 @@ const ProfileCardModal = () => {
       isOpen={currentOpenModal.profileCardModal}
     >
       <WrapperStyled>
-        <h1>오덕애비</h1>
+        <h1>pont-en-ciel</h1>
         <ProfileImageStyled src="/src/assets/profileImage.jpg" />
-        <CaptionStyled>안녕하세요안녕하세요안녕하세요안녕하세요</CaptionStyled>
+        <CaptionStyled>Ravi de vous rencontrer</CaptionStyled>
         <ButtonContainerStyled>
-          <button>프로필</button>
-          <button>팔로우</button>
+          <button>profil</button>
+          <button>suivre</button>
         </ButtonContainerStyled>
         <SubButtonContainerStyled>
           <button>
             <img src="/src/assets/ban.png" />
-            차단하기
+            bloquer
           </button>
           <button>
             <img src="/src/assets/report.png" />
-            신고하기
+            signaler
           </button>
         </SubButtonContainerStyled>
       </WrapperStyled>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilState } from "recoil";
 import styled from "styled-components";
 import { ModalType } from "../types/enum/modal.enum";
 import useModal from "../hooks/useModal";
@@ -9,6 +9,7 @@ import {
   currentCommentIdState,
 } from "../recoil/atom";
 import { IBanUserInfo } from "../types/interface/user.interface";
+import { languageState } from "../recoil/atom";
 
 /**
  * @boardId (optional) 신고, 차단, 삭제할 게시물의 id
@@ -30,6 +31,7 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
   memberId,
   memberName,
 }) => {
+  const [language] = useRecoilState<any>(languageState);
   const [isToggled, setIsToggled] = useState<boolean>(false);
   const setBanUserInfo = useSetRecoilState<IBanUserInfo>(banUserInfoState);
   const setCurrentBoardId = useSetRecoilState<number | null>(
@@ -75,15 +77,17 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
       >
         <MenuList onClick={() => handleToggle("OFF")}>
           <MenuItemWrapperStyled>
-            <MenuItemStyled onClick={handleBan}>차단</MenuItemStyled>
+            <MenuItemStyled onClick={handleBan}>{language.ban}</MenuItemStyled>
           </MenuItemWrapperStyled>
           <MenuItemWrapperStyled>
             <MenuItemStyled onClick={() => openModal(ModalType.REPORT)}>
-              신고
+              {language.report}
             </MenuItemStyled>
           </MenuItemWrapperStyled>
           <MenuItemWrapperStyled>
-            <MenuItemStyled onClick={handleDelete}>삭제</MenuItemStyled>
+            <MenuItemStyled onClick={handleDelete}>
+              {language.delete}
+            </MenuItemStyled>
           </MenuItemWrapperStyled>
         </MenuList>
       </MenuStyled>

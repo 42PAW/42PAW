@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { ChangeEvent, useState } from "react";
+import { Section, SectionType } from "../SignUpPage";
 
 /**
  * @nickname 유저가 설정한 닉네임
@@ -9,14 +10,10 @@ import { ChangeEvent, useState } from "react";
 interface IProfileCardProps {
   nickname: string;
   caption: string;
-  sectionObserver: number;
+  step: SectionType;
 }
 
-const ProfileCard = ({
-  nickname,
-  caption,
-  sectionObserver,
-}: IProfileCardProps) => {
+const ProfileCard = ({ nickname, caption, step }: IProfileCardProps) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -34,13 +31,13 @@ const ProfileCard = ({
 
   return (
     <>
-      <ProfileCardStyled sectionObserver={sectionObserver}>
+      <ProfileCardStyled>
         <ProfileCardNicknameStyled>{nickname}</ProfileCardNicknameStyled>
         <ProfileCardEmptyImageStyled>
           <img src={imagePreview ? imagePreview : "/src/assets/userG.png"} />
         </ProfileCardEmptyImageStyled>
         <ProfileCardFormStyled>
-          {sectionObserver < 2 ? (
+          {step === Section.ProfileImage ? (
             <label htmlFor="profileImage">프로필 사진 변경</label>
           ) : null}
           <input
@@ -56,12 +53,12 @@ const ProfileCard = ({
   );
 };
 
-const ProfileCardStyled = styled.div<{ sectionObserver: number }>`
+const ProfileCardStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 450px;
-  height: 600px;
+  width: 330px;
+  height: 420px;
   border-radius: 30px;
   background-color: var(--white);
   box-shadow: var(--default-shadow);
@@ -69,8 +66,8 @@ const ProfileCardStyled = styled.div<{ sectionObserver: number }>`
 
 const ProfileCardNicknameStyled = styled.div`
   height: 50px;
-  margin-top: 100px;
-  font-size: 30px;
+  margin-top: 40px;
+  font-size: 1.6rem;
 `;
 
 const ProfileCardEmptyImageStyled = styled.div`
@@ -102,8 +99,8 @@ const ProfileCardFormStyled = styled.form`
 `;
 
 const ProfileCardSectionStyled = styled.div`
-  margin-top: 30px;
-  font-size: 17px;
+  margin-top: 10px;
+  font-size: 1.4rem;
 `;
 
 export default ProfileCard;

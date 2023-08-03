@@ -6,21 +6,19 @@ import lombok.NoArgsConstructor;
 import proj.pet.board.domain.Board;
 import proj.pet.comment.domain.Comment;
 import proj.pet.member.domain.Member;
+import proj.pet.utils.domain.IdDomain;
+import proj.pet.utils.domain.RuntimeExceptionThrower;
+import proj.pet.utils.domain.Validatable;
 
 import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.AUTO;
 import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Getter
-public class Report {
-
-	@Id
-	@GeneratedValue(strategy = AUTO)
-	private Long id;
+public class Report extends IdDomain implements Validatable {
 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
@@ -39,6 +37,7 @@ public class Report {
 	private Comment comment;
 
 	@Column(name = "reason", nullable = false)
+	@Enumerated(EnumType.STRING)
 	private ReportReason reason;
 
 	@Column(name = "content", length = 255)
@@ -46,4 +45,28 @@ public class Report {
 
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt;
+
+	private Report(Member from, Member to, Board board, Comment comment, ReportReason reason, String content, LocalDateTime now) {
+		this.from = from;
+		this.to = to;
+		this.board = board;
+		this.comment = comment;
+		this.reason = reason;
+		this.content = content;
+		this.createdAt = now;
+		RuntimeExceptionThrower.checkValidity(this);
+	}
+
+	public static Report of(Member from, Member to, Board board, Comment comment, ReportReason reason, String content, LocalDateTime now) {
+		return new Report(from, to, board, comment, reason, content, now);
+	}
+
+	@Override public boolean isValid() {
+		return from != null && !from.isNew()
+				&& to != null && !to.isNew()
+				&& board != null && !board.isNew()
+				&& comment != null && !comment.isNew()
+				&& reason != null
+				&& createdAt != null;
+	}
 }

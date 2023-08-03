@@ -1,7 +1,7 @@
 package proj.pet.member.domain;
 
 public enum OauthType {
-	FT,
+	FORTY_TWO,
 	GOOGLE,
 
 }

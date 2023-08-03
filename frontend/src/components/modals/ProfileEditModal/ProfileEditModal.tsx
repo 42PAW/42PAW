@@ -4,12 +4,24 @@ import { ModalType } from "../../../types/enum/modal.enum";
 import { currentOpenModalState } from "../../../recoil/atom";
 import { useRecoilState } from "recoil";
 import { ICurrentModalStateInfo } from "../../../types/interface/modal.interface";
+import useModal from "../../../hooks/useModal";
 import PropTypes from "prop-types";
+
+const profileInfo = {
+  memberName: "오덕애비",
+  nicknameUpdatedAt: "2023-01-23",
+  profileImage: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+  statement: "강아지는 항상 옳다. 오덕아 사랑해",
+  followingCount: 279,
+  followerCount: 678,
+  boardCount: 3423434347,
+};
 
 const ProfileEditModal = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
+  const { closeModal } = useModal();
 
   return (
     <ModalLayout
@@ -18,16 +30,22 @@ const ProfileEditModal = () => {
     >
       <WrapperStyled>
         <NameStyled>
-          <h1>오덕애비</h1>
-          <img src="/src/assets/edit_icon.png" style={{ width: "20px" }} />
+          <h1>{profileInfo.memberName}</h1>
+          <button
+            onClick={() => {
+              alert("click!");
+            }}
+          >
+            <img src="/src/assets/edit_icon.png" />
+          </button>
         </NameStyled>
-        <ProfileImageStyled src="/src/assets/profileImage.jpg" />
-        <CaptionStyled>
-          안녕녕하세요 안녕녕하세요 안녕녕하세요 안녕녕하세요
-        </CaptionStyled>
+        <ProfileImageStyled src={profileInfo.profileImage} />
+        <CaptionStyled>{profileInfo.statement}</CaptionStyled>
         <ButtonContainerStyled>
           <button>완료</button>
-          <button>취소</button>
+          <button onClick={() => closeModal(ModalType.PROFILEEDIT)}>
+            취소
+          </button>
         </ButtonContainerStyled>
       </WrapperStyled>
     </ModalLayout>
@@ -55,9 +73,13 @@ const NameStyled = styled.div`
     border-bottom: 1.5px solid var(--grey);
     text-align: center;
   }
-  img {
-    width: 20px;
-    height: 20px;
+  button {
+    background-color: transparent;
+    border: none;
+    img {
+      width: 20px;
+      height: 20px;
+    }
   }
 `;
 
@@ -71,7 +93,7 @@ const CaptionStyled = styled.div`
   align-items: center; /* Vertically center the text */
   justify-content: center; /* Horizontally center the text */
   height: 50px;
-  width: 200px;
+  width: 180px;
   border: 0.5px dashed;
   border-radius: 5px;
   background-color: #f1f1f1;
@@ -80,6 +102,7 @@ const CaptionStyled = styled.div`
   font-size: 1.4rem;
   text-align: center;
   word-break: keep-all;
+  padding-inline: 10px;
 `;
 
 const ButtonContainerStyled = styled.div`

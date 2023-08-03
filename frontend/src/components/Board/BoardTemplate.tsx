@@ -48,7 +48,7 @@ const BoardTemplate = (board: IBoardInfo) => {
     getCommentsData(boardId);
   };
   const handleOpenProfile = () => {
-    openModal(ModalType.PROFILECARD);
+    openModal(ModalType.PROFILECARD); // PROFILECARD -> 바꿔야 돼 다시
   };
 
   return (

@@ -54,8 +54,8 @@ const AnimalButtonContainer = ({
         <AnimalButtonStyled
           key={buttonName}
           onClick={() => handleButtonClick(buttonName)}
-          selectedAnimals={selectedAnimals}
-          buttonName={buttonName}
+          $selectedAnimals={selectedAnimals}
+          $buttonName={buttonName}
         >
           {renderAnimalSpecies(buttonName)}
         </AnimalButtonStyled>
@@ -65,16 +65,17 @@ const AnimalButtonContainer = ({
 };
 
 const AnimalButtonContainerStyled = styled.div<{ $columns: number }>`
+  z-index: 2;
   display: grid;
-  grid-template-columns: repeat(${(props) => props.$columns}, 130px);
-  grid-auto-rows: 55px;
+  grid-template-columns: repeat(${(props) => props.$columns}, 120px);
+  grid-auto-rows: 50px;
   grid-row-gap: 15px;
-  grid-column-gap: 25px;
+  grid-column-gap: 15px;
 `;
 
 const AnimalButtonStyled = styled.button<{
-  selectedAnimals: Set<string>;
-  buttonName: string;
+  $selectedAnimals: Set<string>;
+  $buttonName: string;
 }>`
   display: flex;
   flex-direction: column;
@@ -82,18 +83,19 @@ const AnimalButtonStyled = styled.button<{
   align-items: center;
   border-radius: 50px;
   border: none;
+  margin: 0;
   font-weight: 600;
   font-size: 145%;
   color: ${(props) =>
-    props.selectedAnimals.has(props.buttonName)
+    props.$selectedAnimals.has(props.$buttonName)
       ? "var(--white)"
       : "var(--grey)"};
   background-color: ${(props) =>
-    props.selectedAnimals.has(props.buttonName)
+    props.$selectedAnimals.has(props.$buttonName)
       ? "var(--lightpurple)"
       : "var(--white)"};
   box-shadow: ${(props) =>
-    props.selectedAnimals.has(props.buttonName)
+    props.$selectedAnimals.has(props.$buttonName)
       ? "var(--clicked-shadow)"
       : "var(--button-shadow)"};
   &:hover {

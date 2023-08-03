@@ -10,4 +10,5 @@ export interface ICurrentModalStateInfo {
   reportModal: boolean;
   deleteModal: boolean;
   profileCardModal: boolean;
+  profileEditModal: boolean;
 }

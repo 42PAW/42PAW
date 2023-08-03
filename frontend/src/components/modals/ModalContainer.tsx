@@ -4,6 +4,7 @@ import { currentOpenModalState } from "../../recoil/atom";
 import BanModal from "./BanModal/BanModal";
 import ReportModal from "./ReportModal/ReportModal";
 import ProfileCardModal from "./ProfileCardModal/ProfileCardModal";
+import profileEditModal from "./ProfileEditModal/ProfileEditModal";
 import DeleteModal from "./DeleteModal/DeleteModal";
 
 const ModalContainer = () => {
@@ -16,6 +17,7 @@ const ModalContainer = () => {
       {currentOpenModal.reportModal && <ReportModal />}
       {currentOpenModal.profileCardModal && <ProfileCardModal />}
       {currentOpenModal.deleteModal && <DeleteModal />}
+      {currentOpenModal.profileEditModal && <ProfileEditModal />}
     </>
   );
 };

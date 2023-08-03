@@ -74,6 +74,7 @@ export const currentOpenModalState = atom<ICurrentModalStateInfo>({
     reportModal: false,
     deleteModal: false,
     profileCardModal: false,
+    profileEditModal: false,
   },
 });
 

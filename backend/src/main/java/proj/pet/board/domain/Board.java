@@ -24,6 +24,11 @@ import static lombok.AccessLevel.PROTECTED;
 public class Board extends IdDomain implements Validatable {
 
 	@OneToMany(mappedBy = "board",
+			targetEntity = BoardMedia.class,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private final List<BoardMedia> mediaList = new ArrayList<>();
+	@OneToMany(mappedBy = "board",
 			targetEntity = BoardCategoryFilter.class,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
@@ -75,5 +80,9 @@ public class Board extends IdDomain implements Validatable {
 
 	public void addCategoryFilters(List<BoardCategoryFilter> categoryFilters) {
 		this.categoryFilters.addAll(categoryFilters);
+	}
+
+	public void addMediaList(List<BoardMedia> mediaList) {
+		this.mediaList.addAll(mediaList);
 	}
 }

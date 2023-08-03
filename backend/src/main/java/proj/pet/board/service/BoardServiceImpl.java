@@ -3,11 +3,11 @@ package proj.pet.board.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import proj.pet.board.domain.Board;
-import proj.pet.board.domain.BoardMediaManager;
-import proj.pet.board.domain.VisibleScope;
+import org.springframework.web.multipart.MultipartFile;
+import proj.pet.board.domain.*;
 import proj.pet.board.dto.BoardMediaDto;
 import proj.pet.board.repository.BoardCategoryFilterRepository;
+import proj.pet.board.repository.BoardMediaRepository;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.BoardCategoryFilter;
@@ -16,6 +16,7 @@ import proj.pet.member.repository.MemberRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,7 +31,9 @@ public class BoardServiceImpl implements BoardService {
 
 	private final BoardMediaManager boardMediaManager;
 
-	@Override public void createBoard(Long memberId, List<AnimalCategory> categoryList, List<BoardMediaDto> mediaDataList, String content, LocalDateTime now) {
+	private final BoardMediaRepository boardMediaRepository;
+
+	@Override public void createBoard(Long memberId, List<AnimalCategory> categoryList, List<BoardMediaDto> mediaDtoList, String content, LocalDateTime now) {
 		Member member = memberRepository.findById(memberId).orElseThrow();
 		Board board = Board.of(member, VisibleScope.PUBLIC, content, now);
 		List<BoardCategoryFilter> categoryFilters = categoryList.stream()
@@ -38,11 +41,14 @@ public class BoardServiceImpl implements BoardService {
 				.toList();
 		categoryFilters = boardCategoryFilterRepository.saveAll(categoryFilters);
 		board.addCategoryFilters(categoryFilters);
-		mediaDataList.stream()
-				.map(mediaData -> {
-					String mediaUrl = boardMediaManager.uploadMedia(mediaData.getMediaData());
-					return null;
-				});
+		List<BoardMedia> mediaList = mediaDtoList.stream()
+				.map(dto -> {
+					MultipartFile mediaData = dto.getMediaData();
+					String mediaUrl = boardMediaManager.uploadMedia(mediaData);
+					return BoardMedia.of(board, mediaUrl, dto.getIndex(), MediaType.from(mediaData.getContentType()));
+				}).collect(Collectors.toList());
+		mediaList = boardMediaRepository.saveAll(mediaList);
+		board.addMediaList(mediaList);
 		boardRepository.save(board);
 	}
 

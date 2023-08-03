@@ -17,6 +17,6 @@ public class AwsS3Properties {
 	@Value("${cloud.aws.s3.profile-image-bucket}")
 	private String profileImageBucket;
 
-	@Value("${cloud.aws.s3.board-image-bucket}")
+	@Value("${cloud.aws.s3.board-media-bucket}")
 	private String boardImageBucket;
 }

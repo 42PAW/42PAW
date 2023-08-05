@@ -2,7 +2,7 @@ package proj.pet.board.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import proj.pet.category.domain.AnimalCategory;
+import proj.pet.category.domain.Species;
 
 import java.util.List;
 
@@ -10,6 +10,6 @@ import java.util.List;
 @Getter
 public class BoardCreateRequestDto {
 	List<BoardMediaDto> mediaDataList;
-	List<AnimalCategory> categoryList;
+	List<Species> categoryList;
 	String content;
 }

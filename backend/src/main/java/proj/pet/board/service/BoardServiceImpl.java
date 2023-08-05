@@ -11,6 +11,8 @@ import proj.pet.board.repository.BoardMediaRepository;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.BoardCategoryFilter;
+import proj.pet.category.domain.Species;
+import proj.pet.category.repository.AnimalCategoryRepository;
 import proj.pet.member.domain.Member;
 import proj.pet.member.repository.MemberRepository;
 
@@ -28,13 +30,15 @@ public class BoardServiceImpl implements BoardService {
 	private final BoardCategoryFilterRepository boardCategoryFilterRepository;
 	private final BoardMediaManager boardMediaManager;
 	private final BoardMediaRepository boardMediaRepository;
+	private final AnimalCategoryRepository animalCategoryRepository;
 
 	// TODO: 책임 분산이 필요할지도? + mediaData의 ContentType이 not null임을 검증해야 함.
 	// TODO: AnimalCategory가 아니고 Species로 받아야 함
-	@Override public Board createBoard(Long memberId, List<AnimalCategory> categoryList, List<BoardMediaDto> mediaDtoList, String content, LocalDateTime now) {
+	@Override public Board createBoard(Long memberId, List<Species> speciesList, List<BoardMediaDto> mediaDtoList, String content, LocalDateTime now) {
 		Member member = memberRepository.findById(memberId).orElseThrow();
 		Board board = boardRepository.save(Board.of(member, VisibleScope.PUBLIC, content, now));
-		List<BoardCategoryFilter> categoryFilters = categoryList.stream()
+		List<AnimalCategory> animalCategories = animalCategoryRepository.findBySpeciesIn(speciesList);
+		List<BoardCategoryFilter> categoryFilters = animalCategories.stream()
 				.map(category -> BoardCategoryFilter.of(board, category))
 				.toList();
 		categoryFilters = boardCategoryFilterRepository.saveAll(categoryFilters);

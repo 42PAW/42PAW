@@ -56,7 +56,7 @@ class BoardServiceTest {
 	@BeforeEach
 	void setUp() {
 		boardMediaManager = mock(BoardMediaManager.class);
-		boardService = new BoardServiceImpl(boardRepository, memberRepository, boardCategoryFilterRepository, boardMediaManager, boardMediaRepository);
+		boardService = new BoardServiceImpl(boardRepository, memberRepository, boardCategoryFilterRepository, boardMediaManager, boardMediaRepository, animalCategoryRepository);
 	}
 
 	@DisplayName("게시글을 생성할 수 있다.")
@@ -82,14 +82,15 @@ class BoardServiceTest {
 		when(boardMediaManager.uploadMedia(mockVideoFile)).thenReturn("videoPath");
 		em.flush();
 		em.clear();
+		List<Species> speciesList = List.of(Species.CAT, Species.DOG, Species.ETC);
 
 		//when
-		Board board = boardService.createBoard(1L, categoryList, mediaDtoList, content, now);
+		Board board = boardService.createBoard(1L, speciesList, mediaDtoList, content, now);
 		em.flush();
 		em.clear();
 		board = boardRepository.findById(1L).orElseThrow();
 		member = memberRepository.findById(1L).orElseThrow();
-		
+
 		//then
 		assertThat(board).isNotNull();
 		assertThat(board.getMember()).isEqualTo(member);

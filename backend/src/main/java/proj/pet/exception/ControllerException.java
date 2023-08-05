@@ -4,7 +4,7 @@ import lombok.Getter;
 import proj.pet.dto.ExceptionStatusDto;
 
 @Getter
-public class ControllerException extends RuntimeException{
+public class ControllerException extends RuntimeException {
 
 	private final ExceptionStatusDto status;
 
@@ -15,5 +15,13 @@ public class ControllerException extends RuntimeException{
 
 	public ControllerException(ExceptionStatus status, String message) {
 		this.status = new ExceptionStatusDto(status.getStatusCode(), message, status.getError());
+	}
+
+	@Override
+	public String toString() {
+		return "ControllerException : {\n" +
+				"   statusCode = " + status.getStatusCode() + " " + status.getError() + "\n" +
+				"   message = " + status.getMessage() + "\n" +
+				"}";
 	}
 }

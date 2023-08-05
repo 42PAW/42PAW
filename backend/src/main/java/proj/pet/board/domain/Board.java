@@ -85,4 +85,8 @@ public class Board extends IdDomain implements Validatable {
 	public void addMediaList(List<BoardMedia> mediaList) {
 		this.mediaList.addAll(mediaList);
 	}
+
+	public boolean isOwnedBy(Member member) {
+		return this.member.equals(member);
+	}
 }

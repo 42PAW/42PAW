@@ -21,8 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_BOARD;
-import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
+import static proj.pet.exception.ExceptionStatus.*;
 
 @Service
 @Transactional
@@ -39,7 +38,7 @@ public class BoardServiceImpl implements BoardService {
 	// TODO: 책임 분산이 필요할지도? + mediaData의 ContentType이 not null임을 검증해야 함.
 	// v1.5 이벤트로 미디어 업로드 책임 분리
 	@Override public Board createBoard(Long memberId, List<Species> speciesList, List<BoardMediaDto> mediaDtoList, String content, LocalDateTime now) {
-		Member member = memberRepository.findById(memberId).orElseThrow();
+		Member member = memberRepository.findById(memberId).orElseThrow(() -> new ServiceException(NOT_FOUND_MEMBER));
 		Board board = boardRepository.save(Board.of(member, VisibleScope.PUBLIC, content, now));
 		List<AnimalCategory> animalCategories = animalCategoryRepository.findBySpeciesIn(speciesList);
 		List<BoardCategoryFilter> categoryFilters = animalCategories.stream()
@@ -66,6 +65,7 @@ public class BoardServiceImpl implements BoardService {
 		boardCategoryFilterRepository.deleteAll(board.getCategoryFilters());
 		List<BoardMedia> mediaList = board.getMediaList();
 		boardMediaManager.deleteMediaByList(mediaList);
-
+		boardMediaRepository.deleteAll(mediaList);
+		boardRepository.delete(board);
 	}
 }

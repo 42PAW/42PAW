@@ -149,6 +149,7 @@ gradle-app.setting
 .idea
 .vscode/
 .env
+!/src/test/resources/application.yml
 application*.yml
 !application-test.yml
 

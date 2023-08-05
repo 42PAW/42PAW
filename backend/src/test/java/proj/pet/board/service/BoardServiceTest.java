@@ -12,7 +12,6 @@ import proj.pet.board.domain.Board;
 import proj.pet.board.domain.BoardMedia;
 import proj.pet.board.domain.BoardMediaManager;
 import proj.pet.board.domain.VisibleScope;
-import proj.pet.board.dto.BoardMediaDto;
 import proj.pet.board.repository.BoardCategoryFilterRepository;
 import proj.pet.board.repository.BoardMediaRepository;
 import proj.pet.board.repository.BoardRepository;
@@ -76,10 +75,10 @@ class BoardServiceTest {
 		MultipartFile mockVideoFile = mock(MultipartFile.class);
 		when(mockImageFile.getContentType()).thenReturn("image/png");
 		when(mockVideoFile.getContentType()).thenReturn("video/mp4");
-		List<BoardMediaDto> mediaDtoList = List.of(
-				new BoardMediaDto(0, mockImageFile),
-				new BoardMediaDto(1, mockImageFile),
-				new BoardMediaDto(2, mockVideoFile));
+		List<MultipartFile> mediaDtoList = List.of(
+				mockImageFile,
+				mockImageFile,
+				mockVideoFile);
 		String content = "게시글 내용";
 		when(boardMediaManager.uploadMedia(mockImageFile)).thenReturn("imagePath");
 		when(boardMediaManager.uploadMedia(mockVideoFile)).thenReturn("videoPath");
@@ -121,10 +120,10 @@ class BoardServiceTest {
 		MultipartFile mockVideoFile = mock(MultipartFile.class);
 		when(mockImageFile.getContentType()).thenReturn("image/png");
 		when(mockVideoFile.getContentType()).thenReturn("video/mp4");
-		List<BoardMediaDto> mediaDtoList = List.of(
-				new BoardMediaDto(0, mockImageFile),
-				new BoardMediaDto(1, mockImageFile),
-				new BoardMediaDto(2, mockVideoFile));
+		List<MultipartFile> mediaDtoList = List.of(
+				mockImageFile,
+				mockImageFile,
+				mockVideoFile);
 		String content = "게시글 내용";
 		when(boardMediaManager.uploadMedia(mockImageFile)).thenReturn("imagePath");
 		when(boardMediaManager.uploadMedia(mockVideoFile)).thenReturn("videoPath");

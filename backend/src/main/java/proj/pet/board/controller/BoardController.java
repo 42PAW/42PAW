@@ -2,11 +2,18 @@ package proj.pet.board.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.dto.BoardCreateRequestDto;
 import proj.pet.board.dto.BoardsResponseDto;
 import proj.pet.board.service.BoardFacadeService;
+import proj.pet.category.domain.Species;
 import proj.pet.member.dto.UserSession;
+
+import java.util.List;
+
+import static proj.pet.member.domain.MemberRole.USER;
 
 @RestController
 @RequestMapping("/v1/boards")
@@ -40,10 +47,14 @@ public class BoardController {
 		return boardFacadeService.getMemberBoards(pageRequest, memberId);
 	}
 
-	@PostMapping
+	@PostMapping(
+			consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+	)
 	public void createBoard(
-			UserSession userSession,
-			@RequestBody BoardCreateRequestDto boardCreateRequestDto) {
+//			UserSession userSession,
+			@RequestPart BoardCreateRequestDto boardCreateRequestDto) {
+		// TODO: userSession 시큐리티에서 가져오기
+		UserSession userSession = new UserSession(1L, "sanan", USER);
 		boardFacadeService.createBoard(userSession, boardCreateRequestDto);
 	}
 
@@ -52,5 +63,18 @@ public class BoardController {
 			UserSession userSession,
 			@PathVariable("boardId") Long boardId) {
 		boardFacadeService.deleteBoard(userSession, boardId);
+	}
+
+	@PostMapping(
+			value = "/test",
+			consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+	)
+	public void test(
+			@RequestPart(value = "mediaDataList") List<MultipartFile> mediaDataList,
+			@RequestPart(value = "categoryList") List<Species> categoryList,
+			@RequestPart(value = "content") String content
+	) {
+		System.out.println("mediaDtos = " + mediaDataList + "\n categoryList = " + categoryList + "\n content = " + content);
+//		System.out.println("mediaDtos = " + mediaDataList + "\n categoryList = " + "\n content = " + content);
 	}
 }

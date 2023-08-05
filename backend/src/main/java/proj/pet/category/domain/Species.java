@@ -1,5 +1,8 @@
 package proj.pet.category.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum Species {
 	DOG,
 	CAT,
@@ -10,4 +13,9 @@ public enum Species {
 	AMPHIBIAN,
 	INSECT,
 	ETC;
+
+	@Override
+	public String toString() {
+		return name();
+	}
 }

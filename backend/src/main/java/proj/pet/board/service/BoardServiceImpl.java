@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.domain.*;
-import proj.pet.board.dto.BoardMediaDto;
 import proj.pet.board.repository.BoardCategoryFilterRepository;
 import proj.pet.board.repository.BoardMediaRepository;
 import proj.pet.board.repository.BoardRepository;
@@ -20,6 +19,7 @@ import proj.pet.member.repository.MemberRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static proj.pet.exception.ExceptionStatus.*;
@@ -44,7 +44,7 @@ public class BoardServiceImpl implements BoardService {
 	 *
 	 * @throws ServiceException {@link ExceptionStatus#NOT_FOUND_MEMBER} 해당하는 멤버가 없을 경우
 	 */
-	@Override public Board createBoard(Long memberId, List<Species> speciesList, List<BoardMediaDto> mediaDtoList, String content, LocalDateTime now) {
+	@Override public Board createBoard(Long memberId, List<Species> speciesList, List<MultipartFile> mediaDtoList, String content, LocalDateTime now) {
 		Member member = memberRepository.findById(memberId).orElseThrow(() -> new ServiceException(NOT_FOUND_MEMBER));
 		Board board = boardRepository.save(Board.of(member, VisibleScope.PUBLIC, content, now));
 		List<AnimalCategory> animalCategories = animalCategoryRepository.findBySpeciesIn(speciesList);
@@ -53,11 +53,11 @@ public class BoardServiceImpl implements BoardService {
 				.toList();
 		categoryFilters = boardCategoryFilterRepository.saveAll(categoryFilters);
 		board.addCategoryFilters(categoryFilters);
+		AtomicInteger index = new AtomicInteger(0);
 		List<BoardMedia> mediaList = mediaDtoList.stream()
-				.map(dto -> {
-					MultipartFile mediaData = dto.getMediaData();
-					String mediaUrl = boardMediaManager.uploadMedia(mediaData);
-					return BoardMedia.of(board, mediaUrl, dto.getIndex(), MediaType.from(mediaData.getContentType()));
+				.map(data -> {
+					String mediaUrl = boardMediaManager.uploadMedia(data);
+					return BoardMedia.of(board, mediaUrl, index.getAndIncrement(), MediaType.from(data.getContentType()));
 				}).collect(Collectors.toList());
 		mediaList = boardMediaRepository.saveAll(mediaList);
 		board.addMediaList(mediaList);

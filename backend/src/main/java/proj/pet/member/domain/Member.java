@@ -26,6 +26,7 @@ public class Member extends IdDomain implements Validatable {
 	private OauthProfile oauthProfile;
 
 	@Column(name = "country", nullable = false)
+	@Enumerated(EnumType.STRING)
 	private Country country;
 
 	@Column(name = "profile_image_url")

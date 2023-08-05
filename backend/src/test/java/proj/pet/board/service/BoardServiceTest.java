@@ -17,6 +17,7 @@ import proj.pet.board.repository.BoardCategoryFilterRepository;
 import proj.pet.board.repository.BoardMediaRepository;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.category.domain.AnimalCategory;
+import proj.pet.category.domain.BoardCategoryFilter;
 import proj.pet.category.domain.Species;
 import proj.pet.category.repository.AnimalCategoryRepository;
 import proj.pet.member.domain.*;
@@ -137,12 +138,15 @@ class BoardServiceTest {
 		em.clear();
 		List<BoardMedia> boardMediaList = boardMediaRepository.findAll();
 		assertThat(boardMediaList).hasSize(3);
+		List<BoardCategoryFilter> boardCategoryFilterList = boardCategoryFilterRepository.findAll();
+		assertThat(boardCategoryFilterList).hasSize(3);
 		boardService.deleteBoard(1L, 1L);
 
 		//then
 		then(boardMediaManager).should().deleteMediaByList(boardMediaList);
 		assertThat(boardRepository.findById(1L)).isEmpty();
 		assertThat(boardMediaRepository.findAll()).isEmpty();
+		assertThat(boardCategoryFilterRepository.findAll()).isEmpty();
 	}
 
 	private Member stubMember(String nickname, MemberRole memberRole, LocalDateTime now) {

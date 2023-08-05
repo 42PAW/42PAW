@@ -13,6 +13,7 @@ import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.BoardCategoryFilter;
 import proj.pet.category.domain.Species;
 import proj.pet.category.repository.AnimalCategoryRepository;
+import proj.pet.exception.ExceptionStatus;
 import proj.pet.exception.ServiceException;
 import proj.pet.member.domain.Member;
 import proj.pet.member.repository.MemberRepository;
@@ -37,6 +38,12 @@ public class BoardServiceImpl implements BoardService {
 
 	// TODO: 책임 분산이 필요할지도? + mediaData의 ContentType이 not null임을 검증해야 함.
 	// v1.5 이벤트로 미디어 업로드 책임 분리
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @throws ServiceException {@link ExceptionStatus#NOT_FOUND_MEMBER} 해당하는 멤버가 없을 경우
+	 */
 	@Override public Board createBoard(Long memberId, List<Species> speciesList, List<BoardMediaDto> mediaDtoList, String content, LocalDateTime now) {
 		Member member = memberRepository.findById(memberId).orElseThrow(() -> new ServiceException(NOT_FOUND_MEMBER));
 		Board board = boardRepository.save(Board.of(member, VisibleScope.PUBLIC, content, now));
@@ -57,6 +64,12 @@ public class BoardServiceImpl implements BoardService {
 		return boardRepository.save(board);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @throws ServiceException {@link ExceptionStatus#NOT_FOUND_BOARD} 해당하는 게시글이 없을 경우
+	 * @throws ServiceException {@link ExceptionStatus#UNAUTHENTICATED} 해당 게시글을 삭제할 권한이 없을 경우 - 본인의 게시글이 아닐 때
+	 */
 	@Override public void deleteBoard(Long memberId, Long boardId) {
 		Board board = boardRepository.findById(boardId).orElseThrow(() -> new ServiceException(NOT_FOUND_BOARD));
 		if (!board.getMember().getId().equals(memberId)) {

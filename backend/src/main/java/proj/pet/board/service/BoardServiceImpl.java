@@ -13,12 +13,16 @@ import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.BoardCategoryFilter;
 import proj.pet.category.domain.Species;
 import proj.pet.category.repository.AnimalCategoryRepository;
+import proj.pet.exception.ServiceException;
 import proj.pet.member.domain.Member;
 import proj.pet.member.repository.MemberRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static proj.pet.exception.ExceptionStatus.NOT_FOUND_BOARD;
+import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
 
 @Service
 @Transactional
@@ -55,6 +59,13 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override public void deleteBoard(Long memberId, Long boardId) {
+		Board board = boardRepository.findById(boardId).orElseThrow(() -> new ServiceException(NOT_FOUND_BOARD));
+		if (!board.getMember().getId().equals(memberId)) {
+			throw new ServiceException(UNAUTHENTICATED);
+		}
+		boardCategoryFilterRepository.deleteAll(board.getCategoryFilters());
+		List<BoardMedia> mediaList = board.getMediaList();
+		boardMediaManager.deleteMediaByList(mediaList);
 
 	}
 }

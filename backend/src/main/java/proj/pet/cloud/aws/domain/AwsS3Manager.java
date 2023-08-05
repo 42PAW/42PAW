@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 @Component
 @RequiredArgsConstructor
@@ -22,15 +24,26 @@ public class AwsS3Manager {
 	 * @param bucketPath
 	 * @param file
 	 */
-	public String uploadFileToBucket(String bucketPath, MultipartFile file, String filename) {
+	public String uploadFileToBucket(String bucketName, String directory, MultipartFile file, String filename) {
 		System.out.println("filename = " + filename);
 		try {
-			s3.putObject(
-					createPutObjectRequest(bucketPath, file, filename));
+			String uploadPath = bucketName + "/" + directory;
+			s3.putObject(createPutObjectRequest(uploadPath, file, filename));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return bucketPath + "/" + filename;
+		return s3.getUrl(bucketName, filename).toString();
+	}
+
+	public String deleteFileByUrl(String bucketName, String UrlAsString) throws MalformedURLException {
+		URL fileUrl = new URL(UrlAsString);
+		String key = extractKeyFromUrl(fileUrl);
+		s3.deleteObject(bucketName, key);
+		return fileUrl.toString();
+	}
+
+	private String extractKeyFromUrl(URL fileUrl) {
+		return fileUrl.getPath().substring(1);
 	}
 
 	private ObjectMetadata createObjectMetadata(MultipartFile file) {

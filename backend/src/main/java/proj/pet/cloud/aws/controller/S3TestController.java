@@ -28,28 +28,25 @@ public class S3TestController {
 	private final AwsS3Properties s3Properties;
 	private final AwsS3Manager awsS3Manager;
 
-	@PostMapping(
+	@PostMapping(value = "/upload",
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE
 	)
 	public void uploadImageFile(@Valid ImageUploadRequest dto) {
 		/**
 		 * 이 부분은 Facade가 진행할 부분입니다.
 		 */
-		System.out.println("dto.getNickname() = " + dto.getNickname());
 		MultipartFile profileImageData = dto.getProfileImageData();
 		if (profileImageData.getSize() >= IMAGE_BYTE_SIZE_LIMIT) {
 			throw new RuntimeException("이미지 사이즈가 너무 큽니다."); // TODO: Custom Exception
 		}
-		System.out.println("적합한 용량입니다!");
 		String bucketName = s3Properties.getBucketName();
-		String directory = s3Properties.getBoardImageDirectory();
-		awsS3Manager.uploadFileToBucket(bucketName, directory, profileImageData, affixUuid(dto.getNickname()));
+		String directory = s3Properties.getProfileImageDirectory();
+		String s = awsS3Manager.uploadFileToBucket(bucketName, directory, profileImageData, affixUuid(dto.getNickname()));
 	}
 
 	@PostMapping
 	public void deleteImageFile(
 			@RequestBody Map<String, String> body) throws MalformedURLException {
-		System.out.println("fileUrl = " + body.get("fileUrl"));
 		/**
 		 * 이 부분은 Facade가 진행할 부분입니다.
 		 */

@@ -9,4 +9,8 @@ export const fr = {
   report: "Signaler",
   delete: "Supprimer",
   logout: "Déconnexion",
+
+  //languageModal.tsx
+  languageSetting: "Paramètres de langue",
+  languageChangedToast: "Les paramètres de langue ont été modifiés.",
 };

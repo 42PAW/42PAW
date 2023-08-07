@@ -24,7 +24,7 @@ const DeleteModal = () => {
 
   const handleDelete = () => {
     closeModal(ModalType.DELETE);
-    popToast("해당 글이 삭제되었습니다.");
+    popToast("해당 글이 삭제되었습니다.", "P");
   };
 
   return (

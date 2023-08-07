@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { IBoardImages } from "../../types/interface/board.interface";
 
 const BoardPhotoBox = ({ boardImages }: { boardImages: IBoardImages[] }) => {
@@ -104,8 +104,16 @@ const SwipeButtonStyled = styled.button<{
   img:hover {
     opacity: 0.9;
   }
-  left: ${(props) => (props.$isLeft ? "0%" : "89%")};
-  right: ${(props) => (props.$isLeft ? "87%" : "0%")};
+  ${(props) =>
+    props.$isLeft &&
+    css`
+      left: 5px;
+    `}
+  ${(props) =>
+    !props.$isLeft &&
+    css`
+      right: 5px;
+    `}
 `;
 
 const IndexDotsContainerStyled = styled.div`

@@ -7,6 +7,7 @@ import SuccessSection from "./Sections/SuccessSection";
 import { AnimalSpecies } from "../../types/enum/animal.filter.enum";
 import { styled } from "styled-components";
 import ProfileCard from "./components/ProfileCard";
+import Toaster from "../../components/toast/Toaster";
 
 export enum Section {
   Nickname = "NicknameSection",
@@ -89,6 +90,7 @@ const SignUpPage = () => {
           step={step}
         />
       </ProfileCardWrapperStyled>
+      <Toaster />
     </MainStyled>
   );
 };

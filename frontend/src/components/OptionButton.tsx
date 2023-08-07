@@ -150,7 +150,6 @@ const MenuItemStyled = styled.div`
   text-decoration: none;
   transition: all 0.2s;
   &:hover {
-    font-size: 12px;
     font-weight: bold;
   }
 `;

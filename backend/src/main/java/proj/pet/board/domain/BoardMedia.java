@@ -22,7 +22,7 @@ public class BoardMedia extends IdDomain implements Validatable {
 	@Column(name = "MEDIA_URL", nullable = false)
 	private String mediaUrl;
 
-	@Column(name = "INDEX", nullable = false)
+	@Column(name = "MEDIA_INDEX", nullable = false)
 	private Integer index;
 
 	@Column(name = "MEDIA_TYPE", nullable = false)

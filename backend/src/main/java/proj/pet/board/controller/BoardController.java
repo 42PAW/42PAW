@@ -5,11 +5,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import proj.pet.board.dto.BoardCreateRequestDto;
 import proj.pet.board.dto.BoardsResponseDto;
 import proj.pet.board.service.BoardFacadeService;
 import proj.pet.category.domain.Species;
 import proj.pet.member.dto.UserSession;
+import proj.pet.member.repository.MemberRepository;
 
 import java.util.List;
 
@@ -21,6 +21,8 @@ import static proj.pet.member.domain.MemberRole.USER;
 public class BoardController {
 
 	private final BoardFacadeService boardFacadeService;
+	// REMOVE
+	private final MemberRepository memberRepository;
 
 	@GetMapping
 	public BoardsResponseDto getMainViewBoards(
@@ -52,10 +54,14 @@ public class BoardController {
 	)
 	public void createBoard(
 //			UserSession userSession,
-			@RequestPart BoardCreateRequestDto boardCreateRequestDto) {
+			@RequestPart(value = "mediaDataList") List<MultipartFile> mediaDataList,
+			@RequestPart(value = "categoryList") List<Species> categoryList,
+			@RequestPart(value = "content") String content) {
 		// TODO: userSession 시큐리티에서 가져오기
+		System.out.println("HELLO!");
+		System.out.println("memberRepository.findAll() = " + memberRepository.findAll());
 		UserSession userSession = new UserSession(1L, "sanan", USER);
-		boardFacadeService.createBoard(userSession, boardCreateRequestDto);
+		boardFacadeService.createBoard(userSession, mediaDataList, categoryList, content);
 	}
 
 	@DeleteMapping("/{boardId}")

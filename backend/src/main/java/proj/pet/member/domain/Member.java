@@ -29,6 +29,10 @@ public class Member extends IdDomain implements Validatable {
 	@Enumerated(EnumType.STRING)
 	private Country country;
 
+	@Column(name = "language", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Language language;
+
 	@Column(name = "profile_image_url")
 	private String profileImageUrl;
 
@@ -70,10 +74,11 @@ public class Member extends IdDomain implements Validatable {
 	private List<Follow> followers = new ArrayList<>();
 
 
-	private Member(OauthProfile oauthProfile, String profileImageUrl, Country country, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
+	private Member(OauthProfile oauthProfile, String profileImageUrl, Country country, Language language, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
 		this.oauthProfile = oauthProfile;
 		this.profileImageUrl = profileImageUrl;
 		this.country = country;
+		this.language = language;
 		this.nickname = nickname;
 		this.statement = statement;
 		this.memberRole = memberRole;
@@ -82,13 +87,14 @@ public class Member extends IdDomain implements Validatable {
 		RuntimeExceptionThrower.checkValidity(this);
 	}
 
-	public static Member of(OauthProfile oauthProfile, String profileImageUrl, Country country, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
-		return new Member(oauthProfile, profileImageUrl, country, nickname, statement, memberRole, now);
+	public static Member of(OauthProfile oauthProfile, String profileImageUrl, Country country, Language language, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
+		return new Member(oauthProfile, profileImageUrl, country, language, nickname, statement, memberRole, now);
 	}
 
 	@Override public boolean isValid() {
 		return oauthProfile != null
 				&& country != null
+				&& language != null
 				&& nickname != null
 				&& memberRole != null
 				&& nicknameUpdatedAt != null

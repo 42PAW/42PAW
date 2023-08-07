@@ -3,11 +3,13 @@ package proj.pet.board.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import proj.pet.board.dto.BoardCreateRequestDto;
+import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.dto.BoardsResponseDto;
+import proj.pet.category.domain.Species;
 import proj.pet.member.dto.UserSession;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,11 +34,12 @@ public class BoardFacadeServiceImpl implements BoardFacadeService {
 	}
 
 	@Override
-	public void createBoard(UserSession userSession, BoardCreateRequestDto boardCreateRequestDto) {
+	public void createBoard(UserSession userSession, List<MultipartFile> mediaDataList, List<Species> categoryList, String content) {
 		boardService.createBoard(userSession.getMemberId(),
-				boardCreateRequestDto.getCategoryList(),
-				boardCreateRequestDto.getMediaDataList(),
-				boardCreateRequestDto.getContent(), LocalDateTime.now());
+				categoryList,
+				mediaDataList,
+				content,
+				LocalDateTime.now());
 	}
 
 	@Override

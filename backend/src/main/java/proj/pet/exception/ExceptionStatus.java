@@ -37,4 +37,16 @@ public enum ExceptionStatus {
 		this.message = message;
 		this.error = status.getReasonPhrase();
 	}
+
+	public ControllerException toControllerException() {
+		return new ControllerException(this);
+	}
+
+	public ServiceException toServiceException() {
+		return new ServiceException(this);
+	}
+
+	public DomainException toDomainException() {
+		return new DomainException(this);
+	}
 }

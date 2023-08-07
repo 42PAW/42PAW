@@ -8,4 +8,6 @@ public enum Language {
 	GERMAN,
 	FRENCH,
 	ITALIAN,
+	PORTUGUESE,
+	;
 }

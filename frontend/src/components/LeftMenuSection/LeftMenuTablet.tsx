@@ -1,24 +1,29 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import useNavigateCustom from "../../hooks/useNavigateCustom";
 import useRightSectionHandler from "../../hooks/useRightSectionHandler";
+import { useRecoilState } from "recoil";
+import { languageState } from "../../recoil/atom";
+import useModal from "../../hooks/useModal";
+import { ModalType } from "../../types/enum/modal.enum";
 
 const LeftMenuTablet = () => {
-  const { moveToMain, moveToNotice, moveToMyProfile, moveToUpload } =
-    useNavigateCustom();
+  const [isBannerVisible, setIsBannerVisible] = useState(true);
+  const [language] = useRecoilState<any>(languageState);
+  const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
   const { openSearchSection, openAnimalFilterSection } =
     useRightSectionHandler();
-  const [isMenuVisible, setMenuVisible] = useState(true);
+  const { openModal } = useModal();
+
   const isMainPage: boolean = location.pathname === "/";
 
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
       const deltaY = event.deltaY;
       if (deltaY > 0) {
-        setMenuVisible(false);
+        setIsBannerVisible(false);
       } else if (deltaY < 0) {
-        setMenuVisible(true);
+        setIsBannerVisible(true);
       }
     };
 
@@ -32,7 +37,7 @@ const LeftMenuTablet = () => {
   return (
     <>
       {isMainPage && (
-        <BannerStyled $hidden={isMenuVisible}>
+        <BannerStyled $isBannerVisible={isBannerVisible}>
           <ProfileImageStyled src="/src/assets/profileImage.jpg" />
           <div>
             42PAW
@@ -41,9 +46,9 @@ const LeftMenuTablet = () => {
               <img src="/src/assets/dogLogo.png" />
             </span>
           </div>
-          <UploadButtonStyled onClick={moveToUpload}>
-            <img alt="MyProfile" src="/src/assets/upload.png" />
-          </UploadButtonStyled>
+          <LanguageButtonStyled onClick={() => openModal(ModalType.LANGUAGE)}>
+            <img src="/src/assets/globalW.png" />
+          </LanguageButtonStyled>
         </BannerStyled>
       )}
       <MenuStyled>
@@ -56,24 +61,24 @@ const LeftMenuTablet = () => {
             <li onClick={openSearchSection}>
               <img alt="Search" src="/src/assets/search.png" />
             </li>
+            <li onClick={moveToUpload}>
+              <img alt="MyProfile" src="/src/assets/upload.png" />
+            </li>
             <li onClick={moveToMyProfile}>
               <img alt="MyProfile" src="/src/assets/profile.png" />
-            </li>
-            <li onClick={moveToNotice}>
-              <img alt="Notice" src="/src/assets/notice.png" />
             </li>
             <li onClick={openAnimalFilterSection}>
               <img alt="AnimalFilter" src="/src/assets/categoryW.png" />
             </li>
           </MenuListStyled>
         </nav>
-        <LoginButtonStyled>로그아웃</LoginButtonStyled>
+        <LoginButtonStyled>{language.logout}</LoginButtonStyled>
       </MenuStyled>
     </>
   );
 };
 
-const BannerStyled = styled.div<{ $hidden: boolean }>`
+const BannerStyled = styled.div<{ $isBannerVisible: boolean }>`
   z-index: 2;
   position: sticky;
   display: flex;
@@ -81,11 +86,11 @@ const BannerStyled = styled.div<{ $hidden: boolean }>`
   align-items: center;
   width: 100vw;
   height: 45px;
-  margin-top: ${(props) => (props.$hidden ? "0" : "-50px")};
+  margin-top: ${(props) => (props.$isBannerVisible ? "0" : "-50px")};
   padding-bottom: 2px;
   border-bottom: 1px solid var(--transparent);
   background-color: var(--transparent);
-  transform: translateY(${(props) => (props.$hidden ? "0" : "-100%")});
+  transform: translateY(${(props) => (props.$isBannerVisible ? "0" : "-100%")});
   transition: transform 0.1s ease-in-out, margin-top 0.2s ease;
   line-height: 15px;
   div {
@@ -116,17 +121,20 @@ const ProfileImageStyled = styled.img`
   }
 `;
 
-const UploadButtonStyled = styled.button`
+const LanguageButtonStyled = styled.button`
   margin-right: 5px;
   margin-top: 5px;
-  width: 33px;
-  border: none;
+  width: 35px;
+  height: 35px;
   background-color: transparent;
+  border: none;
   img {
     width: 100%;
-  }
-  &:hover {
-    opacity: 0.7;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+    &:hover {
+      opacity: 0.7;
+    }
   }
 `;
 
@@ -138,7 +146,7 @@ const MenuStyled = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  overflow: hidden;
+  overflow: isBannerVisible;
   width: 100vw;
   background-color: #c5c6dcfa;
   margin-top: -48px;

@@ -5,8 +5,8 @@ import { IToastInfo } from "../types/interface/toast.interface";
 const useToaster = () => {
   const setToastMessages = useSetRecoilState<IToastInfo[]>(toastMessagesState);
 
-  const popToast = (text: string) => {
-    const newToast: IToastInfo = { isPopped: true, text: text };
+  const popToast = (text: string, type: "P" | "N") => {
+    const newToast: IToastInfo = { isPopped: true, text: text, type: type };
     setToastMessages((previous) => [...previous, newToast]);
   };
 

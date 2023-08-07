@@ -44,7 +44,7 @@ body {
   background-repeat: no-repeat;
 }
 
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
   display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
 button {

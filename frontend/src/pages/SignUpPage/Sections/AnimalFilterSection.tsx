@@ -17,7 +17,7 @@ const AnimalFilterSection: React.FC<SectionProps> = ({
     <WrapperStyled>
       <RevertButton setStep={setStep} to={Section.Introduction} />
       <h1>
-        "만나고 싶은 동물 친구들을 <br /> 선택해 주세요"
+        만나고 싶은 동물 친구들을 <br /> 선택해 주세요
       </h1>
       <ButtonZoneStyled>
         <AnimalButtonContainer columns={2} />

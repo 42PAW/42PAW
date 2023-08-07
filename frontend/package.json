@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.6.0",
+    "@types/node": "^20.4.6",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@types/react-transition-group": "^4.4.6",

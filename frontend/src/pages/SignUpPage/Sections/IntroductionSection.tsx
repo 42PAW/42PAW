@@ -18,12 +18,13 @@ const IntroductionSection: React.FC<SectionProps> = ({
 
   return (
     <WrapperStyled>
-      <RevertButton setStep={setStep} to={Section.ProfileImage} />
       <h1>
         자신을 표현할 수 있는 <br /> 소개를 적어 주세요
       </h1>
+      <RevertButton setStep={setStep} to={Section.ProfileImage} />
       <InputContainer>
         <input
+          placeholder="최대 30자 이내"
           value={registerData.Introduction}
           onChange={handleOnChange}
           maxLength={40}
@@ -57,19 +58,24 @@ const InputContainer = styled.div`
   input {
     height: 45px;
     width: 250px;
+
+    margin-right: 10px;
     outline: none;
     font-size: 2rem;
     border-radius: 15px;
     border: none;
-    padding: 0px 10px;
+    padding: 0px 16px;
     background-color: var(--transparent);
     color: var(--white);
+  }
+  input::placeholder {
+    color: var(--transparent);
+    font-size: 1.6rem;
   }
   button {
     height: 45px;
     width: 45px;
     padding: 0;
-    margin-left: 10px;
     border: none;
     background-color: transparent;
     img {

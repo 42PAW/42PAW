@@ -3,6 +3,8 @@ import useNavigateCustom from "../../hooks/useNavigateCustom";
 import useRightSectionHandler from "../../hooks/useRightSectionHandler";
 import { languageState } from "../../recoil/atom";
 import { useRecoilState } from "recoil";
+import useModal from "../../hooks/useModal";
+import { ModalType } from "../../types/enum/modal.enum";
 
 const LeftMenuDesktop = () => {
   const { moveToMain, moveToNotice, moveToMyProfile, moveToUpload } =
@@ -10,11 +12,12 @@ const LeftMenuDesktop = () => {
   const { openSearchSection, openAnimalFilterSection } =
     useRightSectionHandler();
   const [language] = useRecoilState<any>(languageState);
+  const { openModal } = useModal();
 
   return (
     <>
       <LeftMenuStyled>
-        <LogoImageStyled src="/src/assets/dogLogo.png" />
+        <LogoImageStyled src="/src/assets/paw.png" />
         <nav>
           <MenuListStyled>
             <li onClick={moveToMain}>
@@ -40,6 +43,9 @@ const LeftMenuDesktop = () => {
         </nav>
         <LoginButtonStyled>{language.logout}</LoginButtonStyled>
       </LeftMenuStyled>
+      <LanguageButtonStyled onClick={() => openModal(ModalType.LANGUAGE)}>
+        <img src="/src/assets/globalW.png" />
+      </LanguageButtonStyled>
     </>
   );
 };
@@ -69,7 +75,7 @@ const LeftMenuStyled = styled.div`
 `;
 
 const LogoImageStyled = styled.img`
-  width: 40px;
+  width: 60px;
   margin-top: 30%;
 `;
 
@@ -110,6 +116,24 @@ const LoginButtonStyled = styled.div`
     background-color: var(--white);
     color: var(--pink);
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+`;
+
+const LanguageButtonStyled = styled.button`
+  bottom: 4px;
+  right: 7px;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  border: none;
+  img {
+    width: 100%;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+    &:hover {
+      opacity: 0.9;
+    }
   }
 `;
 

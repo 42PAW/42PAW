@@ -6,6 +6,7 @@ import { BoardCategory } from "../types/enum/board.category.enum";
 import { IBanUserInfo } from "../types/interface/user.interface";
 import { IToastInfo } from "../types/interface/toast.interface";
 import Translator from "../languages/Translator";
+import { Language } from "../types/enum/language.enum";
 
 /**현재까지 불러온 기본 정렬 게시물 목록*/
 export const defaultBoardsState = atom<BoardsInfoDTO>({
@@ -76,6 +77,7 @@ export const currentOpenModalState = atom<ICurrentModalStateInfo>({
     deleteModal: false,
     profileCardModal: false,
     profileEditModal: false,
+    languageModal: false,
   },
 });
 
@@ -93,6 +95,6 @@ export const banUserInfoState = atom<IBanUserInfo>({
 });
 
 export const languageState = atom<any>({
-  key: "lanugage",
+  key: "language",
   default: Translator.fr,
 });

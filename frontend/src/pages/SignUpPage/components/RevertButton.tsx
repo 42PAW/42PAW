@@ -13,26 +13,28 @@ const RevertButton = ({ setStep, to }: RevertButtonProps) => {
 
   return (
     <RevertButtonStyled onClick={handleRevert}>
-      <img src="/src/assets/backArrow.png" />
+      <img src="/src/assets/arrow.png" />
     </RevertButtonStyled>
   );
 };
 
 const RevertButtonStyled = styled.button`
   position: absolute;
-  left: 0%;
-  top: 0%;
+  left: 10px;
+  top: 10px;
   border: none;
-  height: 40px;
-  width: 40px;
+  padding: 0;
+  height: 25px;
+  width: 25px;
   background-color: transparent;
+  transform: scaleX(-1);
   img {
     width: 100%;
-    opacity: 0.6;
+    opacity: 0.5;
   }
   img:hover {
-    opacity: 0.8;
-    transition: opacity 0.5s ease;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
   }
 `;
 

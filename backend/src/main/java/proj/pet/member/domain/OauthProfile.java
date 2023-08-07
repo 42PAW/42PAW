@@ -2,6 +2,8 @@ package proj.pet.member.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +15,8 @@ import proj.pet.utils.domain.Validatable;
 @Embeddable
 public class OauthProfile implements Validatable {
 
-	@Column(name = "OAUTH_TYPE", nullable = false)
+	@Column(name = "OAUTH_TYPE", nullable = false, length = 32)
+	@Enumerated(EnumType.STRING)
 	private OauthType type;
 
 	@Column(name = "OAUTH_ID", nullable = false)

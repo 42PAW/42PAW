@@ -41,7 +41,8 @@ public class Board extends IdDomain implements Validatable {
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "MEMBER_ID", nullable = false, updatable = false)
 	private Member member;
-	@Column(name = "VISIBLE_SCOPE", nullable = false)
+	@Column(name = "VISIBLE_SCOPE", nullable = false, length = 32)
+	@Enumerated(EnumType.STRING)
 	private VisibleScope visibleScope;
 	/**
 	 * null이 아닌 빈 문자열을 들고 있도록 설정

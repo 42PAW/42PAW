@@ -25,7 +25,8 @@ public class BoardMedia extends IdDomain implements Validatable {
 	@Column(name = "MEDIA_INDEX", nullable = false)
 	private Integer index;
 
-	@Column(name = "MEDIA_TYPE", nullable = false)
+	@Column(name = "MEDIA_TYPE", nullable = false, length = 32)
+	@Enumerated(EnumType.STRING)
 	private MediaType mediaType;
 
 	private BoardMedia(Board board, String mediaUrl, Integer index, MediaType mediaType) {

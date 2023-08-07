@@ -25,10 +25,12 @@ public class Member extends IdDomain implements Validatable {
 	@Embedded
 	private OauthProfile oauthProfile;
 
-	@Column(name = "COUNTRY", nullable = false)
+	@Enumerated(EnumType.STRING)
+	@Column(name = "COUNTRY", nullable = false, length = 32)
 	private Country country;
 
-	@Column(name = "LANGUAGE", nullable = false)
+	@Enumerated(EnumType.STRING)
+	@Column(name = "LANGUAGE", nullable = false, length = 32)
 	private Language language;
 
 	@Column(name = "PROFILE_IMAGE_URL")
@@ -43,7 +45,8 @@ public class Member extends IdDomain implements Validatable {
 	@Column(name = "STATEMENT", length = 30)
 	private String statement;
 
-	@Column(name = "ROLE", nullable = false)
+	@Enumerated(EnumType.STRING)
+	@Column(name = "ROLE", nullable = false, length = 32)
 	private MemberRole memberRole;
 
 	@Column(name = "CREATED_AT", nullable = false)

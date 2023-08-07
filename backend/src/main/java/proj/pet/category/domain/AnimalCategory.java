@@ -1,8 +1,6 @@
 package proj.pet.category.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.utils.domain.IdDomain;
@@ -17,9 +15,10 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 public class AnimalCategory extends IdDomain implements Validatable {
 
-	private final static int MAX_NAME_LENGTH = 30;
+	private static final int MAX_NAME_LENGTH = 32;
 
 	@Column(name = "SPECIES", nullable = false, length = MAX_NAME_LENGTH)
+	@Enumerated(EnumType.STRING)
 	private Species species;
 
 	private AnimalCategory(Species species) {

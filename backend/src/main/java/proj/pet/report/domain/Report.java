@@ -37,7 +37,8 @@ public class Report extends IdDomain implements Validatable {
 	@JoinColumn(name = "COMMENT_ID", nullable = false, updatable = false)
 	private Comment comment;
 
-	@Column(name = "REASON", nullable = false)
+	@Column(name = "REASON", nullable = false, length = 32)
+	@Enumerated(EnumType.STRING)
 	private ReportReason reason;
 
 	@Column(name = "CONTENT", length = 255)

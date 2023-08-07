@@ -13,9 +13,5 @@ public enum Species {
 	AMPHIBIAN,
 	INSECT,
 	ETC;
-
-	@Override
-	public String toString() {
-		return name();
-	}
+	
 }

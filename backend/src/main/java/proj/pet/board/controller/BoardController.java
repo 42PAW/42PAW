@@ -66,21 +66,9 @@ public class BoardController {
 
 	@DeleteMapping("/{boardId}")
 	public void deleteBoard(
-			UserSessionDto userSessionDto,
+//			UserSession userSession,
 			@PathVariable("boardId") Long boardId) {
-		boardFacadeService.deleteBoard(userSessionDto, boardId);
-	}
-
-	@PostMapping(
-			value = "/test",
-			consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-	)
-	public void test(
-			@RequestPart(value = "mediaDataList") List<MultipartFile> mediaDataList,
-			@RequestPart(value = "categoryList") List<Species> categoryList,
-			@RequestPart(value = "content") String content
-	) {
-		System.out.println("mediaDtos = " + mediaDataList + "\n categoryList = " + categoryList + "\n content = " + content);
-//		System.out.println("mediaDtos = " + mediaDataList + "\n categoryList = " + "\n content = " + content);
+		UserSessionDto userSession = new UserSessionDto(1L, "sanan", USER);
+		boardFacadeService.deleteBoard(userSession, boardId);
 	}
 }

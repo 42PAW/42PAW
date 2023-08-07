@@ -27,7 +27,7 @@ public class FollowQueryServiceImpl implements FollowQueryService {
 		Page<Follow> followings =
 				followRepository.findAllByToWithMember(memberId, pageable);
 		List<MemberPreviewResponseDto> responseDtoList = followings.stream().map(follow ->
-				memberMapper.toMemberPreviewResponseDto(follow.getTo())).toList();
+				memberMapper.toMemberPreviewResponseDto(follow.getTo(), null)).toList();
 		return followMapper.toFollowResponseDto(responseDtoList, followings.getTotalElements());
 	}
 
@@ -36,7 +36,7 @@ public class FollowQueryServiceImpl implements FollowQueryService {
 		Page<Follow> followers =
 				followRepository.findAllByFromWithMember(memberId, pageable);
 		List<MemberPreviewResponseDto> responseDtoList = followers.stream().map(follow ->
-				memberMapper.toMemberPreviewResponseDto(follow.getFrom())).toList();
+				memberMapper.toMemberPreviewResponseDto(follow.getFrom(), null)).toList();
 		return followMapper.toFollowResponseDto(responseDtoList, followers.getTotalElements());
 	}
 }

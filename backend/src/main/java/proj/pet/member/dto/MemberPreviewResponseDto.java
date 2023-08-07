@@ -11,7 +11,7 @@ public class MemberPreviewResponseDto {
 
 	private final String memberName;
 	private final String intraName;
-	private final String profileImage;
+	private final String profileImageUrl;
 	private final Country country;
 	private final String statement;
 	private final FollowType relationship;

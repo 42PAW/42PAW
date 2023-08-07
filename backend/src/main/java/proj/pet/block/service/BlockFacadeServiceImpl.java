@@ -3,6 +3,8 @@ package proj.pet.block.service;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import proj.pet.block.domain.Block;
 import proj.pet.block.dto.BlockRequestDto;
@@ -35,7 +37,8 @@ public class BlockFacadeServiceImpl implements BlockFacadeService {
 	public List<MemberPreviewResponseDto> getMyBlockList(
 			UserSessionDto userSessionDto, int page, int size) {
 		Long memberId = userSessionDto.getMemberId();
-		List<Block> myBlockList = blockQueryService.getBlockList(memberId, page, size);
+		Pageable pageable = PageRequest.of(page, size);
+		List<Block> myBlockList = blockQueryService.getBlockList(memberId, pageable);
 		List<MemberPreviewResponseDto> myBlockDtoList = myBlockList.stream()
 				.map(blockMapper::toMemberPreviewResponseDto).collect(Collectors.toList());
 		return myBlockDtoList;

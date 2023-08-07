@@ -1,6 +1,8 @@
 package proj.pet.follow.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import proj.pet.follow.dto.FollowPagenationDto;
 import proj.pet.follow.dto.FollowRequestDto;
@@ -25,21 +27,25 @@ public class FollowFacadeServiceImpl implements FollowFacadeService {
 
 	@Override
 	public FollowPagenationDto getMyFollowings(UserSessionDto userSessionDto, int page, int size) {
-		return followQueryService.getFollowings(userSessionDto.getMemberId(), page, size);
+		Pageable pageable = PageRequest.of(page, size);
+		return followQueryService.getFollowings(userSessionDto.getMemberId(), pageable);
 	}
 
 	@Override
 	public FollowPagenationDto getFollowings(Long memberId, int page, int size) {
-		return followQueryService.getFollowings(memberId, page, size);
+		Pageable pageable = PageRequest.of(page, size);
+		return followQueryService.getFollowings(memberId, pageable);
 	}
 
 	@Override
 	public FollowPagenationDto getMyFollowers(UserSessionDto userSessionDto, int page, int size) {
-		return followQueryService.getFollowers(userSessionDto.getMemberId(), page, size);
+		Pageable pageable = PageRequest.of(page, size);
+		return followQueryService.getFollowers(userSessionDto.getMemberId(), pageable);
 	}
 
 	@Override
 	public FollowPagenationDto getFollowers(Long memberId, int page, int size) {
-		return followQueryService.getFollowers(memberId, page, size);
+		Pageable pageable = PageRequest.of(page, size);
+		return followQueryService.getFollowers(memberId, pageable);
 	}
 }

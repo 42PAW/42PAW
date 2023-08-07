@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import proj.pet.follow.domain.Follow;
 
@@ -15,17 +16,18 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 			"FROM Follow f " +
 			"WHERE f.from = :memberId " +
 			"AND f.to = :targetMemberId")
-	Optional<Follow> findByMemberCompositeKey(Long memberId, Long targetMemberId);
+	Optional<Follow> findByMemberCompositeKey(
+			@Param("memberId") Long memberId, Long targetMemberId);
 
 	@Query("SELECT f " +
 			"FROM Follow f " +
 			"LEFT JOIN FETCH f.to " +
 			"WHERE f.from = :memberId")
-	Page<Follow> findAllByFromWithMember(Long memberId, Pageable pageable);
+	Page<Follow> findAllByFromWithMember(@Param("memberId") Long memberId, Pageable pageable);
 
 	@Query("SELECT f " +
 			"FROM Follow f " +
 			"LEFT JOIN FETCH f.from " +
 			"WHERE f.to = :memberId")
-	Page<Follow> findAllByToWithMember(Long memberId, Pageable pageable);
+	Page<Follow> findAllByToWithMember(@Param("memberId") Long memberId, Pageable pageable);
 }

@@ -3,7 +3,7 @@ package proj.pet.follow.service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import proj.pet.follow.domain.Follow;
@@ -22,24 +22,21 @@ public class FollowQueryServiceImpl implements FollowQueryService {
 	private final FollowMapper followMapper;
 	private final MemberMapper memberMapper;
 
-	private FollowPagenationDto followsToResponseDto(Page<Follow> follows) {
-		List<MemberPreviewResponseDto> responseDtoList = follows.stream().map((follow -> {
-			return memberMapper.toMemberPreviewResponseDto(follow.getTo());
-		})).toList();
-		return followMapper.toFollowResponseDto(responseDtoList, follows.getTotalElements());
-	}
-
 	@Override
-	public FollowPagenationDto getFollowings(Long memberId, int page, int size) {
+	public FollowPagenationDto getFollowings(Long memberId, Pageable pageable) {
 		Page<Follow> followings =
-				followRepository.findAllByToWithMember(memberId, PageRequest.of(page, size));
-		return followsToResponseDto(followings);
+				followRepository.findAllByToWithMember(memberId, pageable);
+		List<MemberPreviewResponseDto> responseDtoList = followings.stream().map(follow ->
+				memberMapper.toMemberPreviewResponseDto(follow.getTo())).toList();
+		return followMapper.toFollowResponseDto(responseDtoList, followings.getTotalElements());
 	}
 
 	@Override
-	public FollowPagenationDto getFollowers(Long memberId, int page, int size) {
+	public FollowPagenationDto getFollowers(Long memberId, Pageable pageable) {
 		Page<Follow> followers =
-				followRepository.findAllByFromWithMember(memberId, PageRequest.of(page, size));
-		return followsToResponseDto(followers);
+				followRepository.findAllByFromWithMember(memberId, pageable);
+		List<MemberPreviewResponseDto> responseDtoList = followers.stream().map(follow ->
+				memberMapper.toMemberPreviewResponseDto(follow.getFrom())).toList();
+		return followMapper.toFollowResponseDto(responseDtoList, followers.getTotalElements());
 	}
 }

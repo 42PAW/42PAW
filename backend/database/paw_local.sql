@@ -166,3 +166,16 @@ VALUES
     ('FORTY_TWO', '3', 'jpark2', 'JAPAN', 'JAPANESE', 'PROFILE_IMAGE_URL3', '꼬비덕후', '2023-03-01 00:00:00', '내가 국힙원탑', 'USER', '2023-03-01 00:00:00', NULL),
     ('FORTY_TWO', '4', 'hyungnoh', 'FRANCE', 'FRENCH', 'PROFILE_IMAGE_URL3', '오덕십덕', '2023-03-01 00:00:00', '강아지가 세상을 구한다 어쩌구', 'USER', '2023-03-01 00:00:00', NULL),
     ('FORTY_TWO', '5', 'joon-lee', 'KOREA', 'ITALIAN', 'PROFILE_IMAGE_URL3', '준준준준준준준준준준', '2023-03-01 00:00:00', '함 뜨실?', 'USER', '2023-03-01 00:00:00', NULL);
+
+INSERT INTO animal_category
+(species)
+VALUES
+    ('DOG'),
+    ('CAT'),
+    ('FISH'),
+    ('BIRD'),
+    ('SMALL_ANIMAL'),
+    ('REPTILE'),
+    ('AMPHIBIAN'),
+    ('INSECT'),
+    ('ETC');

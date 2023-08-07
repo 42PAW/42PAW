@@ -25,7 +25,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
 	@Override public BoardsResponseDto getHotBoards(PageRequest pageRequest) {
 		Predicate filter = null;
-		OrderSpecifier<?> orderSpecifier = QBoard.board.createdAt.desc(); // Like Count
+		OrderSpecifier<?> orderSpecifier = QBoard.board.reactions.size().desc();
 		return null;
 	}
 

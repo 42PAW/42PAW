@@ -1,16 +1,21 @@
 package proj.pet.follow.domain;
 
-import jakarta.persistence.*;
+import static lombok.AccessLevel.PROTECTED;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.member.domain.Member;
 import proj.pet.utils.domain.MemberCompositeKey;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
-
-import java.time.LocalDateTime;
-
-import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor(access = PROTECTED)
 @Entity
@@ -44,7 +49,8 @@ public class Follow implements Validatable {
 		return new Follow(from, to, now);
 	}
 
-	@Override public boolean isValid() {
+	@Override
+	public boolean isValid() {
 		return id.isValid()
 				&& from != null
 				&& !from.isNew()

@@ -1,13 +1,15 @@
 package proj.pet.mapper;
 
 
-import org.mapstruct.Mapper;
-
 import static org.mapstruct.factory.Mappers.getMapper;
 
-@Mapper(componentModel = "spring")
-public interface BoardMapper {
-	BoardMapper INSTANCE = getMapper(BoardMapper.class);
+import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 
+@Mapper(componentModel = "spring")
+@Component
+public interface BoardMapper {
+
+	BoardMapper INSTANCE = getMapper(BoardMapper.class);
 
 }

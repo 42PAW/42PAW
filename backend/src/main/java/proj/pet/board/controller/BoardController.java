@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.dto.BoardsResponseDto;
 import proj.pet.board.service.BoardFacadeService;
 import proj.pet.category.domain.Species;
-import proj.pet.member.dto.UserSession;
+import proj.pet.member.dto.UserSessionDto;
 import proj.pet.member.repository.MemberRepository;
 
 import java.util.List;
@@ -60,15 +60,15 @@ public class BoardController {
 		// TODO: userSession 시큐리티에서 가져오기
 		System.out.println("HELLO!");
 		System.out.println("memberRepository.findAll() = " + memberRepository.findAll());
-		UserSession userSession = new UserSession(1L, "sanan", USER);
-		boardFacadeService.createBoard(userSession, mediaDataList, categoryList, content);
+		UserSessionDto userSessionDto = new UserSessionDto(1L, "sanan", USER);
+		boardFacadeService.createBoard(userSessionDto, mediaDataList, categoryList, content);
 	}
 
 	@DeleteMapping("/{boardId}")
 	public void deleteBoard(
 //			UserSession userSession,
 			@PathVariable("boardId") Long boardId) {
-		UserSession userSession = new UserSession(1L, "sanan", USER);
+		UserSessionDto userSession = new UserSessionDto(1L, "sanan", USER);
 		boardFacadeService.deleteBoard(userSession, boardId);
 	}
 }

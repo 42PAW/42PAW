@@ -11,7 +11,7 @@ import proj.pet.member.domain.MemberRole;
  */
 @Getter
 @AllArgsConstructor
-public class UserSession {
+public class UserSessionDto {
 	private final Long memberId;
 	private final String nickname;
 	private final MemberRole memberRole;

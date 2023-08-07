@@ -40,10 +40,9 @@ public class BoardCategoryFilter implements Validatable {
 	public static BoardCategoryFilter of(Board board, AnimalCategory animalCategory) {
 		return new BoardCategoryFilter(board, animalCategory);
 	}
+
 	@Override public boolean isValid() {
-		return board != null
-				&& !board.isNew()
-				&& animalCategory != null
-				&& !animalCategory.isNew();
+		return board != null && !board.isNew()
+				&& animalCategory != null && !animalCategory.isNew();
 	}
 }

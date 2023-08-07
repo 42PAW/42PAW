@@ -1,17 +1,22 @@
 package proj.pet.board.service;
 
-import proj.pet.board.dto.BoardCreateRequestDto;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.dto.BoardsResponseDto;
+import proj.pet.category.domain.Species;
+import proj.pet.member.dto.UserSession;
+
+import java.util.List;
 
 public interface BoardFacadeService {
 
-	BoardsResponseDto getMainViewBoards();
+	BoardsResponseDto getMainViewBoards(PageRequest pageRequest);
 
-	BoardsResponseDto getHotBoards();
+	BoardsResponseDto getHotBoards(PageRequest pageRequest);
 
-	BoardsResponseDto getFollowingsBoards();
+	BoardsResponseDto getMemberBoards(PageRequest pageRequest, Long memberId);
 
-	void createBoard(BoardCreateRequestDto boardCreateRequestDto);
+	void createBoard(UserSession userSession, List<MultipartFile> mediaDataList, List<Species> categoryList, String content);
 
-	void deleteBoard(Long boardId);
+	void deleteBoard(UserSession userSession, Long boardId);
 }

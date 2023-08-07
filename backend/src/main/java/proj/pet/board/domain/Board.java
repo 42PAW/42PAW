@@ -3,6 +3,7 @@ package proj.pet.board.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import proj.pet.category.domain.BoardCategoryFilter;
 import proj.pet.member.domain.Member;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.utils.domain.IdDomain;
@@ -22,33 +23,38 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 public class Board extends IdDomain implements Validatable {
 
+	@OneToMany(mappedBy = "board",
+			targetEntity = BoardMedia.class,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private final List<BoardMedia> mediaList = new ArrayList<>();
+	@OneToMany(mappedBy = "board",
+			targetEntity = BoardCategoryFilter.class,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private final List<BoardCategoryFilter> categoryFilters = new ArrayList<>();
+	@OneToMany(mappedBy = "board",
+			targetEntity = Reaction.class,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private final List<Reaction> reactions = new ArrayList<>();
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member member;
-
 	@Column(name = "visible_scope", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private VisibleScope visibleScope;
-
 	/**
 	 * null이 아닌 빈 문자열을 들고 있도록 설정
 	 */
 	@Column(name = "content", nullable = false)
 	private String content;
-
 	@Column(name = "updated_at", nullable = false)
 	private LocalDateTime updatedAt;
-
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt;
-
 	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
-	@OneToMany(mappedBy = "board",
-			targetEntity = Reaction.class,
-			cascade = CascadeType.ALL,
-			orphanRemoval = true)
-	private List<Reaction> reactions = new ArrayList<>();
 
 	protected Board(Member member, VisibleScope visibleScope, String content, LocalDateTime now) {
 		this.member = member;
@@ -65,10 +71,22 @@ public class Board extends IdDomain implements Validatable {
 
 	@Override public boolean isValid() {
 		return this.member != null
-			&& !this.member.isNew()
-			&& this.visibleScope != null
-			&& this.content != null
-			&& this.updatedAt != null
-			&& this.createdAt != null;
+				&& !this.member.isNew()
+				&& this.visibleScope != null
+				&& this.content != null
+				&& this.updatedAt != null
+				&& this.createdAt != null;
+	}
+
+	public void addCategoryFilters(List<BoardCategoryFilter> categoryFilters) {
+		this.categoryFilters.addAll(categoryFilters);
+	}
+
+	public void addMediaList(List<BoardMedia> mediaList) {
+		this.mediaList.addAll(mediaList);
+	}
+
+	public boolean isOwnedBy(Member member) {
+		return this.member.equals(member);
 	}
 }

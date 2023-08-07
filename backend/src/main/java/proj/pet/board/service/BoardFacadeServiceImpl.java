@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.dto.BoardsResponseDto;
 import proj.pet.category.domain.Species;
-import proj.pet.member.dto.UserSession;
+import proj.pet.member.dto.UserSessionDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,8 +34,8 @@ public class BoardFacadeServiceImpl implements BoardFacadeService {
 	}
 
 	@Override
-	public void createBoard(UserSession userSession, List<MultipartFile> mediaDataList, List<Species> categoryList, String content) {
-		boardService.createBoard(userSession.getMemberId(),
+	public void createBoard(UserSessionDto userSessionDto, List<MultipartFile> mediaDataList, List<Species> categoryList, String content) {
+		boardService.createBoard(userSessionDto.getMemberId(),
 				categoryList,
 				mediaDataList,
 				content,
@@ -43,7 +43,7 @@ public class BoardFacadeServiceImpl implements BoardFacadeService {
 	}
 
 	@Override
-	public void deleteBoard(UserSession userSession, Long boardId) {
-		boardService.deleteBoard(userSession.getMemberId(), boardId);
+	public void deleteBoard(UserSessionDto userSessionDto, Long boardId) {
+		boardService.deleteBoard(userSessionDto.getMemberId(), boardId);
 	}
 }

@@ -11,10 +11,10 @@ create table member
     country             varchar(32)                                                                                                                                                                                                                                                                                                                                not null,
     language            varchar(32)                                                                                                                                                                                                                                                           not null,
     statement           varchar(30)                                                                                                                                                                                                                                                                                                                                null,
-    profile_image_url   varchar(255)                                                                                                                                                                                                                                                                                                                               null
+    profile_image_url   varchar(255)                                                                                                                                                                                                                                                                                                                               null,
     role                varchar(32)                                                                                                                                                                                                                                                                                                                     not null,
     created_at          datetime(6)                                                                                                                                                                                                                                                                                                                                not null,
-    deleted_at          datetime(6)                                                                                                                                                                                                                                                                                                                                null,
+    deleted_at          datetime(6)                                                                                                                                                                                                                                                                                                                                null
 );
 -- auto-generated definition
 create table animal_category
@@ -161,6 +161,8 @@ create table scrap
 INSERT INTO member
 (oauth_type, oauth_id, oauth_name, country, language, profile_image_url, nickname, nickname_updated_at, statement, role, created_at, deleted_at)
 VALUES
-    ('OAUTH_TYPE1', 'OAUTH_ID1', 'OAUTH_NAME1', 'COUNTRY1', 'LANGUAGE1', 'PROFILE_IMAGE_URL1', 'NICKNAME1', '2023-01-01 00:00:00', 'STATEMENT1', 'MEMBERROLE1', '2023-01-01 00:00:00', NULL),
-    ('OAUTH_TYPE2', 'OAUTH_ID2', 'OAUTH_NAME2', 'COUNTRY2', 'LANGUAGE2', 'PROFILE_IMAGE_URL2', 'NICKNAME2', '2023-02-01 00:00:00', 'STATEMENT2', 'MEMBERROLE2', '2023-02-01 00:00:00', NULL),
-    ('OAUTH_TYPE3', 'OAUTH_ID3', 'OAUTH_NAME3', 'COUNTRY3', 'LANGUAGE3', 'PROFILE_IMAGE_URL3', 'NICKNAME3', '2023-03-01 00:00:00', 'STATEMENT3', 'MEMBERROLE3', '2023-03-01 00:00:00', NULL);
+    ('FORTY_TWO', '1', 'sanan', 'KOREA', 'KOREAN', 'PROFILE_IMAGE_URL1', '하루애비', '2023-01-01 00:00:00', '멀보노', 'USER', '2023-01-01 00:00:00', NULL),
+    ('FORTY_TWO', '2', 'mingkang', 'USA', 'ENGLISH', 'PROFILE_IMAGE_URL2', '아롱오빠', '2023-02-01 00:00:00', '감귤 사실분', 'USER', '2023-02-01 00:00:00', NULL),
+    ('FORTY_TWO', '3', 'jpark2', 'JAPAN', 'JAPANESE', 'PROFILE_IMAGE_URL3', '꼬비덕후', '2023-03-01 00:00:00', '내가 국힙원탑', 'USER', '2023-03-01 00:00:00', NULL),
+    ('FORTY_TWO', '4', 'hyungnoh', 'FRANCE', 'FRENCH', 'PROFILE_IMAGE_URL3', '오덕십덕', '2023-03-01 00:00:00', '강아지가 세상을 구한다 어쩌구', 'USER', '2023-03-01 00:00:00', NULL),
+    ('FORTY_TWO', '5', 'joon-lee', 'KOREA', 'ITALIAN', 'PROFILE_IMAGE_URL3', '준준준준준준준준준준', '2023-03-01 00:00:00', '함 뜨실?', 'USER', '2023-03-01 00:00:00', NULL);

@@ -25,34 +25,31 @@ public class Member extends IdDomain implements Validatable {
 	@Embedded
 	private OauthProfile oauthProfile;
 
-	@Column(name = "country", nullable = false)
-	@Enumerated(EnumType.STRING)
+	@Column(name = "COUNTRY", nullable = false)
 	private Country country;
 
-	@Column(name = "language", nullable = false)
-	@Enumerated(EnumType.STRING)
+	@Column(name = "LANGUAGE", nullable = false)
 	private Language language;
 
-	@Column(name = "profile_image_url")
+	@Column(name = "PROFILE_IMAGE_URL")
 	private String profileImageUrl;
 
-	@Column(name = "nickname", nullable = false, length = 12)
+	@Column(name = "NICKNAME", nullable = false, length = 12)
 	private String nickname;
 
-	@Column(name = "nickname_updated_at", nullable = false)
+	@Column(name = "NICKNAME_UPDATED_AT", nullable = false)
 	private LocalDateTime nicknameUpdatedAt;
 
-	@Column(name = "statement", length = 30)
+	@Column(name = "STATEMENT", length = 30)
 	private String statement;
 
-	@Column(name = "role", nullable = false)
-	@Enumerated(EnumType.STRING)
+	@Column(name = "ROLE", nullable = false)
 	private MemberRole memberRole;
 
-	@Column(name = "created_at", nullable = false)
+	@Column(name = "CREATED_AT", nullable = false)
 	private LocalDateTime createdAt;
 
-	@Column(name = "deleted_at")
+	@Column(name = "DELETED_AT")
 	private LocalDateTime deletedAt;
 
 	@OneToMany(mappedBy = "from",

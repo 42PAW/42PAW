@@ -22,14 +22,14 @@ public class Follow implements Validatable {
 	private MemberCompositeKey id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "MEMBER_ID", nullable = false, insertable = false, updatable = false)
 	private Member from;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "target_member_id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "TARGET_MEMBER_ID", nullable = false, insertable = false, updatable = false)
 	private Member to;
 
-	@Column(name = "followed_at", nullable = false)
+	@Column(name = "FOLLOWED_AT", nullable = false)
 	private LocalDateTime followedAt;
 
 	private Follow(Member from, Member to, LocalDateTime now) {

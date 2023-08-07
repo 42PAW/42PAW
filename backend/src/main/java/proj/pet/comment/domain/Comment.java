@@ -14,21 +14,22 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "COMMENT")
 @Getter
 public class Comment extends IdDomain implements Validatable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "board_id", nullable = false, updatable = false)
+	@JoinColumn(name = "BOARD_ID", nullable = false, updatable = false)
 	private Board board;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false, updatable = false)
+	@JoinColumn(name = "MEMBER_ID", nullable = false, updatable = false)
 	private Member member;
 
-	@Column(name = "created_at", nullable = false)
+	@Column(name = "CREATED_AT", nullable = false)
 	private LocalDateTime createdAt;
 
-	@Column(name = "deleted_at")
+	@Column(name = "DELETED_AT")
 	private LocalDateTime deletedAt;
 
 	protected Comment(Board board, Member member, LocalDateTime createdAt) {
@@ -41,6 +42,7 @@ public class Comment extends IdDomain implements Validatable {
 	public static Comment of(Board board, Member member, LocalDateTime createdAt) {
 		return new Comment(board, member, createdAt);
 	}
+
 	@Override public boolean isValid() {
 		return board != null
 				&& !board.isNew()

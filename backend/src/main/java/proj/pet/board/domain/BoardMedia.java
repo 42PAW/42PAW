@@ -10,23 +10,22 @@ import proj.pet.utils.domain.Validatable;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Table(name = "board_media")
+@Table(name = "BOARD_MEDIA")
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 public class BoardMedia extends IdDomain implements Validatable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "board_id", nullable = false, updatable = false)
+	@JoinColumn(name = "BOARD_ID", nullable = false, updatable = false)
 	private Board board;
 
-	@Column(name = "media_url", nullable = false)
+	@Column(name = "MEDIA_URL", nullable = false)
 	private String mediaUrl;
 
-	@Column(name = "index", nullable = false)
+	@Column(name = "INDEX", nullable = false)
 	private Integer index;
 
-	@Column(name = "media_type", nullable = false)
-	@Enumerated(EnumType.STRING)
+	@Column(name = "MEDIA_TYPE", nullable = false)
 	private MediaType mediaType;
 
 	private BoardMedia(Board board, String mediaUrl, Integer index, MediaType mediaType) {

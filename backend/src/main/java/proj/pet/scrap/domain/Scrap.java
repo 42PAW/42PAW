@@ -14,20 +14,20 @@ import java.time.LocalDateTime;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Table(name = "scrap")
+@Table(name = "SCRAP")
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 public class Scrap extends IdDomain implements Validatable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false, updatable = false)
+	@JoinColumn(name = "MEMBER_ID", nullable = false, updatable = false)
 	private Member member;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "board_id", nullable = false, updatable = false)
+	@JoinColumn(name = "BOARD_ID", nullable = false, updatable = false)
 	private Board board;
 
-	@Column(name = "created_at", nullable = false, updatable = false)
+	@Column(name = "CREATED_AT", nullable = false)
 	private LocalDateTime createdAt;
 
 	private Scrap(Member member, Board board, LocalDateTime now) {

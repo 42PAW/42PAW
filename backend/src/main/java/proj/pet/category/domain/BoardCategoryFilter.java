@@ -13,21 +13,19 @@ import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor(access = PROTECTED)
 @Entity
-@Table(name = "board_category_filter")
+@Table(name = "BOARD_CATEGORY_FILTER")
 @Getter
 public class BoardCategoryFilter implements Validatable {
 
 	@EmbeddedId
 	private ConsumptionCompositeKey key;
 
-	@MapsId("consumerId")
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "consumer_id", nullable = false, updatable = false)
+	@JoinColumn(name = "CONSUMER_ID", nullable = false, insertable = false, updatable = false)
 	private Board board;
 
-	@MapsId("providerId")
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "provider_id", nullable = false, updatable = false)
+	@JoinColumn(name = "PROVIDER_ID", nullable = false, insertable = false, updatable = false)
 	private AnimalCategory animalCategory;
 
 	private BoardCategoryFilter(Board board, AnimalCategory animalCategory) {

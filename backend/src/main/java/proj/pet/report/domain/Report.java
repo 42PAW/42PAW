@@ -17,33 +17,34 @@ import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor(access = PROTECTED)
 @Entity
+@Table(name = "REPORT")
 @Getter
 public class Report extends IdDomain implements Validatable {
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "member_id", nullable = false, updatable = false)
+	@JoinColumn(name = "MEMBER_ID", nullable = false, updatable = false)
 	private Member from;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "reported_member_id", nullable = false, updatable = false)
+	@JoinColumn(name = "REPORTED_MEMBER_ID", nullable = false, updatable = false)
 	private Member to;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "board_id", nullable = false, updatable = false)
+	@JoinColumn(name = "BOARD_ID", nullable = false, updatable = false)
 	private Board board;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "comment_id", nullable = false, updatable = false)
+	@JoinColumn(name = "COMMENT_ID", nullable = false, updatable = false)
 	private Comment comment;
 
-	@Column(name = "reason", nullable = false)
+	@Column(name = "REASON", nullable = false, length = 32)
 	@Enumerated(EnumType.STRING)
 	private ReportReason reason;
 
-	@Column(name = "content", length = 255)
+	@Column(name = "CONTENT", length = 255)
 	private String content;
 
-	@Column(name = "created_at", nullable = false)
+	@Column(name = "CREATED_AT", nullable = false)
 	private LocalDateTime createdAt;
 
 	private Report(Member from, Member to, Board board, Comment comment, ReportReason reason, String content, LocalDateTime now) {

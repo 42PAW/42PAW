@@ -39,21 +39,21 @@ public class Board extends IdDomain implements Validatable {
 			orphanRemoval = true)
 	private final List<Reaction> reactions = new ArrayList<>();
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "member_id", nullable = false, updatable = false)
+	@JoinColumn(name = "MEMBER_ID", nullable = false, updatable = false)
 	private Member member;
-	@Column(name = "visible_scope", nullable = false)
+	@Column(name = "VISIBLE_SCOPE", nullable = false, length = 32)
 	@Enumerated(EnumType.STRING)
 	private VisibleScope visibleScope;
 	/**
 	 * null이 아닌 빈 문자열을 들고 있도록 설정
 	 */
-	@Column(name = "content", nullable = false)
+	@Column(name = "CONTENT", nullable = false)
 	private String content;
-	@Column(name = "updated_at", nullable = false)
+	@Column(name = "UPDATED_AT", nullable = false)
 	private LocalDateTime updatedAt;
-	@Column(name = "created_at", nullable = false)
+	@Column(name = "CREATED_AT", nullable = false)
 	private LocalDateTime createdAt;
-	@Column(name = "deleted_at")
+	@Column(name = "DELETED_AT")
 	private LocalDateTime deletedAt;
 
 	protected Board(Member member, VisibleScope visibleScope, String content, LocalDateTime now) {

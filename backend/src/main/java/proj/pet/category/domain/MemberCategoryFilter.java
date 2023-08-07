@@ -12,21 +12,19 @@ import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor(access = PROTECTED)
-@Table(name = "member_category_filter")
+@Table(name = "MEMBER_CATEGORY_FILTER")
 @Getter
 @Entity
 public class MemberCategoryFilter implements Validatable {
 	@EmbeddedId
 	private ConsumptionCompositeKey key;
 
-	@MapsId("consumerId")
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "consumer_id", nullable = false, updatable = false)
+	@JoinColumn(name = "CONSUMER_ID", nullable = false, insertable = false, updatable = false)
 	private Member member;
 
-	@MapsId("providerId")
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "provider_id", nullable = false, updatable = false)
+	@JoinColumn(name = "PROVIDER_ID", nullable = false, insertable = false, updatable = false)
 	private AnimalCategory animalCategory;
 
 	private MemberCategoryFilter(Member member, AnimalCategory animalCategory) {

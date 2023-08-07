@@ -10,14 +10,14 @@ import proj.pet.utils.domain.Validatable;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Table(name = "animal_category")
+@Table(name = "ANIMAL_CATEGORY")
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 public class AnimalCategory extends IdDomain implements Validatable {
 
-	private final static int MAX_NAME_LENGTH = 30;
+	private static final int MAX_NAME_LENGTH = 32;
 
-	@Column(name = "species", nullable = false, length = MAX_NAME_LENGTH)
+	@Column(name = "SPECIES", nullable = false, length = MAX_NAME_LENGTH)
 	@Enumerated(EnumType.STRING)
 	private Species species;
 

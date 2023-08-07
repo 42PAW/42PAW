@@ -16,22 +16,23 @@ import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor(access = PROTECTED)
 @Entity
+@Table(name = "REACTION")
 @Getter
 public class Reaction extends IdDomain implements Validatable {
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "board_id", nullable = false, updatable = false)
+	@JoinColumn(name = "BOARD_ID", nullable = false, updatable = false)
 	private Board board;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "member_id", nullable = false, updatable = false)
+	@JoinColumn(name = "MEMBER_ID", nullable = false, updatable = false)
 	private Member member;
 
-	@Column(name = "reaction_type", nullable = false)
+	@Column(name = "REACTION_TYPE", nullable = false, length = 32)
 	@Enumerated(EnumType.STRING)
 	private ReactionType reactionType;
 
-	@Column(name = "created_at", nullable = false)
+	@Column(name = "CREATED_AT", nullable = false)
 	private LocalDateTime createdAt;
 
 	protected Reaction(Board board, Member member, ReactionType reactionType, LocalDateTime now) {

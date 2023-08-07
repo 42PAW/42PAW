@@ -15,14 +15,14 @@ import proj.pet.utils.domain.Validatable;
 @Embeddable
 public class OauthProfile implements Validatable {
 
-	@Column(name = "oauth_type", nullable = false)
+	@Column(name = "OAUTH_TYPE", nullable = false, length = 32)
 	@Enumerated(EnumType.STRING)
 	private OauthType type;
 
-	@Column(name = "oauth_id", nullable = false)
+	@Column(name = "OAUTH_ID", nullable = false)
 	private String id;
 
-	@Column(name = "oauth_name")
+	@Column(name = "OAUTH_NAME")
 	private String name;
 
 	private OauthProfile(OauthType type, String id, String name) {

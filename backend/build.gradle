@@ -47,7 +47,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-    implementation 'com.h2database:h2' // 인메모리 DB(H2) 의존성 추가
+//    implementation 'com.h2database:h2' // 인메모리 DB(H2) 의존성 추가
 
     //QueryDSL
     implementation "com.querydsl:querydsl-codegen:5.0.0"

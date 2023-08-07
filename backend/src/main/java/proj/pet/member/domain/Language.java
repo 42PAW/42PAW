@@ -1,8 +1,5 @@
 package proj.pet.member.domain;
 
-import lombok.Getter;
-
-@Getter
 public enum Language {
 	KOREAN,
 	ENGLISH,
@@ -11,5 +8,4 @@ public enum Language {
 	GERMAN,
 	FRENCH,
 	ITALIAN,
-	;
 }

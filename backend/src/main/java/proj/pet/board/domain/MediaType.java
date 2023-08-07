@@ -1,6 +1,5 @@
 package proj.pet.board.domain;
 
-import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 import proj.pet.exception.DomainException;
 
@@ -9,7 +8,6 @@ import static proj.pet.exception.ExceptionStatus.INVALID_ARGUMENT;
 /**
  * 게시물의 미디어 타입
  */
-@Getter
 public enum MediaType {
 	IMAGE,
 	VIDEO;

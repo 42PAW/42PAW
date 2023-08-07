@@ -28,8 +28,6 @@ public abstract class IdDomain implements Persistable<Long> {
 		return id;
 	}
 
-	;
-
 	/**
 	 * Long 타입 Id를 갖는 엔티티의 경우, Equals와 HashCode는 고정이므로, final로 선언합니다.
 	 */

@@ -57,7 +57,7 @@ const BoardTemplate = (board: IBoardInfo) => {
         <BoardHeaderStyled>
           <BoardProfileStyled onClick={handleOpenProfile}>
             <img src={profileImage} />
-            <div>{memberName}</div>
+            <div>{memberName} 🇰🇷</div>
           </BoardProfileStyled>
           <BoardOptionButtonStyled>
             <OptionButton boardId={boardId} memberName={memberName} />

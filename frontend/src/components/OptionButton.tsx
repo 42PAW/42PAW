@@ -122,8 +122,8 @@ const MenuStyled = styled.div`
   flex-direction: column;
   justify-content: space-around;
   text-align: center;
-  margin-top: 35px;
-  width: 50px;
+  margin-top: 30px;
+  min-width: 50px;
   border-radius: 10px;
   color: var(--grey);
   background: var(--white);

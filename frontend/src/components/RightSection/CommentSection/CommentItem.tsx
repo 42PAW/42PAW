@@ -14,7 +14,7 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
       <CommentItemRightStyled>
         <NicknameToggleContainerStyled>
           <NicknameContainerStyled>
-            {memberName}
+            {memberName} 🇫🇷
             <span>{createdAt}</span>
           </NicknameContainerStyled>
           <OptionButton

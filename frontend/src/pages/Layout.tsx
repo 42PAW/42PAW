@@ -32,9 +32,7 @@ const Layout = () => {
           {isMainPage && <BoardSortToggle />}
           <Outlet />
         </MainAreaStyled>
-        <RightSectionContainer>
-          <RightSection />
-        </RightSectionContainer>
+        <RightSection />
       </MainAreaWrapperStyled>
       <ModalContainer />
       <Toaster />
@@ -74,12 +72,6 @@ const MainAreaStyled = styled.main<{
       ? `calc(100% - ${props.$isRightSectionOpened ? "570px" : "0px"})`
       : "500px"};
   //   transition: margin-left 0.5s ease-in-out, width 0.5s ease-in-out;
-`;
-
-const RightSectionContainer = styled.div`
-  @media (max-width: 1023px) {
-    display: none;
-  }
 `;
 
 export default Layout;

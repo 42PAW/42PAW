@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import {
   isRightSectionOpenedState,
   rightSectionContentState,
@@ -33,15 +33,42 @@ const RightSection = () => {
           {rightSectionContent.animalFilter && <AnimalFilterSection />}
         </RightSectionBodyStyled>
       </RightSectionStyled>
+      {isRightSectionOpened && <OverlayStyled onClick={closeRightSection} />}
     </>
   );
 };
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const OverlayStyled = styled.div`
+  z-index: 3;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: ${fadeIn} 0.2s;
+  backdrop-filter: blur(5px);
+  @media (max-width: 1023px) {
+    display: flex;
+  }
+`;
 
 const RightSectionStyled = styled.div<{
   $isRightSectionOpened: boolean;
 }>`
   display: flex;
-  position: relative;
   flex-direction: column;
   align-items: center;
   width: 490px;
@@ -55,6 +82,20 @@ const RightSectionStyled = styled.div<{
   margin-right: ${(props) => (props.$isRightSectionOpened ? "0px" : "-480px")};
   opacity: ${(props) => (props.$isRightSectionOpened ? 1 : 0)};
   transition: opacity 0.5s ease-in-out, margin-right 0.5s ease-in-out;
+  @media (max-width: 1023px) {
+    z-index: 4;
+    background-color: #dbdcfec3;
+    opacity: 1;
+    position: absolute;
+    bottom: ${(props) => (props.$isRightSectionOpened ? "0%" : "-100%")};
+    margin-right: 0;
+    transition: bottom 0.5s ease;
+    height: 85%;
+    width: 100%;
+    margin-left: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 `;
 
 const CloseButtonContainerStyled = styled.div`
@@ -68,17 +109,16 @@ const CloseButtonContainerStyled = styled.div`
 
 const CloseButtonStyled = styled.button`
   height: 100%;
-  width: 8%;
+  width: 32px;
   background-color: transparent;
   border: none;
-  margin-right: 5px;
+  margin-right: 10px;
   margin-top: 5px;
   img {
     cursor: pointer;
-    width: 20px;
+    width: 100%;
   }
   img:hover {
-    width: 23px;
     opacity: 0.7;
   }
 `;

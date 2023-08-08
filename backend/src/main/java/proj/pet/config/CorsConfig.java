@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-				.allowedOrigins("https://cabi.42seoul.io", "https://dev.cabi.42seoul.io")
+				.allowedOrigins("http://localhost") // TODO : 이후에 배포된 도메인 추가
 				.allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH")
 				.allowCredentials(true)
 				.maxAge(3600)

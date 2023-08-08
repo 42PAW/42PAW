@@ -36,6 +36,9 @@ const ImageUploader = () => {
   };
 
   const upload = async () => {
+    if (webpImage === null) {
+      return;
+    }
     try {
       const response = await axiosCreateBoard({
         mediaDataList: [webpImage],

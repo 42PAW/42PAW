@@ -25,12 +25,23 @@ export const axiosCreateBoard = async ({
   content,
 }: CreateBoardDTO): Promise<any> => {
   try {
-    console.log(mediaDataList, categoryList, content);
     const formData = new FormData();
-    formData.append("mediaDataList", JSON.stringify(mediaDataList));
-    formData.append("categoryList", JSON.stringify(categoryList));
-    formData.append("content", content);
-    const response = await axios.post(axiosCreateBoardURL, formData);
+    mediaDataList.forEach((file) => {
+      formData.append(`mediaDataList`, file);
+    });
+    formData.append(
+      "categoryList",
+      new Blob([JSON.stringify(categoryList)], { type: "application/json" })
+    );
+    formData.append(
+      "content",
+      new Blob([content], { type: "application/json" })
+    );
+    const response = await axios.post(axiosCreateBoardURL, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data;
   } catch (error) {
     throw error;

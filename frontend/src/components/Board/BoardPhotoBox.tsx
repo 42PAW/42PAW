@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled, { css } from "styled-components";
-import { IBoardImages } from "../../types/interface/board.interface";
+import { IBoardImages } from "@/types/interface/board.interface";
 
 const BoardPhotoBox = ({ boardImages }: { boardImages: IBoardImages[] }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);

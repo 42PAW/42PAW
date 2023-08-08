@@ -1,6 +1,6 @@
 import axios from "axios";
-import { getCookie, removeCookie } from "../cookie/cookies";
-import { STATUS_401_UNAUTHORIZED } from "../../constants/StatusCode";
+import { getCookie, removeCookie } from "@/api/cookie/cookies";
+import { STATUS_401_UNAUTHORIZED } from "@/constants/StatusCode";
 
 axios.defaults.withCredentials = true;
 

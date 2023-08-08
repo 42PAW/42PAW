@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { axiosCreateBoard } from "@/api/axios/axios.custom";
+import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 
 const ImageUploader = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -32,6 +34,17 @@ const ImageUploader = () => {
 
     img.src = URL.createObjectURL(file);
   };
+
+  const handleOnClick = () => {
+    if (webpImage) {
+      axiosCreateBoard({
+        mediaDataList: [webpImage],
+        categoryList: [AnimalSpecies.DOG],
+        content: "백으로 보냈다 이자식아",
+      });
+    }
+  };
+
   console.log(typeof webpImage);
   return (
     <div>
@@ -39,7 +52,8 @@ const ImageUploader = () => {
       {selectedImage && (
         <img src={URL.createObjectURL(selectedImage)} alt="Selected" />
       )}
-      {webpImage && <img src={URL.createObjectURL(webpImage)} alt="WebP" />}
+      {/* {webpImage && <img src={URL.createObjectURL(webpImage)} alt="WebP" />} */}
+      <button onClick={handleOnClick}>백으로 보내 이자식아</button>
     </div>
   );
 };

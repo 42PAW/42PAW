@@ -1,8 +1,8 @@
-import { styled, keyframes } from "styled-components";
-import { SectionProps } from "../SignUpPage";
-import { Section } from "../SignUpPage";
-import useToaster from "../../../hooks/useToaster";
 import { useState, useEffect, useRef } from "react";
+import { styled, keyframes } from "styled-components";
+import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
+import { Section } from "@/pages/SignUpPage/SignUpPage";
+import useToaster from "@/hooks/useToaster";
 
 const NicknameSection: React.FC<SectionProps> = ({
   registerData,

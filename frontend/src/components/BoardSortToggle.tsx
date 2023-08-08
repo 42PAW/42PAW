@@ -1,9 +1,9 @@
 import { useState } from "react";
-import styled from "styled-components";
-import { BoardCategory } from "../types/enum/board.category.enum";
-import { boardCategoryState } from "../recoil/atom";
 import { useSetRecoilState, useRecoilState } from "recoil";
-import { languageState } from "../recoil/atom";
+import styled from "styled-components";
+import { BoardCategory } from "@/types/enum/board.category.enum";
+import { boardCategoryState } from "@/recoil/atom";
+import { languageState } from "@/recoil/atom";
 
 const BoardSortToggle = () => {
   const [language] = useRecoilState<any>(languageState);

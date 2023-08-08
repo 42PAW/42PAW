@@ -1,23 +1,22 @@
 import styled from "styled-components";
-import BoardTemplate from "../components/Board/BoardTemplate";
-import LoadingCircleAnimation from "../components/loading/LoadingCircleAnimation";
+import BoardTemplate from "@/components/Board/BoardTemplate";
 import { useRecoilState } from "recoil";
 import {
   defaultBoardsState,
   trendingBoardsState,
   followingBoardsState,
   boardCategoryState,
-} from "../recoil/atom";
-import { BoardsInfoDTO } from "../types/dto/board.dto";
+} from "@/recoil/atom";
+import { BoardsInfoDTO } from "@/types/dto/board.dto";
 import {
   axiosGetBoards,
   axiosGetTrendingBoards,
   axiosGetFollowingBoards,
-} from "../api/axios/axios.custom";
+} from "@/api/axios/axios.custom";
 import { useEffect } from "react";
-import { BoardCategory } from "../types/enum/board.category.enum";
-import SkeletonBoardTemplate from "../components/skeletonView/SkeletonBoardTemplate";
-import LoadingAnimation from "../components/loading/LoadingAnimation";
+import { BoardCategory } from "@/types/enum/board.category.enum";
+import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTemplate";
+import LoadingAnimation from "@/components/loading/LoadingAnimation";
 
 const MainPage = () => {
   const [defaultBoards, setDefaultBoards] =

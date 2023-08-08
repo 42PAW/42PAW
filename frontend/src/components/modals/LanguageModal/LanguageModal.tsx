@@ -1,14 +1,14 @@
-import { styled } from "styled-components";
-import ModalLayout from "../ModalLayout";
-import { ModalType } from "../../../types/enum/modal.enum";
 import { useRecoilState } from "recoil";
-import { currentOpenModalState } from "../../../recoil/atom";
-import { ICurrentModalStateInfo } from "../../../types/interface/modal.interface";
-import { Language } from "../../../types/enum/language.enum";
-import { languageState } from "../../../recoil/atom";
-import Translator from "../../../languages/Translator";
-import useModal from "../../../hooks/useModal";
-import useToaster from "../../../hooks/useToaster";
+import { styled } from "styled-components";
+import ModalLayout from "@/components/modals/ModalLayout";
+import { ModalType } from "@/types/enum/modal.enum";
+import { currentOpenModalState } from "@/recoil/atom";
+import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
+import { Language } from "@/types/enum/language.enum";
+import { languageState } from "@/recoil/atom";
+import Translator from "@/languages/Translator";
+import useModal from "@/hooks/useModal";
+import useToaster from "@/hooks/useToaster";
 
 const LanguageModal = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(

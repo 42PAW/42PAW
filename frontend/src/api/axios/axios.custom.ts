@@ -1,5 +1,6 @@
-import instance from "./axios.instance";
 import axios from "axios";
+import instance from "./axios.instance";
+import { CreateBoardDTO } from "@/types/dto/board.dto";
 
 const axiosGetBoardsURL =
   "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/boards";
@@ -12,6 +13,24 @@ export const axiosGetBoards = async (
       params: { size: size, page: page },
     });
     return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosCreateBoardURL = "/v1/boards";
+export const axiosCreateBoard = async ({
+  mediaDataList,
+  categoryList,
+  content,
+}: CreateBoardDTO): Promise<any> => {
+  try {
+    const response = await axios.post(axiosCreateBoardURL, {
+      mediaDataList,
+      categoryList,
+      content,
+    });
+    return response;
   } catch (error) {
     throw error;
   }

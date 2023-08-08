@@ -1,4 +1,4 @@
-import { AnimalSpecies } from "../enum/animal.filter.enum";
+import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 
 export interface SignUpInfoDTO {
   memberName: string;

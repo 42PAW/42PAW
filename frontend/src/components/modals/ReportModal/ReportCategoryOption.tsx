@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { ReportReason } from "../../../types/enum/report.enum";
+import { ReportReason } from "@/types/enum/report.enum";
 
 /**
  * @value 신고 사유

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import { toastMessagesState } from "../../recoil/atom";
+import { toastMessagesState } from "@/recoil/atom";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { IToastInfo } from "../../types/interface/toast.interface";
+import { IToastInfo } from "@/types/interface/toast.interface";
 
 const Toast: React.FC = () => {
   const [toastMessages, setToastMessages] =

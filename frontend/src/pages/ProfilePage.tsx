@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import ProfileTemplate from "../components/ProfileTemplate";
+import ProfileTemplate from "@/components/ProfileTemplate";
 
 const ProfilePage = () => {
   return (

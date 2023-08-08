@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import Button from "./ButtonComponent";
 import { useState } from "react";
+import styled from "styled-components";
+import Button from "@/components/ButtonComponent";
 
 /* tmp */
 const profileInfo = {

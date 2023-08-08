@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
-import { SectionProps } from "../SignUpPage";
 import createConfetti from "canvas-confetti";
+import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
 
 const SuccessSection: React.FC<SectionProps> = ({ registerData }) => {
   createConfetti({
@@ -12,7 +12,7 @@ const SuccessSection: React.FC<SectionProps> = ({ registerData }) => {
   return (
     <WrapperStyled>
       <h1>
-        환영합니다! <br /> {registerData.Nickname}
+        환영합니다! <br /> {registerData.memberName}
       </h1>
     </WrapperStyled>
   );

@@ -146,6 +146,7 @@ gradle-app.setting
 
 /data
 /database/data
+/src/main/generated
 .idea
 .vscode/
 .env

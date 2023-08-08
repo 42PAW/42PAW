@@ -2,9 +2,11 @@ import { useState } from "react";
 import styled from "styled-components";
 import { BoardCategory } from "../types/enum/board.category.enum";
 import { boardCategoryState } from "../recoil/atom";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilState } from "recoil";
+import { languageState } from "../recoil/atom";
 
 const BoardSortToggle = () => {
+  const [language] = useRecoilState<any>(languageState);
   const [buttonToggled, setbuttonToggled] = useState<number>(0);
   const setBoardCategory = useSetRecoilState<BoardCategory>(boardCategoryState);
 
@@ -27,13 +29,13 @@ const BoardSortToggle = () => {
     <BoardSortToggleWrapperStyled>
       <BoardSortToggleStyled $buttonToggled={buttonToggled}>
         <button onClick={() => handleToggle(BoardCategory.DEFAULT)}>
-          기본순
+          {language.defaultBoards}
         </button>
         <button onClick={() => handleToggle(BoardCategory.TRENDING)}>
-          인기순
+          {language.trendingBoards}
         </button>
         <button onClick={() => handleToggle(BoardCategory.FOLLOWING)}>
-          팔로우순
+          {language.followingBoards}
         </button>
         <div />
       </BoardSortToggleStyled>
@@ -42,6 +44,7 @@ const BoardSortToggle = () => {
 };
 
 const BoardSortToggleWrapperStyled = styled.div`
+  border-radius: 30px;
   position: absolute;
   margin-top: 2%;
   z-index: 1;
@@ -49,7 +52,7 @@ const BoardSortToggleWrapperStyled = styled.div`
 
 const BoardSortToggleStyled = styled.div<{ $buttonToggled: number }>`
   position: relative;
-  width: 195px;
+  width: 225px;
   height: 30px;
   border-radius: 30px;
   background-color: var(--transparent);
@@ -65,12 +68,12 @@ const BoardSortToggleStyled = styled.div<{ $buttonToggled: number }>`
   }
   div {
     height: 30px;
-    width: 65px;
+    width: 75px;
     margin-top: -30px;
-    margin-left: ${({ $buttonToggled }) => $buttonToggled * 65}px;
+    margin-left: ${({ $buttonToggled }) => $buttonToggled * 75}px;
     transition: margin-left 0.3s ease-in-out;
     border-radius: 30px;
-    background-color: var(--pink);
+    background-color: var(--lightpurple);
   }
 `;
 

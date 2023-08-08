@@ -1,35 +1,52 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Monoton&display=swap");
+
 :root {
   --black: #000000;
   --white: #ffffff;
   --grey: #4a494ed5;
   --lightgrey: #929292;
-  --transparent: #fdfdfd39;
   --purple: #878abe;
   --lightpurple: #dbdcfe;
   --pink: #d1c1cd;
-
-  --main-font: "Nunito Sans";
+  --lightpink: #e6dade;
+  --red: #ff4f4f;
+  --transparent: #fdfdfd39;
+  --placeholder: #80808062;
+  --button-grey: #afb0d6;
+  --button-grey-hover: #b7b8d7;
 
   --default-shadow: 0px 10px 50px rgba(0, 0, 0, 0.25);
   --button-shadow: 0px 4px 1px rgba(0, 0, 0, 0.25);
+  --modal-shadow: 0px 5px 50px 1px rgba(255, 255, 255, 0.147);
   --clicked-shadow: inset 0px 4px 1px rgba(0, 0, 0, 0.25);
+
+  --mobile-max: 767px;
+  --tablet-max: 1023px;
 }
 
 html,
 body {
   margin: 0;
   height: 100%;
-  min-width: 400px;
   overflow: auto;
-  font-size: 12px;
+  font-size: 10px;
   color: var(--grey);
-  font-family: var(--main-font);
+  font-family: "Noto Sans KR", sans-serif;
   text-align: justify;
-  background-image: linear-gradient(
-    to bottom left,
-    #878abe6f 40%,
-    #d1c1cd,
-    #e6dade
+  background: linear-gradient(
+    210deg,
+    #878abea0 30%,
+    #d1c1cd 68.34%,
+    #e6dade 76.75%
   );
   background-repeat: no-repeat;
+}
+
+*::-webkit-scrollbar {
+  display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
+button {
+  cursor: pointer;
 }

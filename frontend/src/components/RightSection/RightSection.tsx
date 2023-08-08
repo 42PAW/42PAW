@@ -6,6 +6,7 @@ import {
 import { useRecoilState } from "recoil";
 import CommentSection from "./CommentSection/CommentSection";
 import SearchSection from "./SearchSection/SearchSection";
+import AnimalFilterSection from "./AnimalFilterSection/AnimalFilterSection";
 import useRightSectionHandler from "../../hooks/useRightSectionHandler";
 import { IRightSectionContentInfo } from "../../types/interface/right.section.interface";
 
@@ -29,6 +30,7 @@ const RightSection = () => {
         <RightSectionBodyStyled>
           {rightSectionContent.comment && <CommentSection />}
           {rightSectionContent.search && <SearchSection />}
+          {rightSectionContent.animalFilter && <AnimalFilterSection />}
         </RightSectionBodyStyled>
       </RightSectionStyled>
     </>
@@ -43,9 +45,9 @@ const RightSectionStyled = styled.div<{
   flex-direction: column;
   align-items: center;
   width: 490px;
-  height: 70%;
+  height: 100%;
   max-height: 860px;
-  min-height: 783px;
+
   margin-left: 20px;
   border-radius: 30px;
   background-color: var(--transparent);

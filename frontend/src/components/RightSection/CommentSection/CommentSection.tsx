@@ -41,8 +41,10 @@ const CommentSection = () => {
 const WrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+
+  justify-content: space-between;
   height: 100%;
+  flex: 1;
   width: 100%;
   overflow: scroll;
 `;
@@ -50,7 +52,7 @@ const WrapperStyled = styled.div`
 const CommentItemWrapperStyled = styled.div`
   margin-top: 1%;
   width: 100%;
-  height: 92%;
+
   overflow-y: auto;
 `;
 
@@ -72,8 +74,10 @@ const CommentInputContainerStyled = styled.div`
   justify-content: space-between;
 
   width: 100%;
-  height: 7%;
+  height: 10%;
   border-top: 1px solid var(--transparent);
+  padding-top: 2%;
+  padding-bottom: 2%;
   input {
     height: 50%;
     width: 72%;

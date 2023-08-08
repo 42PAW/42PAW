@@ -2,10 +2,14 @@ import styled from "styled-components";
 import { axiosGetBoardComments } from "../../api/axios/axios.custom";
 import useRightSectionHandler from "../../hooks/useRightSectionHandler";
 import { currentBoardCommentsState } from "../../recoil/atom";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilState } from "recoil";
 import { CommentInfoDTO } from "../../types/dto/board.dto";
 import { IBoardInfo } from "../../types/interface/board.interface";
 import BoardPhotoBox from "./BoardPhotoBox";
+import OptionButton from "../OptionButton";
+import useModal from "../../hooks/useModal";
+import { ModalType } from "../../types/enum/modal.enum";
+import { languageState } from "../../recoil/atom";
 
 const BoardTemplate = (board: IBoardInfo) => {
   const {
@@ -24,10 +28,12 @@ const BoardTemplate = (board: IBoardInfo) => {
     createdAt,
   } = board;
 
+  const [language] = useRecoilState<any>(languageState);
   const setCurrentBoardComments = useSetRecoilState<CommentInfoDTO[]>(
     currentBoardCommentsState
   );
   const { openCommentSection } = useRightSectionHandler();
+  const { openModal } = useModal();
 
   const getCommentsData = async (boardId: number) => {
     try {
@@ -41,18 +47,20 @@ const BoardTemplate = (board: IBoardInfo) => {
     openCommentSection();
     getCommentsData(boardId);
   };
-  console.log("before", images);
+  const handleOpenProfile = () => {
+    openModal(ModalType.PROFILECARD);
+  };
+
   return (
     <>
       <BoardWrapperStyled>
         <BoardHeaderStyled>
-          <BoardProfileStyled>
+          <BoardProfileStyled onClick={handleOpenProfile}>
             <img src={profileImage} />
             <div>{memberName}</div>
-            <div></div>
           </BoardProfileStyled>
           <BoardOptionButtonStyled>
-            <img src="src/assets/optionW.png" />
+            <OptionButton boardId={boardId} memberName={memberName} />
           </BoardOptionButtonStyled>
         </BoardHeaderStyled>
         <BoardBodyStyled>
@@ -67,7 +75,7 @@ const BoardTemplate = (board: IBoardInfo) => {
 
               <img
                 src="/src/assets/comment.png"
-                onClick={() => handleCommentClick(1)}
+                onClick={() => handleCommentClick(boardId)}
               />
             </LikeCommentContainerStyled>
             <ScrapButtonStyled>
@@ -81,15 +89,18 @@ const BoardTemplate = (board: IBoardInfo) => {
           <BoardContentContainerStyled>
             <DivOne>
               <div>
-                좋아요 {reactionCount}개, 댓글 {commentCount}개
+                {reactionCount} {language.like}, {commentCount}{" "}
+                {language.comment}
               </div>
               <span>{createdAt}</span>
             </DivOne>
             <DivTwo>{content}</DivTwo>
             <DivThree>
-              <div>{previewCommentUser}</div>
+              <div onClick={handleOpenProfile}>{previewCommentUser}</div>
               <div>{previewComment}</div>
-              <div onClick={() => handleCommentClick(1)}>..댓글 더 보기</div>
+              <div onClick={() => handleCommentClick(1)}>
+                {language.moreComments}
+              </div>
             </DivThree>
           </BoardContentContainerStyled>
         </BoardBodyStyled>
@@ -99,20 +110,20 @@ const BoardTemplate = (board: IBoardInfo) => {
 };
 
 const BoardWrapperStyled = styled.div`
-  width: 90%;
-  min-height: 640px;
+  width: 93%;
   margin-top: 3%;
-  margin-bottom: 3%;
-  border-radius: 30px;
-  box-shadow: var(--default-shadow);
+  margin-bottom: 5%;
+  border-radius: 25px;
+  padding-bottom: 10%;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
 `;
 
 const BoardHeaderStyled = styled.div`
   display: flex;
   justify-content: space-between;
   height: 10%;
-  border-top-left-radius: 30px;
-  border-top-right-radius: 30px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
   background-color: var(--transparent);
 `;
 
@@ -122,33 +133,34 @@ const BoardProfileStyled = styled.div`
   margin-left: 6%;
   width: 40%;
   img {
+    cursor: pointer;
     width: 20%;
     border-radius: 100%;
   }
   div {
+    cursor: pointer;
     margin-left: 5%;
-    font-size: 120%;
+    font-size: 1.3rem;
     color: var(--white);
   }
 `;
 
-const BoardOptionButtonStyled = styled.button`
+const BoardOptionButtonStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: 40%;
-  background-color: transparent;
+  width: 9%;
   border: none;
-  img {
-    width: 13%;
-    margin-right: 10%;
+  margin-right: 3%;
+  &:focus {
+    opacity: 0.6;
   }
 `;
 
 const BoardBodyStyled = styled.div`
-  height: 90%;
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
+  height: 98.2%;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
   background-color: var(--white);
 `;
 
@@ -199,7 +211,8 @@ const BoardContentContainerStyled = styled.div`
   margin-top: 1.5%;
   margin-left: 5%;
   margin-right: 5%;
-  font-size: 14px;
+  margin-bottom: 1%;
+  font-size: 13px;
 `;
 
 const DivOne = styled.div`
@@ -223,9 +236,10 @@ const DivTwo = styled.div`
 const DivThree = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 3%;
+  margin-top: 2%;
   font-size: 100%;
   div:nth-child(1) {
+    cursor: pointer;
     margin-right: 1%;
     font-weight: bold;
   }

@@ -1,5 +1,7 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { CommentInfoDTO } from "../../../types/dto/board.dto";
+import OptionButton from "../../OptionButton";
 
 const CommentItem = (commentInfo: CommentInfoDTO) => {
   const { commentId, memberId, memberName, comment, profileImage, createdAt } =
@@ -16,9 +18,11 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
             {memberName}
             <span>{createdAt}</span>
           </NicknameContainerStyled>
-          <ToggleButtonStyled>
-            <img src="/src/assets/optionW.png" />
-          </ToggleButtonStyled>
+          <OptionButton
+            commentId={commentId}
+            memberId={memberId}
+            memberName={memberName}
+          />
         </NicknameToggleContainerStyled>
         <CommentContentContainerStyled>{comment}</CommentContentContainerStyled>
       </CommentItemRightStyled>
@@ -56,35 +60,22 @@ const CommentItemRightStyled = styled.div`
 const NicknameToggleContainerStyled = styled.div`
   margin-top: 8px;
   display: flex;
+  position: relative;
   align-items: center;
   justify-content: space-between;
   height: 30px;
   font-size: 15px;
   color: var(--white);
-  font-weight: bold;
 `;
 
 const NicknameContainerStyled = styled.div`
   width: 60%;
   font-size: 14px;
+  font-weight: bold;
   span {
     margin-left: 5px;
     font-weight: 300;
     font-size: 11px;
-  }
-`;
-
-const ToggleButtonStyled = styled.button`
-  height: 35px;
-  width: 35px;
-  background-color: transparent;
-  border: none;
-  img {
-    cursor: pointer;
-    width: 100%;
-  }
-  img:hover {
-    opacity: 0.7;
   }
 `;
 

@@ -16,8 +16,10 @@ import {
 } from "../api/axios/axios.custom";
 import { useEffect } from "react";
 import { BoardCategory } from "../types/enum/board.category.enum";
+import SkeletonBoardTemplate from "../components/skeletonView/SkeletonBoardTemplate";
+import LoadingAnimation from "../components/loading/LoadingAnimation";
 
-const Mainpage = () => {
+const MainPage = () => {
   const [defaultBoards, setDefaultBoards] =
     useRecoilState<BoardsInfoDTO>(defaultBoardsState);
   const [trendingBoards, setTrendingBoards] =
@@ -85,7 +87,10 @@ const Mainpage = () => {
           />
         ))
       ) : (
-        <LoadingCircleAnimation />
+        <>
+          <SkeletonBoardTemplate />
+          <LoadingAnimation />
+        </>
       )}
     </WrapperStyled>
   );
@@ -96,6 +101,8 @@ const WrapperStyled = styled.div`
   flex-direction: column;
   align-items: center;
   overflow-y: scroll;
+  width: 100%;
+  height: 100vh;
 `;
 
-export default Mainpage;
+export default MainPage;

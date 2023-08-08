@@ -34,16 +34,13 @@ public class FtOauthProperties implements OauthProperties {
 	@Value("${cloud.oauth2.client.provider.ft.user-info-uri}")
 	private String userInfoRequestUri;
 
-	@Value("${spring.auth.ft.client-id}")
-	private String clientId;
-
-	@Value("${spring.auth.ft.client-secret}")
-	private String clientSecret;
-
-	@Value("${spring.urls.user-login-callback}")
+	@Value("${cloud.oauth2.client.provider.ft.callback-uri}")
 	private String redirectUri;
 
-	@Value("${spring.oauth2.client.registration.provider.ft.users-info-uri}")
-	private String usersInfoUri;
+	@Value("${cloud.oauth2.client.credentials.ft.client-id}")
+	private String clientId;
+
+	@Value("${cloud.oauth2.client.credentials.ft.client-secret}")
+	private String clientSecret;
 
 }

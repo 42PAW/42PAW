@@ -18,19 +18,24 @@ export const axiosGetBoards = async (
   }
 };
 
-const axiosCreateBoardURL = "/v1/boards";
+const axiosCreateBoardURL = "http://localhost:4242/v1/boards";
 export const axiosCreateBoard = async ({
   mediaDataList,
   categoryList,
   content,
 }: CreateBoardDTO): Promise<any> => {
   try {
-    const response = await axios.post(axiosCreateBoardURL, {
-      mediaDataList,
-      categoryList,
-      content,
+    const formData = new FormData();
+    formData.append("mediaDataList", JSON.stringify(mediaDataList));
+    formData.append("categoryList", JSON.stringify(categoryList));
+    formData.append("content", content);
+
+    const response = await axios.post(axiosCreateBoardURL, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
-    return response;
+    return response.data;
   } catch (error) {
     throw error;
   }

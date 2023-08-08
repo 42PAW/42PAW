@@ -35,13 +35,16 @@ const ImageUploader = () => {
     img.src = URL.createObjectURL(file);
   };
 
-  const handleOnClick = () => {
-    if (webpImage) {
-      axiosCreateBoard({
+  const upload = async () => {
+    try {
+      const response = await axiosCreateBoard({
         mediaDataList: [webpImage],
         categoryList: [AnimalSpecies.DOG],
         content: "백으로 보냈다 이자식아",
       });
+      console.log(response);
+    } catch (error) {
+      throw error;
     }
   };
 
@@ -53,7 +56,7 @@ const ImageUploader = () => {
         <img src={URL.createObjectURL(selectedImage)} alt="Selected" />
       )}
       {/* {webpImage && <img src={URL.createObjectURL(webpImage)} alt="WebP" />} */}
-      <button onClick={handleOnClick}>백으로 보내 이자식아</button>
+      <button onClick={upload}>백으로 보내 이자식아</button>
     </div>
   );
 };

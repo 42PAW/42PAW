@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import useNavigateCustom from "../../hooks/useNavigateCustom";
-import useRightSectionHandler from "../../hooks/useRightSectionHandler";
-import { languageState } from "../../recoil/atom";
+import useNavigateCustom from "@/hooks/useNavigateCustom";
+import useRightSectionHandler from "@/hooks/useRightSectionHandler";
+import { languageState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
-import useModal from "../../hooks/useModal";
-import { ModalType } from "../../types/enum/modal.enum";
+import useModal from "@/hooks/useModal";
+import { ModalType } from "@/types/enum/modal.enum";
 
 const LeftMenuDesktop = () => {
   const { moveToMain, moveToNotice, moveToMyProfile, moveToUpload } =

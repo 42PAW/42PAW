@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import AnimalButtonContainer from "../../AnimalButtonContainer";
+import AnimalButtonContainer from "@/components/AnimalButtonContainer";
 
 const AnimalFilterSection = () => {
   return (

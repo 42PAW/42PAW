@@ -1,4 +1,5 @@
-import { IBoardInfo } from "../interface/board.interface";
+import { IBoardInfo } from "@/types/interface/board.interface";
+import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 
 /**
  * @result 불러올 각 Board에 대한 정보를 담고 있는 배열
@@ -24,4 +25,10 @@ export interface CommentInfoDTO {
   comment: string;
   profileImage: string;
   createdAt: string;
+}
+
+export interface CreateBoardDTO {
+  mediaDataList: Blob[];
+  categoryList: AnimalSpecies[];
+  content: string;
 }

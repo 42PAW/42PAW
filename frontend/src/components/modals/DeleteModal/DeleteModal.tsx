@@ -1,15 +1,12 @@
-import { styled } from "styled-components";
-import ModalLayout from "../ModalLayout";
-import { ModalType } from "../../../types/enum/modal.enum";
-import { currentOpenModalState } from "../../../recoil/atom";
 import { useRecoilState } from "recoil";
-import { ICurrentModalStateInfo } from "../../../types/interface/modal.interface";
-import {
-  currentBoardIdState,
-  currentCommentIdState,
-} from "../../../recoil/atom";
-import useModal from "../../../hooks/useModal";
-import useToaster from "../../../hooks/useToaster";
+import { styled } from "styled-components";
+import ModalLayout from "@/components/modals/ModalLayout";
+import { ModalType } from "@/types/enum/modal.enum";
+import { currentOpenModalState } from "@/recoil/atom";
+import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
+import { currentBoardIdState, currentCommentIdState } from "@/recoil/atom";
+import useModal from "@/hooks/useModal";
+import useToaster from "@/hooks/useToaster";
 
 const DeleteModal = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(

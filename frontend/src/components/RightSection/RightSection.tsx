@@ -2,13 +2,13 @@ import styled from "styled-components";
 import {
   isRightSectionOpenedState,
   rightSectionContentState,
-} from "../../recoil/atom";
+} from "@/recoil/atom";
 import { useRecoilState } from "recoil";
-import CommentSection from "./CommentSection/CommentSection";
-import SearchSection from "./SearchSection/SearchSection";
-import AnimalFilterSection from "./AnimalFilterSection/AnimalFilterSection";
-import useRightSectionHandler from "../../hooks/useRightSectionHandler";
-import { IRightSectionContentInfo } from "../../types/interface/right.section.interface";
+import CommentSection from "@/components/RightSection/CommentSection/CommentSection";
+import SearchSection from "@/components/RightSection/SearchSection/SearchSection";
+import AnimalFilterSection from "@/components/RightSection/AnimalFilterSection/AnimalFilterSection";
+import useRightSectionHandler from "@/hooks/useRightSectionHandler";
+import { IRightSectionContentInfo } from "@/types/interface/right.section.interface";
 
 const RightSection = () => {
   const [isRightSectionOpened] = useRecoilState<boolean>(

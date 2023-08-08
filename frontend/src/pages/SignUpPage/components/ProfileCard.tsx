@@ -1,7 +1,7 @@
-import styled from "styled-components";
 import { ChangeEvent, useState } from "react";
-import { Section, SectionType } from "../SignUpPage";
-import { SignUpInfoDTO } from "../../../types/dto/member.dto";
+import styled from "styled-components";
+import { Section, SectionType } from "@/pages/SignUpPage/SignUpPage";
+import { SignUpInfoDTO } from "@/types/dto/member.dto";
 
 /**
  * @registerData.memberName 유저가 설정한 닉네임

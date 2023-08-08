@@ -1,11 +1,11 @@
-import { en } from "./en";
-import { fr } from "./fr";
-import { ko } from "./ko";
-import { jp } from "./jp";
-import { pt } from "./pt";
-import { it } from "./it";
-import { spa } from "./spa";
-import { ger } from "./ger";
+import { en } from "@/languages/en";
+import { fr } from "@/languages/fr";
+import { ko } from "@/languages/ko";
+import { jp } from "@/languages/jp";
+import { pt } from "@/languages/pt";
+import { it } from "@/languages/it";
+import { spa } from "@/languages/spa";
+import { ger } from "@/languages/ger";
 
 const Translator = {
   en: en,

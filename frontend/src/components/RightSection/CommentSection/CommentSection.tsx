@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import CommentItem from "./CommentItem";
-import { CommentInfoDTO } from "../../../types/dto/board.dto";
 import { useRecoilState } from "recoil";
-import { currentBoardCommentsState } from "../../../recoil/atom";
+import styled from "styled-components";
+import CommentItem from "@/components/RightSection/CommentSection/CommentItem";
+import { CommentInfoDTO } from "@/types/dto/board.dto";
+import { currentBoardCommentsState } from "@/recoil/atom";
 
 const CommentSection = () => {
   const [currentBoardComments] = useRecoilState<CommentInfoDTO[]>(

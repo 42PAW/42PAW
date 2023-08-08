@@ -1,15 +1,15 @@
 import styled from "styled-components";
-import { axiosGetBoardComments } from "../../api/axios/axios.custom";
-import useRightSectionHandler from "../../hooks/useRightSectionHandler";
-import { currentBoardCommentsState } from "../../recoil/atom";
+import { axiosGetBoardComments } from "@/api/axios/axios.custom";
+import useRightSectionHandler from "@/hooks/useRightSectionHandler";
+import { currentBoardCommentsState } from "@/recoil/atom";
 import { useSetRecoilState, useRecoilState } from "recoil";
-import { CommentInfoDTO } from "../../types/dto/board.dto";
-import { IBoardInfo } from "../../types/interface/board.interface";
-import BoardPhotoBox from "./BoardPhotoBox";
-import OptionButton from "../OptionButton";
-import useModal from "../../hooks/useModal";
-import { ModalType } from "../../types/enum/modal.enum";
-import { languageState } from "../../recoil/atom";
+import { CommentInfoDTO } from "@/types/dto/board.dto";
+import { IBoardInfo } from "@/types/interface/board.interface";
+import BoardPhotoBox from "@/components/Board/BoardPhotoBox";
+import OptionButton from "@/components/OptionButton";
+import useModal from "@/hooks/useModal";
+import { ModalType } from "@/types/enum/modal.enum";
+import { languageState } from "@/recoil/atom";
 
 const BoardTemplate = (board: IBoardInfo) => {
   const {

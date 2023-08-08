@@ -1,11 +1,11 @@
-import styled from "styled-components";
 import { useState, useEffect } from "react";
-import useNavigateCustom from "../../hooks/useNavigateCustom";
-import useRightSectionHandler from "../../hooks/useRightSectionHandler";
 import { useRecoilState } from "recoil";
-import { languageState } from "../../recoil/atom";
-import useModal from "../../hooks/useModal";
-import { ModalType } from "../../types/enum/modal.enum";
+import styled from "styled-components";
+import useNavigateCustom from "@/hooks/useNavigateCustom";
+import useRightSectionHandler from "@/hooks/useRightSectionHandler";
+import { languageState } from "@/recoil/atom";
+import useModal from "@/hooks/useModal";
+import { ModalType } from "@/types/enum/modal.enum";
 
 const LeftMenuTablet = () => {
   const [isBannerVisible, setIsBannerVisible] = useState(true);

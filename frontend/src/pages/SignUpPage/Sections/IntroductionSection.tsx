@@ -1,8 +1,8 @@
-import { styled } from "styled-components";
-import { SectionProps } from "../SignUpPage";
-import { Section } from "../SignUpPage";
-import RevertButton from "../components/RevertButton";
 import { useState, useEffect } from "react";
+import { styled } from "styled-components";
+import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
+import { Section } from "@/pages/SignUpPage/SignUpPage";
+import RevertButton from "@/pages/SignUpPage/components/RevertButton";
 
 const IntroductionSection: React.FC<SectionProps> = ({
   registerData,

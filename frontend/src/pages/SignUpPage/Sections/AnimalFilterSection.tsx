@@ -1,10 +1,10 @@
-import { styled } from "styled-components";
-import { SectionProps } from "../SignUpPage";
-import { Section } from "../SignUpPage";
-import AnimalButtonContainer from "../../../components/AnimalButtonContainer";
-import RevertButton from "../components/RevertButton";
 import { useState, useEffect } from "react";
-import { AnimalSpecies } from "../../../types/enum/animal.filter.enum";
+import { styled } from "styled-components";
+import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
+import { Section } from "@/pages/SignUpPage/SignUpPage";
+import AnimalButtonContainer from "@/components/AnimalButtonContainer";
+import RevertButton from "@/pages/SignUpPage/components/RevertButton";
+import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 
 const AnimalFilterSection: React.FC<SectionProps> = ({
   registerData,

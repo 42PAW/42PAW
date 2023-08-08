@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import styled from "styled-components";
-import { ModalType } from "../types/enum/modal.enum";
-import useModal from "../hooks/useModal";
+import { ModalType } from "@/types/enum/modal.enum";
+import useModal from "@/hooks/useModal";
 import {
   banUserInfoState,
   currentBoardIdState,
   currentCommentIdState,
-} from "../recoil/atom";
-import { IBanUserInfo } from "../types/interface/user.interface";
-import { languageState } from "../recoil/atom";
+} from "@/recoil/atom";
+import { IBanUserInfo } from "@/types/interface/user.interface";
+import { languageState } from "@/recoil/atom";
 
 /**
  * @boardId (optional) 신고, 차단, 삭제할 게시물의 id

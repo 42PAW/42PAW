@@ -1,12 +1,12 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { isRightSectionOpenedState } from "../recoil/atom";
-import LeftMenuSection from "../components/LeftMenuSection/LeftMenuSection";
-import RightSection from "../components/RightSection/RightSection";
-import BoardSortToggle from "../components/BoardSortToggle";
-import ModalContainer from "../components/modals/ModalContainer";
-import Toaster from "../components/toast/Toaster";
+import { isRightSectionOpenedState } from "@/recoil/atom";
+import LeftMenuSection from "@/components/LeftMenuSection/LeftMenuSection";
+import RightSection from "@/components/RightSection/RightSection";
+import BoardSortToggle from "@/components/BoardSortToggle";
+import ModalContainer from "@/components/modals/ModalContainer";
+import Toaster from "@/components/toast/Toaster";
 
 const Layout = () => {
   const location = useLocation();

@@ -4,11 +4,15 @@ import { Section } from "../SignUpPage";
 interface RevertButtonProps {
   setStep: React.Dispatch<React.SetStateAction<Section>>;
   to: Section;
+  setIsFading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RevertButton = ({ setStep, to }: RevertButtonProps) => {
+const RevertButton = ({ setStep, to, setIsFading }: RevertButtonProps) => {
   const handleRevert = () => {
-    setStep(to);
+    setIsFading(true);
+    setTimeout(() => {
+      setStep(to);
+    }, 200);
   };
 
   return (

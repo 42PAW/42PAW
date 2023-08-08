@@ -3,24 +3,42 @@ import { SectionProps } from "../SignUpPage";
 import { Section } from "../SignUpPage";
 import AnimalButtonContainer from "../../../components/AnimalButtonContainer";
 import RevertButton from "../components/RevertButton";
+import { useState, useEffect } from "react";
+import { AnimalSpecies } from "../../../types/enum/animal.filter.enum";
 
 const AnimalFilterSection: React.FC<SectionProps> = ({
   registerData,
   setRegisterData,
   setStep,
 }) => {
+  const [isFading, setIsFading] = useState<boolean>(true);
+  const [categoryList, setCategoryList] = useState<AnimalSpecies[]>([]);
   const handleOnClick = () => {
-    setStep(Section.Success);
+    setRegisterData({ ...registerData, categoryFilters: [...categoryList] });
+    setIsFading(true);
+    setTimeout(() => {
+      setStep(Section.Success);
+    }, 200);
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIsFading(false);
+    }, 200);
+  }, []);
+
   return (
-    <WrapperStyled>
-      <RevertButton setStep={setStep} to={Section.Introduction} />
+    <WrapperStyled $isFading={isFading}>
+      <RevertButton
+        setStep={setStep}
+        to={Section.Introduction}
+        setIsFading={setIsFading}
+      />
       <h1>
         만나고 싶은 동물 친구들을 <br /> 선택해 주세요
       </h1>
       <ButtonZoneStyled>
-        <AnimalButtonContainer columns={2} />
+        <AnimalButtonContainer columns={2} setter={setCategoryList} />
       </ButtonZoneStyled>
       <NextButtonStyled onClick={handleOnClick}>
         <img src="/src/assets/arrowW.png" />
@@ -29,14 +47,15 @@ const AnimalFilterSection: React.FC<SectionProps> = ({
   );
 };
 
-const WrapperStyled = styled.div`
+const WrapperStyled = styled.div<{ $isFading: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
   width: 100vw;
-
+  opacity: ${({ $isFading }) => ($isFading ? 0 : 1)};
+  transition: opacity 0.2s ease;
   h1 {
     font-size: 3rem;
     text-align: center;

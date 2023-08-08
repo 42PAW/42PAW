@@ -7,12 +7,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
+	// TODO : CORS 와일드카드 쓰지마라
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-				.allowedOrigins("http://localhost") // TODO : 이후에 배포된 도메인 추가
+				.allowedOrigins("*") // TODO : 이후에 배포된 도메인 추가
 				.allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH")
-				.allowCredentials(true)
 				.maxAge(3600)
 				.allowedHeaders("*");
 	}

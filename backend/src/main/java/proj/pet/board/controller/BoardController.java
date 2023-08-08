@@ -58,9 +58,7 @@ public class BoardController {
 			@RequestPart(value = "categoryList") List<Species> categoryList,
 			@RequestPart(value = "content") String content) {
 		// TODO: userSession 시큐리티에서 가져오기
-		System.out.println("HELLO!");
-		System.out.println("memberRepository.findAll() = " + memberRepository.findAll());
-		UserSessionDto userSessionDto = new UserSessionDto(1L, "sanan", USER);
+		UserSessionDto userSessionDto = new UserSessionDto(1L, "hellow", USER);
 		boardFacadeService.createBoard(userSessionDto, mediaDataList, categoryList, content);
 	}
 

@@ -4,11 +4,10 @@ import ProfileImageSection from "./Sections/ProfileImageSection";
 import IntroductionSection from "./Sections/IntroductionSection";
 import AnimalFilterSection from "./Sections/AnimalFilterSection";
 import SuccessSection from "./Sections/SuccessSection";
-import { AnimalSpecies } from "../../types/enum/animal.filter.enum";
 import { styled } from "styled-components";
 import ProfileCard from "./components/ProfileCard";
 import Toaster from "../../components/toast/Toaster";
-
+import { SignUpInfoDTO } from "../../types/dto/member.dto";
 export enum Section {
   Nickname = "NicknameSection",
   ProfileImage = "ProfileImageSection",
@@ -24,25 +23,18 @@ export type SectionType =
   | Section.AnimalFilter
   | Section.Success;
 
-interface IRegisterDataInfo {
-  Nickname: string;
-  ProfileImage: File | null;
-  Introduction: string;
-  AnimalFilter: AnimalSpecies[];
-}
-
 export interface SectionProps {
-  registerData: IRegisterDataInfo;
-  setRegisterData: React.Dispatch<React.SetStateAction<IRegisterDataInfo>>;
+  registerData: SignUpInfoDTO;
+  setRegisterData: React.Dispatch<React.SetStateAction<SignUpInfoDTO>>;
   setStep: React.Dispatch<React.SetStateAction<Section>>;
 }
 
 const SignUpPage = () => {
-  const [registerData, setRegisterData] = useState<IRegisterDataInfo>({
-    Nickname: "",
-    ProfileImage: null,
-    Introduction: "",
-    AnimalFilter: [],
+  const [registerData, setRegisterData] = useState<SignUpInfoDTO>({
+    memberName: "",
+    imageData: null,
+    statement: "",
+    categoryFilters: [],
   });
   const [step, setStep] = useState<SectionType>(Section.Nickname);
 
@@ -83,13 +75,13 @@ const SignUpPage = () => {
           setStep={setStep}
         />
       )}
-      <ProfileCardWrapperStyled $step={step}>
+      <ProfileCardContainerStyled $step={step}>
         <ProfileCard
-          nickname={registerData.Nickname}
-          caption={registerData.Introduction}
+          registerData={registerData}
+          setRegisterData={setRegisterData}
           step={step}
         />
-      </ProfileCardWrapperStyled>
+      </ProfileCardContainerStyled>
       <Toaster />
     </MainStyled>
   );
@@ -102,13 +94,7 @@ const MainStyled = styled.main`
   width: 100vw;
 `;
 
-const SectionContainer = styled.div<{ $visible: boolean }>`
-  opacity: ${(props) => (props.$visible ? 1 : 0)};
-  transition: opacity 1s ease;
-  pointer-events: ${(props) => (props.$visible ? "auto" : "none")};
-`;
-
-const ProfileCardWrapperStyled = styled.div<{
+const ProfileCardContainerStyled = styled.div<{
   $step: SectionType;
 }>`
   display: flex;
@@ -117,7 +103,7 @@ const ProfileCardWrapperStyled = styled.div<{
   position: absolute;
   left: 50%;
   height: 100vh;
-  transition: transform 1s ease-in-out, opacity 0.3s ease-in-out;
+  transition: transform 0.8s ease-in-out, opacity 0.4s ease-in-out;
   opacity: ${(props) => (props.$step === Section.AnimalFilter ? 0 : 1)};
   transform: ${(props) => {
     switch (props.$step) {

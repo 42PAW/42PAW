@@ -18,10 +18,12 @@ const renderAnimalSpecies = (buttonName: string) => {
  */
 interface AnimalButtonContainerProps {
   columns: number;
+  setter?: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const AnimalButtonContainer = ({
   columns,
+  setter,
 }: AnimalButtonContainerProps): JSX.Element => {
   const [selectedAnimals, setSelectedAnimals] = useState<Set<string>>(
     new Set([AnimalSpecies.DOG, AnimalSpecies.CAT])
@@ -46,6 +48,7 @@ const AnimalButtonContainer = ({
       updatedSelectedAnimals.add(buttonName);
     }
     setSelectedAnimals(updatedSelectedAnimals);
+    setter([...updatedSelectedAnimals]);
   };
 
   return (

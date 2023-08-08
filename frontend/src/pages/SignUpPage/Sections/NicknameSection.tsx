@@ -9,25 +9,26 @@ const NicknameSection: React.FC<SectionProps> = ({
   setRegisterData,
   setStep,
 }) => {
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRegisterData({ ...registerData, Nickname: e.target.value });
-  };
-  const [isWrong, setIsWrong] = useState(false);
+  const [isWrong, setIsWrong] = useState<boolean>(false);
+  const [isFading, setIsFading] = useState<boolean>(true);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { popToast } = useToaster();
 
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRegisterData({ ...registerData, memberName: e.target.value });
+  };
   const handleOnClick = () => {
     if (isWrong === true) {
       popToast("잠시 후에 다시 시도해주세요.", "N");
       return;
     }
     if (
-      registerData.Nickname === "중복됨" ||
-      registerData.Nickname.length < 3
+      registerData.memberName === "중복됨" ||
+      registerData.memberName.length < 3
     ) {
-      if (registerData.Nickname.length < 3) {
+      if (registerData.memberName.length < 3) {
         popToast("닉네임은 3글자 이상이어야 합니다.", "N");
-      } else if (registerData.Nickname === "중복됨") {
+      } else if (registerData.memberName === "중복됨") {
         popToast("사용 중인 닉네임입니다.", "N");
       }
       setIsWrong(true);
@@ -37,16 +38,25 @@ const NicknameSection: React.FC<SectionProps> = ({
       }, 1000);
       return;
     }
-    setStep(Section.ProfileImage);
+    setIsFading(true);
+    setTimeout(() => {
+      setStep(Section.ProfileImage);
+    }, 200);
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIsFading(false);
+    }, 200);
+  }, []);
+
   return (
-    <WrapperStyled>
+    <WrapperStyled $isFading={isFading}>
       <h1>당신의 닉네임은 무엇인가요?</h1>
       <InputContainer $isWrong={isWrong}>
         <input
           placeholder="최대 10자 이내"
-          value={registerData.Nickname}
+          value={registerData.memberName}
           onChange={handleOnChange}
           minLength={3}
           maxLength={10}
@@ -68,13 +78,15 @@ const shakeAnimation = keyframes`
   100% { transform: translateX(0); }
 `;
 
-const WrapperStyled = styled.div`
+const WrapperStyled = styled.div<{ $isFading: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
   width: 100vw;
+  opacity: ${({ $isFading }) => ($isFading ? 0 : 1)};
+  transition: opacity 0.2s ease;
   h1 {
     font-size: 3rem;
   }

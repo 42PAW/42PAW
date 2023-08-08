@@ -1,38 +1,53 @@
 import styled from "styled-components";
 import { ChangeEvent, useState } from "react";
 import { Section, SectionType } from "../SignUpPage";
+import { SignUpInfoDTO } from "../../../types/dto/member.dto";
 
 /**
- * @nickname 유저가 설정한 닉네임
- * @caption 유저가 설정한 캡션
+ * @registerData.memberName 유저가 설정한 닉네임
+ * @statement 유저가 설정한 캡션
  * @sectionObserver ImageSection에서만 프로필 설정 변경 벼튼을 활성화
  */
 interface IProfileCardProps {
-  nickname: string;
-  caption: string;
+  registerData: SignUpInfoDTO;
+  setRegisterData: React.Dispatch<React.SetStateAction<SignUpInfoDTO>>;
   step: SectionType;
 }
 
-const ProfileCard = ({ nickname, caption, step }: IProfileCardProps) => {
-  const [imageFile, setImageFile] = useState<File | null>(null);
+const ProfileCard = ({
+  registerData,
+  setRegisterData,
+  step,
+}: IProfileCardProps) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      const imageBitmap = await createImageBitmap(file);
+      const canvas = document.createElement("canvas");
+      canvas.width = imageBitmap.width;
+      canvas.height = imageBitmap.height;
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.drawImage(imageBitmap, 0, 0);
+        canvas.toBlob(async (webpBlob) => {
+          if (webpBlob) {
+            setRegisterData({ ...registerData, imageData: webpBlob });
+            const webpDataURL = URL.createObjectURL(webpBlob);
+            setImagePreview(webpDataURL);
+          }
+        }, "image/webp");
+      }
     }
   };
 
   return (
     <>
       <ProfileCardStyled>
-        <ProfileCardNicknameStyled>{nickname}</ProfileCardNicknameStyled>
+        <ProfileCardNicknameStyled>
+          {registerData.memberName}
+        </ProfileCardNicknameStyled>
         <ProfileCardEmptyImageStyled>
           <img src={imagePreview ? imagePreview : "/src/assets/userG.png"} />
         </ProfileCardEmptyImageStyled>
@@ -47,7 +62,9 @@ const ProfileCard = ({ nickname, caption, step }: IProfileCardProps) => {
             onChange={handleImageChange}
           />
         </ProfileCardFormStyled>
-        <ProfileCardSectionStyled>{caption}</ProfileCardSectionStyled>
+        <ProfileCardSectionStyled>
+          {registerData.statement}
+        </ProfileCardSectionStyled>
       </ProfileCardStyled>
     </>
   );
@@ -89,12 +106,15 @@ const ProfileCardFormStyled = styled.form`
   margin-top: 15px;
   font-size: 15px;
   color: var(--lightgrey);
-  &:hover {
-    color: var(--grey);
-    font-weight: 500;
-  }
   input {
     display: none;
+  }
+  label {
+    cursor: pointer;
+    &:hover {
+      color: var(--grey);
+      font-weight: 500;
+    }
   }
 `;
 

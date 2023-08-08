@@ -53,6 +53,10 @@ dependencies {
 
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
+    // OAUTH, AOP
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
     //QueryDSL
     implementation "com.querydsl:querydsl-codegen:5.0.0"
     implementation "com.querydsl:querydsl-jpa:5.0.0:jakarta"

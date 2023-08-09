@@ -13,7 +13,6 @@ import proj.pet.auth.domain.CookieManager;
 import proj.pet.auth.domain.jwt.JwtPayload;
 import proj.pet.auth.domain.jwt.JwtProperties;
 import proj.pet.auth.domain.jwt.JwtTokenManager;
-import proj.pet.exception.DomainException;
 import proj.pet.exception.ServiceException;
 
 import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
@@ -23,9 +22,6 @@ import static proj.pet.exception.ExceptionStatus.UNAUTHORIZED;
 @Component
 @RequiredArgsConstructor
 public class AuthAspect {
-
-	private static final String AUTH_HEADER = "Authorization";
-	private static final String AUTH_TYPE = "Bearer";
 
 	private final JwtTokenManager jwtTokenManager;
 	private final CookieManager cookieManager;
@@ -48,7 +44,7 @@ public class AuthAspect {
 		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getResponse();
 
-		String token = extractTokenFrom(request);
+		String token = jwtTokenManager.extractTokenFrom(request);
 		if (!jwtTokenManager.isTokenValid(token, jwtProperties.getSigningKey())) {
 			cookieManager.deleteCookie(response, jwtProperties.getTokenName());
 			throw new ServiceException(UNAUTHORIZED);
@@ -60,18 +56,5 @@ public class AuthAspect {
 		}
 	}
 
-	/**
-	 * 토큰을 추출합니다.
-	 *
-	 * @param req 추출할 {@link HttpServletRequest}
-	 * @return 추출된 토큰 - AUTH_TYPE 이후 공백이 있기에 1을 더해서 substring 합니다.
-	 * @throws DomainException 토큰이 없거나, AUTH_TYPE이 유효하지 않을 경우.
-	 */
-	private String extractTokenFrom(HttpServletRequest req) {
-		String authHeader = req.getHeader(AUTH_HEADER);
-		if (authHeader == null || !authHeader.startsWith(AUTH_TYPE)) {
-			throw new DomainException(UNAUTHORIZED);
-		}
-		return authHeader.substring(AUTH_TYPE.length() + 1);
-	}
+
 }

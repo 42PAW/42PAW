@@ -7,18 +7,19 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import proj.pet.exception.DomainException;
 import proj.pet.member.domain.Country;
-import proj.pet.member.domain.Language;
 import proj.pet.member.domain.MemberRole;
 
 import java.security.Key;
 import java.util.Base64;
 
 import static proj.pet.exception.ExceptionStatus.INTERNAL_SERVER_ERROR;
+import static proj.pet.exception.ExceptionStatus.UNAUTHORIZED;
 
 @Log4j2
 @Component
@@ -27,6 +28,8 @@ public class JwtTokenManager {
 
 	private static final String JWT_DELIMITER = "\\.";
 	private static final int PAYLOAD_INDEX = 1;
+	private static final String AUTH_HEADER = "Authorization";
+	private static final String AUTH_TYPE = "Bearer";
 	private final ObjectMapper objectMapper;
 
 	/**
@@ -64,11 +67,9 @@ public class JwtTokenManager {
 	public JwtPayload createFtPayload(String token) {
 		JsonNode payloadJson = extractPayloadJson(token);
 		return JwtPayload.builder()
-				.id(payloadJson.get("id").asLong())
 				.email(payloadJson.get("email").asText())
-				.nickname(payloadJson.get("name").asText())
-				.country(Country.from(payloadJson.get("country").asText()))
-				.language(Language.from(payloadJson.get("language").asText()))
+				.oauthName(payloadJson.get("oauthName").asText())
+				.campus(Country.Campus.from(payloadJson.get("campus").asText()))
 				.role(MemberRole.from(payloadJson.get("role").asText()))
 				.build();
 	}
@@ -87,5 +88,20 @@ public class JwtTokenManager {
 			log.error("토큰의 Payload를 JsonNode(JSON) 형식으로 가져오는데 실패했습니다.");
 			throw new DomainException(INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	/**
+	 * 토큰을 추출합니다.
+	 *
+	 * @param req 추출할 {@link HttpServletRequest}
+	 * @return 추출된 토큰 - AUTH_TYPE 이후 공백이 있기에 1을 더해서 substring 합니다.
+	 * @throws DomainException 토큰이 없거나, AUTH_TYPE이 유효하지 않을 경우.
+	 */
+	public String extractTokenFrom(HttpServletRequest req) {
+		String authHeader = req.getHeader(AUTH_HEADER);
+		if (authHeader == null || !authHeader.startsWith(AUTH_TYPE)) {
+			throw new DomainException(UNAUTHORIZED);
+		}
+		return authHeader.substring(AUTH_TYPE.length() + 1);
 	}
 }

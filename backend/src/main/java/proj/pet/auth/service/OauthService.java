@@ -74,7 +74,7 @@ public class OauthService {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("email", profile.get("email").asText());
 		claims.put("oauthName", profile.get("login").asText());
-		claims.put("campus", Country.Campus.from(profile.get("campus").get(0).get("name").asText()));
+		claims.put("campus", Country.Campus.from(profile.get("campus").get(0).get("name").asText()).getName());
 		claims.put("role", USER);
 		return claims;
 	}

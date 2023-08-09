@@ -58,7 +58,7 @@ const OverlayStyled = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  animation: ${fadeIn} 0.2s;
+  animation: ${fadeIn} 0.5s;
   backdrop-filter: blur(5px);
   @media (max-width: 1023px) {
     display: flex;
@@ -74,6 +74,7 @@ const RightSectionStyled = styled.div<{
   width: 490px;
   height: 800px;
   max-height: 860px;
+
   margin-left: 20px;
   border-radius: 30px;
   background-color: var(--transparent);
@@ -86,14 +87,17 @@ const RightSectionStyled = styled.div<{
     background-color: #dbdcfec3;
     opacity: 1;
     position: absolute;
-    bottom: ${(props) => (props.$isRightSectionOpened ? "0%" : "-100%")};
-    margin-right: 0;
-    transition: bottom 0.5s ease;
-    height: 85%;
+    height: ${(props) => (props.$isRightSectionOpened ? "85%" : "0%")};
     width: 100%;
+    bottom: 0;
+    margin-right: 0;
+    transition: height 0.3s ease;
     margin-left: 0;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    * {
+      display: ${(props) => !props.$isRightSectionOpened && "none"};
+    }
   }
 `;
 

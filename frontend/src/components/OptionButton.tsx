@@ -51,6 +51,7 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
       setIsToggled(!isToggled);
     }
   };
+
   const handleBan = () => {
     setBanUserInfo(banUser);
     openModal(ModalType.BAN);
@@ -122,10 +123,10 @@ const MenuStyled = styled.div<{ $isToggled: boolean }>`
   border-radius: 10px;
   color: var(--grey);
   background: var(--white);
+
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
   opacity: ${({ $isToggled }) => ($isToggled ? 1 : 0)};
   visibility: ${({ $isToggled }) => ($isToggled ? "visible" : "hidden")};
-  visibility: hidden;
   transition: opacity 0.3s;
   z-index: 1;
 `;

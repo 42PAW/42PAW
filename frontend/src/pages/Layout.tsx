@@ -67,6 +67,7 @@ const MainAreaStyled = styled.main<{
   flex-direction: column;
   align-items: center;
   height: 100%;
+  min-height: 800px;
   width: ${(props) =>
     props.$isProfilePage
       ? `calc(100% - ${props.$isRightSectionOpened ? "570px" : "0px"})`

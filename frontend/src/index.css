@@ -30,7 +30,9 @@ html,
 body {
   margin: 0;
   height: 100%;
-  overflow: auto;
+  /* min-width: 갤럭시 폴드 기준 */
+  min-width: 280px;
+  overflow: hidden;
   font-size: 10px;
   color: var(--grey);
   font-family: "Noto Sans KR", sans-serif;
@@ -43,6 +45,7 @@ body {
   );
   background-repeat: no-repeat;
   @media (max-width: 1023px) {
+    height: 100vh;
     overflow: hidden;
   }
 }

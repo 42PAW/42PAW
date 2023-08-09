@@ -4,7 +4,6 @@ import styled from "styled-components";
 import useNavigateCustom from "@/hooks/useNavigateCustom";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { languageState } from "@/recoil/atom";
-import useModal from "@/hooks/useModal";
 import SettingButton from "@/components/SettingButton";
 
 const LeftMenuTablet = () => {
@@ -56,11 +55,11 @@ const LeftMenuTablet = () => {
             <li onClick={moveToMain}>
               <img alt="Main" src="/src/assets/home.png" />
             </li>
-            <li onClick={openSearchSection}>
-              <img alt="Search" src="/src/assets/search.png" />
-            </li>
             <li onClick={moveToUpload}>
               <img alt="MyProfile" src="/src/assets/upload.png" />
+            </li>
+            <li onClick={openSearchSection}>
+              <img alt="Search" src="/src/assets/search.png" />
             </li>
             <li onClick={moveToMyProfile}>
               <img alt="MyProfile" src="/src/assets/profile.png" />
@@ -178,16 +177,13 @@ const LoginButtonStyled = styled.div`
   cursor: pointer;
   text-align: center;
   min-width: 45px;
-  margin-bottom: 20%;
-  margin-top: 20px;
+  margin: 0;
+  margin-right: 2%;
+  font-size: 1rem;
   &:hover {
     background-color: var(--white);
     color: var(--purple);
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-  }
-  @media (max-width: 1023px) {
-    margin: 0;
-    margin-right: 2%;
   }
 `;
 

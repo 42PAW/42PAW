@@ -1,9 +1,13 @@
+import { styled } from "styled-components";
+
 const NoticePage = () => {
   return (
     <>
-      <div></div>
+      <WrapperStyled></WrapperStyled>
     </>
   );
 };
+
+const WrapperStyled = styled.div``;
 
 export default NoticePage;

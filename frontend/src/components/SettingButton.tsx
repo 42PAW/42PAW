@@ -42,6 +42,7 @@ const SettingButton = () => {
 };
 
 const WrapperStyled = styled.div`
+  z-index: 3;
   position: relative;
   display: flex;
   align-items: center;

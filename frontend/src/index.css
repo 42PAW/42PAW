@@ -42,6 +42,9 @@ body {
     #e6dade 76.75%
   );
   background-repeat: no-repeat;
+  @media (max-width: 1023px) {
+    overflow: hidden;
+  }
 }
 
 *::-webkit-scrollbar {

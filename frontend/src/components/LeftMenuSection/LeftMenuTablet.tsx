@@ -5,15 +5,13 @@ import useNavigateCustom from "@/hooks/useNavigateCustom";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { languageState } from "@/recoil/atom";
 import useModal from "@/hooks/useModal";
-import { ModalType } from "@/types/enum/modal.enum";
+import SettingButton from "@/components/SettingButton";
 
 const LeftMenuTablet = () => {
   const [isBannerVisible, setIsBannerVisible] = useState(true);
   const [language] = useRecoilState<any>(languageState);
   const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
-  const { openSearchSection, openAnimalFilterSection } =
-    useRightSectionHandler();
-  const { openModal } = useModal();
+  const { openSearchSection } = useRightSectionHandler();
 
   const isMainPage: boolean = location.pathname === "/";
 
@@ -39,16 +37,16 @@ const LeftMenuTablet = () => {
       {isMainPage && (
         <BannerStyled $isBannerVisible={isBannerVisible}>
           <ProfileImageStyled src="/src/assets/profileImage.jpg" />
-          <div>
+          <BannerLogoStyled>
             42PAW
             <span>
               Pets Are the World
               <img src="/src/assets/dogLogo.png" />
             </span>
-          </div>
-          <LanguageButtonStyled onClick={() => openModal(ModalType.LANGUAGE)}>
-            <img src="/src/assets/globalW.png" />
-          </LanguageButtonStyled>
+          </BannerLogoStyled>
+          <SettingButtonContainerStyled>
+            <SettingButton />
+          </SettingButtonContainerStyled>
         </BannerStyled>
       )}
       <MenuStyled>
@@ -66,9 +64,6 @@ const LeftMenuTablet = () => {
             </li>
             <li onClick={moveToMyProfile}>
               <img alt="MyProfile" src="/src/assets/profile.png" />
-            </li>
-            <li onClick={openAnimalFilterSection}>
-              <img alt="AnimalFilter" src="/src/assets/categoryW.png" />
             </li>
           </MenuListStyled>
         </nav>
@@ -93,23 +88,6 @@ const BannerStyled = styled.div<{ $isBannerVisible: boolean }>`
   transform: translateY(${(props) => (props.$isBannerVisible ? "0" : "-100%")});
   transition: transform 0.1s ease-in-out, margin-top 0.2s ease;
   line-height: 15px;
-  div {
-    text-align: center;
-    font-family: "Monoton";
-    margin-top: 10px;
-    color: var(--white);
-    font-size: 1.8rem;
-    span {
-      display: flex;
-      align-items: center;
-      font-size: 1rem;
-      img {
-        width: 17px;
-        margin-left: 4px;
-        margin-bottom: 2px;
-      }
-    }
-  }
 `;
 
 const ProfileImageStyled = styled.img`
@@ -121,21 +99,27 @@ const ProfileImageStyled = styled.img`
   }
 `;
 
-const LanguageButtonStyled = styled.button`
-  margin-right: 5px;
-  margin-top: 5px;
-  width: 35px;
-  height: 35px;
-  background-color: transparent;
-  border: none;
-  img {
-    width: 100%;
-    opacity: 0.9;
-    transition: opacity 0.3s ease;
-    &:hover {
-      opacity: 0.7;
+const BannerLogoStyled = styled.div`
+  text-align: center;
+  font-family: "Monoton";
+  margin-top: 10px;
+  color: var(--white);
+  font-size: 1.8rem;
+  span {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    img {
+      width: 17px;
+      margin-left: 4px;
+      margin-bottom: 2px;
     }
   }
+`;
+
+const SettingButtonContainerStyled = styled.div`
+  margin-top: 8px;
+  margin-right: 5px;
 `;
 
 const MenuStyled = styled.div`

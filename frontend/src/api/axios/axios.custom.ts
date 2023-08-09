@@ -1,5 +1,5 @@
 import axios from "axios";
-import instance from "./axios.instance";
+import instance from "@/api/axios/axios.instance";
 import { CreateBoardDTO } from "@/types/dto/board.dto";
 
 const axiosGetBoardsURL =
@@ -18,7 +18,7 @@ export const axiosGetBoards = async (
   }
 };
 
-const axiosCreateBoardURL = "http://localhost:4242/v1/boards";
+const axiosCreateBoardURL = "/v1/boards";
 export const axiosCreateBoard = async ({
   mediaDataList,
   categoryList,
@@ -37,7 +37,7 @@ export const axiosCreateBoard = async ({
       "content",
       new Blob([content], { type: "application/json" })
     );
-    const response = await axios.post(axiosCreateBoardURL, formData, {
+    const response = await instance.post(axiosCreateBoardURL, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

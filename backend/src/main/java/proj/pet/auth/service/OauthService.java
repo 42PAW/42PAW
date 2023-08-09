@@ -13,6 +13,7 @@ import proj.pet.auth.domain.ApiRequestManager;
 import proj.pet.auth.domain.OauthProperties;
 import proj.pet.exception.ExceptionStatus;
 import proj.pet.exception.ServiceException;
+import proj.pet.member.domain.Country;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -66,7 +67,9 @@ public class OauthService {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("email", profile.get("email").asText());
 		claims.put("oauthName", profile.get("login").asText());
-		claims.put("campus", profile.get("campus").get(0).get("name").asText());
+		Country.Campus campus = Country.Campus.from(profile.get("campus").get(0).get("name").asText());
+		claims.put("campus", campus);
+		claims.put("country", Country.whereLocates(campus));
 		claims.put("role", USER);
 		return claims;
 	}

@@ -10,43 +10,45 @@ import static proj.pet.exception.ExceptionStatus.INCORRECT_ARGUMENT;
 
 @Getter
 public enum Country {
-	ARMENIA(Campus.YEREVAN),
-	AUSTRALIA(Campus.ADELAIDE),
-	AUSTRIA(Campus.VIENNA),
-	BELGIUM(Campus.NINE_TEEN),
-	BRAZIL(Campus.RIO_DE_JANEIRO, Campus.SAO_PAULO),
-	CANADA(Campus.QUEBEC),
-	CZECH(Campus.PRAGUE),
-	ETC,
-	FINLAND(Campus.HELSINKI),
-	FRANCE(Campus.LE_HAVRE, Campus.PERPIGNAN, Campus.MULHOUSE, Campus.NICE, Campus.LYON, Campus.PARIS, Campus.ANGOULEME),
-	GERMANY(Campus.BERLIN, Campus.WOLFSBURG, Campus.HELIBRONN),
-	ITALY(Campus.FLORENCE, Campus.ROME),
-	JAPAN(Campus.TOKYO),
-	KOREA(Campus.GYEONGSAN, Campus.SEOUL),
-	LUXEMBOURG(Campus.LOUXEMBOURG),
-	MALAYSIA(Campus.KUALA_LUMPUR),
-	MOLDOVA(Campus.CHISINAU),
-	MOROCCO(Campus.TETOUAN, Campus.BENGUERIR, Campus.KHOURIBGA),
-	NETHERLANDS(Campus.AMSTERDAM),
-	PORTUGAL(Campus.PORTO, Campus.LISBOA),
-	ROMANIA(Campus.CLUJ, Campus.BUCHAREST),
-	RUSSIA(Campus.KAZAN, Campus.MOSCOW),
-	SINGAPORE(Campus.SINGAPORE),
-	SOUTH_AFRICA(Campus.JOHANNESBURG, Campus.CAPE_TOWN),
-	SPAIN(Campus.BARCELONA, Campus.URDULIZ, Campus.MALAGA, Campus.MADRID),
-	SWITZERLAND(Campus.LAUSANNE),
-	THAILAND(Campus.BANGKOK),
-	TURKEY(Campus.KOCAELI, Campus.ISTANBUL),
-	UAE(Campus.ABU_DHABI),
-	UK(Campus.LONDON),
-	UKRAINE(Campus.KYIV),
-	USA(Campus.FREMONT),
+	ARMENIA(Language.ENGLISH, Campus.YEREVAN),
+	AUSTRALIA(Language.ENGLISH, Campus.ADELAIDE),
+	AUSTRIA(Language.GERMAN, Campus.VIENNA),
+	BELGIUM(Language.ENGLISH, Campus.NINE_TEEN),
+	BRAZIL(Language.PORTUGUESE, Campus.RIO_DE_JANEIRO, Campus.SAO_PAULO),
+	CANADA(Language.ENGLISH, Campus.QUEBEC),
+	CZECH(Language.ENGLISH, Campus.PRAGUE),
+	ETC(Language.ENGLISH),
+	FINLAND(Language.ENGLISH, Campus.HELSINKI),
+	FRANCE(Language.FRENCH, Campus.LE_HAVRE, Campus.PERPIGNAN, Campus.MULHOUSE, Campus.NICE, Campus.LYON, Campus.PARIS, Campus.ANGOULEME),
+	GERMANY(Language.GERMAN, Campus.BERLIN, Campus.WOLFSBURG, Campus.HELIBRONN),
+	ITALY(Language.ITALIAN, Campus.FLORENCE, Campus.ROME),
+	JAPAN(Language.JAPANESE, Campus.TOKYO),
+	KOREA(Language.KOREAN, Campus.GYEONGSAN, Campus.SEOUL),
+	LUXEMBOURG(Language.ENGLISH, Campus.LOUXEMBOURG),
+	MALAYSIA(Language.ENGLISH, Campus.KUALA_LUMPUR),
+	MOLDOVA(Language.ENGLISH, Campus.CHISINAU),
+	MOROCCO(Language.ENGLISH, Campus.TETOUAN, Campus.BENGUERIR, Campus.KHOURIBGA),
+	NETHERLANDS(Language.ENGLISH, Campus.AMSTERDAM),
+	PORTUGAL(Language.PORTUGUESE, Campus.PORTO, Campus.LISBOA),
+	ROMANIA(Language.ENGLISH, Campus.CLUJ, Campus.BUCHAREST),
+	RUSSIA(Language.ENGLISH, Campus.KAZAN, Campus.MOSCOW),
+	SINGAPORE(Language.ENGLISH, Campus.SINGAPORE),
+	SOUTH_AFRICA(Language.ENGLISH, Campus.JOHANNESBURG, Campus.CAPE_TOWN),
+	SPAIN(Language.SPANISH, Campus.BARCELONA, Campus.URDULIZ, Campus.MALAGA, Campus.MADRID),
+	SWITZERLAND(Language.ENGLISH, Campus.LAUSANNE),
+	THAILAND(Language.ENGLISH, Campus.BANGKOK),
+	TURKEY(Language.ENGLISH, Campus.KOCAELI, Campus.ISTANBUL),
+	UAE(Language.ENGLISH, Campus.ABU_DHABI),
+	UK(Language.ENGLISH, Campus.LONDON),
+	UKRAINE(Language.ENGLISH, Campus.KYIV),
+	USA(Language.ENGLISH, Campus.FREMONT),
 	;
 
+	private final Language language;
 	private final List<Campus> campuses;
 
-	Country(Campus... campuses) {
+	Country(Language language, Campus... campuses) {
+		this.language = language;
 		this.campuses = List.of(campuses);
 	}
 
@@ -54,7 +56,7 @@ public enum Country {
 		return Country.valueOf(country.toUpperCase());
 	}
 
-	public static Country ofLocates(Campus campus) {
+	public static Country whereLocates(Campus campus) {
 		return Stream.of(Country.values())
 				.filter(country -> country.campuses.contains(campus))
 				.findFirst()

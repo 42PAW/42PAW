@@ -22,13 +22,10 @@ public class AuthFacadeServiceImpl implements AuthFacadeService {
 
 	@Override public void handleLogin(String code, HttpServletRequest req, HttpServletResponse res, OauthProperties oauthProperties, LocalDateTime now) {
 		String accessToken = oauthService.getAccessTokenByCode(code, oauthProperties);
-		System.out.println("accessToken = " + accessToken);
 		JsonNode profileJson = oauthService.getProfileJsonByToken(accessToken, oauthProperties);
-		System.out.println("profileJson = " + profileJson);
 		Map<String, Object> claims = oauthService.makeClaimsByProviderProfile(profileJson);
-		System.out.println("claims = " + claims);
-		authService.addUserIfNotExist();
-		oauthService.provideServerTokenToClient(profileJson, req, res, now);
+		authService.addUserIfNotExist(claims);
+		oauthService.provideServerTokenToClient(claims, req, res, now);
 	}
 
 	@Override public void logout(HttpServletResponse res, OauthProperties oauthProperties) {

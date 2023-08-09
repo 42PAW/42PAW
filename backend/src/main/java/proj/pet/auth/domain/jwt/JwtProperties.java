@@ -19,7 +19,7 @@ public class JwtProperties {
 	private String tokenName;
 
 	@Value("${cloud.oauth2.jwt.token.expiry}")
-	private Integer expiry;
+	private long expiry;
 
 	public Key getSigningKey() {
 		byte[] secretKeyBytes = DatatypeConverter.parseBase64Binary(this.secret);

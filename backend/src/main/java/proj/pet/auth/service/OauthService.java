@@ -3,6 +3,7 @@ package proj.pet.auth.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import proj.pet.auth.domain.ApiRequestManager;
+import proj.pet.auth.domain.CookieManager;
 import proj.pet.auth.domain.OauthProperties;
+import proj.pet.auth.domain.jwt.JwtProperties;
+import proj.pet.auth.domain.jwt.JwtTokenProvider;
 import proj.pet.exception.ExceptionStatus;
 import proj.pet.exception.ServiceException;
 import proj.pet.member.domain.Country;
@@ -29,6 +33,9 @@ import static proj.pet.member.domain.MemberRole.USER;
 public class OauthService {
 
 	private final ObjectMapper objectMapper;
+	private final JwtTokenProvider tokenProvider;
+	private final JwtProperties jwtProperties;
+	private final CookieManager cookieManager;
 
 	public void sendCodeRequestToOauth(HttpServletResponse response, OauthProperties oauthProperties) {
 		try {
@@ -67,9 +74,7 @@ public class OauthService {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("email", profile.get("email").asText());
 		claims.put("oauthName", profile.get("login").asText());
-		Country.Campus campus = Country.Campus.from(profile.get("campus").get(0).get("name").asText());
-		claims.put("campus", campus);
-		claims.put("country", Country.whereLocates(campus));
+		claims.put("campus", Country.Campus.from(profile.get("campus").get(0).get("name").asText()));
 		claims.put("role", USER);
 		return claims;
 	}
@@ -93,7 +98,9 @@ public class OauthService {
 				.block();
 	}
 
-	public void provideServerTokenToClient(JsonNode profileJson, HttpServletRequest req, HttpServletResponse res, LocalDateTime now) {
-
+	public void provideServerTokenToClient(Map<String, Object> claims, HttpServletRequest req, HttpServletResponse res, LocalDateTime now) {
+		String serverToken = tokenProvider.createToken(claims, jwtProperties.getSigningKey(), jwtProperties.getExpiry(), now);
+		Cookie cookie = cookieManager.cookieOf(jwtProperties.getTokenName(), serverToken);
+		cookieManager.setCookieToClient(res, cookie, "/", req.getServerName(), (int) jwtProperties.getExpiry());
 	}
 }

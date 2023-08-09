@@ -8,7 +8,11 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import proj.pet.auth.domain.*;
+import proj.pet.auth.domain.AuthGuard;
+import proj.pet.auth.domain.CookieManager;
+import proj.pet.auth.domain.jwt.JwtPayload;
+import proj.pet.auth.domain.jwt.JwtProperties;
+import proj.pet.auth.domain.jwt.JwtTokenManager;
 import proj.pet.exception.DomainException;
 import proj.pet.exception.ServiceException;
 
@@ -49,8 +53,8 @@ public class AuthAspect {
 			cookieManager.deleteCookie(response, jwtProperties.getTokenName());
 			throw new ServiceException(UNAUTHORIZED);
 		}
-		FtPayload ftPayload = jwtTokenManager.createFtPayload(token);
-		if (!authGuard.level().isMatchWith(ftPayload.getRole())) {
+		JwtPayload jwtPayload = jwtTokenManager.createFtPayload(token);
+		if (!authGuard.level().isMatchWith(jwtPayload.getRole())) {
 			cookieManager.deleteCookie(response, jwtProperties.getTokenName());
 			throw new ServiceException(UNAUTHENTICATED);
 		}

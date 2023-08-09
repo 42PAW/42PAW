@@ -1,4 +1,4 @@
-package proj.pet.auth.domain;
+package proj.pet.auth.domain.jwt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -61,9 +61,9 @@ public class JwtTokenManager {
 	 * @param token
 	 * @return
 	 */
-	public FtPayload createFtPayload(String token) {
+	public JwtPayload createFtPayload(String token) {
 		JsonNode payloadJson = extractPayloadJson(token);
-		return FtPayload.builder()
+		return JwtPayload.builder()
 				.id(payloadJson.get("id").asLong())
 				.email(payloadJson.get("email").asText())
 				.nickname(payloadJson.get("name").asText())

@@ -34,6 +34,7 @@ dependencies {
     // OAUTH, AOP
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.72.Final'
 
     // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'

@@ -1,4 +1,4 @@
-package proj.pet.auth.domain;
+package proj.pet.auth.domain.jwt;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;

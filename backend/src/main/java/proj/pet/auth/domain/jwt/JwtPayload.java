@@ -1,4 +1,4 @@
-package proj.pet.auth.domain;
+package proj.pet.auth.domain.jwt;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import proj.pet.member.domain.MemberRole;
 
 @Getter
 @Builder
-public class FtPayload {
+public class JwtPayload {
 
 	private final Long id;
 	private final String email;
@@ -16,5 +16,5 @@ public class FtPayload {
 	private final Country country;
 	private final Language language;
 	private final MemberRole role;
-	
+
 }

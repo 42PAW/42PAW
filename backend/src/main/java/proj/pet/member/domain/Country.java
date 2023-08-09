@@ -1,8 +1,12 @@
 package proj.pet.member.domain;
 
 import lombok.Getter;
+import proj.pet.exception.DomainException;
 
 import java.util.List;
+import java.util.stream.Stream;
+
+import static proj.pet.exception.ExceptionStatus.INCORRECT_ARGUMENT;
 
 @Getter
 public enum Country {
@@ -48,6 +52,13 @@ public enum Country {
 
 	public static Country from(String country) {
 		return Country.valueOf(country.toUpperCase());
+	}
+
+	public static Country ofLocates(Campus campus) {
+		return Stream.of(Country.values())
+				.filter(country -> country.campuses.contains(campus))
+				.findFirst()
+				.orElseThrow(INCORRECT_ARGUMENT::toDomainException);
 	}
 
 	public enum Campus {
@@ -106,13 +117,21 @@ public enum Country {
 		CHISINAU("Chisinau", ""),
 		;
 
-
 		private final String name;
 		private final String emailExtension;
 
 		Campus(String name, String emailExtension) {
 			this.name = name;
 			this.emailExtension = emailExtension;
+		}
+
+		public static Campus from(String campusName) {
+			for (Campus campus : Campus.values()) {
+				if (campus.name.equals(campusName)) {
+					return campus;
+				}
+			}
+			throw new DomainException(INCORRECT_ARGUMENT);
 		}
 	}
 }

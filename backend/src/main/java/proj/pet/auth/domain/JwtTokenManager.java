@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import proj.pet.exception.DomainException;
+import proj.pet.member.domain.Country;
+import proj.pet.member.domain.Language;
+import proj.pet.member.domain.MemberRole;
 
 import java.security.Key;
 import java.util.Base64;
@@ -52,16 +55,17 @@ public class JwtTokenManager {
 		return false;
 	}
 
-	// TODO : 뭔가 여기 있을 녀석이 아닌 것 같다.
-//	public FtPayload createPayload(String token) {
-//		JsonNode payloadJson = extractPayloadJson(token);
-//		return FtPayload.builder()
-//				.id(payloadJson.get("id").asLong())
-//				.email(payloadJson.get("email").asText())
-//				.name(payloadJson.get("name").asText())
-//				.role(payloadJson.get("role").asText())
-//				.build();
-//	}
+	public FtPayload createFtPayload(String token) {
+		JsonNode payloadJson = extractPayloadJson(token);
+		return FtPayload.builder()
+				.id(payloadJson.get("id").asLong())
+				.email(payloadJson.get("email").asText())
+				.nickname(payloadJson.get("name").asText())
+				.country(Country.from(payloadJson.get("country").asText()))
+				.language(Language.from(payloadJson.get("language").asText()))
+				.role(MemberRole.from(payloadJson.get("role").asText()))
+				.build();
+	}
 
 	/**
 	 * 토큰의 Payload를 JsonNode(JSON) 형식으로 가져옵니다.

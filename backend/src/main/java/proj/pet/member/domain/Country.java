@@ -33,4 +33,8 @@ public enum Country {
 	MOROCCO,
 	ETC,
 	;
+
+	public static Country from(String country) {
+		return Country.valueOf(country.toUpperCase());
+	}
 }

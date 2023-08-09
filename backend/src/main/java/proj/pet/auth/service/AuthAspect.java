@@ -1,6 +1,5 @@
-package proj.pet.auth.domain;
+package proj.pet.auth.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -9,15 +8,17 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import proj.pet.auth.domain.*;
 import proj.pet.exception.DomainException;
+import proj.pet.exception.ServiceException;
 
-import static proj.pet.exception.ExceptionStatus.INVALID_ARGUMENT;
+import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
 import static proj.pet.exception.ExceptionStatus.UNAUTHORIZED;
 
 @Aspect
 @Component
 @RequiredArgsConstructor
-public class AuthAspectProcessor {
+public class AuthAspect {
 
 	private static final String AUTH_HEADER = "Authorization";
 	private static final String AUTH_TYPE = "Bearer";
@@ -34,7 +35,7 @@ public class AuthAspectProcessor {
 	 * @param authGuard 인터셉트 된 해당 {@link AuthGuard} - Level을 알아낼 수 있습니다.
 	 */
 	@Before("@annotation(authGuard))")
-	public void AuthToken(AuthGuard authGuard) throws JsonProcessingException {
+	public void AuthToken(AuthGuard authGuard) {
 		/**
 		 * 현재 인터셉트 된 서블릿의 {@link HttpServletRequest}를 가져옵니다.
 		 */
@@ -45,10 +46,14 @@ public class AuthAspectProcessor {
 
 		String token = extractTokenFrom(request);
 		if (!jwtTokenManager.isTokenValid(token, jwtProperties.getSigningKey())) {
-			throw new DomainException(UNAUTHORIZED);
+			cookieManager.deleteCookie(response, jwtProperties.getTokenName());
+			throw new ServiceException(UNAUTHORIZED);
 		}
-
-
+		FtPayload ftPayload = jwtTokenManager.createFtPayload(token);
+		if (!authGuard.level().isMatchWith(ftPayload.getRole())) {
+			cookieManager.deleteCookie(response, jwtProperties.getTokenName());
+			throw new ServiceException(UNAUTHENTICATED);
+		}
 	}
 
 	/**
@@ -56,11 +61,12 @@ public class AuthAspectProcessor {
 	 *
 	 * @param req 추출할 {@link HttpServletRequest}
 	 * @return 추출된 토큰 - AUTH_TYPE 이후 공백이 있기에 1을 더해서 substring 합니다.
+	 * @throws DomainException 토큰이 없거나, AUTH_TYPE이 유효하지 않을 경우.
 	 */
 	private String extractTokenFrom(HttpServletRequest req) {
 		String authHeader = req.getHeader(AUTH_HEADER);
 		if (authHeader == null || !authHeader.startsWith(AUTH_TYPE)) {
-			throw new DomainException(INVALID_ARGUMENT);
+			throw new DomainException(UNAUTHORIZED);
 		}
 		return authHeader.substring(AUTH_TYPE.length() + 1);
 	}

@@ -55,6 +55,12 @@ public class JwtTokenManager {
 		return false;
 	}
 
+	/**
+	 * 토큰의 Payload를 가져옵니다.
+	 *
+	 * @param token
+	 * @return
+	 */
 	public FtPayload createFtPayload(String token) {
 		JsonNode payloadJson = extractPayloadJson(token);
 		return FtPayload.builder()

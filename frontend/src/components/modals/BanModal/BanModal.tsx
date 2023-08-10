@@ -19,7 +19,7 @@ const BanModal: React.FC = () => {
 
   const handleOnClick = () => {
     closeModal(ModalType.BAN);
-    popToast(`${banUserInfo.userName} 님이 차단됐습니다.`);
+    popToast(`${banUserInfo.userName} 님이 차단됐습니다.`, "N");
   };
 
   return (

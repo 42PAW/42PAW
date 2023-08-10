@@ -9,4 +9,8 @@ export const ko = {
   report: "신고",
   delete: "삭제",
   logout: "로그아웃",
+
+  //languageModal.tsx
+  languageSetting: "언어 설정",
+  languageChangedToast: "언어 설정이 변경되었습니다.",
 };

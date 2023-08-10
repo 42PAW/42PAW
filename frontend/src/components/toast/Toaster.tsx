@@ -34,6 +34,7 @@ const Toast: React.FC = () => {
           key={index}
           $index={index}
           $isToastPopped={toast.isPopped}
+          $type={toast.type}
           onClick={closeAllToasts}
         >
           <p>{toast.text}</p>
@@ -64,12 +65,15 @@ const slideOut = keyframes`
 const ToastWrapperStyled = styled.div<{
   $index: number;
   $isToastPopped: boolean;
+  $type: string;
 }>`
   position: fixed;
   top: ${({ $index }) => 50 * $index + 20}px;
   right: 20px;
-  background-color: #fae4e3;
-  color: #dd4e48;
+  background-color: ${({ $type }) =>
+    $type === "P" ? "#eaf3ea" : $type === "N" ? "#fae4e3" : "#fae4e3"};
+  color: ${({ $type }) =>
+    $type === "P" ? "#0a5f0a" : $type === "N" ? "#dd4e48" : "#dd4e48"};
   padding: 5px 20px;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);

@@ -9,4 +9,8 @@ export const en = {
   report: "report",
   delete: "delete",
   logout: "Logout",
+
+  //languageModal.tsx
+  languageSetting: "Language Settings",
+  languageChangedToast: "Language settings have been changed.",
 };

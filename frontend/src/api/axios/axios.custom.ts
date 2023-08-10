@@ -3,16 +3,6 @@ import instance from "@/api/axios/axios.instance";
 import { SignUpInfoDTO } from "@/types/dto/member.dto";
 import { CreateBoardDTO } from "@/types/dto/board.dto";
 
-// const axiosLoginURL = "/v1/auth/login";
-// export const axiosLogin = async (): Promise<any> => {
-//   try {
-//     const response = await axios.get(axiosLoginURL);
-//     return response;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
 const axiosSignUpURL = "/v1/boards";
 export const axiosSignUp = async ({
   memberName,

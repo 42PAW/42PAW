@@ -39,7 +39,6 @@ const Layout = () => {
 
   useEffect(() => {
     if (token && !userInfo) {
-      console.log("token is here!");
       getMyInfo();
     }
   }, []);

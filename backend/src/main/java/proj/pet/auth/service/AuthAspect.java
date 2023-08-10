@@ -55,11 +55,14 @@ public class AuthAspect {
 			cookieManager.deleteCookie(response, jwtProperties.getTokenName());
 			throw new ServiceException(UNAUTHORIZED);
 		}
+		System.out.println("페이로드 깔거다");
 		JwtPayload jwtPayload = jwtTokenManager.createFtPayload(token);
 		MemberRole role = jwtPayload.getRole();
 		if (role.equals(NOT_REGISTERED)) {
+			System.out.println("나 여기있다");
 			response.sendRedirect(domainProperties.getFrontendHost() + "/sign-up");
 		}
+		System.out.println("리디렉션 안됐다");
 		if (!authGuard.level().isMatchWith(role)) {
 			cookieManager.deleteCookie(response, jwtProperties.getTokenName());
 			throw new ServiceException(UNAUTHENTICATED);

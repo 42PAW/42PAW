@@ -6,6 +6,8 @@ import { useRecoilState } from "recoil";
 import SettingButton from "@/components/SettingButton";
 import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
+import { axiosMyInfo } from "@/api/axios/axios.custom";
+import { getCookie } from "@/api/cookie/cookies";
 
 const url = `${import.meta.env.VITE_BE_HOST}/v1/auth/login`;
 
@@ -17,13 +19,26 @@ const LeftMenuDesktop = () => {
   );
   const [language] = useRecoilState<any>(languageState);
   const { openSearchSection } = useRightSectionHandler();
-
+  const token = getCookie("access_token");
   const handleLogin = () => {
     window.location.replace(url);
   };
 
   const handleLogout = () => {
     setUserInfo(null);
+  };
+
+  const getMyInfo = async () => {
+    try {
+      if (!token) {
+        return;
+      }
+      console.log("TOKEN1");
+      const { data: myInfo } = await axiosMyInfo();
+      setUserInfo(myInfo);
+    } catch (error) {
+      throw error;
+    }
   };
 
   return (
@@ -57,6 +72,7 @@ const LeftMenuDesktop = () => {
             />
           )}
         </nav>
+        <button onClick={getMyInfo}>멤버스미</button>
         {userInfo ? (
           <LoginButtonStyled onClick={handleLogout}>
             {language.logout}

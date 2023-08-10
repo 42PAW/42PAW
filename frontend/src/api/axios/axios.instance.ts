@@ -10,10 +10,11 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(async (config: any) => {
-  const token = getCookie("admin_access_token") ?? getCookie("access_token");
+  const token = getCookie("access_token");
   config.headers = {
     Authorization: `Bearer ${token}`,
   };
+
   return config;
 });
 

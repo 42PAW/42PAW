@@ -1,5 +1,6 @@
 package proj.pet.member.contorller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,10 @@ public class MemberController {
 	private final MemberFacadeService memberFacadeService;
 
 	@PostMapping("/")
-	public void createMember(@RequestBody MemberCreateRequestDto memberCreateRequestDto) {
-		memberFacadeService.createMember(memberCreateRequestDto);
+	public void createMember(
+			HttpServletRequest req, HttpServletResponse res,
+			@RequestBody MemberCreateRequestDto memberCreateRequestDto) {
+		memberFacadeService.createMember(req, res, memberCreateRequestDto);
 	}
 
 	@GetMapping("/valid")

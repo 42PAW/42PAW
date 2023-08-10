@@ -1,25 +1,28 @@
 package proj.pet.member.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import proj.pet.auth.service.OauthService;
 import proj.pet.board.dto.BoardsResponseDto;
-import proj.pet.member.dto.MemberCreateRequestDto;
-import proj.pet.member.dto.MemberLanguageChangeRequestDto;
-import proj.pet.member.dto.MemberMyInfoResponseDto;
-import proj.pet.member.dto.MemberMyProfileResponseDto;
-import proj.pet.member.dto.MemberNicknameValidateResponseDto;
-import proj.pet.member.dto.MemberPreviewResponseDto;
-import proj.pet.member.dto.MemberProfileChangeRequestDto;
-import proj.pet.member.dto.MemberProfileChangeResponseDto;
-import proj.pet.member.dto.MemberSearchResponseDto;
-import proj.pet.member.dto.UserSessionDto;
+import proj.pet.member.dto.*;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberFacadeServiceImpl implements MemberFacadeService {
 
+	private final MemberService memberService;
+	private final OauthService oauthService;
+
 	@Override
-	public void createMember(MemberCreateRequestDto memberCreateRequestDto) {
+	public void createMember(HttpServletRequest req, HttpServletResponse res, MemberCreateRequestDto memberCreateRequestDto) {
+		memberService.createMember(memberCreateRequestDto);
+		oauthService.refreshRoleOfServerToken(req, res, LocalDateTime.now());
 	}
 
 	@Override
@@ -66,7 +69,7 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 
 	@Override
 	public void changeLanguage(UserSessionDto userSession,
-			MemberLanguageChangeRequestDto memberLanguageChangeRequestDto) {
+	                           MemberLanguageChangeRequestDto memberLanguageChangeRequestDto) {
 
 	}
 }

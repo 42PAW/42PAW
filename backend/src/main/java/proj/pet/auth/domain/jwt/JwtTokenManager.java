@@ -17,6 +17,7 @@ import proj.pet.member.domain.MemberRole;
 
 import java.security.Key;
 import java.util.Base64;
+import java.util.Map;
 
 import static proj.pet.exception.ExceptionStatus.INTERNAL_SERVER_ERROR;
 import static proj.pet.exception.ExceptionStatus.UNAUTHORIZED;
@@ -72,6 +73,16 @@ public class JwtTokenManager {
 				.campus(Country.Campus.from(payloadJson.get("campus").asText()))
 				.role(MemberRole.from(payloadJson.get("role").asText()))
 				.build();
+	}
+
+	public Map<String, Object> extractClaims(String token) {
+		JsonNode payloadJson = extractPayloadJson(token);
+		return Map.of(
+				"email", payloadJson.get("email").asText(),
+				"oauthName", payloadJson.get("oauthName").asText(),
+				"campus", Country.Campus.from(payloadJson.get("campus").asText()),
+				"role", MemberRole.from(payloadJson.get("role").asText())
+		);
 	}
 
 	/**

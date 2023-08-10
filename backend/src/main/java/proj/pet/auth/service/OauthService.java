@@ -12,9 +12,10 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import proj.pet.auth.domain.ApiRequestManager;
 import proj.pet.auth.domain.CookieManager;
-import proj.pet.auth.domain.DomainProperties;
 import proj.pet.auth.domain.OauthProperties;
+import proj.pet.auth.domain.jwt.JwtPayload;
 import proj.pet.auth.domain.jwt.JwtProperties;
+import proj.pet.auth.domain.jwt.JwtTokenManager;
 import proj.pet.auth.domain.jwt.JwtTokenProvider;
 import proj.pet.exception.ExceptionStatus;
 import proj.pet.exception.ServiceException;
@@ -39,8 +40,8 @@ public class OauthService {
 
 	private final ObjectMapper objectMapper;
 	private final JwtTokenProvider tokenProvider;
+	private final JwtTokenManager tokenManager;
 	private final JwtProperties jwtProperties;
-	private final DomainProperties domainProperties;
 	private final CookieManager cookieManager;
 	private final MemberRepository memberRepository;
 
@@ -143,9 +144,24 @@ public class OauthService {
 	 * @param res    클라이언트의 응답 서블릿
 	 * @param now    현재 시간
 	 */
-	public void provideServerTokenToClient(Map<String, Object> claims, HttpServletRequest req, HttpServletResponse res, LocalDateTime now) throws IOException {
-		String serverToken = tokenProvider.createToken(claims, jwtProperties.getSigningKey(), jwtProperties.getExpiry(), now);
+	public void provideServerTokenToClient(Map<String, Object> claims, HttpServletRequest req, HttpServletResponse res, LocalDateTime now) {
+		JwtPayload payload = JwtPayload.from(claims);
+		String serverToken = tokenProvider.createToken(payload, jwtProperties.getSigningKey(), jwtProperties.getExpiry(), now);
 		Cookie cookie = cookieManager.cookieOf(jwtProperties.getTokenName(), serverToken);
 		cookieManager.setCookieToClient(res, cookie, "/", req.getServerName(), (int) jwtProperties.getExpiry());
 	}
+
+	public void refreshRoleOfServerToken(HttpServletRequest req, HttpServletResponse res, LocalDateTime now) {
+		String oldToken = cookieManager.getCookieValue(req, jwtProperties.getTokenName());
+		Map<String, Object> claims = tokenManager.extractClaims(oldToken);
+		String oauthName = claims.get("oauthName").toString();
+		memberRepository.findByOauthName(oauthName)
+				.ifPresentOrElse(
+						member -> claims.put("role", member.getMemberRole()),
+						() -> claims.put("role", NOT_REGISTERED));
+		String newToken = tokenProvider.createToken(JwtPayload.from(claims), jwtProperties.getSigningKey(), jwtProperties.getExpiry(), now);
+		Cookie cookie = cookieManager.cookieOf(jwtProperties.getTokenName(), newToken);
+		cookieManager.setCookieToClient(res, cookie, "/", req.getServerName(), (int) jwtProperties.getExpiry());
+	}
+
 }

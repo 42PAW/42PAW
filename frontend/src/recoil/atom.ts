@@ -6,7 +6,12 @@ import { BoardCategory } from "@/types/enum/board.category.enum";
 import { IBanUserInfo } from "@/types/interface/user.interface";
 import { IToastInfo } from "@/types/interface/toast.interface";
 import Translator from "@/languages/Translator";
-import { Language } from "@/types/enum/language.enum";
+import { UserInfoDTO } from "@/types/dto/member.dto";
+
+export const userInfoState = atom<UserInfoDTO | null>({
+  key: "userInfo",
+  default: null,
+});
 
 /**현재까지 불러온 기본 정렬 게시물 목록*/
 export const defaultBoardsState = atom<BoardsInfoDTO>({
@@ -96,5 +101,5 @@ export const banUserInfoState = atom<IBanUserInfo>({
 
 export const languageState = atom<any>({
   key: "language",
-  default: Translator.fr,
+  default: Translator.ko,
 });

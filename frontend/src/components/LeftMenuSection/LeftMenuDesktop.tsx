@@ -3,13 +3,28 @@ import useNavigateCustom from "@/hooks/useNavigateCustom";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { languageState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
-import SettingButton from "../SettingButton";
+import SettingButton from "@/components/SettingButton";
+import { userInfoState } from "@/recoil/atom";
+import { UserInfoDTO } from "@/types/dto/member.dto";
+
+const url = `${import.meta.env.VITE_BE_HOST}/v1/auth/login`;
 
 const LeftMenuDesktop = () => {
   const { moveToMain, moveToNotice, moveToMyProfile, moveToUpload } =
     useNavigateCustom();
-  const { openSearchSection } = useRightSectionHandler();
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoDTO | null>(
+    userInfoState
+  );
   const [language] = useRecoilState<any>(languageState);
+  const { openSearchSection } = useRightSectionHandler();
+
+  const handleLogin = () => {
+    window.location.replace(url);
+  };
+
+  const handleLogout = () => {
+    setUserInfo(null);
+  };
 
   return (
     <>
@@ -33,9 +48,22 @@ const LeftMenuDesktop = () => {
               <img alt="Notice" src="/src/assets/notice.png" />
             </li>
           </MenuListStyled>
-          <ProfileImageStyled src="/src/assets/profileImage.jpg" />
+          {userInfo ? (
+            <ProfileImageStyled src={userInfo.profileImageUrl} />
+          ) : (
+            <ProfileImageStyled
+              src="/src/assets/userW.png"
+              onClick={handleLogin}
+            />
+          )}
         </nav>
-        <LoginButtonStyled>{language.logout}</LoginButtonStyled>
+        {userInfo ? (
+          <LoginButtonStyled onClick={handleLogout}>
+            {language.logout}
+          </LoginButtonStyled>
+        ) : (
+          <LoginButtonStyled onClick={handleLogin}>로그인</LoginButtonStyled>
+        )}
       </LeftMenuStyled>
       <SettingButtonContainerStyled>
         <SettingButton />
@@ -87,11 +115,12 @@ const MenuListStyled = styled.ul`
   }
   img:hover {
     background-color: var(--transparent);
-    border-radius: 30%;
+    border-radius: 50%;
   }
 `;
 
 const ProfileImageStyled = styled.img`
+  cursor: pointer;
   width: 50px;
   border-radius: 100%;
   &:hover {

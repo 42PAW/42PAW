@@ -11,9 +11,10 @@ public class CorsConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-				.allowedOrigins("*") // TODO : 이후에 배포된 도메인 추가
+				.allowedOrigins("http://localhost:2424") // TODO : 이후에 배포된 도메인 추가
 				.allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH")
 				.maxAge(3600)
+				.allowCredentials(true)
 				.allowedHeaders("*");
 	}
 }

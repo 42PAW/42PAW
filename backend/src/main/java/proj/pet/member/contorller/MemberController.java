@@ -1,25 +1,13 @@
 package proj.pet.member.contorller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import proj.pet.auth.domain.AuthGuard;
 import proj.pet.board.dto.BoardsResponseDto;
-import proj.pet.member.dto.MemberCreateRequestDto;
-import proj.pet.member.dto.MemberLanguageChangeRequestDto;
-import proj.pet.member.dto.MemberMyInfoResponseDto;
-import proj.pet.member.dto.MemberMyProfileResponseDto;
-import proj.pet.member.dto.MemberNicknameValidateResponseDto;
-import proj.pet.member.dto.MemberPreviewResponseDto;
-import proj.pet.member.dto.MemberProfileChangeRequestDto;
-import proj.pet.member.dto.MemberProfileChangeResponseDto;
-import proj.pet.member.dto.MemberSearchResponseDto;
+import proj.pet.member.dto.*;
 import proj.pet.member.service.MemberFacadeService;
+
+import static proj.pet.auth.domain.AuthLevel.USER_OR_ADMIN;
 
 @RestController
 @RequestMapping("/v1/members")
@@ -40,6 +28,7 @@ public class MemberController {
 	}
 
 	@GetMapping("me")
+	@AuthGuard(level = USER_OR_ADMIN)
 	public MemberMyInfoResponseDto getMyInfo() {
 		//TODO: user 세션에서 가져오기
 //		return memberFacadeService.getMyInfo();

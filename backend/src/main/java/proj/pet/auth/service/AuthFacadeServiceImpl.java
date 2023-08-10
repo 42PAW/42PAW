@@ -14,10 +14,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthFacadeServiceImpl implements AuthFacadeService {
 	private final OauthService oauthService;
-	private final AuthService authService;
 
 	@Override public void requestLoginToApi(HttpServletResponse res, OauthProperties oauthProperties) {
 		oauthService.sendCodeRequestToOauth(res, oauthProperties);
+		System.out.println();
 	}
 
 	@Override public void handleLogin(String code, HttpServletRequest req, HttpServletResponse res, OauthProperties oauthProperties, LocalDateTime now) {

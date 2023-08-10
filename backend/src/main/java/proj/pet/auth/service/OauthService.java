@@ -19,7 +19,6 @@ import proj.pet.auth.domain.jwt.JwtTokenProvider;
 import proj.pet.exception.ExceptionStatus;
 import proj.pet.exception.ServiceException;
 import proj.pet.member.domain.Country;
-import proj.pet.member.domain.MemberRole;
 import proj.pet.member.repository.MemberRepository;
 
 import java.io.IOException;
@@ -145,10 +144,6 @@ public class OauthService {
 	 * @param now    현재 시간
 	 */
 	public void provideServerTokenToClient(Map<String, Object> claims, HttpServletRequest req, HttpServletResponse res, LocalDateTime now) throws IOException {
-		MemberRole role = (MemberRole) claims.get("role");
-		if (role.equals(NOT_REGISTERED)) {
-			res.sendRedirect(domainProperties.getFrontendHost() + "/sign-up");
-		}
 		String serverToken = tokenProvider.createToken(claims, jwtProperties.getSigningKey(), jwtProperties.getExpiry(), now);
 		Cookie cookie = cookieManager.cookieOf(jwtProperties.getTokenName(), serverToken);
 		cookieManager.setCookieToClient(res, cookie, "/", req.getServerName(), (int) jwtProperties.getExpiry());

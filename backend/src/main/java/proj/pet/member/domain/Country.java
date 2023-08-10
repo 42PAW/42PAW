@@ -120,17 +120,17 @@ public enum Country {
 		CHISINAU("Chisinau", ""),
 		;
 
-		private final String name;
+		private final String originalName;
 		private final String emailExtension;
 
-		Campus(String name, String emailExtension) {
-			this.name = name;
+		Campus(String originalName, String emailExtension) {
+			this.originalName = originalName;
 			this.emailExtension = emailExtension;
 		}
 
 		public static Campus from(String campusName) {
 			for (Campus campus : Campus.values()) {
-				if (campus.name.equals(campusName)) {
+				if (campus.getOriginalName().equals(campusName) || campus.name().equals(campusName.toUpperCase())) {
 					return campus;
 				}
 			}

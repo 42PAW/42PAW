@@ -102,7 +102,7 @@ public class OauthService {
 		claims.put("email", profile.get("email").asText());
 		String oauthName = profile.get("login").asText();
 		claims.put("oauthName", oauthName);
-		claims.put("campus", Country.Campus.from(profile.get("campus").get(0).get("name").asText()).getName());
+		claims.put("campus", Country.Campus.from(profile.get("campus").get(0).get("name").asText()).getOriginalName());
 		memberRepository.findByOauthName(oauthName)
 				.ifPresentOrElse(
 						member -> claims.put("role", member.getMemberRole()),

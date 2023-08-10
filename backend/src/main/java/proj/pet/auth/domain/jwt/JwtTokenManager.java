@@ -67,6 +67,7 @@ public class JwtTokenManager {
 	 */
 	public JwtPayload createFtPayload(String token) {
 		JsonNode payloadJson = extractPayloadJson(token);
+		System.out.println("payloadJson = " + payloadJson);
 		return JwtPayload.builder()
 				.email(payloadJson.get("email").asText())
 				.oauthName(payloadJson.get("oauthName").asText())

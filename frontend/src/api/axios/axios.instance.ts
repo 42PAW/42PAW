@@ -1,6 +1,9 @@
 import axios from "axios";
 import { getCookie, removeCookie } from "@/api/cookie/cookies";
-import { STATUS_401_UNAUTHORIZED } from "@/types/constants/StatusCode";
+import {
+  STATUS_401_UNAUTHORIZED,
+  STATUS_403_FORBIDDEN,
+} from "@/types/constants/StatusCode";
 
 // axios.defaults.withCredentials = true;
 
@@ -23,8 +26,7 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
-    // access_token unauthorized
-    if (error.response?.status === 403) {
+    if (error.response?.status === STATUS_403_FORBIDDEN) {
       window.location.href = "/sign-up";
     }
     if (error.response?.status === STATUS_401_UNAUTHORIZED) {

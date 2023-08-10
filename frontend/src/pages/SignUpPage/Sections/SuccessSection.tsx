@@ -1,6 +1,10 @@
 import { styled } from "styled-components";
 import createConfetti from "canvas-confetti";
 import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
+import { useEffect } from "react";
+import { axiosSignUp } from "@/api/axios/axios.custom";
+
+const url = `${import.meta.env.VITE_AUTH_LOGIN}`;
 
 const SuccessSection: React.FC<SectionProps> = ({ registerData }) => {
   createConfetti({
@@ -8,6 +12,18 @@ const SuccessSection: React.FC<SectionProps> = ({ registerData }) => {
     spread: 150,
     origin: { x: 0.5, y: 0.5 },
   });
+
+  const signUpComplete = async () => {
+    const response = await axiosSignUp(registerData);
+    console.log(response);
+    setTimeout(() => {
+      window.location.replace(url);
+    }, 100);
+  };
+
+  useEffect(() => {
+    signUpComplete();
+  }, []);
 
   return (
     <WrapperStyled>

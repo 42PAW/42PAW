@@ -28,20 +28,20 @@ const Layout = () => {
   const isSignUpPage: boolean = location.pathname === "/sign-up";
   const isProfilePage: boolean = location.pathname === "/profile";
 
-  // const getMyInfo = async () => {
-  //   try {
-  //     const { data: myInfo } = await axiosMyInfo();
-  //     setUserInfo(myInfo);
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // };
+  const getMyInfo = async () => {
+    try {
+      const { data: myInfo } = await axiosMyInfo();
+      setUserInfo(myInfo);
+    } catch (error) {
+      throw error;
+    }
+  };
 
-  // useEffect(() => {
-  //   if (token && !userInfo) {
-  //     getMyInfo();
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (token && !userInfo) {
+      getMyInfo();
+    }
+  }, []);
 
   return isSignUpPage ? (
     <Outlet />

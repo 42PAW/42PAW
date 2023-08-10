@@ -1,11 +1,14 @@
 package proj.pet.member.contorller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import proj.pet.auth.domain.AuthGuard;
 import proj.pet.board.dto.BoardsResponseDto;
 import proj.pet.member.dto.*;
 import proj.pet.member.service.MemberFacadeService;
+
+import java.io.IOException;
 
 import static proj.pet.auth.domain.AuthLevel.USER_OR_ADMIN;
 
@@ -27,15 +30,17 @@ public class MemberController {
 		return memberFacadeService.validateMemberNickname(name);
 	}
 
-	@GetMapping("me")
+	@GetMapping("/me")
 	@AuthGuard(level = USER_OR_ADMIN)
-	public MemberMyInfoResponseDto getMyInfo() {
+	public String getMyInfo(HttpServletResponse response) throws IOException {
 		//TODO: user 세션에서 가져오기
+		System.out.println("getMyInfo");
+//		response.sendRedirect("http://naver.com");
 //		return memberFacadeService.getMyInfo();
-		return null;
+		return "hello";
 	}
 
-	@GetMapping("me/profile")
+	@GetMapping("/me/profile")
 	public MemberMyProfileResponseDto getMyProfile() {
 		//TODO: user 세션에서 가져오기
 //		return memberFacadeService.getMyProfile();

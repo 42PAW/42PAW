@@ -33,7 +33,6 @@ const LeftMenuDesktop = () => {
       if (!token) {
         return;
       }
-      console.log("TOKEN1");
       const { data: myInfo } = await axiosMyInfo();
       setUserInfo(myInfo);
     } catch (error) {

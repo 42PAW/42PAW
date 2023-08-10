@@ -2,7 +2,7 @@ import axios from "axios";
 import { getCookie, removeCookie } from "@/api/cookie/cookies";
 import { STATUS_401_UNAUTHORIZED } from "@/types/constants/StatusCode";
 
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BE_HOST,
@@ -24,6 +24,9 @@ instance.interceptors.response.use(
   },
   (error) => {
     // access_token unauthorized
+    if (error.response?.status === 403) {
+      window.location.href = "/sign-up";
+    }
     if (error.response?.status === STATUS_401_UNAUTHORIZED) {
       if (import.meta.env.VITE_IS_LOCAL === "true") {
         removeCookie("admin_access_token", {

@@ -9,4 +9,6 @@ import proj.pet.member.repository.MemberRepository;
 public class AuthServiceImpl implements AuthService {
 
 	private final MemberRepository memberRepository;
+
+
 }

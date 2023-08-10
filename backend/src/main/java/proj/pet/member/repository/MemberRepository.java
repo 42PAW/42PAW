@@ -6,10 +6,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import proj.pet.member.domain.Member;
 
+import java.util.Optional;
+
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 	@Query("SELECT m " +
 			"FROM Member m " +
 			"WHERE m.oauthProfile.name = :oauthName")
-	Member findByOauthName(@Param("oauthName") String oauthName);
+	Optional<Member> findByOauthName(@Param("oauthName") String oauthName);
 }

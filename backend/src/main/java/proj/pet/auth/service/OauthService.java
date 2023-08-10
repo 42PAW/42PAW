@@ -12,12 +12,15 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import proj.pet.auth.domain.ApiRequestManager;
 import proj.pet.auth.domain.CookieManager;
+import proj.pet.auth.domain.DomainProperties;
 import proj.pet.auth.domain.OauthProperties;
 import proj.pet.auth.domain.jwt.JwtProperties;
 import proj.pet.auth.domain.jwt.JwtTokenProvider;
 import proj.pet.exception.ExceptionStatus;
 import proj.pet.exception.ServiceException;
 import proj.pet.member.domain.Country;
+import proj.pet.member.domain.MemberRole;
+import proj.pet.member.repository.MemberRepository;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -26,7 +29,7 @@ import java.util.Map;
 
 import static proj.pet.exception.ExceptionStatus.INTERNAL_SERVER_ERROR;
 import static proj.pet.exception.ExceptionStatus.OAUTH_BAD_GATEWAY;
-import static proj.pet.member.domain.MemberRole.USER;
+import static proj.pet.member.domain.MemberRole.NOT_REGISTERED;
 
 /**
  * OAuth 관련 작업을 처리하는 서비스 클래스.
@@ -38,7 +41,9 @@ public class OauthService {
 	private final ObjectMapper objectMapper;
 	private final JwtTokenProvider tokenProvider;
 	private final JwtProperties jwtProperties;
+	private final DomainProperties domainProperties;
 	private final CookieManager cookieManager;
+	private final MemberRepository memberRepository;
 
 	/**
 	 * OAuth 인증을 위한 요청(authorization code 요청)을 보냅니다.
@@ -95,9 +100,13 @@ public class OauthService {
 	public Map<String, Object> makeClaimsByProviderProfile(JsonNode profile) {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("email", profile.get("email").asText());
-		claims.put("oauthName", profile.get("login").asText());
+		String oauthName = profile.get("login").asText();
+		claims.put("oauthName", oauthName);
 		claims.put("campus", Country.Campus.from(profile.get("campus").get(0).get("name").asText()).getName());
-		claims.put("role", USER);
+		memberRepository.findByOauthName(oauthName)
+				.ifPresentOrElse(
+						member -> claims.put("role", member.getMemberRole()),
+						() -> claims.put("role", NOT_REGISTERED));
 		return claims;
 	}
 
@@ -135,7 +144,11 @@ public class OauthService {
 	 * @param res    클라이언트의 응답 서블릿
 	 * @param now    현재 시간
 	 */
-	public void provideServerTokenToClient(Map<String, Object> claims, HttpServletRequest req, HttpServletResponse res, LocalDateTime now) {
+	public void provideServerTokenToClient(Map<String, Object> claims, HttpServletRequest req, HttpServletResponse res, LocalDateTime now) throws IOException {
+		MemberRole role = (MemberRole) claims.get("role");
+		if (role.equals(NOT_REGISTERED)) {
+			res.sendRedirect(domainProperties.getFrontendHost() + "/sign-up");
+		}
 		String serverToken = tokenProvider.createToken(claims, jwtProperties.getSigningKey(), jwtProperties.getExpiry(), now);
 		Cookie cookie = cookieManager.cookieOf(jwtProperties.getTokenName(), serverToken);
 		cookieManager.setCookieToClient(res, cookie, "/", req.getServerName(), (int) jwtProperties.getExpiry());

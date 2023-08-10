@@ -1,6 +1,60 @@
 import axios from "axios";
 import instance from "@/api/axios/axios.instance";
+import { SignUpInfoDTO } from "@/types/dto/member.dto";
 import { CreateBoardDTO } from "@/types/dto/board.dto";
+
+// const axiosLoginURL = "/v1/auth/login";
+// export const axiosLogin = async (): Promise<any> => {
+//   try {
+//     const response = await axios.get(axiosLoginURL);
+//     return response;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
+
+const axiosSignUpURL = "/v1/boards";
+export const axiosSignUp = async ({
+  memberName,
+  imageData,
+  statement,
+  categoryFilters,
+}: SignUpInfoDTO): Promise<any> => {
+  try {
+    const formData = new FormData();
+    formData.append(
+      "memberName",
+      new Blob([memberName], { type: "application/json" })
+    );
+    formData.append("imageData", imageData ? imageData : "null");
+    formData.append(
+      "statement",
+      new Blob([statement], { type: "application/json" })
+    );
+    formData.append(
+      "categoryFilters",
+      new Blob([JSON.stringify(categoryFilters)], { type: "application/json" })
+    );
+    const response = await instance.post(axiosSignUpURL, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosMyInfoURL = "/v1/members/me";
+export const axiosMyInfo = async (): Promise<any> => {
+  try {
+    const response = await instance.get(axiosMyInfoURL);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const axiosGetBoardsURL =
   "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/boards";

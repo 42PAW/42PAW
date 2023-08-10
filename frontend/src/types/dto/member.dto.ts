@@ -6,3 +6,10 @@ export interface SignUpInfoDTO {
   statement: string;
   categoryFilters: AnimalSpecies[];
 }
+
+export interface UserInfoDTO {
+  memberName: string;
+  intraName: string;
+  profileImageUrl: string;
+  language: string;
+}

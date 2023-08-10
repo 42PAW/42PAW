@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
@@ -7,19 +8,43 @@ import RightSection from "@/components/RightSection/RightSection";
 import BoardSortToggle from "@/components/BoardSortToggle";
 import ModalContainer from "@/components/modals/ModalContainer";
 import Toaster from "@/components/toast/Toaster";
+import { getCookie } from "@/api/cookie/cookies";
+import { axiosMyInfo } from "@/api/axios/axios.custom";
+import { userInfoState } from "@/recoil/atom";
+import { UserInfoDTO } from "@/types/dto/member.dto";
 
 const Layout = () => {
   const location = useLocation();
+  const token = getCookie("access_token");
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoDTO | null>(
+    userInfoState
+  );
   const [isRightSectionOpened] = useRecoilState<boolean>(
     isRightSectionOpenedState
   );
 
   /**메인 화면일 때만 게시글 정렬 버튼 보여주기*/
   const isMainPage: boolean = location.pathname === "/";
-  const isSignInPage: boolean = location.pathname === "/sign-up";
+  const isSignUpPage: boolean = location.pathname === "/sign-up";
   const isProfilePage: boolean = location.pathname === "/profile";
 
-  return isSignInPage ? (
+  const getMyInfo = async () => {
+    try {
+      const { data: myInfo } = await axiosMyInfo();
+      setUserInfo(myInfo);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    if (token && !userInfo) {
+      console.log("token is here!");
+      getMyInfo();
+    }
+  }, []);
+
+  return isSignUpPage ? (
     <Outlet />
   ) : (
     <WrapperStyled>

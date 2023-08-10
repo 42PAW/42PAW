@@ -20,7 +20,7 @@ public class MemberController {
 
 	private final MemberFacadeService memberFacadeService;
 
-	@PostMapping("/")
+	@PostMapping
 	public void createMember(
 			HttpServletRequest req, HttpServletResponse res,
 			@RequestBody MemberCreateRequestDto memberCreateRequestDto) {

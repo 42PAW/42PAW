@@ -23,13 +23,14 @@ const RightSection = () => {
     <>
       <RightSectionStyled $isRightSectionOpened={isRightSectionOpened}>
         <CloseButtonContainerStyled>
+          {/* {rightSectionContent.search && <SearchBar /> } */}
           <CloseButtonStyled onClick={closeRightSection}>
             <img src="/src/assets/exitW.png" />
           </CloseButtonStyled>
         </CloseButtonContainerStyled>
         <RightSectionBodyStyled>
           {rightSectionContent.comment && <CommentSection />}
-          {rightSectionContent.search && <SearchSection />}
+          {rightSectionContent.search &&  <SearchSection />}
           {rightSectionContent.animalFilter && <AnimalFilterSection />}
         </RightSectionBodyStyled>
       </RightSectionStyled>

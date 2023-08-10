@@ -23,7 +23,11 @@ const ModalLayout: React.FC<IModalLayoutProps> = ({
 
   if (!isOpen) return null;
   return (
-    <ModalOverlay onClick={() => closeModal(modalName)}>
+    <ModalOverlay
+      onClick={() => {
+        if (modalName != ModalType.PROFILEEDIT) closeModal(modalName);
+      }}
+    >
       <ModalContainer onClick={(e: React.MouseEvent) => e.stopPropagation()}>
         {children}
       </ModalContainer>

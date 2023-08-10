@@ -1,4 +1,6 @@
 import { useState } from "react";
+import useModal from "../hooks/useModal";
+import { ModalType } from "../types/enum/modal.enum";
 import styled from "styled-components";
 import Button from "@/components/ButtonComponent";
 
@@ -65,12 +67,18 @@ function CountInfo({
 }
 
 const ProfileTemplate = () => {
-  const [click, setClick] = useState(0);
+  //   const [click, setClick] = useState(0);
 
-  const handleClick = () => {
-    setClick(click + 1);
-    console.log({ click });
+  //   const handleClick = () => {
+  //     setClick(click + 1);
+  //     console.log({ click });
+  //   };
+  const { openModal } = useModal();
+
+  const handleOpenProfile = () => {
+    openModal(ModalType.PROFILEEDIT); // PROFILECARD -> 바꿔야 돼 다시
   };
+
   return (
     <ProfileWrapperStyled>
       <ProfileHeaderStyled>
@@ -85,7 +93,11 @@ const ProfileTemplate = () => {
             followingCount={profileInfo.followingCount}
           />
           <CaptionSectionStyled>{profileInfo.statement}</CaptionSectionStyled>
-          <Button handleClick={handleClick} size="lg" children="프로필 편집" />
+          <Button
+            handleClick={handleOpenProfile}
+            size="lg"
+            children="프로필 편집"
+          />
         </ProfileHeaderRightSectionStyled>
       </ProfileHeaderStyled>
       <ProfileBodyStyled>

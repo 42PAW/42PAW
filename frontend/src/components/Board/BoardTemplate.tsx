@@ -38,7 +38,7 @@ const BoardTemplate = (board: IBoardInfo) => {
     setCurrentBoardId(boardId);
   };
   const handleOpenProfile = () => {
-    openModal(ModalType.PROFILECARD);
+    openModal(ModalType.PROFILECARD); // PROFILECARD -> 바꿔야 돼 다시
   };
 
   return (

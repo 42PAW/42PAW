@@ -1,4 +1,4 @@
-import ImageUploader from "./ImageUploader";
+import ImageUploader from "@/pages/ImageUploader";
 
 const UploadPage = () => {
   return (

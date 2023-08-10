@@ -4,66 +4,89 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.category.domain.BoardCategoryFilter;
-import proj.pet.comment.domain.Comment;
 import proj.pet.member.domain.Member;
 import proj.pet.reaction.domain.Reaction;
-import proj.pet.report.domain.Report;
-import proj.pet.scrap.domain.Scrap;
+import proj.pet.utils.domain.IdDomain;
+import proj.pet.utils.domain.RuntimeExceptionThrower;
+import proj.pet.utils.domain.Validatable;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.AUTO;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Table(name = "BOARD")
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-public class Board {
+public class Board extends IdDomain implements Validatable {
 
-	@Id
-	@GeneratedValue(strategy = AUTO)
-	private Long id;
-
+	@OneToMany(mappedBy = "board",
+			targetEntity = BoardMedia.class,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private final List<BoardMedia> mediaList = new ArrayList<>();
+	@OneToMany(mappedBy = "board",
+			targetEntity = BoardCategoryFilter.class,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private final List<BoardCategoryFilter> categoryFilters = new ArrayList<>();
+	@OneToMany(mappedBy = "board",
+			targetEntity = Reaction.class,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private final List<Reaction> reactions = new ArrayList<>();
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "member_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "MEMBER_ID", nullable = false, updatable = false)
 	private Member member;
-
-	@Column(name = "visible_scope", nullable = false)
+	@Column(name = "VISIBLE_SCOPE", nullable = false, length = 32)
+	@Enumerated(EnumType.STRING)
 	private VisibleScope visibleScope;
-
 	/**
 	 * null이 아닌 빈 문자열을 들고 있도록 설정
 	 */
-	@Column(name = "content", nullable = false)
+	@Column(name = "CONTENT", nullable = false)
 	private String content;
-
-	@Column(name = "updated_at", nullable = false)
+	@Column(name = "UPDATED_AT", nullable = false)
 	private LocalDateTime updatedAt;
-
-	@Column(name = "created_at", nullable = false)
+	@Column(name = "CREATED_AT", nullable = false)
 	private LocalDateTime createdAt;
-
-	@Column(name = "deleted_at")
+	@Column(name = "DELETED_AT")
 	private LocalDateTime deletedAt;
 
-	@OneToMany(mappedBy = "board", fetch = LAZY)
-	private List<BoardImage> images;
+	protected Board(Member member, VisibleScope visibleScope, String content, LocalDateTime now) {
+		this.member = member;
+		this.visibleScope = visibleScope;
+		this.content = content;
+		this.updatedAt = now;
+		this.createdAt = now;
+		RuntimeExceptionThrower.checkValidity(this);
+	}
 
-	@OneToMany(mappedBy = "board", fetch = LAZY)
-	private List<BoardCategoryFilter> categoryFilters;
+	public static Board of(Member member, VisibleScope visibleScope, String content, LocalDateTime now) {
+		return new Board(member, visibleScope, content, now);
+	}
 
-	@OneToMany(mappedBy = "board", fetch = LAZY)
-	private List<Scrap> scrapedList;
+	@Override public boolean isValid() {
+		return this.member != null
+				&& !this.member.isNew()
+				&& this.visibleScope != null
+				&& this.content != null
+				&& this.updatedAt != null
+				&& this.createdAt != null;
+	}
 
-	@OneToMany(mappedBy = "board", fetch = LAZY)
-	private List<Comment> comments;
+	public void addCategoryFilters(List<BoardCategoryFilter> categoryFilters) {
+		this.categoryFilters.addAll(categoryFilters);
+	}
 
-	@OneToMany(mappedBy = "board", fetch = LAZY)
-	private List<Reaction> reactions;
+	public void addMediaList(List<BoardMedia> mediaList) {
+		this.mediaList.addAll(mediaList);
+	}
 
-	@OneToMany(mappedBy = "board", fetch = LAZY)
-	private List<Report> reportedList;
+	public boolean isOwnedBy(Member member) {
+		return this.member.equals(member);
+	}
 }

@@ -1,15 +1,14 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import {
   isRightSectionOpenedState,
   rightSectionContentState,
-} from "../../recoil/atom";
+} from "@/recoil/atom";
 import { useRecoilState } from "recoil";
-import CommentSection from "./CommentSection/CommentSection";
-import SearchBar from "./SearchSection/SearchBar";
-import SearchSection from "./SearchSection/SearchSection";
-import AnimalFilterSection from "./AnimalFilterSection/AnimalFilterSection";
-import useRightSectionHandler from "../../hooks/useRightSectionHandler";
-import { IRightSectionContentInfo } from "../../types/interface/right.section.interface";
+import CommentSection from "@/components/RightSection/CommentSection/CommentSection";
+import SearchSection from "@/components/RightSection/SearchSection/SearchSection";
+import AnimalFilterSection from "@/components/RightSection/AnimalFilterSection/AnimalFilterSection";
+import useRightSectionHandler from "@/hooks/useRightSectionHandler";
+import { IRightSectionContentInfo } from "@/types/interface/right.section.interface";
 
 const RightSection = () => {
   const [isRightSectionOpened] = useRecoilState<boolean>(
@@ -35,19 +34,46 @@ const RightSection = () => {
           {rightSectionContent.animalFilter && <AnimalFilterSection />}
         </RightSectionBodyStyled>
       </RightSectionStyled>
+      {isRightSectionOpened && <OverlayStyled onClick={closeRightSection} />}
     </>
   );
 };
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const OverlayStyled = styled.div`
+  z-index: 3;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: ${fadeIn} 0.5s;
+  backdrop-filter: blur(5px);
+  @media (max-width: 1023px) {
+    display: flex;
+  }
+`;
 
 const RightSectionStyled = styled.div<{
   $isRightSectionOpened: boolean;
 }>`
   display: flex;
-  position: relative;
   flex-direction: column;
   align-items: center;
   width: 490px;
-  height: 100%;
+  height: 800px;
   max-height: 860px;
 
   margin-left: 20px;
@@ -57,6 +83,23 @@ const RightSectionStyled = styled.div<{
   margin-right: ${(props) => (props.$isRightSectionOpened ? "0px" : "-480px")};
   opacity: ${(props) => (props.$isRightSectionOpened ? 1 : 0)};
   transition: opacity 0.5s ease-in-out, margin-right 0.5s ease-in-out;
+  @media (max-width: 1023px) {
+    z-index: 4;
+    background-color: #dbdcfec3;
+    opacity: 1;
+    position: absolute;
+    height: ${(props) => (props.$isRightSectionOpened ? "85%" : "0%")};
+    width: 100%;
+    bottom: 0;
+    margin-right: 0;
+    transition: height 0.3s ease;
+    margin-left: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    * {
+      display: ${(props) => !props.$isRightSectionOpened && "none"};
+    }
+  }
 `;
 
 const CloseButtonContainerStyled = styled.div`
@@ -70,17 +113,16 @@ const CloseButtonContainerStyled = styled.div`
 
 const CloseButtonStyled = styled.button`
   height: 100%;
-  width: 8%;
+  width: 32px;
   background-color: transparent;
   border: none;
-  margin-right: 5px;
+  margin-right: 10px;
   margin-top: 5px;
   img {
     cursor: pointer;
-    width: 20px;
+    width: 100%;
   }
   img:hover {
-    width: 23px;
     opacity: 0.7;
   }
 `;

@@ -1,19 +1,16 @@
-import styled from "styled-components";
 import { useState, useEffect } from "react";
-import useNavigateCustom from "../../hooks/useNavigateCustom";
-import useRightSectionHandler from "../../hooks/useRightSectionHandler";
 import { useRecoilState } from "recoil";
-import { languageState } from "../../recoil/atom";
-import useModal from "../../hooks/useModal";
-import { ModalType } from "../../types/enum/modal.enum";
+import styled from "styled-components";
+import useNavigateCustom from "@/hooks/useNavigateCustom";
+import useRightSectionHandler from "@/hooks/useRightSectionHandler";
+import { languageState } from "@/recoil/atom";
+import SettingButton from "@/components/SettingButton";
 
 const LeftMenuTablet = () => {
   const [isBannerVisible, setIsBannerVisible] = useState(true);
   const [language] = useRecoilState<any>(languageState);
   const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
-  const { openSearchSection, openAnimalFilterSection } =
-    useRightSectionHandler();
-  const { openModal } = useModal();
+  const { openSearchSection } = useRightSectionHandler();
 
   const isMainPage: boolean = location.pathname === "/";
 
@@ -39,16 +36,16 @@ const LeftMenuTablet = () => {
       {isMainPage && (
         <BannerStyled $isBannerVisible={isBannerVisible}>
           <ProfileImageStyled src="/src/assets/profileImage.jpg" />
-          <div>
+          <BannerLogoStyled>
             42PAW
             <span>
               Pets Are the World
               <img src="/src/assets/dogLogo.png" />
             </span>
-          </div>
-          <LanguageButtonStyled onClick={() => openModal(ModalType.LANGUAGE)}>
-            <img src="/src/assets/globalW.png" />
-          </LanguageButtonStyled>
+          </BannerLogoStyled>
+          <SettingButtonContainerStyled>
+            <SettingButton />
+          </SettingButtonContainerStyled>
         </BannerStyled>
       )}
       <MenuStyled>
@@ -58,17 +55,14 @@ const LeftMenuTablet = () => {
             <li onClick={moveToMain}>
               <img alt="Main" src="/src/assets/home.png" />
             </li>
-            <li onClick={openSearchSection}>
-              <img alt="Search" src="/src/assets/search.png" />
-            </li>
             <li onClick={moveToUpload}>
               <img alt="MyProfile" src="/src/assets/upload.png" />
             </li>
+            <li onClick={openSearchSection}>
+              <img alt="Search" src="/src/assets/search.png" />
+            </li>
             <li onClick={moveToMyProfile}>
               <img alt="MyProfile" src="/src/assets/profile.png" />
-            </li>
-            <li onClick={openAnimalFilterSection}>
-              <img alt="AnimalFilter" src="/src/assets/categoryW.png" />
             </li>
           </MenuListStyled>
         </nav>
@@ -93,23 +87,6 @@ const BannerStyled = styled.div<{ $isBannerVisible: boolean }>`
   transform: translateY(${(props) => (props.$isBannerVisible ? "0" : "-100%")});
   transition: transform 0.1s ease-in-out, margin-top 0.2s ease;
   line-height: 15px;
-  div {
-    text-align: center;
-    font-family: "Monoton";
-    margin-top: 10px;
-    color: var(--white);
-    font-size: 1.8rem;
-    span {
-      display: flex;
-      align-items: center;
-      font-size: 1rem;
-      img {
-        width: 17px;
-        margin-left: 4px;
-        margin-bottom: 2px;
-      }
-    }
-  }
 `;
 
 const ProfileImageStyled = styled.img`
@@ -121,21 +98,27 @@ const ProfileImageStyled = styled.img`
   }
 `;
 
-const LanguageButtonStyled = styled.button`
-  margin-right: 5px;
-  margin-top: 5px;
-  width: 35px;
-  height: 35px;
-  background-color: transparent;
-  border: none;
-  img {
-    width: 100%;
-    opacity: 0.9;
-    transition: opacity 0.3s ease;
-    &:hover {
-      opacity: 0.7;
+const BannerLogoStyled = styled.div`
+  text-align: center;
+  font-family: "Monoton";
+  margin-top: 10px;
+  color: var(--white);
+  font-size: 1.8rem;
+  span {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    img {
+      width: 17px;
+      margin-left: 4px;
+      margin-bottom: 2px;
     }
   }
+`;
+
+const SettingButtonContainerStyled = styled.div`
+  margin-top: 8px;
+  margin-right: 5px;
 `;
 
 const MenuStyled = styled.div`
@@ -194,16 +177,13 @@ const LoginButtonStyled = styled.div`
   cursor: pointer;
   text-align: center;
   min-width: 45px;
-  margin-bottom: 20%;
-  margin-top: 20px;
+  margin: 0;
+  margin-right: 2%;
+  font-size: 1rem;
   &:hover {
     background-color: var(--white);
     color: var(--purple);
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-  }
-  @media (max-width: 1023px) {
-    margin: 0;
-    margin-right: 2%;
   }
 `;
 

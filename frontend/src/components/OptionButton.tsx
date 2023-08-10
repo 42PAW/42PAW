@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import styled from "styled-components";
-import { ModalType } from "../types/enum/modal.enum";
-import useModal from "../hooks/useModal";
+import { ModalType } from "@/types/enum/modal.enum";
+import useModal from "@/hooks/useModal";
 import {
   banUserInfoState,
   currentBoardIdState,
   currentCommentIdState,
-} from "../recoil/atom";
-import { IBanUserInfo } from "../types/interface/user.interface";
-import { languageState } from "../recoil/atom";
+} from "@/recoil/atom";
+import { IBanUserInfo } from "@/types/interface/user.interface";
+import { languageState } from "@/recoil/atom";
 
 /**
  * @boardId (optional) 신고, 차단, 삭제할 게시물의 id
@@ -51,6 +51,7 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
       setIsToggled(!isToggled);
     }
   };
+
   const handleBan = () => {
     setBanUserInfo(banUser);
     openModal(ModalType.BAN);
@@ -69,12 +70,7 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
       <ToggleStyled onClick={() => handleToggle("OFF")}>
         <img src="/src/assets/optionW.png" />
       </ToggleStyled>
-      <MenuStyled
-        style={{
-          opacity: isToggled ? 1 : 0,
-          visibility: isToggled ? "visible" : "hidden",
-        }}
-      >
+      <MenuStyled $isToggled={isToggled}>
         <MenuList onClick={() => handleToggle("OFF")}>
           <MenuItemWrapperStyled>
             <MenuItemStyled onClick={handleBan}>{language.ban}</MenuItemStyled>
@@ -116,20 +112,21 @@ const ToggleStyled = styled.button`
   }
 `;
 
-const MenuStyled = styled.div`
+const MenuStyled = styled.div<{ $isToggled: boolean }>`
   position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   text-align: center;
-  margin-top: 35px;
-  width: 50px;
+  margin-top: 30px;
+  min-width: 50px;
   border-radius: 10px;
   color: var(--grey);
   background: var(--white);
+
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
-  opacity: 0;
-  visibility: hidden;
+  opacity: ${({ $isToggled }) => ($isToggled ? 1 : 0)};
+  visibility: ${({ $isToggled }) => ($isToggled ? "visible" : "hidden")};
   transition: opacity 0.3s;
   z-index: 1;
 `;
@@ -144,13 +141,13 @@ const MenuItemWrapperStyled = styled.li``;
 const MenuItemStyled = styled.div`
   cursor: pointer;
   font-size: 10px;
-  padding: 5px 5px;
+  padding: 3px 5px;
   color: var(--lightgrey);
   border-radius: 20px;
   text-decoration: none;
   transition: all 0.2s;
   &:hover {
-    font-weight: bold;
+    color: var(--lightpurple);
   }
 `;
 

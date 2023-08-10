@@ -1,8 +1,8 @@
-import { isRightSectionOpenedState } from "../recoil/atom";
-import { useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
-import { boardCategoryState } from "../recoil/atom";
-import { BoardCategory } from "../types/enum/board.category.enum";
+import { useSetRecoilState } from "recoil";
+import { isRightSectionOpenedState } from "../recoil/atom";
+import { boardCategoryState } from "@/recoil/atom";
+import { BoardCategory } from "@/types/enum/board.category.enum";
 
 /**useNavigate를 통해 라우트 간 이동할 때마다 RightSection을 Close해 주기 위한 훅 */
 const useNavigateCustom = () => {

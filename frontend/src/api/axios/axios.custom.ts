@@ -1,5 +1,6 @@
-import instance from "./axios.instance";
 import axios from "axios";
+import instance from "@/api/axios/axios.instance";
+import { CreateBoardDTO } from "@/types/dto/board.dto";
 
 const axiosGetBoardsURL =
   "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/boards";
@@ -10,6 +11,36 @@ export const axiosGetBoards = async (
   try {
     const response = await axios.get(axiosGetBoardsURL, {
       params: { size: size, page: page },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosCreateBoardURL = "/v1/boards";
+export const axiosCreateBoard = async ({
+  mediaDataList,
+  categoryList,
+  content,
+}: CreateBoardDTO): Promise<any> => {
+  try {
+    const formData = new FormData();
+    mediaDataList.forEach((file) => {
+      formData.append(`mediaDataList`, file);
+    });
+    formData.append(
+      "categoryList",
+      new Blob([JSON.stringify(categoryList)], { type: "application/json" })
+    );
+    formData.append(
+      "content",
+      new Blob([content], { type: "application/json" })
+    );
+    const response = await instance.post(axiosCreateBoardURL, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
     return response.data;
   } catch (error) {

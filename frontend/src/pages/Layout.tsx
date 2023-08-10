@@ -1,12 +1,12 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { isRightSectionOpenedState } from "../recoil/atom";
-import LeftMenuSection from "../components/LeftMenuSection/LeftMenuSection";
-import RightSection from "../components/RightSection/RightSection";
-import BoardSortToggle from "../components/BoardSortToggle";
-import ModalContainer from "../components/modals/ModalContainer";
-import Toaster from "../components/toast/Toaster";
+import { isRightSectionOpenedState } from "@/recoil/atom";
+import LeftMenuSection from "@/components/LeftMenuSection/LeftMenuSection";
+import RightSection from "@/components/RightSection/RightSection";
+import BoardSortToggle from "@/components/BoardSortToggle";
+import ModalContainer from "@/components/modals/ModalContainer";
+import Toaster from "@/components/toast/Toaster";
 
 const Layout = () => {
   const location = useLocation();
@@ -32,9 +32,7 @@ const Layout = () => {
           {isMainPage && <BoardSortToggle />}
           <Outlet />
         </MainAreaStyled>
-        <RightSectionContainer>
-          <RightSection />
-        </RightSectionContainer>
+        <RightSection />
       </MainAreaWrapperStyled>
       <ModalContainer />
       <Toaster />
@@ -69,17 +67,12 @@ const MainAreaStyled = styled.main<{
   flex-direction: column;
   align-items: center;
   height: 100%;
+  min-height: 800px;
   width: ${(props) =>
     props.$isProfilePage
       ? `calc(100% - ${props.$isRightSectionOpened ? "570px" : "0px"})`
       : "500px"};
   //   transition: margin-left 0.5s ease-in-out, width 0.5s ease-in-out;
-`;
-
-const RightSectionContainer = styled.div`
-  @media (max-width: 1023px) {
-    display: none;
-  }
 `;
 
 export default Layout;

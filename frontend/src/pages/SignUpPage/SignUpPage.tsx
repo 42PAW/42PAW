@@ -1,13 +1,13 @@
 import { useState } from "react";
-import NicknameSection from "./Sections/NicknameSection";
-import ProfileImageSection from "./Sections/ProfileImageSection";
-import IntroductionSection from "./Sections/IntroductionSection";
-import AnimalFilterSection from "./Sections/AnimalFilterSection";
-import SuccessSection from "./Sections/SuccessSection";
+import NicknameSection from "@/pages/SignUpPage/Sections/NicknameSection";
+import ProfileImageSection from "@/pages/SignUpPage/Sections/ProfileImageSection";
+import IntroductionSection from "@/pages/SignUpPage/Sections/IntroductionSection";
+import AnimalFilterSection from "@/pages/SignUpPage/Sections/AnimalFilterSection";
+import SuccessSection from "@/pages/SignUpPage/Sections/SuccessSection";
 import { styled } from "styled-components";
-import ProfileCard from "./components/ProfileCard";
-import Toaster from "../../components/toast/Toaster";
-import { SignUpInfoDTO } from "../../types/dto/member.dto";
+import ProfileCard from "@/pages/SignUpPage/components/ProfileCard";
+import Toaster from "@/components/toast/Toaster";
+import { SignUpInfoDTO } from "@/types/dto/member.dto";
 export enum Section {
   Nickname = "NicknameSection",
   ProfileImage = "ProfileImageSection",

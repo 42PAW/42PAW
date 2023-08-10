@@ -1,9 +1,9 @@
 import { useState } from "react";
-import styled from "styled-components";
-import { BoardCategory } from "../types/enum/board.category.enum";
-import { boardCategoryState } from "../recoil/atom";
 import { useSetRecoilState, useRecoilState } from "recoil";
-import { languageState } from "../recoil/atom";
+import styled from "styled-components";
+import { BoardCategory } from "@/types/enum/board.category.enum";
+import { boardCategoryState } from "@/recoil/atom";
+import { languageState } from "@/recoil/atom";
 
 const BoardSortToggle = () => {
   const [language] = useRecoilState<any>(languageState);
@@ -37,8 +37,8 @@ const BoardSortToggle = () => {
         <button onClick={() => handleToggle(BoardCategory.FOLLOWING)}>
           {language.followingBoards}
         </button>
-        <div />
       </BoardSortToggleStyled>
+      <SortTabStyled $buttonToggled={buttonToggled} />
     </BoardSortToggleWrapperStyled>
   );
 };
@@ -48,32 +48,40 @@ const BoardSortToggleWrapperStyled = styled.div`
   position: absolute;
   margin-top: 2%;
   z-index: 1;
+  width: 255px;
+`;
+
+const SortTabStyled = styled.div<{ $buttonToggled: number }>`
+  margin-top: -30px;
+  width: 33.3%;
+  height: 100%;
+  position: absolute;
+  margin-left: ${({ $buttonToggled }) => $buttonToggled * 85}px;
+  transition: margin-left 0.3s ease-in-out;
+  border-radius: 30px;
+  background-color: var(--lightpurple);
 `;
 
 const BoardSortToggleStyled = styled.div<{ $buttonToggled: number }>`
+  display: flex;
+  justify-content: space-around;
   position: relative;
-  width: 225px;
+  width: 100%;
   height: 30px;
   border-radius: 30px;
   background-color: var(--transparent);
   button {
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
     background-color: transparent;
     color: var(--white);
     border-radius: 30px;
     border: none;
-    height: 100%;
     width: 33.3%;
-    font-size: 30%;
-  }
-  div {
-    height: 30px;
-    width: 75px;
-    margin-top: -30px;
-    margin-left: ${({ $buttonToggled }) => $buttonToggled * 75}px;
-    transition: margin-left 0.3s ease-in-out;
-    border-radius: 30px;
-    background-color: var(--lightpurple);
+    font-size: 1rem;
   }
 `;
 

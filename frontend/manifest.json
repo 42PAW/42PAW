@@ -1,0 +1,23 @@
+{
+  "name": "42 PAW",
+  "short_name": "42PAW",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/src/assets/dogLogo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "background_color": "#ffffff",
+  "description": "Hi 42!",
+  "dir": "auto",
+  "orientation": "any",
+  "theme_color": "#ffffff",
+  "categories": ["lifestyle", "social"],
+  "screenshots": [],
+  "shortcuts": [],
+  "lang": "en"
+}

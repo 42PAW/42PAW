@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import styled, { keyframes } from "styled-components";
-import { ModalType } from "../../types/enum/modal.enum";
-import useModal from "../../hooks/useModal";
+import { ModalType } from "@/types/enum/modal.enum";
+import useModal from "@/hooks/useModal";
 
 /**
  * @modalName 닫으려는 타깃 모달명

@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { Section } from "../SignUpPage";
+import { Section } from "@/pages/SignUpPage/SignUpPage";
 
 interface RevertButtonProps {
   setStep: React.Dispatch<React.SetStateAction<Section>>;

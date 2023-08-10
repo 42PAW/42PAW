@@ -2,44 +2,71 @@ package proj.pet.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import proj.pet.member.dto.*;
+import proj.pet.board.dto.BoardsResponseDto;
+import proj.pet.member.dto.MemberCreateRequestDto;
+import proj.pet.member.dto.MemberLanguageChangeRequestDto;
+import proj.pet.member.dto.MemberMyInfoResponseDto;
+import proj.pet.member.dto.MemberMyProfileResponseDto;
+import proj.pet.member.dto.MemberNicknameValidateResponseDto;
+import proj.pet.member.dto.MemberPreviewResponseDto;
+import proj.pet.member.dto.MemberProfileChangeRequestDto;
+import proj.pet.member.dto.MemberProfileChangeResponseDto;
+import proj.pet.member.dto.MemberSearchResponseDto;
+import proj.pet.member.dto.UserSessionDto;
 
 @Service
 @RequiredArgsConstructor
 public class MemberFacadeServiceImpl implements MemberFacadeService {
 
 	@Override
-	public MemberCreateResponse createMember(MemberCreateRequest memberCreateRequest) {
+	public void createMember(MemberCreateRequestDto memberCreateRequestDto) {
+	}
+
+	@Override
+	public MemberNicknameValidateResponseDto validateMemberNickname(String nickname) {
 		return null;
 	}
 
 	@Override
-	public MemberProfileChangeResponse changeMemberProfile(MemberProfileChangeRequest memberProfileChangeRequest) {
+	public MemberMyInfoResponseDto getMyInfo(UserSessionDto userSessionDto) {
 		return null;
 	}
 
 	@Override
-	public MemberPreviewResponse getMemberPreview(Long memberId) {
+	public MemberMyProfileResponseDto getMyProfile(UserSessionDto userSessionDto) {
 		return null;
 	}
 
 	@Override
-	public MemberNicknameValidateResponse validateMemberNickname(String nickname) {
+	public MemberProfileChangeResponseDto changeMemberProfile(
+			UserSessionDto userSessionDto,
+			MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
 		return null;
 	}
 
 	@Override
-	public MemberBoardsResponse getMyBoards(UserSession userSession) {
+	public MemberPreviewResponseDto getMemberPreview(Long memberId) {
 		return null;
 	}
 
 	@Override
-	public MemberBoardsResponse getMemberBoards(Long memberId) {
+	public BoardsResponseDto getMyBoards(UserSessionDto userSessionDto, int page, int size) {
 		return null;
 	}
 
 	@Override
-	public MemberSearchResponse searchMemberByNickname(String nickname) {
+	public BoardsResponseDto getMemberBoards(Long memberId, int page, int size) {
 		return null;
+	}
+
+	@Override
+	public MemberSearchResponseDto searchMemberByName(String nickname, int page, int size) {
+		return null;
+	}
+
+	@Override
+	public void changeLanguage(UserSessionDto userSession,
+			MemberLanguageChangeRequestDto memberLanguageChangeRequestDto) {
+
 	}
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { AnimalSpecies } from "../types/enum/animal.filter.enum";
+import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 
 const renderAnimalSpecies = (buttonName: string) => {
   if (buttonName === AnimalSpecies.DOG) return "🐶 강아지";
@@ -18,7 +18,7 @@ const renderAnimalSpecies = (buttonName: string) => {
  */
 interface AnimalButtonContainerProps {
   columns: number;
-  setter?: React.Dispatch<React.SetStateAction<any>>;
+  setter: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const AnimalButtonContainer = ({

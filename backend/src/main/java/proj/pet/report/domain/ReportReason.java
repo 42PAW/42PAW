@@ -7,5 +7,5 @@ public enum ReportReason {
 	INAPPROPRIATE_NICKNAME,
 	SEXUAL_VIOLENCE,
 	IRRELEVANT,
-	ETC
+	ETC;
 }

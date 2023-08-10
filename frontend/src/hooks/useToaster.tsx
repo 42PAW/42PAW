@@ -1,6 +1,6 @@
 import { useSetRecoilState } from "recoil";
-import { toastMessagesState } from "../recoil/atom";
-import { IToastInfo } from "../types/interface/toast.interface";
+import { toastMessagesState } from "@/recoil/atom";
+import { IToastInfo } from "@/types/interface/toast.interface";
 
 const useToaster = () => {
   const setToastMessages = useSetRecoilState<IToastInfo[]>(toastMessagesState);

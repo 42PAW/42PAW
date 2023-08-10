@@ -4,81 +4,100 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.block.domain.Block;
-import proj.pet.category.domain.MemberCategoryFilter;
-import proj.pet.comment.domain.Comment;
 import proj.pet.follow.domain.Follow;
-import proj.pet.reaction.domain.Reaction;
-import proj.pet.report.domain.Report;
-import proj.pet.scrap.domain.Scrap;
+import proj.pet.utils.domain.IdDomain;
+import proj.pet.utils.domain.RuntimeExceptionThrower;
+import proj.pet.utils.domain.Validatable;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.AUTO;
 import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "MEMBER")
 @Getter
-public class Member {
+public class Member extends IdDomain implements Validatable {
 
-	@Id
-	@GeneratedValue(strategy = AUTO)
-	private Long id;
+	@Embedded
+	private OauthProfile oauthProfile;
 
-	@Column(name = "oauth_type", nullable = false)
-	private OauthType oauthType;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "COUNTRY", nullable = false, length = 32)
+	private Country country;
 
-	@Column(name = "oauth_id", nullable = false)
-	private String oauthId;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "LANGUAGE", nullable = false, length = 32)
+	private Language language;
 
-	@Column(name = "profile_image_name")
-	private String profileImageName;
+	@Column(name = "PROFILE_IMAGE_URL")
+	private String profileImageUrl;
 
-	@Column(name = "nickname", nullable = false, length = 12)
+	@Column(name = "NICKNAME", nullable = false, length = 12)
 	private String nickname;
 
-	@Column(name = "statement", length = 30)
-	private String statement;
-
-	@Column(name = "role", nullable = false)
-	private Role role;
-
-	@Column(name = "nickname_updated_at", nullable = false)
+	@Column(name = "NICKNAME_UPDATED_AT", nullable = false)
 	private LocalDateTime nicknameUpdatedAt;
 
-	@Column(name = "created_at", nullable = false)
+	@Column(name = "STATEMENT", length = 30)
+	private String statement;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "ROLE", nullable = false, length = 32)
+	private MemberRole memberRole;
+
+	@Column(name = "CREATED_AT", nullable = false)
 	private LocalDateTime createdAt;
 
-	@Column(name = "deleted_at")
+	@Column(name = "DELETED_AT")
 	private LocalDateTime deletedAt;
 
-	@OneToMany(mappedBy = "from", fetch = LAZY)
-	private List<Block> blocks;
+	@OneToMany(mappedBy = "from",
+			fetch = LAZY,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Block> blocks = new ArrayList<>();
 
-	@OneToMany(mappedBy = "from", fetch = LAZY)
-	private List<Follow> followings;
+	@OneToMany(mappedBy = "from",
+			fetch = LAZY,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Follow> followings = new ArrayList<>();
 
-	@OneToMany(mappedBy = "to", fetch = LAZY)
-	private List<Follow> followers;
+	@OneToMany(mappedBy = "to",
+			fetch = LAZY,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Follow> followers = new ArrayList<>();
 
-	@OneToMany(mappedBy = "member", fetch = LAZY)
-	private List<MemberCategoryFilter> memberCategoryFilters;
 
-	@OneToMany(mappedBy = "member", fetch = LAZY)
-	private List<Scrap> scraps;
+	private Member(OauthProfile oauthProfile, String profileImageUrl, Country country, Language language, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
+		this.oauthProfile = oauthProfile;
+		this.profileImageUrl = profileImageUrl;
+		this.country = country;
+		this.language = language;
+		this.nickname = nickname;
+		this.statement = statement;
+		this.memberRole = memberRole;
+		this.nicknameUpdatedAt = now;
+		this.createdAt = now;
+		RuntimeExceptionThrower.checkValidity(this);
+	}
 
-	@OneToMany(mappedBy = "member", fetch = LAZY)
-	private List<Comment> comments;
+	public static Member of(OauthProfile oauthProfile, String profileImageUrl, Country country, Language language, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
+		return new Member(oauthProfile, profileImageUrl, country, language, nickname, statement, memberRole, now);
+	}
 
-	@OneToMany(mappedBy = "member", fetch = LAZY)
-	private List<Reaction> reactions;
-
-	@OneToMany(mappedBy = "from", fetch = LAZY)
-	private List<Report> reportList;
-
-	@OneToMany(mappedBy = "to", fetch = LAZY)
-	private List<Report> reportedList;
+	@Override public boolean isValid() {
+		return oauthProfile != null
+				&& country != null
+				&& language != null
+				&& nickname != null
+				&& memberRole != null
+				&& nicknameUpdatedAt != null
+				&& createdAt != null;
+	}
 }

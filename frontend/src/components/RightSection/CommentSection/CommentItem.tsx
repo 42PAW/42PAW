@@ -1,7 +1,6 @@
-import { useState } from "react";
 import styled from "styled-components";
-import { CommentInfoDTO } from "../../../types/dto/board.dto";
-import OptionButton from "../../OptionButton";
+import { CommentInfoDTO } from "@/types/dto/board.dto";
+import OptionButton from "@/components/OptionButton";
 
 const CommentItem = (commentInfo: CommentInfoDTO) => {
   const { commentId, memberId, memberName, comment, profileImage, createdAt } =
@@ -15,7 +14,7 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
       <CommentItemRightStyled>
         <NicknameToggleContainerStyled>
           <NicknameContainerStyled>
-            {memberName}
+            {memberName} 🇫🇷
             <span>{createdAt}</span>
           </NicknameContainerStyled>
           <OptionButton

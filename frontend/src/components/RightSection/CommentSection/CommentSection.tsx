@@ -1,13 +1,32 @@
-import styled from "styled-components";
-import CommentItem from "./CommentItem";
-import { CommentInfoDTO } from "../../../types/dto/board.dto";
 import { useRecoilState } from "recoil";
-import { currentBoardCommentsState } from "../../../recoil/atom";
+import styled from "styled-components";
+import CommentItem from "@/components/RightSection/CommentSection/CommentItem";
+import { CommentInfoDTO } from "@/types/dto/board.dto";
+import { useState, useEffect } from "react";
+import { currentBoardIdState } from "@/recoil/atom";
+import { axiosGetBoardComments } from "@/api/axios/axios.custom";
 
 const CommentSection = () => {
-  const [currentBoardComments] = useRecoilState<CommentInfoDTO[]>(
-    currentBoardCommentsState
-  );
+  const [currentBoardComments, setCurrentBoardComments] = useState<
+    CommentInfoDTO[] | null
+  >(null);
+  const [currentBoardId] = useRecoilState<number | null>(currentBoardIdState);
+
+  useEffect(() => {
+    getCommentsData();
+  }, [currentBoardId]);
+
+  const getCommentsData = async () => {
+    try {
+      if (!currentBoardId) {
+        return;
+      }
+      const response = await axiosGetBoardComments(currentBoardId);
+      setCurrentBoardComments(response);
+    } catch (error) {
+      throw error;
+    }
+  };
 
   return (
     <WrapperStyled>
@@ -52,7 +71,7 @@ const WrapperStyled = styled.div`
 const CommentItemWrapperStyled = styled.div`
   margin-top: 1%;
   width: 100%;
-
+  height: 100%;
   overflow-y: auto;
 `;
 

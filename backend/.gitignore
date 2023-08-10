@@ -146,9 +146,11 @@ gradle-app.setting
 
 /data
 /database/data
+/src/main/generated
 .idea
 .vscode/
 .env
+!src/test/resources/application.yml
 application*.yml
 !application-test.yml
 

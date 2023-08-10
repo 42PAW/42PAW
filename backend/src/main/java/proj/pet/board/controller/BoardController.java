@@ -1,44 +1,72 @@
 package proj.pet.board.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import proj.pet.board.dto.BoardCreateRequestDto;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.dto.BoardsResponseDto;
 import proj.pet.board.service.BoardFacadeService;
+import proj.pet.category.domain.Species;
+import proj.pet.member.dto.UserSessionDto;
+import proj.pet.member.repository.MemberRepository;
 
-@RestController("/v1/boards")
+import java.util.List;
+
+import static proj.pet.member.domain.MemberRole.USER;
+
+@RestController
+@RequestMapping("/v1/boards")
 @RequiredArgsConstructor
 public class BoardController {
 
 	private final BoardFacadeService boardFacadeService;
+	// REMOVE
+	private final MemberRepository memberRepository;
 
-	@GetMapping("/")
-	public BoardsResponseDto getMainViewBoards() {
-		return boardFacadeService.getMainViewBoards();
+	@GetMapping
+	public BoardsResponseDto getMainViewBoards(
+			@RequestParam("size") int size,
+			@RequestParam("page") int page) {
+		PageRequest pageRequest = PageRequest.of(page, size);
+		return boardFacadeService.getMainViewBoards(pageRequest);
 	}
 
 	@GetMapping("/hot")
-	public BoardsResponseDto getHotBoards() {
-		return boardFacadeService.getHotBoards();
+	public BoardsResponseDto getHotBoards(
+			@RequestParam("size") int size,
+			@RequestParam("page") int page) {
+		PageRequest pageRequest = PageRequest.of(page, size);
+		return boardFacadeService.getHotBoards(pageRequest);
 	}
 
-	@GetMapping("/followings")
-	public BoardsResponseDto getFollowingsBoards() {
-		return boardFacadeService.getFollowingsBoards();
+	@GetMapping("/members/{memberId}")
+	public BoardsResponseDto getMemberBoards(
+			@RequestParam("size") int size,
+			@RequestParam("page") int page,
+			@PathVariable("memberId") Long memberId) {
+		PageRequest pageRequest = PageRequest.of(page, size);
+		return boardFacadeService.getMemberBoards(pageRequest, memberId);
 	}
 
-	@PostMapping("/")
-	public void createBoard(@RequestBody BoardCreateRequestDto boardCreateRequestDto) {
-		boardFacadeService.createBoard(boardCreateRequestDto);
+	@PostMapping(
+			consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+	)
+	public void createBoard(
+//			UserSession userSession,
+			@RequestPart(value = "mediaDataList") List<MultipartFile> mediaDataList,
+			@RequestPart(value = "categoryList") List<Species> categoryList,
+			@RequestPart(value = "content") String content) {
+		// TODO: userSession 시큐리티에서 가져오기
+		UserSessionDto userSessionDto = new UserSessionDto(1L, "hellow", USER);
+		boardFacadeService.createBoard(userSessionDto, mediaDataList, categoryList, content);
 	}
 
 	@DeleteMapping("/{boardId}")
-	public void deleteBoard(@PathVariable("boardId") Long boardId) {
-		boardFacadeService.deleteBoard(boardId);
+	public void deleteBoard(
+//			UserSession userSession,
+			@PathVariable("boardId") Long boardId) {
+		UserSessionDto userSession = new UserSessionDto(1L, "sanan", USER);
+		boardFacadeService.deleteBoard(userSession, boardId);
 	}
 }

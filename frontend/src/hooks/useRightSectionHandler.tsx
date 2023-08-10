@@ -2,8 +2,8 @@ import { useSetRecoilState } from "recoil";
 import {
   isRightSectionOpenedState,
   rightSectionContentState,
-} from "../recoil/atom";
-import { IRightSectionContentInfo } from "../types/interface/right.section.interface";
+} from "@/recoil/atom";
+import { IRightSectionContentInfo } from "@/types/interface/right.section.interface";
 
 /**오른쪽 섹션을 닫거나, 어떤 섹션을 열지 핸들링하기 위한 훅*/
 const useRightSectionHandler = () => {

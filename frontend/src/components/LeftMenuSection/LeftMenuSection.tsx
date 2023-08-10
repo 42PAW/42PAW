@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import LeftMenuTablet from "./LeftMenuTablet";
-import LeftMenuDesktop from "./LeftMenuDesktop";
+import LeftMenuTablet from "@/components/LeftMenuSection/LeftMenuTablet";
+import LeftMenuDesktop from "@/components/LeftMenuSection/LeftMenuDesktop";
 
 const LeftMenuSection = () => {
   const [isDesktopScreen, setIsDesktopScreen] = useState(

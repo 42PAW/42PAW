@@ -1,18 +1,15 @@
 import styled from "styled-components";
-import useNavigateCustom from "../../hooks/useNavigateCustom";
-import useRightSectionHandler from "../../hooks/useRightSectionHandler";
-import { languageState } from "../../recoil/atom";
+import useNavigateCustom from "@/hooks/useNavigateCustom";
+import useRightSectionHandler from "@/hooks/useRightSectionHandler";
+import { languageState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
-import useModal from "../../hooks/useModal";
-import { ModalType } from "../../types/enum/modal.enum";
+import SettingButton from "../SettingButton";
 
 const LeftMenuDesktop = () => {
   const { moveToMain, moveToNotice, moveToMyProfile, moveToUpload } =
     useNavigateCustom();
-  const { openSearchSection, openAnimalFilterSection } =
-    useRightSectionHandler();
+  const { openSearchSection } = useRightSectionHandler();
   const [language] = useRecoilState<any>(languageState);
-  const { openModal } = useModal();
 
   return (
     <>
@@ -35,17 +32,14 @@ const LeftMenuDesktop = () => {
             <li onClick={moveToNotice}>
               <img alt="Notice" src="/src/assets/notice.png" />
             </li>
-            <li onClick={openAnimalFilterSection}>
-              <img alt="AnimalFilter" src="/src/assets/categoryW.png" />
-            </li>
           </MenuListStyled>
           <ProfileImageStyled src="/src/assets/profileImage.jpg" />
         </nav>
         <LoginButtonStyled>{language.logout}</LoginButtonStyled>
       </LeftMenuStyled>
-      <LanguageButtonStyled onClick={() => openModal(ModalType.LANGUAGE)}>
-        <img src="/src/assets/globalW.png" />
-      </LanguageButtonStyled>
+      <SettingButtonContainerStyled>
+        <SettingButton />
+      </SettingButtonContainerStyled>
     </>
   );
 };
@@ -119,22 +113,10 @@ const LoginButtonStyled = styled.div`
   }
 `;
 
-const LanguageButtonStyled = styled.button`
+const SettingButtonContainerStyled = styled.div`
   bottom: 4px;
   right: 7px;
   position: absolute;
-  width: 40px;
-  height: 40px;
-  background-color: transparent;
-  border: none;
-  img {
-    width: 100%;
-    opacity: 0.6;
-    transition: opacity 0.3s ease;
-    &:hover {
-      opacity: 0.9;
-    }
-  }
 `;
 
 export default LeftMenuDesktop;

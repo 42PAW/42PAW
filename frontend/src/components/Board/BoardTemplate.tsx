@@ -1,15 +1,13 @@
 import styled from "styled-components";
-import { axiosGetBoardComments } from "../../api/axios/axios.custom";
-import useRightSectionHandler from "../../hooks/useRightSectionHandler";
-import { currentBoardCommentsState } from "../../recoil/atom";
+import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useSetRecoilState, useRecoilState } from "recoil";
-import { CommentInfoDTO } from "../../types/dto/board.dto";
-import { IBoardInfo } from "../../types/interface/board.interface";
-import BoardPhotoBox from "./BoardPhotoBox";
-import OptionButton from "../OptionButton";
-import useModal from "../../hooks/useModal";
-import { ModalType } from "../../types/enum/modal.enum";
-import { languageState } from "../../recoil/atom";
+import { IBoardInfo } from "@/types/interface/board.interface";
+import BoardPhotoBox from "@/components/Board/BoardPhotoBox";
+import OptionButton from "@/components/OptionButton";
+import useModal from "@/hooks/useModal";
+import { ModalType } from "@/types/enum/modal.enum";
+import { languageState } from "@/recoil/atom";
+import { currentBoardIdState } from "@/recoil/atom";
 
 const BoardTemplate = (board: IBoardInfo) => {
   const {
@@ -29,23 +27,15 @@ const BoardTemplate = (board: IBoardInfo) => {
   } = board;
 
   const [language] = useRecoilState<any>(languageState);
-  const setCurrentBoardComments = useSetRecoilState<CommentInfoDTO[]>(
-    currentBoardCommentsState
+  const setCurrentBoardId = useSetRecoilState<number | null>(
+    currentBoardIdState
   );
   const { openCommentSection } = useRightSectionHandler();
   const { openModal } = useModal();
 
-  const getCommentsData = async (boardId: number) => {
-    try {
-      const result = await axiosGetBoardComments(boardId);
-      setCurrentBoardComments(result);
-    } catch (error) {
-      throw error;
-    }
-  };
   const handleCommentClick = (boardId: number) => {
     openCommentSection();
-    getCommentsData(boardId);
+    setCurrentBoardId(boardId);
   };
   const handleOpenProfile = () => {
     openModal(ModalType.PROFILECARD); // PROFILECARD -> 바꿔야 돼 다시
@@ -57,7 +47,7 @@ const BoardTemplate = (board: IBoardInfo) => {
         <BoardHeaderStyled>
           <BoardProfileStyled onClick={handleOpenProfile}>
             <img src={profileImage} />
-            <div>{memberName}</div>
+            <div>{memberName} 🇰🇷</div>
           </BoardProfileStyled>
           <BoardOptionButtonStyled>
             <OptionButton boardId={boardId} memberName={memberName} />

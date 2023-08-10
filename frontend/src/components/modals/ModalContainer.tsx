@@ -1,12 +1,12 @@
 import { useRecoilState } from "recoil";
-import { ICurrentModalStateInfo } from "../../types/interface/modal.interface";
-import { currentOpenModalState } from "../../recoil/atom";
-import BanModal from "./BanModal/BanModal";
-import ReportModal from "./ReportModal/ReportModal";
-import ProfileCardModal from "./ProfileCardModal/ProfileCardModal";
-import ProfileEditModal from "./ProfileEditModal/ProfileEditModal";
-import DeleteModal from "./DeleteModal/DeleteModal";
-import LanguageModal from "./LanguageModal/LanguageModal";
+import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
+import { currentOpenModalState } from "@/recoil/atom";
+import BanModal from "@/components/modals/BanModal/BanModal";
+import ReportModal from "@/components/modals/ReportModal/ReportModal";
+import ProfileCardModal from "@/components/modals/ProfileCardModal/ProfileCardModal";
+import ProfileEditModal from "@/components/modals/ProfileEditModal/ProfileEditModal";
+import DeleteModal from "@/components/modals/DeleteModal/DeleteModal";
+import LanguageModal from "@/components/modals/LanguageModal/LanguageModal";
 
 const ModalContainer = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(

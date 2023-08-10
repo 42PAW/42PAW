@@ -10,4 +10,8 @@ public enum Language {
 	ITALIAN,
 	PORTUGUESE,
 	;
+
+	public static Language from(String language) {
+		return Language.valueOf(language.toUpperCase());
+	}
 }

@@ -4,12 +4,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import proj.pet.auth.domain.AuthGuard;
 import proj.pet.board.dto.BoardsResponseDto;
+import proj.pet.category.domain.AnimalCategory;
 import proj.pet.member.dto.*;
 import proj.pet.member.service.MemberFacadeService;
 
 import java.io.IOException;
+import java.util.List;
 
 import static proj.pet.auth.domain.AuthLevel.USER_OR_ADMIN;
 
@@ -20,11 +23,15 @@ public class MemberController {
 
 	private final MemberFacadeService memberFacadeService;
 
-	@PostMapping
+	@PostMapping(consumes = "multipart/form-data")
 	public void createMember(
 			HttpServletRequest req, HttpServletResponse res,
-			@RequestBody MemberCreateRequestDto memberCreateRequestDto) {
-		memberFacadeService.createMember(req, res, memberCreateRequestDto);
+			@RequestPart("memberName") String memberName,
+			@RequestPart("imageData") MultipartFile imageData,
+			@RequestPart("statement") String statement,
+			@RequestPart("categoryFilters") List<AnimalCategory> categoryFilters
+	) {
+		memberFacadeService.createMember(req, res, new MemberCreateRequestDto(memberName, imageData, statement, categoryFilters));
 	}
 
 	@GetMapping("/valid")

@@ -3,6 +3,7 @@ package proj.pet.member.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import proj.pet.block.domain.Block;
 import proj.pet.follow.domain.Follow;
 import proj.pet.utils.domain.IdDomain;
@@ -20,6 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "MEMBER")
 @Getter
+@ToString
 public class Member extends IdDomain implements Validatable {
 
 	@Embedded
@@ -55,18 +57,21 @@ public class Member extends IdDomain implements Validatable {
 	@Column(name = "DELETED_AT")
 	private LocalDateTime deletedAt;
 
+	@ToString.Exclude
 	@OneToMany(mappedBy = "from",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	private List<Block> blocks = new ArrayList<>();
 
+	@ToString.Exclude
 	@OneToMany(mappedBy = "from",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	private List<Follow> followings = new ArrayList<>();
 
+	@ToString.Exclude
 	@OneToMany(mappedBy = "to",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,

@@ -153,13 +153,23 @@ public class OauthService {
 
 	public void refreshRoleOfServerToken(HttpServletRequest req, HttpServletResponse res, LocalDateTime now) {
 		String oldToken = cookieManager.getCookieValue(req, jwtProperties.getTokenName());
+		System.out.println("oldToken = " + oldToken);
 		Map<String, Object> claims = tokenManager.extractClaims(oldToken);
+		System.out.println("claims = " + claims);
 		String oauthName = claims.get("oauthName").toString();
+		System.out.println("oauthName = " + oauthName);
+		Map<String, Object> mutableClaims = new HashMap<>(claims);
 		memberRepository.findByOauthName(oauthName)
 				.ifPresentOrElse(
-						member -> claims.put("role", member.getMemberRole()),
-						() -> claims.put("role", NOT_REGISTERED));
-		String newToken = tokenProvider.createToken(JwtPayload.from(claims), jwtProperties.getSigningKey(), jwtProperties.getExpiry(), now);
+						member -> mutableClaims.replace("role", member.getMemberRole()),
+						() -> mutableClaims.replace("role", NOT_REGISTERED)
+				);
+//		memberRepository.findByOauthName(oauthName)
+//				.ifPresentOrElse(
+//						member -> claims.replace("role", member.getMemberRole()),
+//						() -> claims.replace("role", NOT_REGISTERED));
+		System.out.println("mutableClaims = " + mutableClaims);
+		String newToken = tokenProvider.createToken(JwtPayload.from(mutableClaims), jwtProperties.getSigningKey(), jwtProperties.getExpiry(), now);
 		Cookie cookie = cookieManager.cookieOf(jwtProperties.getTokenName(), newToken);
 		cookieManager.setCookieToClient(res, cookie, "/", req.getServerName(), (int) jwtProperties.getExpiry());
 	}

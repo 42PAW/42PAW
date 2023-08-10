@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import proj.pet.auth.service.OauthService;
 import proj.pet.board.dto.BoardsResponseDto;
+import proj.pet.member.domain.Member;
 import proj.pet.member.dto.*;
 
 import java.time.LocalDateTime;
@@ -21,7 +22,9 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 
 	@Override
 	public void createMember(HttpServletRequest req, HttpServletResponse res, MemberCreateRequestDto memberCreateRequestDto) {
-		memberService.createMember(memberCreateRequestDto);
+		Member member = memberService.createMember(memberCreateRequestDto);
+		System.out.println("member = " + member);
+		System.out.println("member.getId() = " + member.getId());
 		oauthService.refreshRoleOfServerToken(req, res, LocalDateTime.now());
 	}
 

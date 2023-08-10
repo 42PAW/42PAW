@@ -25,9 +25,10 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	// TODO: userSession을 이용한 NOT_REGISTERED인 상태의 멤버의 정보들을 이용해야 함.
-	@Override public void createMember(MemberCreateRequestDto memberCreateRequestDto) {
+	@Override public Member createMember(
+			MemberCreateRequestDto memberCreateRequestDto) {
 		Member member = Member.of(
-				OauthProfile.of(OauthType.FORTY_TWO, "42", "thisIsIntraNickname"),
+				OauthProfile.of(OauthType.FORTY_TWO, "42", "sanan"),
 				"imageUrl",
 				Country.KOREA,
 				Country.KOREA.getLanguage(),
@@ -36,6 +37,6 @@ public class MemberServiceImpl implements MemberService {
 				MemberRole.USER,
 				LocalDateTime.now() // TODO: Parameterize
 		);
-		memberRepository.save(member);
+		return memberRepository.save(member);
 	}
 }

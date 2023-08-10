@@ -10,7 +10,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import proj.pet.auth.domain.AuthGuard;
 import proj.pet.auth.domain.CookieManager;
-import proj.pet.auth.domain.DomainProperties;
 import proj.pet.auth.domain.jwt.JwtPayload;
 import proj.pet.auth.domain.jwt.JwtProperties;
 import proj.pet.auth.domain.jwt.JwtTokenManager;
@@ -31,7 +30,6 @@ public class AuthAspect {
 	private final JwtTokenManager jwtTokenManager;
 	private final CookieManager cookieManager;
 	private final JwtProperties jwtProperties;
-	private final DomainProperties domainProperties;
 
 	/**
 	 * {@link AuthGuard} 어노테이션이 붙은 곳을 {@link org.aspectj.lang.annotation.Pointcut}으로 인터셉트합니다.

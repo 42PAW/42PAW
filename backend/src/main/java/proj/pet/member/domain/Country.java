@@ -129,7 +129,6 @@ public enum Country {
 		}
 
 		public static Campus from(String campusName) {
-			System.out.println("campusName = " + campusName);
 			for (Campus campus : Campus.values()) {
 				if (campus.name.equals(campusName)) {
 					return campus;

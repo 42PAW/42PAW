@@ -20,12 +20,13 @@ public class JwtPayload {
 	private final MemberRole role;
 
 	public static JwtPayload from(Map<String, Object> claims) {
+		System.out.println("claims = " + claims);
 		try {
 			return JwtPayload.builder()
 					.email((String) claims.get("email"))
 					.oauthName((String) claims.get("oauthName"))
-					.campus(Country.Campus.valueOf((String) claims.get("campus")))
-					.role(MemberRole.valueOf((String) claims.get("role")))
+					.campus(Country.Campus.from(claims.get("campus").toString()))
+					.role(MemberRole.from(claims.get("role").toString()))
 					.build();
 		} catch (Exception e) {
 			e.printStackTrace();

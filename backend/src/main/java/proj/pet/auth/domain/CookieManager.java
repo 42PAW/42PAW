@@ -34,11 +34,21 @@ public class CookieManager {
 		return null;
 	}
 
+	/**
+	 * 쿠키를 설정합니다.
+	 *
+	 * @param res           요청 시의 서블렛 {@link HttpServletResponse}
+	 * @param cookie        쿠키
+	 * @param path          쿠키가 사용되는 path
+	 * @param currentDomain 쿠키가 사용될 domain
+	 * @param expiryDays    쿠키의 만료일
+	 */
+
 	public void setCookieToClient(HttpServletResponse res, Cookie cookie, String path,
-	                              String serverName, int expiryDays) {
+	                              String currentDomain, int expiryDays) {
 		cookie.setMaxAge(60 * 60 * 24 * expiryDays);
 		cookie.setPath(path);
-		if (serverName.equals(LOCALHOST)) {
+		if (currentDomain.equals(LOCALHOST)) {
 			cookie.setDomain(LOCALHOST);
 		} else {
 			cookie.setDomain(domainProperties.getServiceDomain());

@@ -13,6 +13,11 @@ public class ApiRequestManager {
 		return new ApiRequestManager(oauthProperties);
 	}
 
+	/**
+	 * 인증 코드(authorization code) 요청을 위한 URI를 생성합니다.
+	 *
+	 * @return 인증 코드 요청을 위한 URI
+	 */
 	public String createCodeRequestUri() {
 		return String.format("%s?client_id=%s&redirect_uri=%s&scope=%s&response_type=%s",
 				oauthProperties.getAuthorizationUri(),
@@ -36,15 +41,5 @@ public class ApiRequestManager {
 		map.add("grant_type", oauthProperties.getTokenGrantType());
 		map.add("code", code);
 		return map;
-	}
-
-	public String getAccessTokenRequestUri(String code) {
-		return oauthProperties.getAccessTokenRequestUri() + "?grant_type=" + oauthProperties.getGrantType()
-				+ "&client_id=" + oauthProperties.getClientId() + "&client_secret=" + oauthProperties.getClientSecret()
-				+ "&redirect_uri=" + oauthProperties.getRedirectUri() + "&code=" + code;
-	}
-
-	public String getUserInfoRequestUri(String accessToken) {
-		return oauthProperties.getUserInfoRequestUri() + "?access_token=" + accessToken;
 	}
 }

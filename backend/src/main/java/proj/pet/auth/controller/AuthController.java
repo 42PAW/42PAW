@@ -41,6 +41,11 @@ public class AuthController {
 		System.out.println("userSessionDto = " + userSessionDto);
 	}
 
+	/**
+	 * 로그인 요청을 합니다. - Oauth 로그인으로 redirect
+	 *
+	 * @param response
+	 */
 	@GetMapping("/login")
 	public void login(
 			HttpServletResponse response
@@ -48,6 +53,21 @@ public class AuthController {
 		authFacadeService.requestLoginToApi(response, ftOauthProperties);
 	}
 
+	/**
+	 * 로그인 콜백을 합니다. - Oauth 로그인 성공 시 이 route로 redirect
+	 * <p>
+	 * code를 받아서 access token을 받아옵니다.
+	 * <br>
+	 * access token으로 사용자 정보를 받아옵니다.
+	 * <br>
+	 * 사용자 정보로 서버 측 토큰을 발급합니다.
+	 * <br>
+	 * 첫 로그인 시 회원가입 페이지로 리디렉션합니다. TODO
+	 *
+	 * @param code
+	 * @param response
+	 * @param request
+	 */
 	@GetMapping("/login/callback")
 	public void loginCallback(
 			@RequestParam String code,

@@ -3,7 +3,7 @@ import instance from "@/api/axios/axios.instance";
 import { SignUpInfoDTO } from "@/types/dto/member.dto";
 import { CreateBoardDTO } from "@/types/dto/board.dto";
 
-const axiosSignUpURL = "/v1/boards";
+const axiosSignUpURL = "/v1/members";
 export const axiosSignUp = async ({
   memberName,
   imageData,

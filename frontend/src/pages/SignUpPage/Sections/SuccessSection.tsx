@@ -1,12 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import createConfetti from "canvas-confetti";
 import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
 import { useEffect } from "react";
 import { axiosSignUp } from "@/api/axios/axios.custom";
 
-const url = `${import.meta.env.VITE_AUTH_LOGIN}`;
-
 const SuccessSection: React.FC<SectionProps> = ({ registerData }) => {
+  const navigator = useNavigate();
+
   createConfetti({
     particleCount: 200,
     spread: 150,
@@ -17,7 +18,7 @@ const SuccessSection: React.FC<SectionProps> = ({ registerData }) => {
     const response = await axiosSignUp(registerData);
     console.log(response);
     setTimeout(() => {
-      window.location.replace(url);
+      navigator("/");
     }, 100);
   };
 

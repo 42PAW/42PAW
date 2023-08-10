@@ -6,6 +6,7 @@ import { useRecoilState } from "recoil";
 import SettingButton from "@/components/SettingButton";
 import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
+import { removeCookie } from "@/api/cookie/cookies";
 
 const url = `${import.meta.env.VITE_AUTH_LOGIN}`;
 
@@ -24,6 +25,7 @@ const LeftMenuDesktop = () => {
 
   const handleLogout = () => {
     setUserInfo(null);
+    removeCookie("access_token");
   };
 
   return (

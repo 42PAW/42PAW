@@ -58,9 +58,9 @@ public class AuthAspect {
 		System.out.println("페이로드 깔거다");
 		JwtPayload jwtPayload = jwtTokenManager.createFtPayload(token);
 		MemberRole role = jwtPayload.getRole();
+		System.out.println("role = " + role);
 		if (role.equals(NOT_REGISTERED)) {
-			System.out.println("나 여기있다");
-			response.sendRedirect(domainProperties.getFrontendHost() + "/sign-up");
+			throw new ServiceException(UNAUTHENTICATED);
 		}
 		System.out.println("리디렉션 안됐다");
 		if (!authGuard.level().isMatchWith(role)) {
@@ -68,6 +68,4 @@ public class AuthAspect {
 			throw new ServiceException(UNAUTHENTICATED);
 		}
 	}
-
-
 }

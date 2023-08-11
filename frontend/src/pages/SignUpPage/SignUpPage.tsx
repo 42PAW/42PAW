@@ -10,8 +10,17 @@ import ProfileCard from "@/pages/SignUpPage/components/ProfileCard";
 import Toaster from "@/components/toast/Toaster";
 import { SignUpInfoDTO } from "@/types/dto/member.dto";
 import { getCookie } from "@/api/cookie/cookies";
+import jwtDecode from "jwt-decode";
 
 const token = getCookie("access_token");
+
+interface IToken {
+  campus: string;
+  email: string;
+  exp: number;
+  oauthName: string;
+  role: string;
+}
 
 export enum Section {
   Nickname = "NicknameSection",
@@ -48,7 +57,17 @@ const SignUpPage = () => {
     if (!token) {
       navigator("/");
     }
-  }, [token]);
+    if (token) {
+      try {
+        const decodedToken: IToken = jwtDecode(token);
+        if (decodedToken?.role === "USER") {
+          navigator("/");
+        }
+      } catch (error) {
+        navigator("/");
+      }
+    }
+  }, []);
 
   return (
     <MainStyled>

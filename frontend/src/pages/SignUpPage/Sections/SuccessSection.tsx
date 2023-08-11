@@ -19,7 +19,7 @@ const SuccessSection: React.FC<SectionProps> = ({ registerData }) => {
     console.log(response);
     setTimeout(() => {
       navigator("/");
-    }, 100);
+    }, 1000);
   };
 
   useEffect(() => {

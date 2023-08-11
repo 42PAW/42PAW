@@ -8,8 +8,6 @@ import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
 import { removeCookie } from "@/api/cookie/cookies";
 
-const url = `${import.meta.env.VITE_AUTH_LOGIN}`;
-
 const LeftMenuDesktop = () => {
   const { moveToMain, moveToNotice, moveToMyProfile, moveToUpload } =
     useNavigateCustom();
@@ -20,7 +18,7 @@ const LeftMenuDesktop = () => {
   const { openSearchSection } = useRightSectionHandler();
 
   const handleLogin = () => {
-    window.location.replace(url);
+    window.location.replace(`${import.meta.env.VITE_AUTH_LOGIN}`);
   };
 
   const handleLogout = () => {

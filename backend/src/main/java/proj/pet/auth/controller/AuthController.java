@@ -48,7 +48,7 @@ public class AuthController {
 	public void ftLogin(
 			HttpServletResponse response
 	) {
-		authFacadeService.requestLoginToApi(response);
+		authFacadeService.requestLoginToFtApi(response);
 	}
 
 	/**

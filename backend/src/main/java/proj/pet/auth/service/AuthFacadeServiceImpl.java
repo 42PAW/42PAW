@@ -22,7 +22,7 @@ public class AuthFacadeServiceImpl implements AuthFacadeService {
 	private final FtOauthProperties ftOauthProperties;
 	private final JwtProperties jwtProperties;
 
-	@Override public void requestLoginToApi(HttpServletResponse res) {
+	@Override public void requestLoginToFtApi(HttpServletResponse res) {
 		oauthService.sendCodeRequestToOauth(res, ftOauthProperties);
 	}
 

@@ -49,19 +49,20 @@ public class MemberServiceImpl implements MemberService {
 			LocalDateTime now
 	) {
 		Country country = Country.whereLocates(payload.getCampus());
-		System.out.println("country = " + country);
-		Member member = Member.of(
-				payload.getProfile(),
-				country,
-				country.getLanguage(),
-				nickname,
-				statement,
-				MemberRole.USER,
-				now);
+		Member member = memberRepository.save(
+				Member.of(
+						payload.getProfile(),
+						country,
+						country.getLanguage(),
+						nickname,
+						statement,
+						MemberRole.USER,
+						now));
 		List<MemberCategoryFilter> filters =
 				animalCategoryRepository.findBySpeciesIn(categoryFilters).stream()
 						.map(category -> MemberCategoryFilter.of(member, category))
 						.toList();
+		System.out.println("filters = " + filters);
 		member.addCategoryFilters(filters);
 		return memberRepository.save(member);
 	}

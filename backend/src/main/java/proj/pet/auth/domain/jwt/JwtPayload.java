@@ -33,7 +33,6 @@ public class JwtPayload {
 	 * @return JwtPayload
 	 */
 	public static JwtPayload from(Map<String, Object> claims) {
-		System.out.println("claims = " + claims);
 		try {
 			return JwtPayload.builder()
 					.email((String) claims.get("email"))

@@ -43,4 +43,8 @@ public class BoardCategoryFilter implements Validatable {
 		return board != null && !board.isNew()
 				&& animalCategory != null && !animalCategory.isNew();
 	}
+
+	public Species getSpecies() {
+		return this.animalCategory.getSpecies();
+	}
 }

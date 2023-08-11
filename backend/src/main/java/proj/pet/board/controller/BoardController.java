@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.dto.BoardsResponseDto;
 import proj.pet.board.service.BoardFacadeService;
 import proj.pet.category.domain.Species;
+import proj.pet.member.domain.UserSession;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.member.repository.MemberRepository;
 
@@ -26,27 +27,30 @@ public class BoardController {
 
 	@GetMapping
 	public BoardsResponseDto getMainViewBoards(
+			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("size") int size,
 			@RequestParam("page") int page) {
 		PageRequest pageRequest = PageRequest.of(page, size);
-		return boardFacadeService.getMainViewBoards(pageRequest);
+		return boardFacadeService.getMainViewBoards(userSessionDto, pageRequest);
 	}
 
 	@GetMapping("/hot")
 	public BoardsResponseDto getHotBoards(
+			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("size") int size,
 			@RequestParam("page") int page) {
 		PageRequest pageRequest = PageRequest.of(page, size);
-		return boardFacadeService.getHotBoards(pageRequest);
+		return boardFacadeService.getHotBoards(userSessionDto, pageRequest);
 	}
 
 	@GetMapping("/members/{memberId}")
 	public BoardsResponseDto getMemberBoards(
+			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("size") int size,
 			@RequestParam("page") int page,
 			@PathVariable("memberId") Long memberId) {
 		PageRequest pageRequest = PageRequest.of(page, size);
-		return boardFacadeService.getMemberBoards(pageRequest, memberId);
+		return boardFacadeService.getMemberBoards(userSessionDto, memberId, pageRequest);
 	}
 
 	@PostMapping(

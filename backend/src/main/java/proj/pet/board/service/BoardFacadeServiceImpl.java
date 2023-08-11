@@ -19,18 +19,18 @@ public class BoardFacadeServiceImpl implements BoardFacadeService {
 	private final BoardQueryService boardQueryService;
 
 	@Override
-	public BoardsResponseDto getMainViewBoards(PageRequest pageRequest) {
-		return boardQueryService.getMainViewBoards(pageRequest);
+	public BoardsResponseDto getMainViewBoards(UserSessionDto userSessionDto, PageRequest pageRequest) {
+		return boardQueryService.getMainViewBoards(userSessionDto.getMemberId(), pageRequest);
 	}
 
 	@Override
-	public BoardsResponseDto getHotBoards(PageRequest pageRequest) {
-		return boardQueryService.getHotBoards(pageRequest);
+	public BoardsResponseDto getHotBoards(UserSessionDto userSessionDto, PageRequest pageRequest) {
+		return boardQueryService.getHotBoards(userSessionDto.getMemberId(), pageRequest);
 	}
 
 	@Override
-	public BoardsResponseDto getMemberBoards(PageRequest pageRequest, Long memberId) {
-		return boardQueryService.getMemberBoards(pageRequest, memberId);
+	public BoardsResponseDto getMemberBoards(UserSessionDto userSessionDto, Long memberId, PageRequest pageRequest) {
+		return boardQueryService.getMemberBoards(userSessionDto.getMemberId(), memberId, pageRequest);
 	}
 
 	@Override

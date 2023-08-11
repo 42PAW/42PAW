@@ -6,10 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import proj.pet.auth.domain.AuthGuard;
 import proj.pet.board.dto.BoardsResponseDto;
+import proj.pet.member.domain.UserSession;
 import proj.pet.member.dto.*;
 import proj.pet.member.service.MemberFacadeService;
-
-import java.io.IOException;
 
 import static proj.pet.auth.domain.AuthLevel.USER_OR_ADMIN;
 
@@ -36,12 +35,9 @@ public class MemberController {
 
 	@GetMapping("/me")
 	@AuthGuard(level = USER_OR_ADMIN)
-	public String getMyInfo(HttpServletResponse response) throws IOException {
+	public MemberMyInfoResponseDto getMyInfo(@UserSession UserSessionDto userSessionDto) {
 		//TODO: user 세션에서 가져오기
-		System.out.println("getMyInfo");
-//		response.sendRedirect("http://naver.com");
-//		return memberFacadeService.getMyInfo();
-		return "hello";
+		return memberFacadeService.getMyInfo(userSessionDto);
 	}
 
 	@GetMapping("/me/profile")

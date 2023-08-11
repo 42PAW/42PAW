@@ -10,6 +10,9 @@ import java.util.Map;
 
 import static proj.pet.exception.ExceptionStatus.INCORRECT_ARGUMENT;
 
+/**
+ * 서버 내부에서 사용하는 서버 토큰의 Payload
+ */
 @Getter
 @Builder
 public class JwtPayload {
@@ -19,6 +22,12 @@ public class JwtPayload {
 	private final Country.Campus campus;
 	private final MemberRole role;
 
+	/**
+	 * JWT Payload를 Map으로부터 생성
+	 *
+	 * @param claims Payload를 담고 있는 Map
+	 * @return JwtPayload
+	 */
 	public static JwtPayload from(Map<String, Object> claims) {
 		System.out.println("claims = " + claims);
 		try {
@@ -32,9 +41,13 @@ public class JwtPayload {
 			e.printStackTrace();
 			throw new DomainException(INCORRECT_ARGUMENT);
 		}
-
 	}
 
+	/**
+	 * JwtPayload를 Map으로 변환
+	 *
+	 * @return Map
+	 */
 	public Map<String, Object> toClaims() {
 		return Map.of(
 				"email", email,

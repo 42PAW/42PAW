@@ -151,9 +151,17 @@ public class OauthService {
 		cookieManager.setCookieToClient(res, cookie, "/", req.getServerName(), (int) jwtProperties.getExpiry());
 	}
 
+	/**
+	 * 토큰의 Payload에 담겨있는 MemberRole을 갱신합니다.
+	 * <p>
+	 * 회원가입 이후에 갱신해주어야 할 때 사용됩니다.
+	 *
+	 * @param req 클라이언트의 요청 서블릿
+	 * @param res 클라이언트의 응답 서블릿
+	 * @param now 현재 시간
+	 */
 	public void refreshRoleOfServerToken(HttpServletRequest req, HttpServletResponse res, LocalDateTime now) {
 		String oldToken = cookieManager.getCookieValue(req, jwtProperties.getTokenName());
-		System.out.println("oldToken = " + oldToken);
 		Map<String, Object> claims = tokenManager.extractClaims(oldToken);
 		String oauthName = claims.get("oauthName").toString();
 		Map<String, Object> mutableClaims = new HashMap<>(claims);

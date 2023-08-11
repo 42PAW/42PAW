@@ -23,8 +23,6 @@ public class FtOauthProperties implements OauthProperties {
 	@Value("${cloud.oauth2.client.registration.ft.scope}")
 	private String scope;
 
-	/**/
-
 	@Value("${cloud.oauth2.client.provider.ft.authorization-uri}")
 	private String authorizationUri;
 

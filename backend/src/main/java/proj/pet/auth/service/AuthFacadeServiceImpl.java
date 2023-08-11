@@ -10,6 +10,9 @@ import proj.pet.auth.domain.OauthProperties;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+/**
+ * 인증 관련 서비스를 수행하는 파사드
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthFacadeServiceImpl implements AuthFacadeService {
@@ -17,18 +20,13 @@ public class AuthFacadeServiceImpl implements AuthFacadeService {
 
 	@Override public void requestLoginToApi(HttpServletResponse res, OauthProperties oauthProperties) {
 		oauthService.sendCodeRequestToOauth(res, oauthProperties);
-		System.out.println();
 	}
 
 	@Override public void handleLogin(String code, HttpServletRequest req, HttpServletResponse res, OauthProperties oauthProperties, LocalDateTime now) {
 		String accessToken = oauthService.getAccessTokenByCode(code, oauthProperties);
 		JsonNode profileJson = oauthService.getProfileJsonByToken(accessToken, oauthProperties);
 		Map<String, Object> claims = oauthService.makeClaimsByProviderProfile(profileJson);
-		try {
-			oauthService.provideServerTokenToClient(claims, req, res, now);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		oauthService.provideServerTokenToClient(claims, req, res, now);
 	}
 
 	@Override public void logout(HttpServletResponse res, OauthProperties oauthProperties) {

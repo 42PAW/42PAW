@@ -75,7 +75,7 @@ public class AuthController {
 			HttpServletRequest request) {
 		authFacadeService.handleLogin(code, request, response, ftOauthProperties, LocalDateTime.now());
 		try {
-			response.sendRedirect(domainProperties.getFrontendHost());
+			response.sendRedirect(domainProperties.getFrontendDomain());
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new ControllerException(INTERNAL_SERVER_ERROR);

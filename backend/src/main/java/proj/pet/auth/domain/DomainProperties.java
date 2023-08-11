@@ -12,6 +12,6 @@ public class DomainProperties {
 	private String serviceDomain;
 
 	@Value("${cloud.oauth2.domain.frontend}")
-	private String frontendHost;
+	private String frontendDomain;
 
 }

@@ -8,7 +8,6 @@ import proj.pet.auth.domain.jwt.JwtPayload;
 import proj.pet.category.domain.MemberCategoryFilter;
 import proj.pet.category.domain.Species;
 import proj.pet.category.repository.AnimalCategoryRepository;
-import proj.pet.mapper.MemberMapper;
 import proj.pet.member.domain.Country;
 import proj.pet.member.domain.Member;
 import proj.pet.member.domain.MemberImageManager;
@@ -25,7 +24,6 @@ import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
 @Transactional
 public class MemberServiceImpl implements MemberService {
 	private final MemberRepository memberRepository;
-	private final MemberMapper memberMapper;
 	private final MemberImageManager memberImageManager;
 	private final AnimalCategoryRepository animalCategoryRepository;
 
@@ -50,7 +48,8 @@ public class MemberServiceImpl implements MemberService {
 			List<Species> categoryFilters,
 			LocalDateTime now
 	) {
-		Country country = Country.from(payload.getCampus().name());
+		Country country = Country.whereLocates(payload.getCampus());
+		System.out.println("country = " + country);
 		Member member = Member.of(
 				payload.getProfile(),
 				country,

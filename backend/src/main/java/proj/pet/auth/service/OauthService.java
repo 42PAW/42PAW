@@ -20,6 +20,7 @@ import proj.pet.auth.domain.jwt.JwtTokenProvider;
 import proj.pet.exception.ExceptionStatus;
 import proj.pet.exception.ServiceException;
 import proj.pet.member.domain.Country;
+import proj.pet.member.domain.OauthType;
 import proj.pet.member.repository.MemberRepository;
 
 import java.io.IOException;
@@ -101,8 +102,10 @@ public class OauthService {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("email", profile.get("email").asText());
 		String oauthName = profile.get("login").asText();
+		claims.put("oauthType", OauthType.FORTY_TWO); // 확장시 분리
+		claims.put("oauthId", profile.get("id").asText());
 		claims.put("oauthName", oauthName);
-		claims.put("campus", Country.Campus.from(profile.get("campus").get(0).get("name").asText()).getOriginalName());
+		claims.put("campus", Country.Campus.from(profile.get("campus").get(0).get("name").asText()));
 		memberRepository.findByOauthName(oauthName)
 				.ifPresentOrElse(
 						member -> claims.put("role", member.getMemberRole()),
@@ -146,6 +149,7 @@ public class OauthService {
 	 */
 	public void provideServerTokenToClient(Map<String, Object> claims, HttpServletRequest req, HttpServletResponse res, LocalDateTime now) {
 		JwtPayload payload = JwtPayload.from(claims);
+		System.out.println("payload = " + payload);
 		String serverToken = tokenProvider.createToken(payload, jwtProperties.getSigningKey(), jwtProperties.getExpiry(), now);
 		Cookie cookie = cookieManager.cookieOf(jwtProperties.getTokenName(), serverToken);
 		cookieManager.setCookieToClient(res, cookie, "/", req.getServerName(), (int) jwtProperties.getExpiry());

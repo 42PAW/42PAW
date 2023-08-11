@@ -2,6 +2,7 @@ package proj.pet.auth.domain.jwt;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import proj.pet.exception.DomainException;
 import proj.pet.member.domain.Country;
 import proj.pet.member.domain.MemberRole;
@@ -17,6 +18,7 @@ import static proj.pet.exception.ExceptionStatus.INCORRECT_ARGUMENT;
  */
 @Getter
 @Builder
+@ToString
 public class JwtPayload {
 
 	private final OauthProfile profile;
@@ -31,6 +33,7 @@ public class JwtPayload {
 	 * @return JwtPayload
 	 */
 	public static JwtPayload from(Map<String, Object> claims) {
+		System.out.println("claims = " + claims);
 		try {
 			return JwtPayload.builder()
 					.email((String) claims.get("email"))

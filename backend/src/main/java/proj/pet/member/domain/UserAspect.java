@@ -14,8 +14,9 @@ import proj.pet.exception.ControllerException;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.member.repository.MemberRepository;
 
+import java.util.Optional;
+
 import static proj.pet.exception.ExceptionStatus.INCORRECT_ARGUMENT;
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
 
 @Component
 @Aspect
@@ -42,8 +43,12 @@ public class UserAspect {
 	public UserSessionDto getUserSessionDtoByRequest(HttpServletRequest req) {
 		String token = tokenManager.extractTokenFrom(req);
 		JwtPayload ftPayload = tokenManager.createFtPayload(token);
-		Member member = memberRepository.findByOauthName(ftPayload.getProfile().getName())
-				.orElseThrow(NOT_FOUND_MEMBER::toServiceException);
-		return new UserSessionDto(member.getId(), member.getNickname(), member.getMemberRole());
+		Optional<Member> member = memberRepository.findByOauthName(ftPayload.getProfile().getName());
+		if (member.isPresent()) {
+			Member presentMember = member.get();
+			return new UserSessionDto(presentMember.getId(), presentMember.getNickname(), presentMember.getMemberRole());
+		} else {
+			return new UserSessionDto(0L, "", MemberRole.NOT_REGISTERED);
+		}
 	}
 }

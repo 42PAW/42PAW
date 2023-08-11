@@ -71,8 +71,11 @@ const MainPage = () => {
           <BoardTemplate
             key={board.boardId}
             boardId={board.boardId}
+            memberId={board.memberId}
             memberName={board.memberName}
-            profileImage={board.profileImage}
+            intraName={board.intraName}
+            profileImageURL={board.profileImage}
+            country={board.country}
             images={board.images}
             categories={board.categories}
             reactionCount={board.reactionCount}

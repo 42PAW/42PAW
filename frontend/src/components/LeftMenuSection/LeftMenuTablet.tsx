@@ -1,41 +1,75 @@
-import { useState, useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import useNavigateCustom from "@/hooks/useNavigateCustom";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
-import { languageState } from "@/recoil/atom";
 import SettingButton from "@/components/SettingButton";
+import { LeftMenuProps } from "./LeftMenuSection";
 
-const LeftMenuTablet = () => {
+const LeftMenuTablet: React.FC<LeftMenuProps> = ({
+  handleLogin,
+  handleLogout,
+  userInfo,
+  language,
+}) => {
   const [isBannerVisible, setIsBannerVisible] = useState(true);
-  const [language] = useRecoilState<any>(languageState);
   const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
   const { openSearchSection } = useRightSectionHandler();
+  const touchStartY = useRef<number | null>(null);
 
   const isMainPage: boolean = location.pathname === "/";
 
   useEffect(() => {
-    const handleWheel = (event: WheelEvent) => {
-      const deltaY = event.deltaY;
-      if (deltaY > 0) {
-        setIsBannerVisible(false);
-      } else if (deltaY < 0) {
-        setIsBannerVisible(true);
-      }
-    };
-
     window.addEventListener("wheel", handleWheel);
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchmove", handleTouchMove);
 
     return () => {
       window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
     };
   }, []);
+
+  const handleWheel = (event: WheelEvent) => {
+    const deltaY = event.deltaY;
+    if (deltaY > 0) {
+      setIsBannerVisible(false);
+    } else if (deltaY < 0) {
+      setIsBannerVisible(true);
+    }
+  };
+
+  const handleTouchStart = (event: TouchEvent) => {
+    if (touchStartY.current === null) return;
+
+    touchStartY.current = event.touches[0].clientY;
+  };
+
+  const handleTouchMove = (event: TouchEvent) => {
+    if (touchStartY.current === null) return;
+
+    const deltaY = touchStartY.current - event.touches[0].clientY;
+    if (deltaY > 50) {
+      setIsBannerVisible(false);
+    } else if (deltaY < -50) {
+      setIsBannerVisible(true);
+    }
+
+    touchStartY.current = null;
+  };
 
   return (
     <>
       {isMainPage && (
         <BannerStyled $isBannerVisible={isBannerVisible}>
-          <ProfileImageStyled src="/src/assets/profileImage.jpg" />
+          {userInfo ? (
+            <ProfileImageStyled src={userInfo.profileImageUrl} />
+          ) : (
+            <ProfileImageStyled
+              src="/src/assets/userW.png"
+              onClick={handleLogin}
+            />
+          )}
           <BannerLogoStyled>
             42PAW
             <span>
@@ -66,7 +100,13 @@ const LeftMenuTablet = () => {
             </li>
           </MenuListStyled>
         </nav>
-        <LoginButtonStyled>{language.logout}</LoginButtonStyled>
+        {userInfo ? (
+          <LoginButtonStyled onClick={handleLogout}>
+            {language.logout}
+          </LoginButtonStyled>
+        ) : (
+          <LoginButtonStyled onClick={handleLogin}>로그인</LoginButtonStyled>
+        )}
       </MenuStyled>
     </>
   );

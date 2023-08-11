@@ -34,6 +34,7 @@ body {
   min-width: 280px;
   overflow: hidden;
   font-size: 10px;
+  font-weight: 500;
   color: var(--grey);
   font-family: "Noto Sans KR", sans-serif;
   text-align: justify;
@@ -44,10 +45,6 @@ body {
     #e6dade 76.75%
   );
   background-repeat: no-repeat;
-  @media (max-width: 1023px) {
-    height: 100vh;
-    overflow: hidden;
-  }
 }
 
 *::-webkit-scrollbar {

@@ -12,18 +12,12 @@ export const axiosSignUp = async ({
 }: SignUpInfoDTO): Promise<any> => {
   try {
     const formData = new FormData();
-    formData.append(
-      "memberName",
-      memberName
-    );
+    formData.append("memberName", memberName);
     formData.append("imageData", imageData ? imageData : "null");
-    formData.append(
-      "statement",
-      statement
-    );
-      categoryFilters.map( (categoryFilter) => {
-          formData.append("categoryFilters", categoryFilter);
-      })
+    formData.append("statement", statement);
+    categoryFilters.map((categoryFilter) => {
+      formData.append("categoryFilters", categoryFilter);
+    });
     const response = await instance.post(axiosSignUpURL, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -46,14 +40,13 @@ export const axiosMyInfo = async (): Promise<any> => {
   }
 };
 
-const axiosGetBoardsURL =
-  "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/boards";
+const axiosGetBoardsURL = "/v1/boards";
 export const axiosGetBoards = async (
   size: number,
   page: number
 ): Promise<any> => {
   try {
-    const response = await axios.get(axiosGetBoardsURL, {
+    const response = await instance.get(axiosGetBoardsURL, {
       params: { size: size, page: page },
     });
     return response.data;

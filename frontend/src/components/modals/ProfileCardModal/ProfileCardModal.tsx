@@ -16,33 +16,27 @@ const ProfileCardModal = () => {
       isOpen={currentOpenModal.profileCardModal}
     >
       <WrapperStyled>
-        <h1>pont-en-ciel</h1>
-        <ProfileImageStyled src="/src/assets/profileImage.jpg" />
-        <CaptionStyled>Ravi de vous rencontrer</CaptionStyled>
-        <ButtonContainerStyled>
-          <button>profil</button>
-          <button>suivre</button>
-        </ButtonContainerStyled>
-        <SubButtonContainerStyled>
-          <button>
-            <img src="/src/assets/ban.png" />
-            bloquer
-          </button>
-          <button>
-            <img src="/src/assets/report.png" />
-            signaler
-          </button>
-        </SubButtonContainerStyled>
+        <LogoStyled>
+          <img src="/src/assets/paw.png" />
+        </LogoStyled>
+        <BurgerButtonStyled>
+          <img src="/src/assets/burgerPurple.png" />
+        </BurgerButtonStyled>
+        <img src="/src/assets/profileImage.jpg" />
+        <MainAreaStyled>g</MainAreaStyled>
       </WrapperStyled>
     </ModalLayout>
   );
 };
 
 const WrapperStyled = styled.div`
+  overflow: hidden;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 280px;
+  height: 440px;
   background-color: var(--white);
   border-radius: 15px;
   color: var(--grey);
@@ -51,70 +45,44 @@ const WrapperStyled = styled.div`
     margin-top: 40px;
     margin-bottom: 5px;
   }
-`;
-
-const ProfileImageStyled = styled.img`
-  border-radius: 100%;
-  width: 100px;
-`;
-const CaptionStyled = styled.div`
-  margin-top: 25px;
-  font-size: 13px;
-`;
-
-const ButtonContainerStyled = styled.div`
-  margin-top: 30px;
-  margin: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 215px;
-  button {
-    cursor: pointer;
-    height: 40px;
-    width: 100px;
-    border-radius: 10px;
-    border: none;
-    &:nth-child(1) {
-      background-color: var(--purple);
-      color: var(--white);
-    }
-    &:nth-child(2) {
-      background-color: var(--white);
-      border: 1px solid var(--grey);
-      color: var(--grey);
-    }
-    &:hover {
-      opacity: 0.7;
-    }
-  }
-`;
-
-const SubButtonContainerStyled = styled.div`
-  margin-top: -8px;
-  padding-bottom: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 160px;
-  button {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background-color: var(--white);
-    color: var(--lightgrey);
-    font-size: 12px;
-    width: 50%;
-    &:hover {
-      opacity: 0.7;
-    }
-  }
   img {
-    width: 14px;
-    margin-right: 5px;
+    width: 110%;
   }
+`;
+
+const LogoStyled = styled.div`
+  position: absolute;
+  left: 11px;
+  top: 8px;
+  img {
+    width: 35px;
+  }
+`;
+
+const BurgerButtonStyled = styled.button`
+  background-color: transparent;
+  padding: none;
+  border: none;
+  position: absolute;
+  right: 5px;
+  top: 8px;
+  img {
+    width: 30px;
+  }
+`;
+
+const MainAreaStyled = styled.div`
+  position: absolute;
+  bottom: -310px;
+  border-radius: 100%;
+  height: 500px;
+  width: 500px;
+  background: linear-gradient(
+    228deg,
+    #878abe 0%,
+    #d1c1cd 52.34%,
+    #e6dade 76.75%
+  );
 `;
 
 export default ProfileCardModal;

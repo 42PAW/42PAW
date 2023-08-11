@@ -13,12 +13,8 @@ import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static proj.pet.exception.ExceptionStatus.INCORRECT_ARGUMENT;
 import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
 
 @QueryService
@@ -39,16 +35,22 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 					boolean isReacted = reactions.stream().anyMatch(reaction -> reaction.getBoard().getId().equals(board.getId()));
 					int reactionCount = board.getReactions().size();
 					int commentCount = board.getComments().size();
-					Comment latestComment = board.getComments().stream().max(Comparator.comparing(Comment::getCreatedAt))
-							.orElseThrow(INCORRECT_ARGUMENT::toServiceException);
+					Optional<Comment> latestComment = board.getComments().stream().max(Comparator.comparing(Comment::getCreatedAt));
+					String previewCommentUserName = "";
+					String previewCommentContent = "";
+					if (latestComment.isPresent()) {
+						previewCommentUserName = latestComment.get().getMember().getNickname();
+						previewCommentContent = latestComment.get().getContent();
+					}
 					return boardMapper.toBoardInfoDto(
 							board, board.getMember(),
 							board.getBoardMediaUrls(), board.getCategoriesAsSpecies(),
 							isScrapped, isReacted,
 							reactionCount, commentCount,
-							latestComment.getMember().getNickname(), latestComment.getContent());
+							previewCommentUserName, previewCommentContent
+					);
 				}).toList();
-		return boardMapper.toBoardsResponseDto(result, pageRequest.getPageSize());
+		return boardMapper.toBoardsResponseDto(result, 1); // totallength는 임시로 1로 설정
 	}
 
 	@Override public BoardsResponseDto getHotBoards(Long loginUserId, PageRequest pageRequest) {

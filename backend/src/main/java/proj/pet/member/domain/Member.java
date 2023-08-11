@@ -99,8 +99,8 @@ public class Member extends IdDomain implements Validatable {
 		RuntimeExceptionThrower.checkValidity(this);
 	}
 
-	public static Member of(OauthProfile oauthProfile, Country country, Language language, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
-		return new Member(oauthProfile, country, language, nickname, statement, memberRole, now);
+	public static Member of(OauthProfile oauthProfile, Country country, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
+		return new Member(oauthProfile, country, country.getLanguage(), nickname, statement, memberRole, now);
 	}
 
 	@Override public boolean isValid() {

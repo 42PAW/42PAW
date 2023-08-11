@@ -53,7 +53,6 @@ public class MemberServiceImpl implements MemberService {
 				Member.of(
 						payload.getProfile(),
 						country,
-						country.getLanguage(),
 						nickname,
 						statement,
 						MemberRole.USER,
@@ -62,10 +61,7 @@ public class MemberServiceImpl implements MemberService {
 				animalCategoryRepository.findBySpeciesIn(categoryFilters).stream()
 						.map(category -> MemberCategoryFilter.of(member, category))
 						.toList();
-		System.out.println("filters = " + filters);
 		member.addCategoryFilters(filters);
 		return memberRepository.save(member);
 	}
-
-
 }

@@ -49,7 +49,7 @@ public class AuthAspect {
 				.getResponse();
 
 		String token = jwtTokenManager.extractTokenFrom(request);
-		if (!jwtTokenManager.isTokenValid(token, jwtProperties.getSigningKey())) {
+		if (!jwtTokenManager.isTokenValid(token, jwtProperties.createSigningKey())) {
 			cookieManager.deleteCookie(response, jwtProperties.getTokenName());
 			throw new ServiceException(UNAUTHORIZED);
 		}

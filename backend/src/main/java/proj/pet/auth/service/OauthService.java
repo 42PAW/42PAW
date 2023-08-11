@@ -147,10 +147,11 @@ public class OauthService {
 	 * @param res    클라이언트의 응답 서블릿
 	 * @param now    현재 시간
 	 */
-	public void provideServerTokenToClient(Map<String, Object> claims, HttpServletRequest req, HttpServletResponse res, LocalDateTime now) {
+	public void provideServerTokenToClient(
+			Map<String, Object> claims, HttpServletRequest req, HttpServletResponse res, LocalDateTime now,
+			JwtProperties jwtProperties) {
 		JwtPayload payload = JwtPayload.from(claims);
-		System.out.println("payload = " + payload);
-		String serverToken = tokenProvider.createToken(payload, jwtProperties.getSigningKey(), jwtProperties.getExpiry(), now);
+		String serverToken = tokenProvider.createToken(payload, jwtProperties.createSigningKey(), jwtProperties.getExpiry(), now);
 		Cookie cookie = cookieManager.cookieOf(jwtProperties.getTokenName(), serverToken);
 		cookieManager.setCookieToClient(res, cookie, "/", req.getServerName(), (int) jwtProperties.getExpiry());
 	}
@@ -174,7 +175,7 @@ public class OauthService {
 						member -> mutableClaims.replace("role", member.getMemberRole()),
 						() -> mutableClaims.replace("role", NOT_REGISTERED)
 				);
-		String newToken = tokenProvider.createToken(JwtPayload.from(mutableClaims), jwtProperties.getSigningKey(), jwtProperties.getExpiry(), now);
+		String newToken = tokenProvider.createToken(JwtPayload.from(mutableClaims), jwtProperties.createSigningKey(), jwtProperties.getExpiry(), now);
 		Cookie cookie = cookieManager.cookieOf(jwtProperties.getTokenName(), newToken);
 		cookieManager.setCookieToClient(res, cookie, "/", req.getServerName(), (int) jwtProperties.getExpiry());
 	}

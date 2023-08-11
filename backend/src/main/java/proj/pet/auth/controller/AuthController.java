@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import proj.pet.auth.domain.AuthGuard;
 import proj.pet.auth.domain.DomainProperties;
-import proj.pet.auth.domain.FtOauthProperties;
 import proj.pet.auth.service.AuthFacadeService;
 import proj.pet.exception.ControllerException;
 import proj.pet.member.domain.UserSession;
@@ -32,7 +31,6 @@ import static proj.pet.exception.ExceptionStatus.INTERNAL_SERVER_ERROR;
 public class AuthController {
 
 	private final AuthFacadeService authFacadeService;
-	private final FtOauthProperties ftOauthProperties;
 	private final DomainProperties domainProperties;
 
 	@GetMapping
@@ -47,10 +45,10 @@ public class AuthController {
 	 * @param response
 	 */
 	@GetMapping("/login")
-	public void login(
+	public void ftLogin(
 			HttpServletResponse response
 	) {
-		authFacadeService.requestLoginToApi(response, ftOauthProperties);
+		authFacadeService.requestLoginToApi(response);
 	}
 
 	/**
@@ -73,7 +71,7 @@ public class AuthController {
 			@RequestParam String code,
 			HttpServletResponse response,
 			HttpServletRequest request) {
-		authFacadeService.handleLogin(code, request, response, ftOauthProperties, LocalDateTime.now());
+		authFacadeService.handleFortyTwoLogin(code, request, response, LocalDateTime.now());
 		try {
 			response.sendRedirect(domainProperties.getFrontendDomain());
 		} catch (IOException e) {

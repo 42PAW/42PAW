@@ -7,10 +7,9 @@ import proj.pet.auth.domain.OauthProperties;
 import java.time.LocalDateTime;
 
 public interface AuthFacadeService {
-	void requestLoginToApi(HttpServletResponse res, OauthProperties oauthProperties);
+	void requestLoginToApi(HttpServletResponse res);
 
-	void handleLogin(String code, HttpServletRequest req, HttpServletResponse res,
-	                 OauthProperties oauthProperties, LocalDateTime now);
+	void handleFortyTwoLogin(String code, HttpServletRequest req, HttpServletResponse res, LocalDateTime now);
 
 	void logout(HttpServletResponse res, OauthProperties oauthProperties);
 }

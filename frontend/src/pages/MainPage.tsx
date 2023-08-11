@@ -29,7 +29,7 @@ const MainPage = () => {
 
   useEffect(() => {
     getBoardsData();
-  }, [boardCategory]);
+  }, []);
 
   const getBoardsData = async () => {
     try {

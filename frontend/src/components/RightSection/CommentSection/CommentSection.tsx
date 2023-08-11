@@ -1,16 +1,18 @@
+import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import CommentItem from "@/components/RightSection/CommentSection/CommentItem";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
-import { useState, useEffect } from "react";
 import { currentBoardIdState } from "@/recoil/atom";
 import { axiosGetBoardComments } from "@/api/axios/axios.custom";
+import { axiosCreateComment } from "@/api/axios/axios.custom";
 
 const CommentSection = () => {
   const [currentBoardComments, setCurrentBoardComments] = useState<
     CommentInfoDTO[] | null
   >(null);
   const [currentBoardId] = useRecoilState<number | null>(currentBoardIdState);
+  const [comment, setComment] = useState<string>("");
 
   useEffect(() => {
     getCommentsData();
@@ -26,6 +28,15 @@ const CommentSection = () => {
     } catch (error) {
       throw error;
     }
+  };
+
+  const handleOnchange = (e: any) => {
+    setComment(e.target.value);
+  };
+
+  const uploadComment = async () => {
+    const response = await axiosCreateComment(currentBoardId, comment);
+    console.log(response);
   };
 
   return (
@@ -50,8 +61,12 @@ const CommentSection = () => {
         )}
       </CommentItemWrapperStyled>
       <CommentInputContainerStyled>
-        <input placeholder="댓글을 입력해주세요..." />
-        <button>게시</button>
+        <input
+          value={comment}
+          placeholder="댓글을 입력해주세요..."
+          onChange={handleOnchange}
+        />
+        <button onClick={uploadComment}>게시</button>
       </CommentInputContainerStyled>
     </WrapperStyled>
   );

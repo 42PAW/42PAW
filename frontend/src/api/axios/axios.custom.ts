@@ -46,7 +46,7 @@ export const axiosGetBoards = async (
   page: number
 ): Promise<any> => {
   try {
-    const response = await instance.get(axiosGetBoardsURL, {
+    const response = await axios.get(axiosGetBoardsURL, {
       params: { size: size, page: page },
     });
     return response.data;
@@ -125,6 +125,22 @@ export const axiosGetBoardComments = async (boardId: number): Promise<any> => {
       axiosGetBoardCommentsURL + boardId.toString()
     );
     return response.data.result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosCreateCommentURL = "/v1/comments";
+export const axiosCreateComment = async (
+  boardId: number | null,
+  content: string
+): Promise<any> => {
+  try {
+    const response = await instance.post(axiosCreateCommentURL, {
+      boardId,
+      content,
+    });
+    return response;
   } catch (error) {
     throw error;
   }

@@ -14,17 +14,16 @@ export const axiosSignUp = async ({
     const formData = new FormData();
     formData.append(
       "memberName",
-      new Blob([memberName], { type: "application/json" })
+      memberName
     );
     formData.append("imageData", imageData ? imageData : "null");
     formData.append(
       "statement",
-      new Blob([statement], { type: "application/json" })
+      statement
     );
-    formData.append(
-      "categoryFilters",
-      new Blob([JSON.stringify(categoryFilters)], { type: "application/json" })
-    );
+      categoryFilters.map( (categoryFilter) => {
+          formData.append("categoryFilters", categoryFilter);
+      })
     const response = await instance.post(axiosSignUpURL, formData, {
       headers: {
         "Content-Type": "multipart/form-data",

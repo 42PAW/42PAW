@@ -24,8 +24,8 @@ function App() {
             <Route path="notice" element={<NoticePage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="upload" element={<UploadPage />} />
-            <Route path="sign-up" element={<SignUpPage />} />
           </Route>
+          <Route path="/sign-up" element={<SignUpPage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

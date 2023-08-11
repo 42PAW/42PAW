@@ -1,20 +1,13 @@
 package proj.pet.member.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import proj.pet.board.dto.BoardsResponseDto;
-import proj.pet.member.dto.MemberCreateRequestDto;
-import proj.pet.member.dto.MemberLanguageChangeRequestDto;
-import proj.pet.member.dto.MemberMyInfoResponseDto;
-import proj.pet.member.dto.MemberMyProfileResponseDto;
-import proj.pet.member.dto.MemberNicknameValidateResponseDto;
-import proj.pet.member.dto.MemberPreviewResponseDto;
-import proj.pet.member.dto.MemberProfileChangeRequestDto;
-import proj.pet.member.dto.MemberProfileChangeResponseDto;
-import proj.pet.member.dto.MemberSearchResponseDto;
-import proj.pet.member.dto.UserSessionDto;
+import proj.pet.member.dto.*;
 
 public interface MemberFacadeService {
 
-	void createMember(MemberCreateRequestDto memberCreateRequestDto);
+	void createMember(HttpServletRequest req, HttpServletResponse res, MemberCreateRequestDto memberCreateRequestDto);
 
 	MemberNicknameValidateResponseDto validateMemberNickname(String nickname);
 
@@ -35,5 +28,5 @@ public interface MemberFacadeService {
 	MemberSearchResponseDto searchMemberByName(String nickname, int page, int size);
 
 	void changeLanguage(UserSessionDto userSession,
-			MemberLanguageChangeRequestDto memberLanguageChangeRequestDto);
+	                    MemberLanguageChangeRequestDto memberLanguageChangeRequestDto);
 }

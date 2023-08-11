@@ -153,9 +153,7 @@ class BoardServiceTest {
 	private Member stubMember(String nickname, MemberRole memberRole, LocalDateTime now) {
 		OauthProfile oauthProfile = OauthProfile.of(OauthType.FORTY_TWO, "oauthId", "oauthName");
 		return Member.of(oauthProfile,
-				"profileImageUrl",
 				Country.KOREA,
-				Language.KOREAN,
 				nickname,
 				"statement",
 				memberRole,

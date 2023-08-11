@@ -6,8 +6,7 @@ import { useRecoilState } from "recoil";
 import SettingButton from "@/components/SettingButton";
 import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
-
-const url = `${import.meta.env.VITE_BE_HOST}/v1/auth/login`;
+import { removeCookie } from "@/api/cookie/cookies";
 
 const LeftMenuDesktop = () => {
   const { moveToMain, moveToNotice, moveToMyProfile, moveToUpload } =
@@ -19,11 +18,12 @@ const LeftMenuDesktop = () => {
   const { openSearchSection } = useRightSectionHandler();
 
   const handleLogin = () => {
-    window.location.replace(url);
+    window.location.replace(`${import.meta.env.VITE_AUTH_LOGIN}`);
   };
 
   const handleLogout = () => {
     setUserInfo(null);
+    removeCookie("access_token");
   };
 
   return (

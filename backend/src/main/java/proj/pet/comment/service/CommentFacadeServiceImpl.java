@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import proj.pet.comment.dto.CommentRequestDto;
 import proj.pet.comment.dto.CommentResponseDto;
+import proj.pet.member.dto.UserSessionDto;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +21,8 @@ public class CommentFacadeServiceImpl implements CommentFacadeService {
 	}
 
 	@Override
-	public void createComment(CommentRequestDto commentRequestDto) {
+	public void createComment(UserSessionDto userSessionDto, CommentRequestDto commentRequestDto) {
+		commentService.addCommentToBoard(userSessionDto.getMemberId(), commentRequestDto.getBoardId(), commentRequestDto.getContent(), LocalDateTime.now());
 
 	}
 

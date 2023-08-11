@@ -15,20 +15,26 @@ import proj.pet.utils.annotations.QueryService;
 
 import java.util.*;
 
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
-
 @QueryService
 @RequiredArgsConstructor
 public class BoardQueryServiceImpl implements BoardQueryService {
 
+	private final static Long NON_REGISTERED_USER_ID = 0L;
 	private final BoardRepository boardRepository;
 	private final MemberRepository memberRepository;
 	private final BoardMapper boardMapper;
 
 	@Override public BoardsResponseDto getMainViewBoards(Long loginUserId, PageRequest pageRequest) {
-		Member me = memberRepository.findById(loginUserId).orElseThrow(NOT_FOUND_MEMBER::toServiceException);
-		Set<Reaction> reactions = new HashSet<>(me.getReactions());
-		Set<Scrap> scraps = new HashSet<>(me.getScraps());
+		Set<Scrap> scraps;
+		Set<Reaction> reactions;
+		Optional<Member> loginUser = memberRepository.findById(loginUserId);
+		if (loginUser.isPresent()) {
+			scraps = new HashSet<>(loginUser.get().getScraps());
+			reactions = new HashSet<>(loginUser.get().getReactions());
+		} else {
+			scraps = new HashSet<>();
+			reactions = new HashSet<>();
+		}
 		List<BoardInfoDto> result = boardRepository.getMainViewBoards(pageRequest).stream()
 				.map(board -> {
 					boolean isScrapped = scraps.stream().anyMatch(scrap -> scrap.getBoard().getId().equals(board.getId()));

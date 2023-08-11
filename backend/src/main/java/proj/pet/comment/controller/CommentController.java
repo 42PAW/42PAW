@@ -8,7 +8,8 @@ import proj.pet.comment.service.CommentFacadeService;
 import proj.pet.member.domain.UserSession;
 import proj.pet.member.dto.UserSessionDto;
 
-@RestController("/v1/comments")
+@RestController
+@RequestMapping("/v1/comments")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -19,7 +20,7 @@ public class CommentController {
 		return commentFacadeService.getCommentsByBoardId(boardId);
 	}
 
-	@PostMapping("")
+	@PostMapping
 	public void createComment(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestBody CommentRequestDto commentRequestDto) {

@@ -19,6 +19,7 @@ import proj.pet.member.domain.OauthProfile;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Map;
+import java.util.Optional;
 
 import static proj.pet.exception.ExceptionStatus.INTERNAL_SERVER_ERROR;
 import static proj.pet.exception.ExceptionStatus.UNAUTHORIZED;
@@ -122,5 +123,13 @@ public class JwtTokenManager {
 			throw new DomainException(UNAUTHORIZED);
 		}
 		return authHeader.substring(AUTH_TYPE.length() + 1);
+	}
+
+	public Optional<String> extractOptionalToken(HttpServletRequest req) {
+		String authHeader = req.getHeader(AUTH_HEADER);
+		if (authHeader == null || !authHeader.startsWith(AUTH_TYPE)) {
+			return Optional.empty();
+		}
+		return Optional.of(authHeader.substring(AUTH_TYPE.length() + 1));
 	}
 }

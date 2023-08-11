@@ -41,8 +41,14 @@ public class UserAspect {
 
 	// ToDo: 수정 필요
 	public UserSessionDto getUserSessionDtoByRequest(HttpServletRequest req) {
-		String token = tokenManager.extractTokenFrom(req);
-		JwtPayload ftPayload = tokenManager.createFtPayload(token);
+		Optional<String> token = tokenManager.extractOptionalToken(req);
+		String presentToken = "";
+		if (!token.isPresent()) {
+			return new UserSessionDto(0L, "", MemberRole.NOT_REGISTERED);
+		} else {
+			presentToken = token.get();
+		}
+		JwtPayload ftPayload = tokenManager.createFtPayload(presentToken);
 		Optional<Member> member = memberRepository.findByOauthName(ftPayload.getProfile().getName());
 		if (member.isPresent()) {
 			Member presentMember = member.get();

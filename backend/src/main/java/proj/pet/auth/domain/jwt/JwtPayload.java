@@ -5,6 +5,8 @@ import lombok.Getter;
 import proj.pet.exception.DomainException;
 import proj.pet.member.domain.Country;
 import proj.pet.member.domain.MemberRole;
+import proj.pet.member.domain.OauthProfile;
+import proj.pet.member.domain.OauthType;
 
 import java.util.Map;
 
@@ -17,9 +19,9 @@ import static proj.pet.exception.ExceptionStatus.INCORRECT_ARGUMENT;
 @Builder
 public class JwtPayload {
 
+	private final OauthProfile profile;
 	private final String email;
-	private final String oauthName;
-	private final Country.Campus campus;
+	private final Country.Campus campus; // 확장된다면 분리
 	private final MemberRole role;
 
 	/**
@@ -29,11 +31,14 @@ public class JwtPayload {
 	 * @return JwtPayload
 	 */
 	public static JwtPayload from(Map<String, Object> claims) {
-		System.out.println("claims = " + claims);
 		try {
 			return JwtPayload.builder()
 					.email((String) claims.get("email"))
-					.oauthName((String) claims.get("oauthName"))
+					.profile(
+							OauthProfile.of(
+									OauthType.valueOf(claims.get("oauthType").toString()),
+									claims.get("oauthId").toString(),
+									claims.get("oauthName").toString()))
 					.campus(Country.Campus.from(claims.get("campus").toString()))
 					.role(MemberRole.from(claims.get("role").toString()))
 					.build();
@@ -51,7 +56,9 @@ public class JwtPayload {
 	public Map<String, Object> toClaims() {
 		return Map.of(
 				"email", email,
-				"oauthName", oauthName,
+				"oauthId", profile.getId(),
+				"oauthName", profile.getName(),
+				"oauthType", profile.getType(),
 				"campus", campus,
 				"role", role
 		);

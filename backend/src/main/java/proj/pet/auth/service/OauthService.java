@@ -175,4 +175,9 @@ public class OauthService {
 		cookieManager.setCookieToClient(res, cookie, "/", req.getServerName(), (int) jwtProperties.getExpiry());
 	}
 
+	public JwtPayload extractPayloadFromServerToken(HttpServletRequest req) {
+		String serverToken = tokenManager.extractTokenFrom(req);
+		return tokenManager.createFtPayload(serverToken);
+	}
+
 }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import proj.pet.block.domain.Block;
+import proj.pet.category.domain.MemberCategoryFilter;
 import proj.pet.follow.domain.Follow;
 import proj.pet.utils.domain.IdDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
@@ -36,7 +37,7 @@ public class Member extends IdDomain implements Validatable {
 	private Language language;
 
 	@Column(name = "PROFILE_IMAGE_URL")
-	private String profileImageUrl;
+	private String profileImageUrl = null;
 
 	@Column(name = "NICKNAME", nullable = false, length = 12)
 	private String nickname;
@@ -78,10 +79,16 @@ public class Member extends IdDomain implements Validatable {
 			orphanRemoval = true)
 	private List<Follow> followers = new ArrayList<>();
 
+	@ToString.Exclude
+	@OneToMany(mappedBy = "member",
+			fetch = LAZY,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<MemberCategoryFilter> memberCategoryFilters = new ArrayList<>();
 
-	private Member(OauthProfile oauthProfile, String profileImageUrl, Country country, Language language, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
+
+	private Member(OauthProfile oauthProfile, Country country, Language language, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
 		this.oauthProfile = oauthProfile;
-		this.profileImageUrl = profileImageUrl;
 		this.country = country;
 		this.language = language;
 		this.nickname = nickname;
@@ -92,8 +99,8 @@ public class Member extends IdDomain implements Validatable {
 		RuntimeExceptionThrower.checkValidity(this);
 	}
 
-	public static Member of(OauthProfile oauthProfile, String profileImageUrl, Country country, Language language, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
-		return new Member(oauthProfile, profileImageUrl, country, language, nickname, statement, memberRole, now);
+	public static Member of(OauthProfile oauthProfile, Country country, Language language, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
+		return new Member(oauthProfile, country, language, nickname, statement, memberRole, now);
 	}
 
 	@Override public boolean isValid() {
@@ -104,5 +111,13 @@ public class Member extends IdDomain implements Validatable {
 				&& memberRole != null
 				&& nicknameUpdatedAt != null
 				&& createdAt != null;
+	}
+
+	public void changeProfileImageUrl(String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
+	}
+
+	public void addCategoryFilters(List<MemberCategoryFilter> categoryFilters) {
+		this.memberCategoryFilters.addAll(categoryFilters);
 	}
 }

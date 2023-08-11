@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import proj.pet.exception.DomainException;
 import proj.pet.member.domain.Country;
 import proj.pet.member.domain.MemberRole;
+import proj.pet.member.domain.OauthProfile;
 
 import java.security.Key;
 import java.util.Base64;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 import static proj.pet.exception.ExceptionStatus.INTERNAL_SERVER_ERROR;
 import static proj.pet.exception.ExceptionStatus.UNAUTHORIZED;
+import static proj.pet.member.domain.OauthType.FORTY_TWO;
 
 @Log4j2
 @Component
@@ -67,10 +69,13 @@ public class JwtTokenManager {
 	 */
 	public JwtPayload createFtPayload(String token) {
 		JsonNode payloadJson = extractPayloadJson(token);
-		System.out.println("payloadJson = " + payloadJson);
 		return JwtPayload.builder()
 				.email(payloadJson.get("email").asText())
-				.oauthName(payloadJson.get("oauthName").asText())
+				.profile(
+						OauthProfile.of(
+								FORTY_TWO,
+								payloadJson.get("oauthId").asText(),
+								payloadJson.get("oauthName").asText()))
 				.campus(Country.Campus.from(payloadJson.get("campus").asText()))
 				.role(MemberRole.from(payloadJson.get("role").asText()))
 				.build();
@@ -79,8 +84,10 @@ public class JwtTokenManager {
 	public Map<String, Object> extractClaims(String token) {
 		JsonNode payloadJson = extractPayloadJson(token);
 		return Map.of(
-				"email", payloadJson.get("email").asText(),
+				"oauthId", payloadJson.get("oauthId").asText(),
+				"oauthType", payloadJson.get("oauthType").asText(),
 				"oauthName", payloadJson.get("oauthName").asText(),
+				"email", payloadJson.get("email").asText(),
 				"campus", Country.Campus.from(payloadJson.get("campus").asText()),
 				"role", MemberRole.from(payloadJson.get("role").asText())
 		);

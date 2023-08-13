@@ -14,10 +14,7 @@ import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 @QueryService
@@ -83,24 +80,8 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 * @param board     게시글
 	 * @return {@link BoardInfoDto}
 	 */
-//	private BoardInfoDto createBoardInfoDto(Collection<Scrap> scraps, Collection<Reaction> reactions, Board board) {
-//		boolean isScrapped = scraps.stream().anyMatch(scrap -> scrap.getBoard().equals(board));
-//		boolean isReacted = reactions.stream().anyMatch(reaction -> reaction.getBoard().equals(board));
-//		int reactionCount = board.getReactions().size();
-//		int commentCount = board.getComments().size();
-//		Optional<Comment> latestComment = board.findLatestComment();
-//		String previewCommentUserName = latestComment.map(comment -> comment.getMember().getNickname()).orElse(EMPTY_STRING);
-//		String previewCommentContent = latestComment.map(Comment::getContent).orElse(EMPTY_STRING);
-//
-//		return boardMapper.toBoardInfoDto(
-//				board, board.getMember(),
-//				board.findBoardMediaUrls(), board.getCategoriesAsSpecies(),
-//				isScrapped, isReacted,
-//				reactionCount, commentCount,
-//				previewCommentUserName, previewCommentContent);
-//	}
-	private BoardInfoDto createBoardInfoDto(Long loginUserId, Board board) {
-		boolean isScrapped = board.getScraps().stream().anyMatch(scrap -> scrap.getMember().getId().equals(loginUserId));
+	private BoardInfoDto createBoardInfoDto(Collection<Scrap> scraps, Collection<Reaction> reactions, Board board) {
+		boolean isScrapped = scraps.stream().anyMatch(scrap -> scrap.getBoard().equals(board));
 		boolean isReacted = reactions.stream().anyMatch(reaction -> reaction.getBoard().equals(board));
 		int reactionCount = board.getReactions().size();
 		int commentCount = board.getComments().size();
@@ -115,6 +96,22 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 				reactionCount, commentCount,
 				previewCommentUserName, previewCommentContent);
 	}
+//	private BoardInfoDto createBoardInfoDto(Long loginUserId, Board board) {
+//		boolean isScrapped = board.getScraps().stream().anyMatch(scrap -> scrap.getMember().getId().equals(loginUserId));
+//		boolean isReacted = reactions.stream().anyMatch(reaction -> reaction.getBoard().equals(board));
+//		int reactionCount = board.getReactions().size();
+//		int commentCount = board.getComments().size();
+//		Optional<Comment> latestComment = board.findLatestComment();
+//		String previewCommentUserName = latestComment.map(comment -> comment.getMember().getNickname()).orElse(EMPTY_STRING);
+//		String previewCommentContent = latestComment.map(Comment::getContent).orElse(EMPTY_STRING);
+//
+//		return boardMapper.toBoardInfoDto(
+//				board, board.getMember(),
+//				board.findBoardMediaUrls(), board.getCategoriesAsSpecies(),
+//				isScrapped, isReacted,
+//				reactionCount, commentCount,
+//				previewCommentUserName, previewCommentContent);
+//	}
 
 	/**
 	 * entity가 존재하면 extractor를 통해 List<E>를 추출하고, Set<E>로 변환하여 반환한다.

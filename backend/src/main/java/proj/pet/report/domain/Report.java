@@ -21,16 +21,16 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 public class Report extends IdDomain implements Validatable {
 
-	@Column(name = "MEMBER_ID", nullable = false, updatable = false)
+	@Column(name = "MEMBER_ID", nullable = false, insertable = false, updatable = false)
 	private Long memberId;
 
-	@Column(name = "REPORTED_MEMBER_ID", nullable = false, updatable = false)
+	@Column(name = "REPORTED_MEMBER_ID", nullable = false, insertable = false, updatable = false)
 	private Long reportedMemberId;
 
-	@Column(name = "BOARD_ID", updatable = false)
+	@Column(name = "BOARD_ID", insertable = false, updatable = false)
 	private Long boardId;
 
-	@Column(name = "COMMENT_ID", updatable = false)
+	@Column(name = "COMMENT_ID", insertable = false, updatable = false)
 	private Long commentId;
 
 	@ManyToOne(fetch = LAZY)

@@ -73,12 +73,13 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 				.where(predicate)
 				.orderBy(orderSpecifier)
 				.join(board.member).fetchJoin()
-				.join(board.reactions).fetchJoin()
-				.join(board.comments).fetchJoin()
-				.join(board.mediaList).fetchJoin()
-				.join(board.scraps).fetchJoin()
+//				.join(board.comments).fetchJoin()
+//				.join(board.reactions)
+//				.join(board.mediaList).fetchJoin()
+//				.join(board.scraps).fetchJoin()
 				.offset(pageRequest.getOffset())
 				.limit(pageRequest.getPageSize())
 				.fetch();
 	}
+	//TODO : https://jojoldu.tistory.com/457 / N+1을 피하는 방법 찾아보기
 }

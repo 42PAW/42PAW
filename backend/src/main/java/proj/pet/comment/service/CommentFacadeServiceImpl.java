@@ -18,8 +18,7 @@ public class CommentFacadeServiceImpl implements CommentFacadeService {
 
 	@Override
 	public CommentResponseDto getCommentsByBoardId(Long boardId, PageRequest pageRequest) {
-		commentQueryService.findCommentsByBoardId(boardId, pageRequest);
-		return null;
+		return commentQueryService.findCommentsByBoardId(boardId, pageRequest);
 	}
 
 	@Override
@@ -29,7 +28,7 @@ public class CommentFacadeServiceImpl implements CommentFacadeService {
 	}
 
 	@Override
-	public void deleteComment(Long commentId) {
-
+	public void deleteComment(UserSessionDto userSessionDto, Long commentId) {
+		commentService.deleteComment(userSessionDto.getMemberId(), commentId);
 	}
 }

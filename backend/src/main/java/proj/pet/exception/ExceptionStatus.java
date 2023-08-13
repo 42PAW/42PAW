@@ -21,6 +21,7 @@ public enum ExceptionStatus {
 	ALREADY_EXIST_MEMBER(HttpStatus.CONFLICT, "이미 존재하는 멤버입니다."),
 	UNAUTHENTICATED(HttpStatus.FORBIDDEN, "권한이 없는 요청입니다."),
 	NOT_FOUND_BOARD(HttpStatus.NOT_FOUND, "존재하지 않는 게시물입니다."),
+	NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."),
 
 	/*-----------------------------------DOMAIN-----------------------------------*/
 	INVARIANT_VIOLENCE(HttpStatus.BAD_REQUEST, "불변식에 위배되는 생성 매개변수입니다."),

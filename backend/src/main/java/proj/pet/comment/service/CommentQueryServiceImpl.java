@@ -13,6 +13,7 @@ import java.util.List;
 @QueryService
 @RequiredArgsConstructor
 public class CommentQueryServiceImpl implements CommentQueryService {
+
 	private final CommentRepository commentRepository;
 	private final CommentMapper commentMapper;
 

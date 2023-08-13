@@ -34,7 +34,8 @@ public class CommentController {
 
 	@DeleteMapping("/{commentId}")
 	public void deleteComment(
+			@UserSession UserSessionDto userSessionDto,
 			@PathVariable("commentId") Long commentId) {
-		commentFacadeService.deleteComment(commentId);
+		commentFacadeService.deleteComment(userSessionDto, commentId);
 	}
 }

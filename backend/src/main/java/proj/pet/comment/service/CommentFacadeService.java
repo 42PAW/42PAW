@@ -11,5 +11,5 @@ public interface CommentFacadeService {
 
 	void createComment(UserSessionDto userSessionDto, CommentRequestDto commentRequestDto);
 
-	void deleteComment(Long commentId);
+	void deleteComment(UserSessionDto userSessionDto, Long commentId);
 }

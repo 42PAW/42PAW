@@ -1,6 +1,7 @@
 package proj.pet.comment.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import proj.pet.comment.dto.CommentRequestDto;
 import proj.pet.comment.dto.CommentResponseDto;
@@ -16,8 +17,12 @@ public class CommentController {
 	private final CommentFacadeService commentFacadeService;
 
 	@GetMapping("/boards/{boardId}")
-	public CommentResponseDto getCommentsByBoardId(Long boardId) {
-		return commentFacadeService.getCommentsByBoardId(boardId);
+	public CommentResponseDto getCommentsByBoardId(
+			@PathVariable("boardId") Long boardId,
+			@RequestParam("page") int page,
+			@RequestParam("size") int size) {
+		PageRequest pageRequest = PageRequest.of(page, size);
+		return commentFacadeService.getCommentsByBoardId(boardId, pageRequest);
 	}
 
 	@PostMapping
@@ -28,7 +33,8 @@ public class CommentController {
 	}
 
 	@DeleteMapping("/{commentId}")
-	public void deleteComment(@PathVariable("commentId") Long commentId) {
+	public void deleteComment(
+			@PathVariable("commentId") Long commentId) {
 		commentFacadeService.deleteComment(commentId);
 	}
 }

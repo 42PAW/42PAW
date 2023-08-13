@@ -1,6 +1,7 @@
 package proj.pet.comment.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import proj.pet.comment.dto.CommentRequestDto;
 import proj.pet.comment.dto.CommentResponseDto;
@@ -16,7 +17,8 @@ public class CommentFacadeServiceImpl implements CommentFacadeService {
 	private final CommentQueryService commentQueryService;
 
 	@Override
-	public CommentResponseDto getCommentsByBoardId(Long boardId) {
+	public CommentResponseDto getCommentsByBoardId(Long boardId, PageRequest pageRequest) {
+		commentQueryService.findCommentsByBoardId(boardId, pageRequest);
 		return null;
 	}
 

@@ -20,6 +20,12 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 public class Reaction extends IdDomain implements Validatable {
 
+	@Column(name = "MEMBER_ID", nullable = false, updatable = false)
+	private Long memberId;
+
+	@Column(name = "BOARD_ID", nullable = false, updatable = false)
+	private Long boardId;
+
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "BOARD_ID", nullable = false, updatable = false)
 	private Board board;

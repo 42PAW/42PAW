@@ -21,6 +21,18 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 public class Report extends IdDomain implements Validatable {
 
+	@Column(name = "MEMBER_ID", nullable = false, updatable = false)
+	private Long memberId;
+
+	@Column(name = "REPORTED_MEMBER_ID", nullable = false, updatable = false)
+	private Long reportedMemberId;
+
+	@Column(name = "BOARD_ID", updatable = false)
+	private Long boardId;
+
+	@Column(name = "COMMENT_ID", updatable = false)
+	private Long commentId;
+
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "MEMBER_ID", nullable = false, updatable = false)
 	private Member from;
@@ -30,11 +42,11 @@ public class Report extends IdDomain implements Validatable {
 	private Member to;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "BOARD_ID", nullable = false, updatable = false)
+	@JoinColumn(name = "BOARD_ID", updatable = false)
 	private Board board;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "COMMENT_ID", nullable = false, updatable = false)
+	@JoinColumn(name = "COMMENT_ID", updatable = false)
 	private Comment comment;
 
 	@Column(name = "REASON", nullable = false, length = 32)

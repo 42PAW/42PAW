@@ -1,17 +1,15 @@
 package proj.pet.comment.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import proj.pet.comment.dto.CommentRequestDto;
 import proj.pet.comment.dto.CommentResponseDto;
 import proj.pet.comment.service.CommentFacadeService;
+import proj.pet.member.domain.UserSession;
+import proj.pet.member.dto.UserSessionDto;
 
-@RestController("/v1/comments")
+@RestController
+@RequestMapping("/v1/comments")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -22,9 +20,11 @@ public class CommentController {
 		return commentFacadeService.getCommentsByBoardId(boardId);
 	}
 
-	@PostMapping("")
-	public void createComment(@RequestBody CommentRequestDto commentRequestDto) {
-		commentFacadeService.createComment(commentRequestDto);
+	@PostMapping
+	public void createComment(
+			@UserSession UserSessionDto userSessionDto,
+			@RequestBody CommentRequestDto commentRequestDto) {
+		commentFacadeService.createComment(userSessionDto, commentRequestDto);
 	}
 
 	@DeleteMapping("/{commentId}")

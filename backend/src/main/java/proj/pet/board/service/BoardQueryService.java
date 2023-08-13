@@ -4,9 +4,9 @@ import org.springframework.data.domain.PageRequest;
 import proj.pet.board.dto.BoardsResponseDto;
 
 public interface BoardQueryService {
-	BoardsResponseDto getMainViewBoards(PageRequest pageRequest);
+	BoardsResponseDto getMainViewBoards(Long loginUserId, PageRequest pageRequest);
 
-	BoardsResponseDto getHotBoards(PageRequest pageRequest);
+	BoardsResponseDto getHotBoards(Long loginUserId, PageRequest pageRequest);
 
-	BoardsResponseDto getMemberBoards(PageRequest pageRequest, Long memberId);
+	BoardsResponseDto getMemberBoards(Long loginUserId, Long memberId, PageRequest pageRequest);
 }

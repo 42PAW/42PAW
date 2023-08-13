@@ -101,7 +101,7 @@ class BoardQueryServiceTest {
 		when(boardMediaManager.uploadMedia(mockImageFile)).thenReturn("imagePath");
 		when(boardMediaManager.uploadMedia(mockVideoFile)).thenReturn("videoPath");
 		List<Species> speciesList = List.of(Species.CAT, Species.DOG, Species.ETC);
-		Board board = boardService.createBoard(1L, speciesList, mediaDtoList, "content", now);
+		Board board = boardService.createBoard(author.getId(), speciesList, mediaDtoList, "content", now);
 		em.flush();
 		em.clear();
 		reactionRepository.save(Reaction.of(board, loginUser, ReactionType.LIKE, now));

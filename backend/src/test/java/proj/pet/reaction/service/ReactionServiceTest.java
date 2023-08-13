@@ -59,6 +59,24 @@ class ReactionServiceTest {
 		assertThat(reaction.getReactionType()).isEqualTo(ReactionType.LIKE);
 	}
 
+	@DisplayName("사용자는 게시글에 대한 리액션을 삭제할 수 있다.")
+	@Test
+	void deleteReaction() {
+		//given
+		LocalDateTime now = LocalDateTime.now();
+		Member member = memberRepository.save(stubMember("sanan", MemberRole.USER, now));
+		Board board = boardRepository.save(Board.of(member, VisibleScope.PUBLIC, "글의 내용", now));
+		Reaction reaction = reactionRepository.save(Reaction.of(board, member, ReactionType.LIKE, now));
+		em.flush();
+		em.clear();
+
+		//when
+		reactionService.deleteReaction(member.getId(), board.getId());
+
+		//then
+		assertThat(reactionRepository.findById(reaction.getId())).isEmpty();
+	}
+
 	private Member stubMember(String nickname, MemberRole memberRole, LocalDateTime now) {
 		OauthProfile oauthProfile = OauthProfile.of(OauthType.FORTY_TWO, "oauthId", "oauthName");
 		return Member.of(oauthProfile,

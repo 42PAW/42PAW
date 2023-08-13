@@ -62,7 +62,7 @@ public class BoardServiceImpl implements BoardService {
 		List<BoardMedia> mediaList = mediaDtoList.stream()
 				.map(data -> {
 					String mediaUrl = boardMediaManager.uploadMedia(data);
-					return BoardMedia.of(board, mediaUrl, index.getAndIncrement(), MediaType.from(data.getContentType()));
+					return BoardMedia.of(board, mediaUrl, index.getAndIncrement(), MediaType.from(data));
 				}).collect(Collectors.toList());
 		mediaList = boardMediaRepository.saveAll(mediaList);
 		board.addMediaList(mediaList);

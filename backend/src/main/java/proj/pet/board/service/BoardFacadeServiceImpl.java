@@ -11,6 +11,9 @@ import proj.pet.member.dto.UserSessionDto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * 컨트롤러의 요청을 처리하는 서비스 로직들을 응집하는 구현체
+ */
 @Service
 @RequiredArgsConstructor
 public class BoardFacadeServiceImpl implements BoardFacadeService {

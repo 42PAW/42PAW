@@ -15,10 +15,14 @@ public enum MediaType {
 	/**
 	 * contentType을 기반으로 MediaType을 반환한다.
 	 *
-	 * @param contentType {@link MultipartFile}의 컨텐츠 타입
+	 * @param mediaData {@link MultipartFile}
 	 * @return 미디어 타입
 	 */
-	public static MediaType from(String contentType) {
+	public static MediaType from(MultipartFile mediaData) {
+		if (mediaData == null || mediaData.getContentType() == null) {
+			throw new DomainException(INVALID_ARGUMENT);
+		}
+		String contentType = mediaData.getContentType();
 		if (contentType.startsWith("image")) {
 			return IMAGE;
 		}

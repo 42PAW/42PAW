@@ -3,8 +3,8 @@ package proj.pet.member.domain;
 import lombok.Getter;
 import proj.pet.exception.DomainException;
 
+import java.util.EnumSet;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static proj.pet.exception.ExceptionStatus.INCORRECT_ARGUMENT;
 
@@ -44,6 +44,7 @@ public enum Country {
 	USA(Language.ENGLISH, Campus.FREMONT),
 	;
 
+	private static final EnumSet<Country> countries = EnumSet.allOf(Country.class);
 	private final Language language;
 	private final List<Campus> campuses;
 
@@ -57,7 +58,7 @@ public enum Country {
 	}
 
 	public static Country whereLocates(Campus campus) {
-		return Stream.of(Country.values())
+		return countries.stream()
 				.filter(country -> country.campuses.contains(campus))
 				.findFirst()
 				.orElseThrow(INCORRECT_ARGUMENT::toDomainException);
@@ -120,6 +121,7 @@ public enum Country {
 		CHISINAU("Chisinau", ""),
 		;
 
+		private static final EnumSet<Campus> campuses = EnumSet.allOf(Campus.class);
 		private final String originalName;
 		private final String emailExtension;
 
@@ -129,12 +131,11 @@ public enum Country {
 		}
 
 		public static Campus from(String campusName) {
-			for (Campus campus : Campus.values()) {
-				if (campus.getOriginalName().equals(campusName) || campus.name().equals(campusName.toUpperCase())) {
-					return campus;
-				}
-			}
-			throw new DomainException(INCORRECT_ARGUMENT);
+			return campuses.stream()
+					.filter(campus -> campus.getOriginalName().equals(campusName)
+							|| campus.name().equals(campusName.toUpperCase()))
+					.findFirst()
+					.orElseThrow(() -> new DomainException(INCORRECT_ARGUMENT));
 		}
 	}
 }

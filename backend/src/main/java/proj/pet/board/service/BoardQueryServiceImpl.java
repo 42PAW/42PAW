@@ -32,10 +32,11 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 * 로그인하지 않은 유저 또한 조회가 가능하다.
 	 *
 	 * @param loginUserId 로그인한 유저의 id - 로그인하지 않았다면 0
+	 *                    <br>   참고 : {@link proj.pet.member.domain.UserAspect}
+	 *                    <br>
 	 * @param pageRequest 페이지 요청 정보
 	 * @return {@link BoardsResponseDto} - 게시글 정보에 대한 페이지네이션
 	 * @see proj.pet.member.domain.UserSession
-	 * @see proj.pet.member.domain.UserAspect
 	 */
 	@Override public BoardsResponseDto getMainViewBoards(Long loginUserId, PageRequest pageRequest) {
 		Optional<Member> loginUser = memberRepository.findById(loginUserId);

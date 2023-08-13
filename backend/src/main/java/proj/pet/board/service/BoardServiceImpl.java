@@ -24,6 +24,9 @@ import java.util.stream.Collectors;
 
 import static proj.pet.exception.ExceptionStatus.*;
 
+/**
+ * Board의 CUD 비즈니스 로직을 담당하는 서비스 구현체
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -45,14 +48,16 @@ public class BoardServiceImpl implements BoardService {
 	 * @throws ServiceException {@link ExceptionStatus#NOT_FOUND_MEMBER} 해당하는 멤버가 없을 경우
 	 */
 	@Override public Board createBoard(Long memberId, List<Species> speciesList, List<MultipartFile> mediaDtoList, String content, LocalDateTime now) {
-		Member member = memberRepository.findById(memberId).orElseThrow(() -> new ServiceException(NOT_FOUND_MEMBER));
+		Member member = memberRepository.findById(memberId).orElseThrow(NOT_FOUND_MEMBER::toServiceException);
 		Board board = boardRepository.save(Board.of(member, VisibleScope.PUBLIC, content, now));
+
 		List<AnimalCategory> animalCategories = animalCategoryRepository.findBySpeciesIn(speciesList);
 		List<BoardCategoryFilter> categoryFilters = animalCategories.stream()
 				.map(category -> BoardCategoryFilter.of(board, category))
 				.toList();
 		categoryFilters = boardCategoryFilterRepository.saveAll(categoryFilters);
 		board.addCategoryFilters(categoryFilters);
+
 		AtomicInteger index = new AtomicInteger(0);
 		List<BoardMedia> mediaList = mediaDtoList.stream()
 				.map(data -> {
@@ -61,6 +66,7 @@ public class BoardServiceImpl implements BoardService {
 				}).collect(Collectors.toList());
 		mediaList = boardMediaRepository.saveAll(mediaList);
 		board.addMediaList(mediaList);
+
 		return boardRepository.save(board);
 	}
 
@@ -72,13 +78,12 @@ public class BoardServiceImpl implements BoardService {
 	 */
 	@Override public void deleteBoard(Long memberId, Long boardId) {
 		Board board = boardRepository.findById(boardId).orElseThrow(() -> new ServiceException(NOT_FOUND_BOARD));
-		if (!board.getMember().getId().equals(memberId)) {
+		if (!board.isId(memberId)) {
 			throw new ServiceException(UNAUTHENTICATED);
 		}
 		boardCategoryFilterRepository.deleteAll(board.getCategoryFilters());
-		List<BoardMedia> mediaList = board.getMediaList();
-		boardMediaManager.deleteMediaByList(mediaList);
-		boardMediaRepository.deleteAll(mediaList);
+		boardMediaManager.deleteMediaByList(board.getMediaList());
+		boardMediaRepository.deleteAll(board.getMediaList());
 		boardRepository.delete(board);
 	}
 }

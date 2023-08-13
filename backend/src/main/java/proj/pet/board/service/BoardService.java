@@ -7,6 +7,9 @@ import proj.pet.category.domain.Species;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Board의 CUD 비즈니스 로직을 담당하는 서비스 인터페이스
+ */
 public interface BoardService {
 
 	/**

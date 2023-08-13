@@ -14,7 +14,9 @@ import proj.pet.utils.domain.Validatable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -103,9 +105,13 @@ public class Board extends IdDomain implements Validatable {
 				.toList();
 	}
 
-	public List<String> getBoardMediaUrls() {
+	public List<String> findBoardMediaUrls() {
 		return this.mediaList.stream()
 				.map(BoardMedia::getMediaUrl)
 				.toList();
+	}
+
+	public Optional<Comment> findLatestComment() {
+		return this.getComments().stream().max(Comparator.comparing(Comment::getCreatedAt));
 	}
 }

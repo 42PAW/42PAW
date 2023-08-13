@@ -13,50 +13,42 @@ import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
 
 @QueryService
 @RequiredArgsConstructor
 public class BoardQueryServiceImpl implements BoardQueryService {
 
-	private final static Long NON_REGISTERED_USER_ID = 0L;
 	private final BoardRepository boardRepository;
 	private final MemberRepository memberRepository;
 	private final BoardMapper boardMapper;
 
 	@Override public BoardsResponseDto getMainViewBoards(Long loginUserId, PageRequest pageRequest) {
-		Set<Scrap> scraps;
-		Set<Reaction> reactions;
 		Optional<Member> loginUser = memberRepository.findById(loginUserId);
-		if (loginUser.isPresent()) {
-			scraps = new HashSet<>(loginUser.get().getScraps());
-			reactions = new HashSet<>(loginUser.get().getReactions());
-		} else {
-			scraps = new HashSet<>();
-			reactions = new HashSet<>();
-		}
+		Set<Scrap> scraps = extractSetFromListIfExists(loginUser, Member::getScraps);
+		Set<Reaction> reactions = extractSetFromListIfExists(loginUser, Member::getReactions);
 		List<BoardInfoDto> result = boardRepository.getMainViewBoards(pageRequest).stream()
 				.map(board -> {
-					boolean isScrapped = scraps.stream().anyMatch(scrap -> scrap.getBoard().getId().equals(board.getId()));
-					boolean isReacted = reactions.stream().anyMatch(reaction -> reaction.getBoard().getId().equals(board.getId()));
+					boolean isScrapped = scraps.stream().anyMatch(scrap -> scrap.getBoard().equals(board));
+					boolean isReacted = reactions.stream().anyMatch(reaction -> reaction.getBoard().equals(board));
 					int reactionCount = board.getReactions().size();
 					int commentCount = board.getComments().size();
-					Optional<Comment> latestComment = board.getComments().stream().max(Comparator.comparing(Comment::getCreatedAt));
-					String previewCommentUserName = "";
-					String previewCommentContent = "";
-					if (latestComment.isPresent()) {
-						previewCommentUserName = latestComment.get().getMember().getNickname();
-						previewCommentContent = latestComment.get().getContent();
-					}
+					Optional<Comment> latestComment = board.findLatestComment();
+					String previewCommentUserName = latestComment.map(comment -> comment.getMember().getNickname()).orElse("");
+					String previewCommentContent = latestComment.map(Comment::getContent).orElse("");
 					return boardMapper.toBoardInfoDto(
 							board, board.getMember(),
-							board.getBoardMediaUrls(), board.getCategoriesAsSpecies(),
+							board.findBoardMediaUrls(), board.getCategoriesAsSpecies(),
 							isScrapped, isReacted,
 							reactionCount, commentCount,
 							previewCommentUserName, previewCommentContent
 					);
 				}).toList();
-		return boardMapper.toBoardsResponseDto(result, 1); // totallength는 임시로 1로 설정
+		return boardMapper.toBoardsResponseDto(result, result.size()); // TODO: result.size가 아닌 전체 길이를 가져오도록 수정
 	}
 
 	@Override public BoardsResponseDto getHotBoards(Long loginUserId, PageRequest pageRequest) {
@@ -66,4 +58,24 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	@Override public BoardsResponseDto getMemberBoards(Long loginUserId, Long memberId, PageRequest pageRequest) {
 		return null;
 	}
+
+	/**
+	 * entity가 존재하면 extractor를 통해 Set<E>를 추출하고, 존재하지 않으면 빈 Set<E>를 반환한다.
+	 * <p>
+	 * HashSet으로 매핑하는 오버헤드가 클 수 있으나, List의 원소가 충분히 많다면 복잡도가 개선될 수 있다.
+	 *
+	 * @param entity    Optional한 엔티티
+	 * @param extractor 엔티티에서 List<E>를 추출하는 함수
+	 * @param <T>       엔티티 타입
+	 * @param <E>       List의 원소 타입 - 연관관계의 엔티티
+	 * @return entity가 존재하면 extractor를 통해 추출한 Set<E>, 존재하지 않으면 빈 Set<E>
+	 */
+	private <T, E> Set<E> extractSetFromListIfExists(Optional<T> entity, Function<T, List<E>> extractor) {
+		return entity
+				.map(extractor)
+				.map(HashSet::new)
+				.orElseGet(HashSet::new);
+	}
+
+
 }

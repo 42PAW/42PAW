@@ -5,19 +5,17 @@ import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import proj.pet.auth.domain.jwt.JwtPayload;
 import proj.pet.auth.domain.jwt.JwtTokenManager;
-import proj.pet.exception.ControllerException;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.member.repository.MemberRepository;
 
-import java.util.Arrays;
+import java.lang.reflect.Parameter;
 import java.util.Optional;
-
-import static proj.pet.exception.ExceptionStatus.INCORRECT_ARGUMENT;
 
 /**
  * 컨트롤러에서 UserSessionDto를 받는 메소드에 대해 UserSessionDto를 AOP로 set하기 위한 Aspect 클래스
@@ -43,10 +41,18 @@ public class UserAspect {
 	public Object setUserSessionDto(ProceedingJoinPoint joinPoint) throws Throwable {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getRequest();
+
+		Parameter[] parameters = ((MethodSignature) joinPoint.getSignature())
+				.getMethod()
+				.getParameters();
 		Object[] args = joinPoint.getArgs();
-		Object userSessionParameter = Arrays.stream(args).filter(arg -> arg.getClass().equals(UserSessionDto.class))
-				.findFirst().orElseThrow(() -> new ControllerException(INCORRECT_ARGUMENT));
-		userSessionParameter = getUserSessionDtoByRequest(request);
+
+		for (int i = 0; i < parameters.length; i++) {
+			Parameter parameter = parameters[i];
+			if (parameter.getAnnotation(UserSession.class) != null && parameter.getType().equals(UserSessionDto.class)) {
+				args[i] = getUserSessionDtoByRequest(request);
+			}
+		}
 		return joinPoint.proceed(args);
 	}
 

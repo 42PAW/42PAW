@@ -59,7 +59,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 							previewCommentUserName, previewCommentContent
 					);
 				}).toList();
-		return boardMapper.toBoardsResponseDto(result, result.size()); // TODO: result.size가 아닌 전체 길이를 가져오도록 수정
+		return boardMapper.toBoardsResponseDto(result, result.size()); // TODO: result.size가 아닌 전체 길이를 가져오도록 수정 및 최적화
 	}
 
 	@Override public BoardsResponseDto getHotBoards(Long loginUserId, PageRequest pageRequest) {
@@ -71,7 +71,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	}
 
 	/**
-	 * entity가 존재하면 extractor를 통해 Set<E>를 추출하고, 존재하지 않으면 빈 Set<E>를 반환한다.
+	 * entity가 존재하면 extractor를 통해 List<E>를 추출하고, Set<E>로 변환하여 반환한다.
 	 * <p>
 	 * HashSet으로 매핑하는 오버헤드가 클 수 있으나, List의 원소가 충분히 많다면 복잡도가 개선될 수 있다.
 	 *
@@ -80,6 +80,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 * @param <T>       엔티티 타입
 	 * @param <E>       List의 원소 타입 - 연관관계의 엔티티
 	 * @return entity가 존재하면 extractor를 통해 추출한 Set<E>, 존재하지 않으면 빈 Set<E>
+	 *  TODO: 언젠가는 옮길건데 Util 클래스로 사용할 수 있을 것 같다는 생각이 듦.
 	 */
 	private <T, E> Set<E> extractSetFromListIfExists(Optional<T> entity, Function<T, List<E>> extractor) {
 		return entity

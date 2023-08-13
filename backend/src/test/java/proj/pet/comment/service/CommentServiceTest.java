@@ -7,30 +7,28 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.domain.Board;
 import proj.pet.board.domain.BoardMediaManager;
+import proj.pet.board.domain.VisibleScope;
 import proj.pet.board.repository.BoardCategoryFilterRepository;
 import proj.pet.board.repository.BoardMediaRepository;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.board.service.BoardService;
 import proj.pet.board.service.BoardServiceImpl;
-import proj.pet.category.domain.AnimalCategory;
-import proj.pet.category.domain.Species;
 import proj.pet.category.repository.AnimalCategoryRepository;
 import proj.pet.comment.domain.Comment;
 import proj.pet.comment.repository.CommentRepository;
+import proj.pet.exception.ServiceException;
 import proj.pet.member.domain.*;
 import proj.pet.member.repository.MemberRepository;
 import proj.pet.reaction.repository.ReactionRepository;
 import proj.pet.scrap.repository.ScrapRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
@@ -83,22 +81,7 @@ class CommentServiceTest {
 		LocalDateTime now = LocalDateTime.now();
 		Member author = memberRepository.save(stubMember("sanan", MemberRole.USER, now));
 		Member loginUser = memberRepository.save(stubMember("hyungnoh", MemberRole.USER, now));
-		animalCategoryRepository.saveAll(List.of(
-				AnimalCategory.of(Species.CAT),
-				AnimalCategory.of(Species.DOG),
-				AnimalCategory.of(Species.ETC)));
-		MultipartFile mockImageFile = mock(MultipartFile.class);
-		MultipartFile mockVideoFile = mock(MultipartFile.class);
-		when(mockImageFile.getContentType()).thenReturn("image/png");
-		when(mockVideoFile.getContentType()).thenReturn("video/mp4");
-		List<MultipartFile> mediaDtoList = List.of(
-				mockImageFile,
-				mockImageFile,
-				mockVideoFile);
-		when(boardMediaManager.uploadMedia(mockImageFile)).thenReturn("imagePath");
-		when(boardMediaManager.uploadMedia(mockVideoFile)).thenReturn("videoPath");
-		List<Species> speciesList = List.of(Species.CAT, Species.DOG, Species.ETC);
-		Board board = boardService.createBoard(author.getId(), speciesList, mediaDtoList, "content", now);
+		Board board = boardRepository.save(Board.of(author, VisibleScope.PUBLIC, "content", now));
 		em.flush();
 		em.clear();
 
@@ -111,6 +94,42 @@ class CommentServiceTest {
 		assertThat(comment.getBoard().getId()).isEqualTo(board.getId());
 		assertThat(comment.getContent()).isEqualTo("이것은 댓글이여");
 		assertThat(comment.getCreatedAt()).isNotNull();
+	}
+
+	@DisplayName("본인이 작성한 댓글을 지울 수 있다.")
+	@Test
+	void deleteComment() {
+		//given
+		LocalDateTime now = LocalDateTime.now();
+		Member author = memberRepository.save(stubMember("sanan", MemberRole.USER, now));
+		Member loginUser = memberRepository.save(stubMember("hyungnoh", MemberRole.USER, now));
+		Board board = boardRepository.save(Board.of(author, VisibleScope.PUBLIC, "content", now));
+		commentRepository.save(Comment.of(board, loginUser, "이것은 댓글이여", now));
+		em.flush();
+		em.clear();
+
+		//when
+		commentService.deleteComment(loginUser.getId(), 1L);
+
+		//then
+		assertThat(commentRepository.findById(1L)).isEmpty();
+	}
+
+	@DisplayName("본인이 작성하지 않은 댓글은 지울 수 없다.")
+	@Test
+	void deleteComment2() {
+		//given
+		LocalDateTime now = LocalDateTime.now();
+		Member author = memberRepository.save(stubMember("sanan", MemberRole.USER, now));
+		Member loginUser = memberRepository.save(stubMember("hyungnoh", MemberRole.USER, now));
+		Board board = boardRepository.save(Board.of(author, VisibleScope.PUBLIC, "content", now));
+		commentRepository.save(Comment.of(board, author, "이것은 댓글이여", now));
+		em.flush();
+		em.clear();
+
+		//when, then
+		assertThatThrownBy(() -> commentService.deleteComment(loginUser.getId(), 1L))
+				.isInstanceOf(ServiceException.class);
 	}
 
 	private Member stubMember(String nickname, MemberRole memberRole, LocalDateTime now) {

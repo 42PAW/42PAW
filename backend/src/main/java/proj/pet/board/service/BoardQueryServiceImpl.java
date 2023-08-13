@@ -2,6 +2,7 @@ package proj.pet.board.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import proj.pet.board.domain.Board;
 import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsResponseDto;
 import proj.pet.board.repository.BoardRepository;
@@ -13,10 +14,7 @@ import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 @QueryService
@@ -35,7 +33,9 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 *
 	 * @param loginUserId 로그인한 유저의 id - 로그인하지 않았다면 0
 	 * @param pageRequest 페이지 요청 정보
-	 * @return
+	 * @return {@link BoardsResponseDto} - 게시글 정보에 대한 페이지네이션
+	 * @see proj.pet.member.domain.UserSession
+	 * @see proj.pet.member.domain.UserAspect
 	 */
 	@Override public BoardsResponseDto getMainViewBoards(Long loginUserId, PageRequest pageRequest) {
 		Optional<Member> loginUser = memberRepository.findById(loginUserId);
@@ -43,31 +43,57 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 		Set<Reaction> reactions = extractSetFromListIfExists(loginUser, Member::getReactions);
 
 		List<BoardInfoDto> result = boardRepository.getMainViewBoards(pageRequest).stream()
-				.map(board -> {
-					boolean isScrapped = scraps.stream().anyMatch(scrap -> scrap.getBoard().equals(board));
-					boolean isReacted = reactions.stream().anyMatch(reaction -> reaction.getBoard().equals(board));
-					int reactionCount = board.getReactions().size();
-					int commentCount = board.getComments().size();
-					Optional<Comment> latestComment = board.findLatestComment();
-					String previewCommentUserName = latestComment.map(comment -> comment.getMember().getNickname()).orElse(EMPTY_STRING);
-					String previewCommentContent = latestComment.map(Comment::getContent).orElse(EMPTY_STRING);
-					return boardMapper.toBoardInfoDto(
-							board, board.getMember(),
-							board.findBoardMediaUrls(), board.getCategoriesAsSpecies(),
-							isScrapped, isReacted,
-							reactionCount, commentCount,
-							previewCommentUserName, previewCommentContent
-					);
-				}).toList();
-		return boardMapper.toBoardsResponseDto(result, result.size()); // TODO: result.size가 아닌 전체 길이를 가져오도록 수정 및 최적화
+				.map(board -> createBoardInfoDto(scraps, reactions, board))
+				.toList();
+		return boardMapper.toBoardsResponseDto(result, result.size());
 	}
+	// TODO: result.size가 아닌 전체 길이를 가져오도록 수정 및 최적화 필요, 혹시 변할 수도 있으니 아직 함수 중복에 대해서는 리팩터링하지 않았음.
 
 	@Override public BoardsResponseDto getHotBoards(Long loginUserId, PageRequest pageRequest) {
-		return null;
+		Optional<Member> loginUser = memberRepository.findById(loginUserId);
+		Set<Scrap> scraps = extractSetFromListIfExists(loginUser, Member::getScraps);
+		Set<Reaction> reactions = extractSetFromListIfExists(loginUser, Member::getReactions);
+
+		List<BoardInfoDto> result = boardRepository.getHotBoards(pageRequest).stream()
+				.map(board -> createBoardInfoDto(scraps, reactions, board))
+				.toList();
+		return boardMapper.toBoardsResponseDto(result, result.size());
 	}
 
 	@Override public BoardsResponseDto getMemberBoards(Long loginUserId, Long memberId, PageRequest pageRequest) {
-		return null;
+		Optional<Member> loginUser = memberRepository.findById(loginUserId);
+		Set<Scrap> scraps = extractSetFromListIfExists(loginUser, Member::getScraps);
+		Set<Reaction> reactions = extractSetFromListIfExists(loginUser, Member::getReactions);
+
+		List<BoardInfoDto> result = boardRepository.getMemberBoards(memberId, pageRequest).stream()
+				.map(board -> createBoardInfoDto(scraps, reactions, board))
+				.toList();
+		return boardMapper.toBoardsResponseDto(result, result.size());
+	}
+
+	/**
+	 * 게시글의 반응과 내용, 그리고 해당 게시글에 대한 사용자의 Scrap과 Reaction 여부를 포함한 {@link BoardInfoDto}로 변환한다.
+	 *
+	 * @param scraps    사용자의 전체 Scrap의 Set
+	 * @param reactions 사용자의 전체 Reaction의 Set
+	 * @param board     게시글
+	 * @return {@link BoardInfoDto}
+	 */
+	private BoardInfoDto createBoardInfoDto(Collection<Scrap> scraps, Collection<Reaction> reactions, Board board) {
+		boolean isScrapped = scraps.stream().anyMatch(scrap -> scrap.getBoard().equals(board));
+		boolean isReacted = reactions.stream().anyMatch(reaction -> reaction.getBoard().equals(board));
+		int reactionCount = board.getReactions().size();
+		int commentCount = board.getComments().size();
+		Optional<Comment> latestComment = board.findLatestComment();
+		String previewCommentUserName = latestComment.map(comment -> comment.getMember().getNickname()).orElse(EMPTY_STRING);
+		String previewCommentContent = latestComment.map(Comment::getContent).orElse(EMPTY_STRING);
+
+		return boardMapper.toBoardInfoDto(
+				board, board.getMember(),
+				board.findBoardMediaUrls(), board.getCategoriesAsSpecies(),
+				isScrapped, isReacted,
+				reactionCount, commentCount,
+				previewCommentUserName, previewCommentContent);
 	}
 
 	/**

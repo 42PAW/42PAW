@@ -47,7 +47,13 @@ public class BoardServiceImpl implements BoardService {
 	 *
 	 * @throws ServiceException {@link ExceptionStatus#NOT_FOUND_MEMBER} 해당하는 멤버가 없을 경우
 	 */
-	@Override public Board createBoard(Long memberId, List<Species> speciesList, List<MultipartFile> mediaDtoList, String content, LocalDateTime now) {
+	@Override public Board createBoard(
+			Long memberId,
+			List<Species> speciesList,
+			List<MultipartFile> mediaDtoList,
+			String content,
+			LocalDateTime now
+	) {
 		Member member = memberRepository.findById(memberId).orElseThrow(NOT_FOUND_MEMBER::toServiceException);
 		Board board = boardRepository.save(Board.of(member, VisibleScope.PUBLIC, content, now));
 

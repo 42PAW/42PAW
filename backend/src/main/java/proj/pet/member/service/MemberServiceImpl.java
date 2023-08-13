@@ -28,13 +28,13 @@ public class MemberServiceImpl implements MemberService {
 	private final AnimalCategoryRepository animalCategoryRepository;
 
 	@Override public void uploadMemberProfileImage(Long memberId, MultipartFile profileImageData) {
-		Member member = memberRepository.findById(memberId).orElseThrow(NOT_FOUND_MEMBER::toServiceException);
+		Member member = memberRepository.findById(memberId).orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		String profileImageUrl = memberImageManager.uploadMemberProfileImage(profileImageData);
 		member.changeProfileImageUrl(profileImageUrl);
 	}
 
 	@Override public void changeMemberProfileImage(Long memberId, MultipartFile profileImageData) {
-		Member member = memberRepository.findById(memberId).orElseThrow(NOT_FOUND_MEMBER::toServiceException);
+		Member member = memberRepository.findById(memberId).orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		memberImageManager.deleteMemberProfileImage(member.getProfileImageUrl());
 		String profileImageUrl = memberImageManager.uploadMemberProfileImage(profileImageData);
 		member.changeProfileImageUrl(profileImageUrl);

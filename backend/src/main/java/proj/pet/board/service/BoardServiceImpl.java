@@ -54,7 +54,7 @@ public class BoardServiceImpl implements BoardService {
 			String content,
 			LocalDateTime now
 	) {
-		Member member = memberRepository.findById(memberId).orElseThrow(NOT_FOUND_MEMBER::toServiceException);
+		Member member = memberRepository.findById(memberId).orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		Board board = boardRepository.save(Board.of(member, VisibleScope.PUBLIC, content, now));
 
 		List<AnimalCategory> animalCategories = animalCategoryRepository.findBySpeciesIn(speciesList);

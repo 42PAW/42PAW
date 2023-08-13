@@ -38,15 +38,15 @@ public enum ExceptionStatus {
 		this.error = status.getReasonPhrase();
 	}
 
-	public ControllerException toControllerException() {
+	public ControllerException asControllerException() {
 		return new ControllerException(this);
 	}
 
-	public ServiceException toServiceException() {
+	public ServiceException asServiceException() {
 		return new ServiceException(this);
 	}
 
-	public DomainException toDomainException() {
+	public DomainException asDomainException() {
 		return new DomainException(this);
 	}
 }

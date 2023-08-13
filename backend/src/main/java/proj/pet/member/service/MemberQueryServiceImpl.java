@@ -2,6 +2,7 @@ package proj.pet.member.service;
 
 import lombok.RequiredArgsConstructor;
 import proj.pet.mapper.MemberMapper;
+import proj.pet.member.domain.Language;
 import proj.pet.member.domain.Member;
 import proj.pet.member.dto.MemberMyInfoResponseDto;
 import proj.pet.member.repository.MemberRepository;
@@ -16,7 +17,10 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 	private final MemberMapper memberMapper;
 
 	@Override public MemberMyInfoResponseDto getMyInfo(Long loginUserId) {
-		Member member = memberRepository.findById(loginUserId).orElseThrow(NOT_FOUND_MEMBER::toServiceException);
+		if (loginUserId.equals(0L)) {
+			return new MemberMyInfoResponseDto("", "", "", Language.ENGLISH);
+		}
+		Member member = memberRepository.findById(loginUserId).orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		return memberMapper.toMemberMyInfoResponseDto(member);
 	}
 }

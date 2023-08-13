@@ -1,8 +1,5 @@
 package proj.pet.block.service;
 
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
-
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +8,10 @@ import proj.pet.block.repository.BlockRepository;
 import proj.pet.follow.repository.FollowRepository;
 import proj.pet.member.domain.Member;
 import proj.pet.member.repository.MemberRepository;
+
+import java.time.LocalDateTime;
+
+import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +25,9 @@ public class BlockServiceImpl implements BlockService {
 	@Override
 	public Block blockMember(Long memberId, Long blockMemberId) {
 		Member member = memberRepository.findById(memberId)
-				.orElseThrow(NOT_FOUND_MEMBER::toServiceException);
+				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		Member blockedMember = memberRepository.findById(blockMemberId)
-				.orElseThrow(NOT_FOUND_MEMBER::toServiceException);
+				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		followRepository.findByMemberCompositeKey(memberId, blockMemberId)
 				.ifPresent(followRepository::delete);
 		followRepository.findByMemberCompositeKey(blockMemberId, memberId)
@@ -38,7 +39,7 @@ public class BlockServiceImpl implements BlockService {
 	@Override
 	public void deleteBlock(Long memberId, Long blockMemberId) {
 		Block block = blockRepository.findByMemberCompositeKey(memberId, blockMemberId)
-				.orElseThrow(NOT_FOUND_MEMBER::toServiceException);
+				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		blockRepository.deleteByCompositeKey(block.getId());
 	}
 }

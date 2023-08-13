@@ -115,7 +115,7 @@ public class Member extends IdDomain implements Validatable {
 	}
 
 	public static Member of(OauthProfile oauthProfile, Country country, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
-		return new Member(oauthProfile, country, country.getLanguage(), nickname, statement, memberRole, now);
+		return new Member(oauthProfile, country, country.getDefaultLanguage(), nickname, statement, memberRole, now);
 	}
 
 	@Override public boolean isValid() {

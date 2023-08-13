@@ -22,8 +22,8 @@ public class CommentServiceImpl implements CommentService {
 	private final CommentRepository commentRepository;
 
 	@Override public void addCommentToBoard(Long loginUserId, Long boardId, String content, LocalDateTime now) {
-		Member member = memberRepository.findById(loginUserId).orElseThrow(NOT_FOUND_MEMBER::toServiceException);
-		Board board = boardRepository.findById(boardId).orElseThrow(NOT_FOUND_BOARD::toServiceException);
+		Member member = memberRepository.findById(loginUserId).orElseThrow(NOT_FOUND_MEMBER::asServiceException);
+		Board board = boardRepository.findById(boardId).orElseThrow(NOT_FOUND_BOARD::asServiceException);
 		commentRepository.save(Comment.of(board, member, content, now));
 	}
 }

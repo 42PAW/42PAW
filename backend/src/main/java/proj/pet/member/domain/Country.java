@@ -1,13 +1,15 @@
 package proj.pet.member.domain;
 
 import lombok.Getter;
-import proj.pet.exception.DomainException;
 
+import java.util.EnumSet;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static proj.pet.exception.ExceptionStatus.INCORRECT_ARGUMENT;
 
+/**
+ * 42가 있는 국가와 캠퍼스 정보를 담고 있는 Enum
+ */
 @Getter
 public enum Country {
 	ARMENIA(Language.ENGLISH, Campus.YEREVAN),
@@ -44,25 +46,41 @@ public enum Country {
 	USA(Language.ENGLISH, Campus.FREMONT),
 	;
 
-	private final Language language;
+	/**
+	 * defaultLanguage - 해당 국가에 설정되는 기본 {@link Language}
+	 * campuses - 해당 국가에 있는 캠퍼스 List
+	 */
+	private static final EnumSet<Country> countries = EnumSet.allOf(Country.class);
+	private final Language defaultLanguage;
 	private final List<Campus> campuses;
 
-	Country(Language language, Campus... campuses) {
-		this.language = language;
+	Country(Language defaultLanguage, Campus... campuses) {
+		this.defaultLanguage = defaultLanguage;
 		this.campuses = List.of(campuses);
 	}
 
+	/**
+	 * @param country - 국가명
+	 * @return 국가명에 해당하는 {@link Country}
+	 */
 	public static Country from(String country) {
 		return Country.valueOf(country.toUpperCase());
 	}
 
+	/**
+	 * @param campus - 캠퍼스
+	 * @return 캠퍼스가 위치한 {@link Country}
+	 */
 	public static Country whereLocates(Campus campus) {
-		return Stream.of(Country.values())
+		return countries.stream()
 				.filter(country -> country.campuses.contains(campus))
 				.findFirst()
-				.orElseThrow(INCORRECT_ARGUMENT::toDomainException);
+				.orElseThrow(INCORRECT_ARGUMENT::asDomainException);
 	}
 
+	/**
+	 * 42의 캠퍼스에 대한 정보
+	 */
 	@Getter
 	public enum Campus {
 		GYEONGSAN("Gyeongsan", "42gyeongsan.kr"),
@@ -120,21 +138,32 @@ public enum Country {
 		CHISINAU("Chisinau", ""),
 		;
 
+		/**
+		 * originalName - 42 API에서 사용하는 캠퍼스 이름
+		 * <p>
+		 * emailDomain - 각 캠퍼스에서 사용하는 42 이메일 확장자
+		 */
+		private static final EnumSet<Campus> campuses = EnumSet.allOf(Campus.class);
 		private final String originalName;
-		private final String emailExtension;
+		private final String emailDomain;
 
-		Campus(String originalName, String emailExtension) {
+		Campus(String originalName, String emailDomain) {
 			this.originalName = originalName;
-			this.emailExtension = emailExtension;
+			this.emailDomain = emailDomain;
 		}
 
+		/**
+		 * 캠퍼스 이름으로 캠퍼스 Enum을 반환합니다.
+		 *
+		 * @param campusName 42 API 기준의 캠퍼스 이름 또는 Enum의 이름
+		 * @return 캠퍼스 Enum
+		 */
 		public static Campus from(String campusName) {
-			for (Campus campus : Campus.values()) {
-				if (campus.getOriginalName().equals(campusName) || campus.name().equals(campusName.toUpperCase())) {
-					return campus;
-				}
-			}
-			throw new DomainException(INCORRECT_ARGUMENT);
+			return campuses.stream()
+					.filter(campus -> campus.getOriginalName().equals(campusName)
+							|| campus.name().equals(campusName.toUpperCase()))
+					.findFirst()
+					.orElseThrow(INCORRECT_ARGUMENT::asDomainException);
 		}
 	}
 }

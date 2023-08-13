@@ -36,7 +36,6 @@ public class MemberController {
 	@GetMapping("/me")
 	@AuthGuard(level = USER_OR_ADMIN)
 	public MemberMyInfoResponseDto getMyInfo(@UserSession UserSessionDto userSessionDto) {
-		//TODO: user 세션에서 가져오기
 		return memberFacadeService.getMyInfo(userSessionDto);
 	}
 

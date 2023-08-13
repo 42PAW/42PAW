@@ -1,13 +1,15 @@
 package proj.pet.member.domain;
 
 import lombok.Getter;
-import proj.pet.exception.DomainException;
 
 import java.util.EnumSet;
 import java.util.List;
 
 import static proj.pet.exception.ExceptionStatus.INCORRECT_ARGUMENT;
 
+/**
+ * 42가 있는 국가와 캠퍼스 정보를 담고 있는 Enum
+ */
 @Getter
 public enum Country {
 	ARMENIA(Language.ENGLISH, Campus.YEREVAN),
@@ -45,11 +47,11 @@ public enum Country {
 	;
 
 	private static final EnumSet<Country> countries = EnumSet.allOf(Country.class);
-	private final Language language;
+	private final Language defaultLanguage;
 	private final List<Campus> campuses;
 
-	Country(Language language, Campus... campuses) {
-		this.language = language;
+	Country(Language defaultLanguage, Campus... campuses) {
+		this.defaultLanguage = defaultLanguage;
 		this.campuses = List.of(campuses);
 	}
 
@@ -61,9 +63,12 @@ public enum Country {
 		return countries.stream()
 				.filter(country -> country.campuses.contains(campus))
 				.findFirst()
-				.orElseThrow(INCORRECT_ARGUMENT::toDomainException);
+				.orElseThrow(INCORRECT_ARGUMENT::asDomainException);
 	}
 
+	/**
+	 * 42의 캠퍼스에 대한 정보
+	 */
 	@Getter
 	public enum Campus {
 		GYEONGSAN("Gyeongsan", "42gyeongsan.kr"),
@@ -121,13 +126,18 @@ public enum Country {
 		CHISINAU("Chisinau", ""),
 		;
 
+		/**
+		 * originalName - 42 API에서 사용하는 캠퍼스 이름
+		 * <p>
+		 * emailDomain - 각 캠퍼스에서 사용하는 42 이메일 확장자
+		 */
 		private static final EnumSet<Campus> campuses = EnumSet.allOf(Campus.class);
 		private final String originalName;
-		private final String emailExtension;
+		private final String emailDomain;
 
-		Campus(String originalName, String emailExtension) {
+		Campus(String originalName, String emailDomain) {
 			this.originalName = originalName;
-			this.emailExtension = emailExtension;
+			this.emailDomain = emailDomain;
 		}
 
 		public static Campus from(String campusName) {
@@ -135,7 +145,7 @@ public enum Country {
 					.filter(campus -> campus.getOriginalName().equals(campusName)
 							|| campus.name().equals(campusName.toUpperCase()))
 					.findFirst()
-					.orElseThrow(() -> new DomainException(INCORRECT_ARGUMENT));
+					.orElseThrow(INCORRECT_ARGUMENT::asDomainException);
 		}
 	}
 }

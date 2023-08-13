@@ -43,7 +43,7 @@ public class UserAspect {
 		String token = tokenManager.extractTokenFrom(req);
 		JwtPayload ftPayload = tokenManager.createFtPayload(token);
 		Member member = memberRepository.findByOauthName(ftPayload.getProfile().getName())
-				.orElseThrow(NOT_FOUND_MEMBER::toServiceException);
+				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		return new UserSessionDto(member.getId(), member.getNickname(), member.getMemberRole());
 	}
 }

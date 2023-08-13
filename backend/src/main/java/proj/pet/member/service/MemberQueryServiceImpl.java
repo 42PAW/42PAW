@@ -16,7 +16,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 	private final MemberMapper memberMapper;
 
 	@Override public MemberMyInfoResponseDto getMyInfo(Long loginUserId) {
-		Member member = memberRepository.findById(loginUserId).orElseThrow(NOT_FOUND_MEMBER::toServiceException);
+		Member member = memberRepository.findById(loginUserId).orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		return memberMapper.toMemberMyInfoResponseDto(member);
 	}
 }

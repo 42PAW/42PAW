@@ -2,6 +2,7 @@ package proj.pet.comment.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import proj.pet.board.domain.Board;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.comment.domain.Comment;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import static proj.pet.exception.ExceptionStatus.*;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 

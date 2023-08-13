@@ -53,4 +53,8 @@ public abstract class IdDomain implements Persistable<Long> {
 	protected void markNotNew() {
 		this.isNew = false;
 	}
+
+	public boolean isId(Long id) {
+		return this.id.equals(id);
+	}
 }

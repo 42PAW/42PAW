@@ -158,6 +158,5 @@ class BoardServiceTest {
 				"statement",
 				memberRole,
 				now);
-
 	}
 }

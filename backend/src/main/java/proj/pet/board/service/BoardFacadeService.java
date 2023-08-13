@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface BoardFacadeService {
 
-	BoardsResponseDto getMainViewBoards(PageRequest pageRequest);
+	BoardsResponseDto getMainViewBoards(UserSessionDto userSessionDto, PageRequest pageRequest);
 
-	BoardsResponseDto getHotBoards(PageRequest pageRequest);
+	BoardsResponseDto getHotBoards(UserSessionDto userSessionDto, PageRequest pageRequest);
 
-	BoardsResponseDto getMemberBoards(PageRequest pageRequest, Long memberId);
+	BoardsResponseDto getMemberBoards(UserSessionDto userSessionDto, Long memberId, PageRequest pageRequest);
 
 	void createBoard(UserSessionDto userSessionDto, List<MultipartFile> mediaDataList, List<Species> categoryList, String content);
 

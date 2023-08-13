@@ -11,6 +11,9 @@ import proj.pet.member.dto.UserSessionDto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * 컨트롤러의 요청을 처리하는 서비스 로직들을 응집하는 구현체
+ */
 @Service
 @RequiredArgsConstructor
 public class BoardFacadeServiceImpl implements BoardFacadeService {
@@ -19,18 +22,18 @@ public class BoardFacadeServiceImpl implements BoardFacadeService {
 	private final BoardQueryService boardQueryService;
 
 	@Override
-	public BoardsResponseDto getMainViewBoards(PageRequest pageRequest) {
-		return boardQueryService.getMainViewBoards(pageRequest);
+	public BoardsResponseDto getMainViewBoards(UserSessionDto userSessionDto, PageRequest pageRequest) {
+		return boardQueryService.getMainViewBoards(userSessionDto.getMemberId(), pageRequest);
 	}
 
 	@Override
-	public BoardsResponseDto getHotBoards(PageRequest pageRequest) {
-		return boardQueryService.getHotBoards(pageRequest);
+	public BoardsResponseDto getHotBoards(UserSessionDto userSessionDto, PageRequest pageRequest) {
+		return boardQueryService.getHotBoards(userSessionDto.getMemberId(), pageRequest);
 	}
 
 	@Override
-	public BoardsResponseDto getMemberBoards(PageRequest pageRequest, Long memberId) {
-		return boardQueryService.getMemberBoards(pageRequest, memberId);
+	public BoardsResponseDto getMemberBoards(UserSessionDto userSessionDto, Long memberId, PageRequest pageRequest) {
+		return boardQueryService.getMemberBoards(userSessionDto.getMemberId(), memberId, pageRequest);
 	}
 
 	@Override

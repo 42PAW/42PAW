@@ -7,6 +7,8 @@ import lombok.ToString;
 import proj.pet.block.domain.Block;
 import proj.pet.category.domain.MemberCategoryFilter;
 import proj.pet.follow.domain.Follow;
+import proj.pet.reaction.domain.Reaction;
+import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.domain.IdDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
@@ -86,6 +88,19 @@ public class Member extends IdDomain implements Validatable {
 			orphanRemoval = true)
 	private List<MemberCategoryFilter> memberCategoryFilters = new ArrayList<>();
 
+	@ToString.Exclude
+	@OneToMany(mappedBy = "member",
+			fetch = LAZY,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Reaction> reactions = new ArrayList<>();
+
+	@ToString.Exclude
+	@OneToMany(mappedBy = "member",
+			fetch = LAZY,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Scrap> scraps = new ArrayList<>();
 
 	private Member(OauthProfile oauthProfile, Country country, Language language, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
 		this.oauthProfile = oauthProfile;

@@ -9,7 +9,6 @@ import proj.pet.member.domain.Member;
 import proj.pet.member.repository.MemberRepository;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.reaction.domain.ReactionType;
-import proj.pet.reaction.dto.ReactionRequestDto;
 import proj.pet.reaction.repository.ReactionRepository;
 
 import java.time.LocalDateTime;
@@ -25,15 +24,14 @@ public class ReactionServiceImpl implements ReactionService {
 	private final MemberRepository memberRepository;
 	private final ReactionRepository reactionRepository;
 
-	@Override public void createReaction(Long loginUserId, ReactionRequestDto reactionRequestDto) {
+	@Override public void createReaction(Long loginUserId, Long boardId, ReactionType reactionType) {
 		Member loginUser = memberRepository.findById(loginUserId).orElseThrow(NOT_FOUND_MEMBER::asServiceException);
-		Board board = boardRepository.findById(reactionRequestDto.getBoardId()).orElseThrow(NOT_FOUND_BOARD::asServiceException);
-		reactionRepository.save(Reaction.of(board, loginUser, ReactionType.LIKE, LocalDateTime.now()));
+		Board board = boardRepository.findById(boardId).orElseThrow(NOT_FOUND_BOARD::asServiceException);
+		reactionRepository.save(Reaction.of(board, loginUser, reactionType, LocalDateTime.now()));
 	}
 
 	/**
 	 * 게시글에 대한 반응 삭제
-	 * `
 	 *
 	 * @param loginUserId 로그인 유저 아이디
 	 * @param boardId     게시글 아이디

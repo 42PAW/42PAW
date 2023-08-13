@@ -14,7 +14,7 @@ public class ReactionFacadeServiceImpl implements ReactionFacadeService {
 
 	@Transactional
 	@Override public void createReaction(UserSessionDto userSessionDto, ReactionRequestDto reactionRequestDto) {
-		reactionService.createReaction(userSessionDto.getMemberId(), reactionRequestDto);
+		reactionService.createReaction(userSessionDto.getMemberId(), reactionRequestDto.getBoardId(), reactionRequestDto.getReactionType());
 	}
 
 	@Transactional

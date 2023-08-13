@@ -19,7 +19,7 @@ public class CommentQueryServiceImpl implements CommentQueryService {
 
 	@Override
 	public CommentResponseDto findCommentsByBoardId(Long boardId, PageRequest pageRequest) {
-		List<CommentDto> comments = commentRepository.findByBoardId(boardId, pageRequest)
+		List<CommentDto> comments = commentRepository.findDescOrderByBoardId(boardId, pageRequest)
 				.map(comment -> commentMapper.toCommentDto(comment, comment.getMember())).toList();
 		return commentMapper.toCommentResponseDto(comments, pageRequest.getPageSize()); // pageSize 총 개수로 변경
 	}

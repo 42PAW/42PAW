@@ -1,34 +1,24 @@
 package proj.pet.comment.service;
 
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import proj.pet.board.domain.Board;
-import proj.pet.board.domain.BoardMediaManager;
 import proj.pet.board.domain.VisibleScope;
-import proj.pet.board.repository.BoardCategoryFilterRepository;
-import proj.pet.board.repository.BoardMediaRepository;
 import proj.pet.board.repository.BoardRepository;
-import proj.pet.board.service.BoardService;
-import proj.pet.board.service.BoardServiceImpl;
-import proj.pet.category.repository.AnimalCategoryRepository;
 import proj.pet.comment.domain.Comment;
 import proj.pet.comment.repository.CommentRepository;
 import proj.pet.exception.ServiceException;
 import proj.pet.member.domain.*;
 import proj.pet.member.repository.MemberRepository;
-import proj.pet.reaction.repository.ReactionRepository;
-import proj.pet.scrap.repository.ScrapRepository;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 @Transactional
@@ -47,32 +37,7 @@ class CommentServiceTest {
 	private MemberRepository memberRepository;
 
 	@Autowired
-	private BoardCategoryFilterRepository boardCategoryFilterRepository;
-
-	@Autowired
-	private BoardMediaRepository boardMediaRepository;
-
-	private BoardMediaManager boardMediaManager;
-
-	private BoardService boardService;
-
-	@Autowired
-	private AnimalCategoryRepository animalCategoryRepository;
-
-	@Autowired
-	private ReactionRepository reactionRepository;
-
-	@Autowired
-	private ScrapRepository scrapRepository;
-
-	@Autowired
 	private CommentRepository commentRepository;
-
-	@BeforeEach
-	void setUp() {
-		boardMediaManager = mock(BoardMediaManager.class);
-		boardService = new BoardServiceImpl(boardRepository, memberRepository, boardCategoryFilterRepository, boardMediaManager, boardMediaRepository, animalCategoryRepository);
-	}
 
 	@DisplayName("사용자가 게시물에 댓글을 작성할 수 있다.")
 	@Test

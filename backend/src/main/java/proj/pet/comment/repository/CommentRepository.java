@@ -14,6 +14,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 	@EntityGraph(attributePaths = {"member"})
 	@Query("SELECT c " +
 			"FROM Comment c " +
-			"WHERE c.board.id = :boardId")
-	Page<Comment> findByBoardId(@Param("boardId") Long boardId, PageRequest pageRequest);
+			"WHERE c.board.id = :boardId " +
+			"ORDER BY c.createdAt DESC")
+	Page<Comment> findDescOrderByBoardId(@Param("boardId") Long boardId, PageRequest pageRequest);
 }

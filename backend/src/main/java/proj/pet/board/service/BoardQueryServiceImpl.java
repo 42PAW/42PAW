@@ -23,14 +23,25 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class BoardQueryServiceImpl implements BoardQueryService {
 
+	private final static String EMPTY_STRING = "";
 	private final BoardRepository boardRepository;
 	private final MemberRepository memberRepository;
 	private final BoardMapper boardMapper;
 
+	/**
+	 * 메인 화면에 보여줄 게시글 목록을 가져온다.
+	 * <p>
+	 * 로그인하지 않은 유저 또한 조회가 가능하다.
+	 *
+	 * @param loginUserId 로그인한 유저의 id - 로그인하지 않았다면 0
+	 * @param pageRequest 페이지 요청 정보
+	 * @return
+	 */
 	@Override public BoardsResponseDto getMainViewBoards(Long loginUserId, PageRequest pageRequest) {
 		Optional<Member> loginUser = memberRepository.findById(loginUserId);
 		Set<Scrap> scraps = extractSetFromListIfExists(loginUser, Member::getScraps);
 		Set<Reaction> reactions = extractSetFromListIfExists(loginUser, Member::getReactions);
+
 		List<BoardInfoDto> result = boardRepository.getMainViewBoards(pageRequest).stream()
 				.map(board -> {
 					boolean isScrapped = scraps.stream().anyMatch(scrap -> scrap.getBoard().equals(board));
@@ -38,8 +49,8 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 					int reactionCount = board.getReactions().size();
 					int commentCount = board.getComments().size();
 					Optional<Comment> latestComment = board.findLatestComment();
-					String previewCommentUserName = latestComment.map(comment -> comment.getMember().getNickname()).orElse("");
-					String previewCommentContent = latestComment.map(Comment::getContent).orElse("");
+					String previewCommentUserName = latestComment.map(comment -> comment.getMember().getNickname()).orElse(EMPTY_STRING);
+					String previewCommentContent = latestComment.map(Comment::getContent).orElse(EMPTY_STRING);
 					return boardMapper.toBoardInfoDto(
 							board, board.getMember(),
 							board.findBoardMediaUrls(), board.getCategoriesAsSpecies(),

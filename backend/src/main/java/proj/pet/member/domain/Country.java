@@ -46,6 +46,10 @@ public enum Country {
 	USA(Language.ENGLISH, Campus.FREMONT),
 	;
 
+	/**
+	 * defaultLanguage - 해당 국가에 설정되는 기본 {@link Language}
+	 * campuses - 해당 국가에 있는 캠퍼스 List
+	 */
 	private static final EnumSet<Country> countries = EnumSet.allOf(Country.class);
 	private final Language defaultLanguage;
 	private final List<Campus> campuses;
@@ -55,10 +59,18 @@ public enum Country {
 		this.campuses = List.of(campuses);
 	}
 
+	/**
+	 * @param country - 국가명
+	 * @return 국가명에 해당하는 {@link Country}
+	 */
 	public static Country from(String country) {
 		return Country.valueOf(country.toUpperCase());
 	}
 
+	/**
+	 * @param campus - 캠퍼스
+	 * @return 캠퍼스가 위치한 {@link Country}
+	 */
 	public static Country whereLocates(Campus campus) {
 		return countries.stream()
 				.filter(country -> country.campuses.contains(campus))
@@ -140,6 +152,12 @@ public enum Country {
 			this.emailDomain = emailDomain;
 		}
 
+		/**
+		 * 캠퍼스 이름으로 캠퍼스 Enum을 반환합니다.
+		 *
+		 * @param campusName 42 API 기준의 캠퍼스 이름 또는 Enum의 이름
+		 * @return 캠퍼스 Enum
+		 */
 		public static Campus from(String campusName) {
 			return campuses.stream()
 					.filter(campus -> campus.getOriginalName().equals(campusName)

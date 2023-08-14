@@ -141,7 +141,7 @@ const MenuItemWrapperStyled = styled.li``;
 const MenuItemStyled = styled.div`
   cursor: pointer;
   font-size: 10px;
-  padding: 3px 5px;
+  padding: 2px 5px;
   color: var(--lightgrey);
   border-radius: 20px;
   text-decoration: none;

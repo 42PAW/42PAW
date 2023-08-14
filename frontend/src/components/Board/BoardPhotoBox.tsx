@@ -1,11 +1,12 @@
 import { useState } from "react";
 import styled, { css } from "styled-components";
-import { IBoardImages } from "@/types/interface/board.interface";
 
-const BoardPhotoBox = ({ boardImages }: { boardImages: IBoardImages[] }) => {
+const BoardPhotoBox = ({ boardImages }: { boardImages: string[] }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [photoIndex, setPhotoIndex] = useState<number>(0);
+  const [startX, setStartX] = useState<number | null>(null);
   const imagesLength = boardImages.length;
+
   const handleShowButtons = (state: string) => {
     if (state === "show") {
       setIsHovered(true);
@@ -13,7 +14,23 @@ const BoardPhotoBox = ({ boardImages }: { boardImages: IBoardImages[] }) => {
       setIsHovered(false);
     }
   };
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setStartX(e.touches[0].clientX);
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (startX === null) return;
 
+    const endX = e.changedTouches[0].clientX;
+    const deltaX = startX - endX;
+
+    if (deltaX > 50) {
+      handleSwipe("RIGHT");
+    } else if (deltaX < -50) {
+      handleSwipe("LEFT");
+    }
+
+    setStartX(null);
+  };
   const handleSwipe = (direction: string) => {
     if (direction === "LEFT" && photoIndex > 0) {
       setPhotoIndex(photoIndex - 1);
@@ -28,9 +45,13 @@ const BoardPhotoBox = ({ boardImages }: { boardImages: IBoardImages[] }) => {
       onMouseEnter={() => handleShowButtons("show")}
       onMouseLeave={() => handleShowButtons("hide")}
     >
-      <PhotoZoneStyled $photoIndex={photoIndex}>
-        {boardImages.map((boardImage) => (
-          <img key={boardImage.index} src={boardImage.imageUrl} />
+      <PhotoZoneStyled
+        $photoIndex={photoIndex}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {boardImages.map((boardImage, index) => (
+          <img key={index} src={boardImage} alt={`Image ${index}`} />
         ))}
       </PhotoZoneStyled>
       <SwipeButtonStyled
@@ -82,7 +103,7 @@ const PhotoZoneStyled = styled.div<{ $photoIndex: number }>`
     width: 100%;
     min-height: 100%;
     min-width: 100%;
-    transition: transform 0.5s ease;
+    transition: transform 0.4s ease;
   }
 `;
 

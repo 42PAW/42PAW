@@ -12,18 +12,12 @@ export const axiosSignUp = async ({
 }: SignUpInfoDTO): Promise<any> => {
   try {
     const formData = new FormData();
-    formData.append(
-      "memberName",
-      memberName
-    );
+    formData.append("memberName", memberName);
     formData.append("imageData", imageData ? imageData : "null");
-    formData.append(
-      "statement",
-      statement
-    );
-      categoryFilters.map( (categoryFilter) => {
-          formData.append("categoryFilters", categoryFilter);
-      })
+    formData.append("statement", statement);
+    categoryFilters.map((categoryFilter) => {
+      formData.append("categoryFilters", categoryFilter);
+    });
     const response = await instance.post(axiosSignUpURL, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -46,8 +40,7 @@ export const axiosMyInfo = async (): Promise<any> => {
   }
 };
 
-const axiosGetBoardsURL =
-  "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/boards";
+const axiosGetBoardsURL = "/v1/boards";
 export const axiosGetBoards = async (
   size: number,
   page: number
@@ -132,6 +125,22 @@ export const axiosGetBoardComments = async (boardId: number): Promise<any> => {
       axiosGetBoardCommentsURL + boardId.toString()
     );
     return response.data.result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosCreateCommentURL = "/v1/comments";
+export const axiosCreateComment = async (
+  boardId: number | null,
+  content: string
+): Promise<any> => {
+  try {
+    const response = await instance.post(axiosCreateCommentURL, {
+      boardId,
+      content,
+    });
+    return response;
   } catch (error) {
     throw error;
   }

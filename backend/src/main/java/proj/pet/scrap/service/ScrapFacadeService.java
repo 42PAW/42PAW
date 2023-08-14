@@ -1,12 +1,15 @@
 package proj.pet.scrap.service;
 
-import proj.pet.scrap.dto.ScrapResponseDto;
+import org.springframework.data.domain.PageRequest;
+import proj.pet.board.dto.BoardsResponseDto;
+import proj.pet.member.dto.UserSessionDto;
+import proj.pet.scrap.dto.ScrapCreateRequestDto;
 
 public interface ScrapFacadeService {
 
-	void createScrap(Long boardId);
+	void createScrap(UserSessionDto userSessionDto, ScrapCreateRequestDto scrapCreateRequestDto);
 
-	void deleteScrap(Long boardId);
+	void deleteScrap(UserSessionDto userSessionDto, Long boardId);
 
-	ScrapResponseDto getMyScraps();
+	BoardsResponseDto getMyScraps(UserSessionDto userSessionDto, PageRequest pageRequest);
 }

@@ -8,15 +8,14 @@ import proj.pet.category.domain.Species;
 import proj.pet.comment.domain.Comment;
 import proj.pet.member.domain.Member;
 import proj.pet.reaction.domain.Reaction;
+import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.domain.IdDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -47,6 +46,12 @@ public class Board extends IdDomain implements Validatable {
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	private final List<Comment> comments = new ArrayList<>();
+	@OneToMany(mappedBy = "board",
+			targetEntity = Scrap.class,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private final List<Scrap> scraps = new ArrayList<>();
+
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "MEMBER_ID", nullable = false, updatable = false)
 	private Member member;
@@ -109,9 +114,5 @@ public class Board extends IdDomain implements Validatable {
 		return this.mediaList.stream()
 				.map(BoardMedia::getMediaUrl)
 				.toList();
-	}
-
-	public Optional<Comment> findLatestComment() {
-		return this.getComments().stream().max(Comparator.comparing(Comment::getCreatedAt));
 	}
 }

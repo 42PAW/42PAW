@@ -10,6 +10,7 @@ import proj.pet.board.domain.Board;
 import java.util.List;
 
 import static proj.pet.board.domain.QBoard.board;
+import static proj.pet.scrap.domain.QScrap.scrap;
 
 /**
  * QueryDSL을 사용하는 BoardRepository의 커스텀 구현체
@@ -27,7 +28,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @return 생성시각 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
 	 */
 	@Override public List<Board> getMainViewBoards(PageRequest pageRequest) {
-		return getBoards(
+		return getBoardsWithFetchJoin(
 				EMPTY_PREDICATE,
 				board.createdAt.desc(),
 				pageRequest);
@@ -40,7 +41,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @return 반응 수 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
 	 */
 	@Override public List<Board> getHotBoards(PageRequest pageRequest) {
-		return getBoards(
+		return getBoardsWithFetchJoin(
 				EMPTY_PREDICATE,
 				board.reactions.size().desc(),
 				pageRequest);
@@ -54,10 +55,30 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @return 해당 멤버의 생성시각 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
 	 */
 	@Override public List<Board> getMemberBoards(Long memberId, PageRequest pageRequest) {
-		return getBoards(
+		return getBoardsWithFetchJoin(
 				board.member.id.eq(memberId),
 				board.createdAt.desc(),
 				pageRequest);
+	}
+
+	/**
+	 * 로그인한 사용자의 스크랩한 게시글 목록을 가져온다.
+	 *
+	 * @param loginUserId 로그인한 멤버 ID
+	 * @param pageRequest 페이지네이션
+	 * @return 해당 멤버의 생성시각 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
+	 */
+	@Override
+	public List<Board> getScrapBoards(Long loginUserId, PageRequest pageRequest) {
+		return queryFactory
+				.select(board)
+				.from(scrap)
+				.join(scrap.board, board)
+				.where(scrap.member.id.eq(loginUserId))
+				.orderBy(board.createdAt.desc())
+				.offset(pageRequest.getOffset())
+				.limit(pageRequest.getPageSize())
+				.fetch();
 	}
 
 	/**
@@ -68,12 +89,18 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @param pageRequest    페이지네이션
 	 * @return {@link Board} 페이지네이션 - Page 아님
 	 */
-	private List<Board> getBoards(Predicate predicate, OrderSpecifier<?> orderSpecifier, PageRequest pageRequest) {
+	private List<Board> getBoardsWithFetchJoin(Predicate predicate, OrderSpecifier<?> orderSpecifier, PageRequest pageRequest) {
 		return queryFactory.selectFrom(board)
 				.where(predicate)
 				.orderBy(orderSpecifier)
+				.join(board.member).fetchJoin()
+//				.join(board.comments).fetchJoin()
+//				.join(board.reactions)
+//				.join(board.mediaList).fetchJoin()
+//				.join(board.scraps).fetchJoin()
 				.offset(pageRequest.getOffset())
 				.limit(pageRequest.getPageSize())
 				.fetch();
 	}
+	//TODO : https://jojoldu.tistory.com/457 / N+1을 피하는 방법 찾아보기
 }

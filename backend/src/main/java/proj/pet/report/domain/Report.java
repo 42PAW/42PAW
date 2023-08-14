@@ -1,6 +1,7 @@
 package proj.pet.report.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.board.domain.Board;
@@ -21,6 +22,18 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 public class Report extends IdDomain implements Validatable {
 
+	@Column(name = "MEMBER_ID", nullable = false, insertable = false, updatable = false)
+	private Long memberId;
+
+	@Column(name = "REPORTED_MEMBER_ID", nullable = false, insertable = false, updatable = false)
+	private Long reportedMemberId;
+
+	@Column(name = "BOARD_ID", insertable = false, updatable = false)
+	private Long boardId;
+
+	@Column(name = "COMMENT_ID", insertable = false, updatable = false)
+	private Long commentId;
+
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "MEMBER_ID", nullable = false, updatable = false)
 	private Member from;
@@ -30,11 +43,11 @@ public class Report extends IdDomain implements Validatable {
 	private Member to;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "BOARD_ID", nullable = false, updatable = false)
+	@JoinColumn(name = "BOARD_ID", updatable = false)
 	private Board board;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "COMMENT_ID", nullable = false, updatable = false)
+	@JoinColumn(name = "COMMENT_ID", updatable = false)
 	private Comment comment;
 
 	@Column(name = "REASON", nullable = false, length = 32)
@@ -47,6 +60,7 @@ public class Report extends IdDomain implements Validatable {
 	@Column(name = "CREATED_AT", nullable = false)
 	private LocalDateTime createdAt;
 
+	@Builder
 	private Report(Member from, Member to, Board board, Comment comment, ReportReason reason, String content, LocalDateTime now) {
 		this.from = from;
 		this.to = to;
@@ -65,8 +79,6 @@ public class Report extends IdDomain implements Validatable {
 	@Override public boolean isValid() {
 		return from != null && !from.isNew()
 				&& to != null && !to.isNew()
-				&& board != null && !board.isNew()
-				&& comment != null && !comment.isNew()
 				&& reason != null
 				&& createdAt != null;
 	}

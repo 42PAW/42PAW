@@ -10,4 +10,6 @@ public interface BoardQueryService {
 	BoardsPaginationDto getHotBoards(Long loginUserId, PageRequest pageRequest);
 
 	BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId, PageRequest pageRequest);
+
+	BoardsPaginationDto getScraps(Long loginUserId, PageRequest pageRequest);
 }

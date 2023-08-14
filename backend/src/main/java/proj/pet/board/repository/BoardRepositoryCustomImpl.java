@@ -1,14 +1,16 @@
 package proj.pet.board.repository;
 
-import static proj.pet.board.domain.QBoard.board;
-
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import proj.pet.board.domain.Board;
+
+import java.util.List;
+
+import static proj.pet.board.domain.QBoard.board;
+import static proj.pet.scrap.domain.QScrap.scrap;
 
 /**
  * QueryDSL을 사용하는 BoardRepository의 커스텀 구현체
@@ -60,6 +62,26 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 				board.member.id.eq(memberId),
 				board.createdAt.desc(),
 				pageRequest);
+	}
+
+	/**
+	 * 로그인한 사용자의 스크랩한 게시글 목록을 가져온다.
+	 *
+	 * @param loginUserId 로그인한 멤버 ID
+	 * @param pageRequest 페이지네이션
+	 * @return 해당 멤버의 생성시각 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
+	 */
+	@Override
+	public List<Board> getScrapBoards(Long loginUserId, PageRequest pageRequest) {
+		return queryFactory
+				.select(board)
+				.from(scrap)
+				.join(scrap.board, board)
+				.where(scrap.member.id.eq(loginUserId))
+				.orderBy(board.createdAt.desc())
+				.offset(pageRequest.getOffset())
+				.limit(pageRequest.getPageSize())
+				.fetch();
 	}
 
 	/**

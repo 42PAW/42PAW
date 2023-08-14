@@ -26,6 +26,7 @@ public interface MemberMapper {
 	MemberPreviewResponseDto toMemberPreviewResponseDto(Member member, FollowType relationship);
 
 
+	@Mapping(target = "memberId", source = "member.id")
 	@Mapping(target = "memberName", source = "member.nickname")
 	@Mapping(target = "intraName", source = "member.oauthProfile.name")
 	MemberMyInfoResponseDto toMemberMyInfoResponseDto(Member member);

@@ -12,5 +12,7 @@ public interface BoardRepositoryCustom {
 
 	List<Board> getMemberBoards(Long memberId, PageRequest pageRequest);
 
+	List<Board> getScrapBoards(Long loginUserId, PageRequest pageRequest);
+
 	long countByMemberId(Long memberId);
 }

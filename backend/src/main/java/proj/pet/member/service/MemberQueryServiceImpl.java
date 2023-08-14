@@ -14,6 +14,7 @@ import proj.pet.follow.domain.FollowType;
 import proj.pet.follow.repository.FollowRepository;
 import proj.pet.follow.service.FollowQueryService;
 import proj.pet.mapper.MemberMapper;
+import proj.pet.member.domain.Language;
 import proj.pet.member.domain.Member;
 import proj.pet.member.dto.MemberMyInfoResponseDto;
 import proj.pet.member.dto.MemberNicknameValidateResponseDto;
@@ -56,6 +57,9 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 	 */
 	@Override
 	public MemberMyInfoResponseDto getMyInfo(Long loginUserId) {
+		if (loginUserId.equals(0L)) {
+			return new MemberMyInfoResponseDto(null, null, null, null, Language.ENGLISH);
+		}
 		Member member = memberRepository.findById(loginUserId)
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		return memberMapper.toMemberMyInfoResponseDto(member);

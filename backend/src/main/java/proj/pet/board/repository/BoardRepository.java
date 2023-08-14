@@ -6,4 +6,6 @@ import proj.pet.board.domain.Board;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom {
+
+
 }

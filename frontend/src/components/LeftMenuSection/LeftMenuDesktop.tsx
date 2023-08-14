@@ -1,31 +1,18 @@
 import styled from "styled-components";
 import useNavigateCustom from "@/hooks/useNavigateCustom";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
-import { languageState } from "@/recoil/atom";
-import { useRecoilState } from "recoil";
 import SettingButton from "@/components/SettingButton";
-import { userInfoState } from "@/recoil/atom";
-import { UserInfoDTO } from "@/types/dto/member.dto";
-import { removeCookie } from "@/api/cookie/cookies";
+import { LeftMenuProps } from "./LeftMenuSection";
 
-const LeftMenuDesktop = () => {
+const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
+  handleLogin,
+  handleLogout,
+  userInfo,
+  language,
+}) => {
   const { moveToMain, moveToNotice, moveToMyProfile, moveToUpload } =
     useNavigateCustom();
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoDTO | null>(
-    userInfoState
-  );
-  const [language] = useRecoilState<any>(languageState);
   const { openSearchSection } = useRightSectionHandler();
-
-  const handleLogin = () => {
-    window.location.replace(`${import.meta.env.VITE_AUTH_LOGIN}`);
-  };
-
-  const handleLogout = () => {
-    setUserInfo(null);
-    removeCookie("access_token");
-  };
-
   return (
     <>
       <LeftMenuStyled>
@@ -122,6 +109,7 @@ const MenuListStyled = styled.ul`
 const ProfileImageStyled = styled.img`
   cursor: pointer;
   width: 50px;
+  height: 50px;
   border-radius: 100%;
   &:hover {
     opacity: 0.8;

@@ -1,40 +1,40 @@
 import { useState } from "react";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import styled from "styled-components";
-import { BoardCategory } from "@/types/enum/board.category.enum";
+import { Board } from "@/types/enum/board.category.enum";
 import { boardCategoryState } from "@/recoil/atom";
 import { languageState } from "@/recoil/atom";
 
 const BoardSortToggle = () => {
   const [language] = useRecoilState<any>(languageState);
   const [buttonToggled, setbuttonToggled] = useState<number>(0);
-  const setBoardCategory = useSetRecoilState<BoardCategory>(boardCategoryState);
+  const setBoard = useSetRecoilState<Board>(boardCategoryState);
 
   const handleToggle = (toggle: string) => {
-    if (toggle === BoardCategory.DEFAULT) {
+    if (toggle === Board.DEFAULT) {
       setbuttonToggled(0);
-      setBoardCategory(BoardCategory.DEFAULT);
+      setBoard(Board.DEFAULT);
     }
-    if (toggle === BoardCategory.TRENDING) {
+    if (toggle === Board.TRENDING) {
       setbuttonToggled(1);
-      setBoardCategory(BoardCategory.TRENDING);
+      setBoard(Board.TRENDING);
     }
-    if (toggle === BoardCategory.FOLLOWING) {
+    if (toggle === Board.FOLLOWING) {
       setbuttonToggled(2);
-      setBoardCategory(BoardCategory.FOLLOWING);
+      setBoard(Board.FOLLOWING);
     }
   };
 
   return (
     <BoardSortToggleWrapperStyled>
       <BoardSortToggleStyled $buttonToggled={buttonToggled}>
-        <button onClick={() => handleToggle(BoardCategory.DEFAULT)}>
+        <button onClick={() => handleToggle(Board.DEFAULT)}>
           {language.defaultBoards}
         </button>
-        <button onClick={() => handleToggle(BoardCategory.TRENDING)}>
+        <button onClick={() => handleToggle(Board.TRENDING)}>
           {language.trendingBoards}
         </button>
-        <button onClick={() => handleToggle(BoardCategory.FOLLOWING)}>
+        <button onClick={() => handleToggle(Board.FOLLOWING)}>
           {language.followingBoards}
         </button>
       </BoardSortToggleStyled>

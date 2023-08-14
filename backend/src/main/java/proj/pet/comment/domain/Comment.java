@@ -1,12 +1,6 @@
 package proj.pet.comment.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +9,8 @@ import proj.pet.member.domain.Member;
 import proj.pet.utils.domain.IdDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
+
+import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -39,7 +35,7 @@ public class Comment extends IdDomain implements Validatable {
 	@Column(name = "CONTENT", nullable = false, length = 128)
 	private String content;
 
-	protected Comment(Board board, Member member,String content, LocalDateTime createdAt) {
+	protected Comment(Board board, Member member, String content, LocalDateTime createdAt) {
 		this.board = board;
 		this.member = member;
 		this.content = content;
@@ -57,5 +53,9 @@ public class Comment extends IdDomain implements Validatable {
 				&& member != null
 				&& !member.isNew()
 				&& createdAt != null;
+	}
+
+	public boolean isOwnedBy(Member member) {
+		return this.member.equals(member);
 	}
 }

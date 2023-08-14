@@ -8,8 +8,10 @@ import proj.pet.category.dto.CategoryResponseDto;
 @RequiredArgsConstructor
 public class CategoryFacadeServiceImpl implements CategoryFacadeService {
 
+	private final CategoryQueryService categoryQueryService;
+
 	@Override
 	public CategoryResponseDto getCategories() {
-		return null;
+		return categoryQueryService.getAllCategories();
 	}
 }

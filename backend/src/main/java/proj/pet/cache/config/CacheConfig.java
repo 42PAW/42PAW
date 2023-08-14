@@ -22,14 +22,14 @@ public class CacheConfig {
 		List<CaffeineCache> caches = Arrays.stream(CacheType.values())
 				.map(cacheType ->
 						new CaffeineCache(
-								cacheType.name(),
+								cacheType.getCacheName(),
 								Caffeine.newBuilder()
 										.recordStats()
 										.expireAfterWrite(cacheType.getSecsToExpireAfterWrite(), TimeUnit.SECONDS)
 										.maximumSize(cacheType.getEntryMaxSize())
 										.build()))
 				.toList();
-		
+
 		SimpleCacheManager cacheManager = new SimpleCacheManager();
 		cacheManager.setCaches(caches);
 		return cacheManager;

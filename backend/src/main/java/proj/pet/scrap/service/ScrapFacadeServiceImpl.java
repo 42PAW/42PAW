@@ -1,27 +1,36 @@
 package proj.pet.scrap.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import proj.pet.scrap.dto.ScrapResponseDto;
+import org.springframework.transaction.annotation.Transactional;
+import proj.pet.board.dto.BoardsResponseDto;
+import proj.pet.board.service.BoardQueryService;
+import proj.pet.member.dto.UserSessionDto;
+import proj.pet.scrap.dto.ScrapCreateRequestDto;
 
 @Service
 @RequiredArgsConstructor
 public class ScrapFacadeServiceImpl implements ScrapFacadeService {
 
+	private final BoardQueryService boardQueryService;
 	private final ScrapService scrapService;
 
+	@Transactional
 	@Override
-	public void createScrap(Long boardId) {
-
+	public void createScrap(UserSessionDto userSessionDto, ScrapCreateRequestDto scrapCreateRequestDto) {
+		scrapService.createScrap(userSessionDto.getMemberId(), scrapCreateRequestDto.getBoardId());
 	}
 
+	@Transactional
 	@Override
-	public void deleteScrap(Long boardId) {
-
+	public void deleteScrap(UserSessionDto userSessionDto, Long boardId) {
+		scrapService.deleteScrap(userSessionDto.getMemberId(), boardId);
 	}
 
+	@Transactional(readOnly = true)
 	@Override
-	public ScrapResponseDto getMyScraps() {
-		return null;
+	public BoardsResponseDto getMyScraps(UserSessionDto userSessionDto, PageRequest pageRequest) {
+		return boardQueryService.getScraps(userSessionDto.getMemberId(), pageRequest);
 	}
 }

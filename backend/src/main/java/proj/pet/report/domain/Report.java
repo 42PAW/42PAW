@@ -1,6 +1,7 @@
 package proj.pet.report.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.board.domain.Board;
@@ -59,6 +60,7 @@ public class Report extends IdDomain implements Validatable {
 	@Column(name = "CREATED_AT", nullable = false)
 	private LocalDateTime createdAt;
 
+	@Builder
 	private Report(Member from, Member to, Board board, Comment comment, ReportReason reason, String content, LocalDateTime now) {
 		this.from = from;
 		this.to = to;
@@ -77,8 +79,6 @@ public class Report extends IdDomain implements Validatable {
 	@Override public boolean isValid() {
 		return from != null && !from.isNew()
 				&& to != null && !to.isNew()
-				&& board != null && !board.isNew()
-				&& comment != null && !comment.isNew()
 				&& reason != null
 				&& createdAt != null;
 	}

@@ -9,4 +9,6 @@ public interface BoardQueryService {
 	BoardsResponseDto getHotBoards(Long loginUserId, PageRequest pageRequest);
 
 	BoardsResponseDto getMemberBoards(Long loginUserId, Long memberId, PageRequest pageRequest);
+
+	BoardsResponseDto getScraps(Long loginUserId, PageRequest pageRequest);
 }

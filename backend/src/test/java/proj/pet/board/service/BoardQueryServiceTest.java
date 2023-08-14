@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.domain.Board;
 import proj.pet.board.domain.BoardMediaManager;
+import proj.pet.board.domain.VisibleScope;
 import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsResponseDto;
 import proj.pet.board.repository.BoardCategoryFilterRepository;
@@ -124,6 +125,38 @@ class BoardQueryServiceTest {
 		assertThat(boardInfoDto.getPreviewComment()).isEqualTo("야 귀엽다");
 
 
+	}
+
+	@DisplayName("사용자는 본인이 스크랩한 게시글들을 조회할 수 있다.")
+	@Test
+	void getScraps() {
+		//given
+		LocalDateTime now = LocalDateTime.now();
+		Member author = memberRepository.save(stubMember("sanan", MemberRole.USER, now));
+		Member loginUser = memberRepository.save(stubMember("hyungnoh", MemberRole.USER, now));
+		List<Board> boards = boardRepository.saveAll(List.of(
+				Board.of(author, VisibleScope.PUBLIC, "content1", now),
+				Board.of(author, VisibleScope.PUBLIC, "content2", now),
+				Board.of(author, VisibleScope.PUBLIC, "content3", now)
+		));
+		scrapRepository.saveAll(List.of(
+				Scrap.of(loginUser, boards.get(0), now),
+				Scrap.of(loginUser, boards.get(1), now)
+		));
+		em.flush();
+		em.clear();
+
+		//when
+		List<BoardInfoDto> result = boardQueryService.getScraps(loginUser.getId(), PageRequest.of(0, 10))
+				.getResult();
+
+		//then
+		assertThat(result).isNotNull();
+		assertThat(result.size()).isEqualTo(2);
+		assertThat(result.get(0).getBoardId()).isEqualTo(boards.get(0).getId());
+		assertThat(result.get(1).getBoardId()).isEqualTo(boards.get(1).getId());
+		assertThat(result).extracting("content")
+				.containsExactlyInAnyOrder("content1", "content2");
 	}
 
 	private Member stubMember(String nickname, MemberRole memberRole, LocalDateTime now) {

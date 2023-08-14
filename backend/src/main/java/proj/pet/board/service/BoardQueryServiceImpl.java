@@ -8,7 +8,6 @@ import proj.pet.board.dto.BoardsResponseDto;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.comment.domain.Comment;
 import proj.pet.mapper.BoardMapper;
-import proj.pet.member.repository.MemberRepository;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
@@ -23,7 +22,6 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
 	private final static String EMPTY_STRING = "";
 	private final BoardRepository boardRepository;
-	private final MemberRepository memberRepository;
 	private final BoardMapper boardMapper;
 
 	/**

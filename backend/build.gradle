@@ -32,8 +32,9 @@ dependencies {
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
     // Cache
-    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
-    
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation "com.github.ben-manes.caffeine:caffeine:3.1.8"
+
     // OAUTH, AOP
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'

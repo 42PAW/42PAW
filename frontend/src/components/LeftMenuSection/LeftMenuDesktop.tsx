@@ -109,6 +109,7 @@ const MenuListStyled = styled.ul`
 const ProfileImageStyled = styled.img`
   cursor: pointer;
   width: 50px;
+  height: 50px;
   border-radius: 100%;
   &:hover {
     opacity: 0.8;

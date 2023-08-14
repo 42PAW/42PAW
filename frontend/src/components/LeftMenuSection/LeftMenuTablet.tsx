@@ -132,6 +132,7 @@ const BannerStyled = styled.div<{ $isBannerVisible: boolean }>`
 const ProfileImageStyled = styled.img`
   margin-left: 10px;
   width: 35px;
+  height: 35px;
   border-radius: 100%;
   &:hover {
     opacity: 0.8;

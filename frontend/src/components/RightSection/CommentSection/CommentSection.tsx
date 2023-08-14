@@ -6,13 +6,20 @@ import { CommentInfoDTO } from "@/types/dto/board.dto";
 import { currentBoardIdState } from "@/recoil/atom";
 import { axiosGetBoardComments } from "@/api/axios/axios.custom";
 import { axiosCreateComment } from "@/api/axios/axios.custom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Board } from "@/types/enum/board.category.enum";
+import { userInfoState } from "@/recoil/atom";
+import { UserInfoDTO } from "@/types/dto/member.dto";
+import { IBoardInfo } from "@/types/interface/board.interface";
 
 const CommentSection = () => {
+  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [currentBoardComments, setCurrentBoardComments] = useState<
     CommentInfoDTO[] | null
   >(null);
   const [currentBoardId] = useRecoilState<number | null>(currentBoardIdState);
   const [comment, setComment] = useState<string>("");
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     getCommentsData();
@@ -38,6 +45,34 @@ const CommentSection = () => {
     const response = await axiosCreateComment(currentBoardId, comment);
     console.log(response);
   };
+
+  const commentMutation = useMutation(uploadComment, {
+    onSuccess: async () => {
+      // Update the defaultBoards data in the cache to include the new comment
+      await queryClient.setQueryData(
+        [Board.DEFAULT],
+        (prevData: IBoardInfo[] | any) => {
+          if (!prevData) return prevData;
+
+          const updatedBoards = prevData.map((board: IBoardInfo) => {
+            if (board.boardId === currentBoardId) {
+              return {
+                ...board,
+                previewCommentUser: userInfo?.memberName,
+                previewComment: comment,
+                commentCount: board.commentCount + 1,
+              };
+            }
+            return board;
+          });
+
+          return updatedBoards;
+        }
+      );
+
+      setComment(""); // Clear the input after successful comment submission
+    },
+  });
 
   return (
     <WrapperStyled>
@@ -66,7 +101,7 @@ const CommentSection = () => {
           placeholder="댓글을 입력해주세요..."
           onChange={handleOnchange}
         />
-        <button onClick={uploadComment}>게시</button>
+        <button onClick={() => commentMutation.mutate()}>게시</button>
       </CommentInputContainerStyled>
     </WrapperStyled>
   );

@@ -4,7 +4,7 @@ export const ko = {
   followingBoards: "팔로우순",
   like: "좋아요",
   comment: "댓글",
-  moreComments: "..댓글 더 보기",
+  moreComments: "..더 보기",
   ban: "차단",
   report: "신고",
   delete: "삭제",

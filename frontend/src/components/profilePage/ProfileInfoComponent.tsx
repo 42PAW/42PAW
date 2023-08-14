@@ -63,12 +63,11 @@ const UserInfoStyled = styled.div`
 `;
 
 const ProfileInfoComponent = () => {
-  const { openModal } = useModal();
+  //   const { openModal } = useModal();
 
-  const handleOpenProfile = () => {
-    openModal(ModalType.PROFILEEDIT); // PROFILECARD -> 바꿔야 돼 다시
-  };
-
+  //   const handleOpenProfile = () => {
+  //     openModal(ModalType.PROFILEEDIT); // PROFILECARD -> 바꿔야 돼 다시
+  //   };
   return (
     <ProfileHeaderStyled>
       <img
@@ -122,7 +121,7 @@ const ProfileHeaderStyled = styled.div`
   margin-top: 30px;
   color: var(--white);
   width: 100%;
-  height: 386px;
+  min-height: 386px;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   font-size: 1.6rem;
 

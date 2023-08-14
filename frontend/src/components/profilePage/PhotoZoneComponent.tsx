@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const imgs = [
   "/src/assets/oduck.png",
@@ -48,7 +48,6 @@ const PhotoZoneComponent = () => {
     // 게시물 정보를 가져오는 비동기 요청 등을 수행
     // 결과를 setPosts로 업데이트
   };
-
   // 탭 변경 시 호출되는 함수
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -89,17 +88,21 @@ const PhotoZoneComponent = () => {
 
 const ProfileBodyStyled = styled.div`
   flex: 1;
-  overflow: hidden;
+  //   overflow: hidden;
   margin-top: 30px;
   border-radius: 20px 20px 0px 0px;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  background: linear-gradient(75deg, #999bc6 50%, #d3c3ce 150%);
 `;
 
 const PhotoCategoryToggleStyled = styled.div`
-  background: linear-gradient(10deg, #999bc6 50%, #d3c3ce 150%);
   display: flex;
   justify-content: space-evenly;
   height: 50px;
+  position: sticky;
+  top: -10px;
+  background: linear-gradient(100deg, #999bc6 50%, #d3c3ce 150%);
+  border-radius: 10px 10px 0px 0px;
   button {
     display: flex;
     align-items: center;
@@ -123,15 +126,15 @@ const PhotoCategoryToggleStyled = styled.div`
     background-color: #fdfdfd39;
   }
   img {
-    width: 30px;
+    margin-top: 5px;
+    width: 25px;
   }
 `;
 
 const PhotoZoneWrapperStyled = styled.div`
   display: flex;
   flex-wrap: wrap;
-  max-height: calc(100% - 60px);
-  overflow-y: scroll;
+  max-height: calc(100% - 50px);
   img {
     width: calc(33.3%);
     border-radius: 1%;

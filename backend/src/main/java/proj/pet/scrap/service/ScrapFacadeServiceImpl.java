@@ -1,12 +1,13 @@
 package proj.pet.scrap.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import proj.pet.board.dto.BoardsResponseDto;
 import proj.pet.board.service.BoardQueryService;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.scrap.dto.ScrapCreateRequestDto;
-import proj.pet.scrap.dto.ScrapResponseDto;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class ScrapFacadeServiceImpl implements ScrapFacadeService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public ScrapResponseDto getMyScraps(UserSessionDto userSessionDto) {
-		return null;
+	public BoardsResponseDto getMyScraps(UserSessionDto userSessionDto, PageRequest pageRequest) {
+		return boardQueryService.getScraps(userSessionDto.getMemberId(), pageRequest);
 	}
 }

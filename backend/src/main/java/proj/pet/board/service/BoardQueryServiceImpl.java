@@ -13,8 +13,9 @@ import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 @QueryService
 @RequiredArgsConstructor
@@ -54,6 +55,13 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
 	@Override public BoardsResponseDto getMemberBoards(Long loginUserId, Long memberId, PageRequest pageRequest) {
 		List<BoardInfoDto> result = boardRepository.getMemberBoards(memberId, pageRequest).stream()
+				.map(board -> createBoardInfoDto(loginUserId, board))
+				.toList();
+		return boardMapper.toBoardsResponseDto(result, result.size());
+	}
+
+	@Override public BoardsResponseDto getScraps(Long loginUserId, PageRequest pageRequest) {
+		List<BoardInfoDto> result = boardRepository.getScrapBoards(loginUserId, pageRequest).stream()
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());
@@ -108,25 +116,6 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 				isUserScrapped, isUserReacted,
 				reactionCount, commentCount,
 				previewCommentUserName, previewCommentContent);
-	}
-
-	/**
-	 * entity가 존재하면 extractor를 통해 List<E>를 추출하고, Set<E>로 변환하여 반환한다.
-	 * <p>
-	 * HashSet으로 매핑하는 오버헤드가 클 수 있으나, List의 원소가 충분히 많다면 복잡도가 개선될 수 있다.
-	 *
-	 * @param entity    Optional한 엔티티
-	 * @param extractor 엔티티에서 List<E>를 추출하는 함수
-	 * @param <T>       엔티티 타입
-	 * @param <E>       List의 원소 타입 - 연관관계의 엔티티
-	 * @return entity가 존재하면 extractor를 통해 추출한 Set<E>, 존재하지 않으면 빈 Set<E>
-	 *  TODO: 언젠가는 옮길건데 Util 클래스로 사용할 수 있을 것 같다는 생각이 듦.
-	 */
-	private <T, E> Set<E> extractSetFromListIfExists(Optional<T> entity, Function<T, List<E>> extractor) {
-		return entity
-				.map(extractor)
-				.map(HashSet::new)
-				.orElseGet(HashSet::new);
 	}
 
 

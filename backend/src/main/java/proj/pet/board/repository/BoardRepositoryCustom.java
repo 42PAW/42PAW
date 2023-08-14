@@ -11,4 +11,7 @@ public interface BoardRepositoryCustom {
 	List<Board> getHotBoards(PageRequest pageRequest);
 
 	List<Board> getMemberBoards(Long memberId, PageRequest pageRequest);
+
+	List<Board> getScrapBoards(Long loginUserId, PageRequest pageRequest);
+
 }

@@ -1,11 +1,14 @@
 package proj.pet.follow.service;
 
-import org.springframework.data.domain.Pageable;
-import proj.pet.follow.dto.FollowPagenationDto;
+import org.springframework.data.domain.PageRequest;
+import proj.pet.follow.domain.FollowType;
+import proj.pet.follow.dto.FollowPaginationDto;
 
 public interface FollowQueryService {
 
-	FollowPagenationDto getFollowings(Long memberId, Pageable pageable);
+	FollowType getFollowType(Long loginUserId, Long memberId);
 
-	FollowPagenationDto getFollowers(Long memberId, Pageable pageable);
+	FollowPaginationDto getFollowings(Long loginUserId, Long memberId, PageRequest pageable);
+
+	FollowPaginationDto getFollowers(Long loginUserId, Long memberId, PageRequest pageable);
 }

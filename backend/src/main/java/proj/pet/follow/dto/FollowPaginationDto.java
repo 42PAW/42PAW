@@ -1,12 +1,13 @@
-package proj.pet.member.dto;
+package proj.pet.follow.dto;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import proj.pet.member.dto.MemberPreviewResponseDto;
 
 @Getter
 @AllArgsConstructor
-public class MemberSearchResponseDto {
+public class FollowPaginationDto {
 
 	private final List<MemberPreviewResponseDto> result;
 	private final long totalLength;

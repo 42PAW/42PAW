@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import proj.pet.board.dto.BoardsResponseDto;
+import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.board.service.BoardQueryService;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.scrap.dto.ScrapCreateRequestDto;
@@ -18,7 +18,8 @@ public class ScrapFacadeServiceImpl implements ScrapFacadeService {
 
 	@Transactional
 	@Override
-	public void createScrap(UserSessionDto userSessionDto, ScrapCreateRequestDto scrapCreateRequestDto) {
+	public void createScrap(UserSessionDto userSessionDto,
+			ScrapCreateRequestDto scrapCreateRequestDto) {
 		scrapService.createScrap(userSessionDto.getMemberId(), scrapCreateRequestDto.getBoardId());
 	}
 
@@ -30,7 +31,7 @@ public class ScrapFacadeServiceImpl implements ScrapFacadeService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public BoardsResponseDto getMyScraps(UserSessionDto userSessionDto, PageRequest pageRequest) {
+	public BoardsPaginationDto getMyScraps(UserSessionDto userSessionDto, PageRequest pageRequest) {
 		return boardQueryService.getScraps(userSessionDto.getMemberId(), pageRequest);
 	}
 }

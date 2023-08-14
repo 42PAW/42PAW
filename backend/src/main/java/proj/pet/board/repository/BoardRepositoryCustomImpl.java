@@ -27,7 +27,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @param pageRequest 페이지네이션
 	 * @return 생성시각 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
 	 */
-	@Override public List<Board> getMainViewBoards(PageRequest pageRequest) {
+	@Override
+	public List<Board> getMainViewBoards(PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
 				EMPTY_PREDICATE,
 				board.createdAt.desc(),
@@ -40,7 +41,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @param pageRequest 페이지네이션
 	 * @return 반응 수 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
 	 */
-	@Override public List<Board> getHotBoards(PageRequest pageRequest) {
+	@Override
+	public List<Board> getHotBoards(PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
 				EMPTY_PREDICATE,
 				board.reactions.size().desc(),
@@ -54,7 +56,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @param pageRequest 페이지네이션
 	 * @return 해당 멤버의 생성시각 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
 	 */
-	@Override public List<Board> getMemberBoards(Long memberId, PageRequest pageRequest) {
+	@Override
+	public List<Board> getMemberBoards(Long memberId, PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
 				board.member.id.eq(memberId),
 				board.createdAt.desc(),
@@ -89,7 +92,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @param pageRequest    페이지네이션
 	 * @return {@link Board} 페이지네이션 - Page 아님
 	 */
-	private List<Board> getBoardsWithFetchJoin(Predicate predicate, OrderSpecifier<?> orderSpecifier, PageRequest pageRequest) {
+	private List<Board> getBoardsWithFetchJoin(Predicate predicate,
+			OrderSpecifier<?> orderSpecifier, PageRequest pageRequest) {
 		return queryFactory.selectFrom(board)
 				.where(predicate)
 				.orderBy(orderSpecifier)
@@ -103,4 +107,12 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 				.fetch();
 	}
 	//TODO : https://jojoldu.tistory.com/457 / N+1을 피하는 방법 찾아보기
+
+	@Override
+	public long countByMemberId(Long memberId) {
+		return queryFactory.select(board.count())
+				.from(board)
+				.where(board.member.id.eq(memberId))
+				.fetchFirst();
+	}
 }

@@ -7,7 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import proj.pet.block.domain.Block;
 import proj.pet.block.dto.BlockRequestDto;
-import proj.pet.mapper.BlockMapper;
+import proj.pet.follow.domain.FollowType;
+import proj.pet.mapper.MemberMapper;
 import proj.pet.member.dto.MemberPreviewResponseDto;
 import proj.pet.member.dto.UserSessionDto;
 
@@ -17,7 +18,7 @@ public class BlockFacadeServiceImpl implements BlockFacadeService {
 
 	private final BlockService blockService;
 	private final BlockQueryService blockQueryService;
-	private final BlockMapper blockMapper;
+	private final MemberMapper memberMapper;
 
 	@Override
 	public void createBlock(UserSessionDto userSessionDto, BlockRequestDto blockRequestDto) {
@@ -38,6 +39,8 @@ public class BlockFacadeServiceImpl implements BlockFacadeService {
 		Long memberId = userSessionDto.getMemberId();
 		Pageable pageable = PageRequest.of(page, size);
 		List<Block> myBlockList = blockQueryService.getBlockList(memberId, pageable);
-		return myBlockList.stream().map(blockMapper::toMemberPreviewResponseDto).toList();
+		return myBlockList.stream().map((block) ->
+				memberMapper.toMemberPreviewResponseDto(block.getTo(), FollowType.BLOCK)
+		).toList();
 	}
 }

@@ -2,9 +2,8 @@ package proj.pet.follow.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import proj.pet.follow.dto.FollowPagenationDto;
+import proj.pet.follow.dto.FollowPaginationDto;
 import proj.pet.follow.dto.FollowRequestDto;
 import proj.pet.member.dto.UserSessionDto;
 
@@ -26,26 +25,28 @@ public class FollowFacadeServiceImpl implements FollowFacadeService {
 	}
 
 	@Override
-	public FollowPagenationDto getMyFollowings(UserSessionDto userSessionDto, int page, int size) {
-		Pageable pageable = PageRequest.of(page, size);
-		return followQueryService.getFollowings(userSessionDto.getMemberId(), pageable);
+	public FollowPaginationDto getMyFollowings(UserSessionDto userSessionDto, int page, int size) {
+		PageRequest pageable = PageRequest.of(page, size);
+		return followQueryService.getFollowings(0L, userSessionDto.getMemberId(), pageable);
 	}
 
 	@Override
-	public FollowPagenationDto getFollowings(Long memberId, int page, int size) {
-		Pageable pageable = PageRequest.of(page, size);
-		return followQueryService.getFollowings(memberId, pageable);
+	public FollowPaginationDto getFollowings(UserSessionDto userSessionDto, Long memberId, int page,
+			int size) {
+		PageRequest pageable = PageRequest.of(page, size);
+		return followQueryService.getFollowings(userSessionDto.getMemberId(), memberId, pageable);
 	}
 
 	@Override
-	public FollowPagenationDto getMyFollowers(UserSessionDto userSessionDto, int page, int size) {
-		Pageable pageable = PageRequest.of(page, size);
-		return followQueryService.getFollowers(userSessionDto.getMemberId(), pageable);
+	public FollowPaginationDto getMyFollowers(UserSessionDto userSessionDto, int page, int size) {
+		PageRequest pageable = PageRequest.of(page, size);
+		return followQueryService.getFollowers(0L, userSessionDto.getMemberId(), pageable);
 	}
 
 	@Override
-	public FollowPagenationDto getFollowers(Long memberId, int page, int size) {
-		Pageable pageable = PageRequest.of(page, size);
-		return followQueryService.getFollowers(memberId, pageable);
+	public FollowPaginationDto getFollowers(UserSessionDto userSessionDto, Long memberId, int page,
+			int size) {
+		PageRequest pageable = PageRequest.of(page, size);
+		return followQueryService.getFollowers(userSessionDto.getMemberId(), memberId, pageable);
 	}
 }

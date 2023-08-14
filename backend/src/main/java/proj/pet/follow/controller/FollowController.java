@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import proj.pet.follow.dto.FollowPagenationDto;
+import proj.pet.follow.dto.FollowPaginationDto;
 import proj.pet.follow.dto.FollowRequestDto;
 import proj.pet.follow.service.FollowFacadeService;
+import proj.pet.member.domain.UserSession;
+import proj.pet.member.dto.UserSessionDto;
 
 @RestController
 @RequestMapping("/v1/follows")
@@ -20,53 +22,103 @@ public class FollowController {
 
 	private final FollowFacadeService followFacadeService;
 
+	/**
+	 * 팔로우 생성
+	 * <br>
+	 * 팔로우 하기를 누르면 팔로우 테이블에 팔로우 정보를 생성 및 저장한다.
+	 *
+	 * @param userSessionDto   로그인한 사용자 정보
+	 * @param followRequestDto 팔로우 생성 요청 정보
+	 */
 	@PostMapping("/")
-	public void createFollow(@RequestBody FollowRequestDto followRequestDto) {
-		//TODO: user 세션 정보로 memberId를 가져와서 넣어줘야 함
-//		followFacadeService.createFollow(, followRequestDto);
+	public void createFollow(
+			@UserSession UserSessionDto userSessionDto,
+			@RequestBody FollowRequestDto followRequestDto) {
+		followFacadeService.createFollow(userSessionDto, followRequestDto);
 	}
 
+	/**
+	 * 팔로우 삭제
+	 * <br>
+	 * 팔로우 취소를 누르면 팔로우 테이블에서 팔로우 정보를 삭제한다.
+	 *
+	 * @param userSessionDto 로그인한 사용자 정보
+	 * @param memberId       팔로우 삭제할 사용자 id
+	 */
 	@DeleteMapping("/members/{memberId}")
-	public void deleteFollow(@PathVariable("memberId") Long memberId) {
-		//TODO: user 세션 정보로 memberId를 가져와서 넣어줘야 함
-//		followFacadeService.deleteFollow(, memberId);
+	public void deleteFollow(
+			@UserSession UserSessionDto userSessionDto,
+			@PathVariable("memberId") Long memberId) {
+		followFacadeService.deleteFollow(userSessionDto, memberId);
 	}
 
+	/**
+	 * 내가 팔로우 하는 멤버들 조회
+	 *
+	 * @param userSessionDto 로그인한 사용자 정보
+	 * @param page           페이지 번호
+	 * @param size           페이지 사이즈
+	 * @return FollowPaginationDto 내가 팔로우하는 멤버들 페이징 정보
+	 */
 	@GetMapping("/me/followings")
-	public FollowPagenationDto getMyFollowings(
+	public FollowPaginationDto getMyFollowings(
+			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("page") int page,
 			@RequestParam("size") int size
 	) {
-		//TODO: user 세션 정보로 memberId를 가져와서 넣어줘야 함
-//		return followFacadeService.getMyFollowings(, page, size);
-		return null;
+		return followFacadeService.getMyFollowings(userSessionDto, page, size);
 	}
 
+	/**
+	 * 다른 사람이 팔로우 하는 멤버들 조회
+	 *
+	 * @param memberId 팔로우 여부를 확인할 사용자 id
+	 * @param page     페이지 번호
+	 * @param size     페이지 사이즈
+	 * @return FollowPaginationDto 다른 사람의 팔로우하는 멤버들 페이징 정보
+	 */
 	@GetMapping("/members/{memberId}/followings")
-	public FollowPagenationDto getFollowings(
+	public FollowPaginationDto getFollowings(
+			@UserSession UserSessionDto userSessionDto,
 			@PathVariable("memberId") Long memberId,
 			@RequestParam("page") int page,
 			@RequestParam("size") int size
 	) {
-		return followFacadeService.getFollowings(memberId, page, size);
+		return followFacadeService.getFollowings(userSessionDto, memberId, page, size);
 	}
 
+	/**
+	 * 나를 팔로우 하는 멤버들 조회
+	 *
+	 * @param userSessionDto 로그인한 사용자 정보
+	 * @param page           페이지 번호
+	 * @param size           페이지 사이즈
+	 * @return FollowPaginationDto 나를 팔로우하는 멤버들 페이징 정보
+	 */
 	@GetMapping("/me/followers")
-	public FollowPagenationDto getMyFollowers(
+	public FollowPaginationDto getMyFollowers(
+			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("page") int page,
 			@RequestParam("size") int size
 	) {
-		//TODO: user 세션 정보로 memberId를 가져와서 넣어줘야 함
-//		return followFacadeService.getMyFollowers(, page, size);
-		return null;
+		return followFacadeService.getMyFollowers(userSessionDto, page, size);
 	}
 
+	/**
+	 * 다른 사람을 팔로우 하는 멤버들 조회
+	 *
+	 * @param memberId 팔로우 여부를 확인할 사용자 id
+	 * @param page     페이지 번호
+	 * @param size     페이지 사이즈
+	 * @return FollowPaginationDto 다른 사람을 팔로우하는 멤버들 페이징 정보
+	 */
 	@GetMapping("/members/{memberId}/followers")
-	public FollowPagenationDto getFollowers(
+	public FollowPaginationDto getFollowers(
+			@UserSession UserSessionDto userSessionDto,
 			@PathVariable("memberId") Long memberId,
 			@RequestParam("page") int page,
 			@RequestParam("size") int size
 	) {
-		return followFacadeService.getFollowers(memberId, page, size);
+		return followFacadeService.getFollowers(userSessionDto, memberId, page, size);
 	}
 }

@@ -1,19 +1,18 @@
 package proj.pet.mapper;
 
 
+import static org.mapstruct.factory.Mappers.getMapper;
+
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.stereotype.Component;
 import proj.pet.board.domain.Board;
 import proj.pet.board.dto.BoardInfoDto;
-import proj.pet.board.dto.BoardsResponseDto;
+import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.category.domain.Species;
 import proj.pet.member.domain.Member;
-
-import java.util.List;
-
-import static org.mapstruct.factory.Mappers.getMapper;
 
 @Mapper(componentModel = "spring")
 @Component
@@ -35,5 +34,7 @@ public interface BoardMapper {
 			int reactionCount, int commentCount,
 			String previewCommentUser, String previewComment);
 
-	BoardsResponseDto toBoardsResponseDto(List<BoardInfoDto> result, int totalLength);
+	BoardsPaginationDto toBoardsResponseDto(List<BoardInfoDto> result, int totalLength);
+
+	BoardInfoDto toBoardInfoDto(Board board);
 }

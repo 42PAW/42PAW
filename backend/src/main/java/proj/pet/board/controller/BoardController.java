@@ -1,17 +1,23 @@
 package proj.pet.board.controller;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import proj.pet.board.dto.BoardsResponseDto;
+import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.board.service.BoardFacadeService;
 import proj.pet.category.domain.Species;
 import proj.pet.member.domain.UserSession;
 import proj.pet.member.dto.UserSessionDto;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/v1/boards")
@@ -21,7 +27,7 @@ public class BoardController {
 	private final BoardFacadeService boardFacadeService;
 
 	@GetMapping
-	public BoardsResponseDto getMainViewBoards(
+	public BoardsPaginationDto getMainViewBoards(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("size") int size,
 			@RequestParam("page") int page) {
@@ -30,7 +36,7 @@ public class BoardController {
 	}
 
 	@GetMapping("/hot")
-	public BoardsResponseDto getHotBoards(
+	public BoardsPaginationDto getHotBoards(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("size") int size,
 			@RequestParam("page") int page) {
@@ -39,7 +45,7 @@ public class BoardController {
 	}
 
 	@GetMapping("/members/{memberId}")
-	public BoardsResponseDto getMemberBoards(
+	public BoardsPaginationDto getMemberBoards(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("size") int size,
 			@RequestParam("page") int page,

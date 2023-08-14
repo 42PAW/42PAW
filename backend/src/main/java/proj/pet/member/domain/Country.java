@@ -1,17 +1,17 @@
 package proj.pet.member.domain;
 
-import lombok.Getter;
+import static proj.pet.exception.ExceptionStatus.INCORRECT_ARGUMENT;
 
 import java.util.EnumSet;
 import java.util.List;
-
-import static proj.pet.exception.ExceptionStatus.INCORRECT_ARGUMENT;
+import lombok.Getter;
 
 /**
  * 42가 있는 국가와 캠퍼스 정보를 담고 있는 Enum
  */
 @Getter
 public enum Country {
+
 	ARMENIA(Language.ENGLISH, Campus.YEREVAN),
 	AUSTRALIA(Language.ENGLISH, Campus.ADELAIDE),
 	AUSTRIA(Language.GERMAN, Campus.VIENNA),
@@ -21,7 +21,8 @@ public enum Country {
 	CZECH(Language.ENGLISH, Campus.PRAGUE),
 	ETC(Language.ENGLISH),
 	FINLAND(Language.ENGLISH, Campus.HELSINKI),
-	FRANCE(Language.FRENCH, Campus.LE_HAVRE, Campus.PERPIGNAN, Campus.MULHOUSE, Campus.NICE, Campus.LYON, Campus.PARIS, Campus.ANGOULEME),
+	FRANCE(Language.FRENCH, Campus.LE_HAVRE, Campus.PERPIGNAN, Campus.MULHOUSE, Campus.NICE,
+			Campus.LYON, Campus.PARIS, Campus.ANGOULEME),
 	GERMANY(Language.GERMAN, Campus.BERLIN, Campus.WOLFSBURG, Campus.HELIBRONN),
 	ITALY(Language.ITALIAN, Campus.FLORENCE, Campus.ROME),
 	JAPAN(Language.JAPANESE, Campus.TOKYO),
@@ -47,8 +48,7 @@ public enum Country {
 	;
 
 	/**
-	 * defaultLanguage - 해당 국가에 설정되는 기본 {@link Language}
-	 * campuses - 해당 국가에 있는 캠퍼스 List
+	 * defaultLanguage - 해당 국가에 설정되는 기본 {@link Language} campuses - 해당 국가에 있는 캠퍼스 List
 	 */
 	private static final EnumSet<Country> countries = EnumSet.allOf(Country.class);
 	private final Language defaultLanguage;

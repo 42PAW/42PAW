@@ -1,12 +1,13 @@
 package proj.pet.board.service;
 
 import org.springframework.data.domain.PageRequest;
-import proj.pet.board.dto.BoardsResponseDto;
+import proj.pet.board.dto.BoardsPaginationDto;
 
 public interface BoardQueryService {
-	BoardsResponseDto getMainViewBoards(Long loginUserId, PageRequest pageRequest);
 
-	BoardsResponseDto getHotBoards(Long loginUserId, PageRequest pageRequest);
+	BoardsPaginationDto getMainViewBoards(Long loginUserId, PageRequest pageRequest);
 
-	BoardsResponseDto getMemberBoards(Long loginUserId, Long memberId, PageRequest pageRequest);
+	BoardsPaginationDto getHotBoards(Long loginUserId, PageRequest pageRequest);
+
+	BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId, PageRequest pageRequest);
 }

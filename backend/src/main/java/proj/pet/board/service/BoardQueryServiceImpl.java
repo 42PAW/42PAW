@@ -1,20 +1,22 @@
 package proj.pet.board.service;
 
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import proj.pet.board.domain.Board;
 import proj.pet.board.dto.BoardInfoDto;
-import proj.pet.board.dto.BoardsResponseDto;
+import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.comment.domain.Comment;
 import proj.pet.mapper.BoardMapper;
-import proj.pet.member.repository.MemberRepository;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
-
-import java.util.*;
-import java.util.function.Function;
 
 @QueryService
 @RequiredArgsConstructor
@@ -22,7 +24,6 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
 	private final static String EMPTY_STRING = "";
 	private final BoardRepository boardRepository;
-	private final MemberRepository memberRepository;
 	private final BoardMapper boardMapper;
 
 	/**
@@ -34,10 +35,11 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 *                    <br>   참고 : {@link proj.pet.member.domain.UserAspect}
 	 *                    <br>
 	 * @param pageRequest 페이지 요청 정보
-	 * @return {@link BoardsResponseDto} - 게시글 정보에 대한 페이지네이션
+	 * @return {@link BoardsPaginationDto} - 게시글 정보에 대한 페이지네이션
 	 * @see proj.pet.member.domain.UserSession
 	 */
-	@Override public BoardsResponseDto getMainViewBoards(Long loginUserId, PageRequest pageRequest) {
+	@Override
+	public BoardsPaginationDto getMainViewBoards(Long loginUserId, PageRequest pageRequest) {
 		List<BoardInfoDto> result = boardRepository.getMainViewBoards(pageRequest).stream()
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
@@ -45,14 +47,17 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	}
 	// TODO: result.size가 아닌 전체 길이를 가져오도록 수정 및 최적화 필요, 혹시 변할 수도 있으니 아직 함수 중복에 대해서는 리팩터링하지 않았음.
 
-	@Override public BoardsResponseDto getHotBoards(Long loginUserId, PageRequest pageRequest) {
+	@Override
+	public BoardsPaginationDto getHotBoards(Long loginUserId, PageRequest pageRequest) {
 		List<BoardInfoDto> result = boardRepository.getHotBoards(pageRequest).stream()
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());
 	}
 
-	@Override public BoardsResponseDto getMemberBoards(Long loginUserId, Long memberId, PageRequest pageRequest) {
+	@Override
+	public BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId,
+			PageRequest pageRequest) {
 		List<BoardInfoDto> result = boardRepository.getMemberBoards(memberId, pageRequest).stream()
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
@@ -122,12 +127,11 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 * @return entity가 존재하면 extractor를 통해 추출한 Set<E>, 존재하지 않으면 빈 Set<E>
 	 *  TODO: 언젠가는 옮길건데 Util 클래스로 사용할 수 있을 것 같다는 생각이 듦.
 	 */
-	private <T, E> Set<E> extractSetFromListIfExists(Optional<T> entity, Function<T, List<E>> extractor) {
+	private <T, E> Set<E> extractSetFromListIfExists(Optional<T> entity,
+			Function<T, List<E>> extractor) {
 		return entity
 				.map(extractor)
 				.map(HashSet::new)
 				.orElseGet(HashSet::new);
 	}
-
-
 }

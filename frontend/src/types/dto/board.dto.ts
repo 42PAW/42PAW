@@ -23,7 +23,7 @@ export interface CommentInfoDTO {
   memberId: number;
   memberName: string;
   comment: string;
-  profileImage: string;
+  profileImageUrl: string;
   createdAt: string;
 }
 

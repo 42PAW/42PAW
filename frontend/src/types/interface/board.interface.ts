@@ -18,7 +18,7 @@ export interface IBoardInfo {
   memberId: number;
   memberName: string;
   intraName: string;
-  profileImageURL: string;
+  profileImageUrl: string;
   country: string;
   images: string[];
   categories: string[];

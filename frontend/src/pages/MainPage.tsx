@@ -3,7 +3,6 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import BoardTemplate from "@/components/Board/BoardTemplate";
 import {
-  defaultBoardsState,
   trendingBoardsState,
   followingBoardsState,
   boardCategoryState,
@@ -14,13 +13,11 @@ import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTempla
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import useFetchBoards from "@/hooks/useFetchBoards";
 import { IBoardInfo } from "@/types/interface/board.interface";
-import { currentBoardIdState } from "@/recoil/atom";
 
 const MainPage = () => {
   const [trendingBoards] = useRecoilState<BoardsInfoDTO>(trendingBoardsState);
   const [followingBoards] = useRecoilState<BoardsInfoDTO>(followingBoardsState);
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
-  const [currentBoardId] = useRecoilState(currentBoardIdState);
   const { fetchBoards } = useFetchBoards();
   const {
     isLoading,
@@ -65,7 +62,7 @@ const MainPage = () => {
           memberId={board.memberId}
           memberName={board.memberName}
           intraName={board.intraName}
-          profileImageURL={board.profileImageURL}
+          profileImageUrl={board.profileImageUrl}
           country={board.country}
           images={board.images}
           categories={board.categories}

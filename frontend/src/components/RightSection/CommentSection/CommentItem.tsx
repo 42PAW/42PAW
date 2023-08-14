@@ -3,13 +3,19 @@ import { CommentInfoDTO } from "@/types/dto/board.dto";
 import OptionButton from "@/components/OptionButton";
 
 const CommentItem = (commentInfo: CommentInfoDTO) => {
-  const { commentId, memberId, memberName, comment, profileImage, createdAt } =
-    commentInfo;
+  const {
+    commentId,
+    memberId,
+    memberName,
+    comment,
+    profileImageUrl,
+    createdAt,
+  } = commentInfo;
 
   return (
     <CommentItemStyled>
       <UserImageContainerStyled>
-        <img src={profileImage} />
+        <img src={profileImageUrl} />
       </UserImageContainerStyled>
       <CommentItemRightStyled>
         <NicknameToggleContainerStyled>

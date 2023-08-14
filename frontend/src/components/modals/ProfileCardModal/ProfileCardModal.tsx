@@ -58,7 +58,7 @@ const WrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 500px;
+  width: 550px;
   height: 300px;
   background-color: var(--white);
   border-radius: 15px;
@@ -104,10 +104,10 @@ const ProfileImageStyled = styled.img`
   @media (min-width: 1024px) {
     z-index: 2;
     position: absolute;
-    height: 110%;
+    height: 130%;
     border-radius: 100%;
-    left: -85px;
-    top: -15px;
+    left: -90px;
+    top: -60px;
     box-shadow: 6px 3px 3px rgba(0, 0, 0, 0.25);
   }
 `;
@@ -132,7 +132,7 @@ const MainAreaStyled = styled.div`
   }
   @media (min-width: 1024px) {
     position: absolute;
-    right: -120px;
+    right: -125px;
   }
 `;
 

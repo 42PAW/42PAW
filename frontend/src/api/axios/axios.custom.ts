@@ -46,7 +46,7 @@ export const axiosGetBoards = async (
   page: number
 ): Promise<any> => {
   try {
-    const response = await axios.get(axiosGetBoardsURL, {
+    const response = await instance.get(axiosGetBoardsURL, {
       params: { size: size, page: page },
     });
     return response.data;
@@ -117,13 +117,20 @@ export const axiosGetFollowingBoards = async (
   }
 };
 
-const axiosGetBoardCommentsURL =
-  "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/comments/boards/";
-export const axiosGetBoardComments = async (boardId: number): Promise<any> => {
+const axiosGetBoardCommentsURL = "/v1/comments/boards/";
+export const axiosGetBoardComments = async (
+  boardId: number,
+  size: number,
+  page: number
+): Promise<any> => {
   try {
-    const response = await axios.get(
-      axiosGetBoardCommentsURL + boardId.toString()
+    const response = await instance.get(
+      axiosGetBoardCommentsURL + boardId.toString(),
+      {
+        params: { size: size, page: page },
+      }
     );
+    console.log(response.data.result);
     return response.data.result;
   } catch (error) {
     throw error;

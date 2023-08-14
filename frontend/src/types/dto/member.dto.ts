@@ -8,6 +8,7 @@ export interface SignUpInfoDTO {
 }
 
 export interface UserInfoDTO {
+  memberId: number;
   memberName: string;
   intraName: string;
   profileImageUrl: string;

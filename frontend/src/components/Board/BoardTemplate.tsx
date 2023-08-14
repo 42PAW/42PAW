@@ -15,7 +15,7 @@ const BoardTemplate = (board: IBoardInfo) => {
     memberId,
     memberName,
     intraName,
-    profileImageURL,
+    profileImageUrl,
     country,
     images,
     categories,
@@ -49,7 +49,7 @@ const BoardTemplate = (board: IBoardInfo) => {
       <BoardWrapperStyled>
         <BoardHeaderStyled>
           <BoardProfileStyled onClick={handleOpenProfile}>
-            <img src={profileImageURL} />
+            <img src={profileImageUrl} />
             <div>{memberName} 🇰🇷</div>
           </BoardProfileStyled>
           <BoardOptionButtonStyled>
@@ -88,13 +88,17 @@ const BoardTemplate = (board: IBoardInfo) => {
               <span>{createdAt}</span>
             </DivOne>
             <DivTwo>{content}</DivTwo>
-            <DivThree>
-              <div onClick={handleOpenProfile}>{previewCommentUser}</div>
-              <div>{previewComment}</div>
-              <div onClick={() => handleCommentClick(1)}>
-                {language.moreComments}
-              </div>
-            </DivThree>
+            {previewComment ? (
+              <DivThree>
+                <div onClick={handleOpenProfile}>{previewCommentUser}</div>
+                <div>{previewComment}</div>
+                <div onClick={() => handleCommentClick(boardId)}>
+                  {language.moreComments}
+                </div>
+              </DivThree>
+            ) : (
+              <NoCommentStyled>댓글이 없습니다.</NoCommentStyled>
+            )}
           </BoardContentContainerStyled>
         </BoardBodyStyled>
       </BoardWrapperStyled>
@@ -123,7 +127,7 @@ const BoardHeaderStyled = styled.div`
 const BoardProfileStyled = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 6%;
+  margin-left: 4%;
   width: 40%;
   img {
     cursor: pointer;
@@ -241,6 +245,12 @@ const DivThree = styled.div`
     margin-left: 2%;
     color: var(--lightgrey);
   }
+`;
+
+const NoCommentStyled = styled.div`
+  font-weight: 400;
+  color: var(--lightgrey);
+  margin-top: 2%;
 `;
 
 export default BoardTemplate;

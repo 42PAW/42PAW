@@ -1,4 +1,4 @@
-export enum BoardCategory {
+export enum Board {
   DEFAULT = "DEFAULT",
   TRENDING = "TRENDING",
   FOLLOWING = "FOLLOWING",

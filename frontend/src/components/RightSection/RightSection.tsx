@@ -30,7 +30,7 @@ const RightSection = () => {
         </CloseButtonContainerStyled>
         <RightSectionBodyStyled>
           {rightSectionContent.comment && <CommentSection />}
-          {rightSectionContent.search &&  <SearchSection />}
+          {rightSectionContent.search && <SearchSection />}
           {rightSectionContent.animalFilter && <AnimalFilterSection />}
         </RightSectionBodyStyled>
       </RightSectionStyled>

@@ -151,7 +151,6 @@ class BoardQueryServiceTest {
 				.getResult();
 
 		//then
-		assertThat(result).isNotNull();
 		assertThat(result.size()).isEqualTo(2);
 		assertThat(result.get(0).getBoardId()).isEqualTo(boards.get(0).getId());
 		assertThat(result.get(1).getBoardId()).isEqualTo(boards.get(1).getId());

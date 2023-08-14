@@ -24,7 +24,7 @@ public class ScrapFacadeServiceImpl implements ScrapFacadeService {
 	@Transactional
 	@Override
 	public void deleteScrap(UserSessionDto userSessionDto, Long boardId) {
-
+		scrapService.deleteScrap(userSessionDto.getMemberId(), boardId);
 	}
 
 	@Transactional(readOnly = true)

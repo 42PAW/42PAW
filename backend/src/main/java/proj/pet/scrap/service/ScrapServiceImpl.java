@@ -29,4 +29,13 @@ public class ScrapServiceImpl implements ScrapService {
 		Board board = boardRepository.findById(boardId).orElseThrow(NOT_FOUND_BOARD::asServiceException);
 		scrapRepository.save(Scrap.of(loginUser, board, LocalDateTime.now()));
 	}
+
+	@Override public void deleteScrap(Long memberId, Long boardId) {
+		if (memberId.equals(NOT_REGISTERED_ID)) {
+			throw UNAUTHORIZED.asServiceException();
+		}
+		Member loginUser = memberRepository.findById(memberId).orElseThrow(NOT_FOUND_MEMBER::asServiceException);
+		Scrap scrap = scrapRepository.findByMemberAndBoardId(loginUser.getId(), boardId).orElseThrow(NOT_FOUND_SCRAP::asServiceException);
+		scrapRepository.delete(scrap);
+	}
 }

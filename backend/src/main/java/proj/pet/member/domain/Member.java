@@ -1,25 +1,36 @@
 package proj.pet.member.domain;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import proj.pet.block.domain.Block;
-import proj.pet.follow.domain.Follow;
-import proj.pet.utils.domain.IdDomain;
-import proj.pet.utils.domain.RuntimeExceptionThrower;
-import proj.pet.utils.domain.Validatable;
+import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import static jakarta.persistence.FetchType.LAZY;
-import static lombok.AccessLevel.PROTECTED;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import proj.pet.block.domain.Block;
+import proj.pet.category.domain.MemberCategoryFilter;
+import proj.pet.follow.domain.Follow;
+import proj.pet.reaction.domain.Reaction;
+import proj.pet.scrap.domain.Scrap;
+import proj.pet.utils.domain.IdDomain;
+import proj.pet.utils.domain.RuntimeExceptionThrower;
+import proj.pet.utils.domain.Validatable;
 
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "MEMBER")
 @Getter
+@ToString
 public class Member extends IdDomain implements Validatable {
 
 	@Embedded
@@ -34,7 +45,7 @@ public class Member extends IdDomain implements Validatable {
 	private Language language;
 
 	@Column(name = "PROFILE_IMAGE_URL")
-	private String profileImageUrl;
+	private String profileImageUrl = null;
 
 	@Column(name = "NICKNAME", nullable = false, length = 12)
 	private String nickname;
@@ -55,28 +66,51 @@ public class Member extends IdDomain implements Validatable {
 	@Column(name = "DELETED_AT")
 	private LocalDateTime deletedAt;
 
+	@ToString.Exclude
 	@OneToMany(mappedBy = "from",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	private List<Block> blocks = new ArrayList<>();
 
+	@ToString.Exclude
 	@OneToMany(mappedBy = "from",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	private List<Follow> followings = new ArrayList<>();
 
+	@ToString.Exclude
 	@OneToMany(mappedBy = "to",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	private List<Follow> followers = new ArrayList<>();
 
+	@ToString.Exclude
+	@OneToMany(mappedBy = "member",
+			fetch = LAZY,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<MemberCategoryFilter> memberCategoryFilters = new ArrayList<>();
 
-	private Member(OauthProfile oauthProfile, String profileImageUrl, Country country, Language language, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
+	@ToString.Exclude
+	@OneToMany(mappedBy = "member",
+			fetch = LAZY,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Reaction> reactions = new ArrayList<>();
+
+	@ToString.Exclude
+	@OneToMany(mappedBy = "member",
+			fetch = LAZY,
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Scrap> scraps = new ArrayList<>();
+
+	private Member(OauthProfile oauthProfile, Country country, Language language, String nickname,
+			String statement, MemberRole memberRole, LocalDateTime now) {
 		this.oauthProfile = oauthProfile;
-		this.profileImageUrl = profileImageUrl;
 		this.country = country;
 		this.language = language;
 		this.nickname = nickname;
@@ -87,11 +121,14 @@ public class Member extends IdDomain implements Validatable {
 		RuntimeExceptionThrower.checkValidity(this);
 	}
 
-	public static Member of(OauthProfile oauthProfile, String profileImageUrl, Country country, Language language, String nickname, String statement, MemberRole memberRole, LocalDateTime now) {
-		return new Member(oauthProfile, profileImageUrl, country, language, nickname, statement, memberRole, now);
+	public static Member of(OauthProfile oauthProfile, Country country, String nickname,
+			String statement, MemberRole memberRole, LocalDateTime now) {
+		return new Member(oauthProfile, country, country.getDefaultLanguage(), nickname, statement,
+				memberRole, now);
 	}
 
-	@Override public boolean isValid() {
+	@Override
+	public boolean isValid() {
 		return oauthProfile != null
 				&& country != null
 				&& language != null
@@ -99,5 +136,31 @@ public class Member extends IdDomain implements Validatable {
 				&& memberRole != null
 				&& nicknameUpdatedAt != null
 				&& createdAt != null;
+	}
+
+	public void changeNickname(String nickname, LocalDateTime now) {
+		this.nickname = nickname;
+		this.nicknameUpdatedAt = now;
+		RuntimeExceptionThrower.checkValidity(this);
+	}
+
+	public void changeProfileImageUrl(String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
+		RuntimeExceptionThrower.checkValidity(this);
+	}
+
+	public void addCategoryFilters(List<MemberCategoryFilter> categoryFilters) {
+		this.memberCategoryFilters.addAll(categoryFilters);
+		RuntimeExceptionThrower.checkValidity(this);
+	}
+
+	public void changeStatement(String statement) {
+		this.statement = statement;
+		RuntimeExceptionThrower.checkValidity(this);
+	}
+
+	public void changeLanguage(Language language) {
+		this.language = language;
+		RuntimeExceptionThrower.checkValidity(this);
 	}
 }

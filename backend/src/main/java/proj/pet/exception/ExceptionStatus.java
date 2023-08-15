@@ -21,12 +21,14 @@ public enum ExceptionStatus {
 	ALREADY_EXIST_MEMBER(HttpStatus.CONFLICT, "이미 존재하는 멤버입니다."),
 	UNAUTHENTICATED(HttpStatus.FORBIDDEN, "권한이 없는 요청입니다."),
 	NOT_FOUND_BOARD(HttpStatus.NOT_FOUND, "존재하지 않는 게시물입니다."),
+	NOT_FOUND_REACTION(HttpStatus.NOT_FOUND, "존재하지 않는 반응입니다."),
+	NOT_FOUND_SCRAP(HttpStatus.NOT_FOUND, "존재하지 않는 스크랩입니다."),
+	NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."),
 
 	/*-----------------------------------DOMAIN-----------------------------------*/
 	INVARIANT_VIOLENCE(HttpStatus.BAD_REQUEST, "불변식에 위배되는 생성 매개변수입니다."),
 	INVALID_ARGUMENT(HttpStatus.BAD_REQUEST, "유효하지 않은 입력입니다."),
-	MALFORMED_URL(HttpStatus.BAD_REQUEST, "잘못된 URL입니다."),
-	;
+	MALFORMED_URL(HttpStatus.BAD_REQUEST, "잘못된 URL입니다.");
 
 	private final int statusCode;
 	private final String error;
@@ -38,15 +40,15 @@ public enum ExceptionStatus {
 		this.error = status.getReasonPhrase();
 	}
 
-	public ControllerException toControllerException() {
+	public ControllerException asControllerException() {
 		return new ControllerException(this);
 	}
 
-	public ServiceException toServiceException() {
+	public ServiceException asServiceException() {
 		return new ServiceException(this);
 	}
 
-	public DomainException toDomainException() {
+	public DomainException asDomainException() {
 		return new DomainException(this);
 	}
 }

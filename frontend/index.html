@@ -3,19 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/src/assets/dogLogo.png" />
-    <link rel="manifest" href="manifest.json" />
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, minimum-scale=1.0, maximum-scale=1, user-scalable=no"
+    />
     <title>42PAW</title>
   </head>
   <body>
     <div id="root"></div>
-    <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker.register("service-worker.ts");
-        });
-      }
-    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

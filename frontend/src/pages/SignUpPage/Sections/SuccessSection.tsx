@@ -1,13 +1,30 @@
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import createConfetti from "canvas-confetti";
 import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
+import { useEffect } from "react";
+import { axiosSignUp } from "@/api/axios/axios.custom";
 
 const SuccessSection: React.FC<SectionProps> = ({ registerData }) => {
+  const navigator = useNavigate();
+
   createConfetti({
     particleCount: 200,
     spread: 150,
     origin: { x: 0.5, y: 0.5 },
   });
+
+  const signUpComplete = async () => {
+    const response = await axiosSignUp(registerData);
+    console.log(response);
+    setTimeout(() => {
+      navigator("/");
+    }, 1000);
+  };
+
+  useEffect(() => {
+    signUpComplete();
+  }, []);
 
   return (
     <WrapperStyled>

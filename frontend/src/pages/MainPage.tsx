@@ -1,61 +1,41 @@
+import { useQuery } from "@tanstack/react-query";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import BoardTemplate from "@/components/Board/BoardTemplate";
-import { useRecoilState } from "recoil";
 import {
-  defaultBoardsState,
   trendingBoardsState,
   followingBoardsState,
   boardCategoryState,
 } from "@/recoil/atom";
 import { BoardsInfoDTO } from "@/types/dto/board.dto";
-import {
-  axiosGetBoards,
-  axiosGetTrendingBoards,
-  axiosGetFollowingBoards,
-} from "@/api/axios/axios.custom";
-import { useEffect } from "react";
-import { BoardCategory } from "@/types/enum/board.category.enum";
+import { Board } from "@/types/enum/board.category.enum";
 import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTemplate";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
+import useFetchBoards from "@/hooks/useFetchBoards";
+import { IBoardInfo } from "@/types/interface/board.interface";
 
 const MainPage = () => {
-  const [defaultBoards, setDefaultBoards] =
-    useRecoilState<BoardsInfoDTO>(defaultBoardsState);
-  const [trendingBoards, setTrendingBoards] =
-    useRecoilState<BoardsInfoDTO>(trendingBoardsState);
-  const [followingBoards, setFollowingBoards] =
-    useRecoilState<BoardsInfoDTO>(followingBoardsState);
-  const [boardCategory] = useRecoilState<BoardCategory>(boardCategoryState);
+  const [trendingBoards] = useRecoilState<BoardsInfoDTO>(trendingBoardsState);
+  const [followingBoards] = useRecoilState<BoardsInfoDTO>(followingBoardsState);
+  const [boardCategory] = useRecoilState<Board>(boardCategoryState);
+  const { fetchBoards } = useFetchBoards();
+  const {
+    isLoading,
+    isError,
+    data: defaultBoards,
+    error,
+  } = useQuery({
+    queryKey: [Board.DEFAULT],
+    queryFn: fetchBoards,
+  });
 
-  useEffect(() => {
-    getBoardsData();
-  }, [boardCategory]);
-
-  const getBoardsData = async () => {
-    try {
-      if (boardCategory === BoardCategory.DEFAULT) {
-        const result = await axiosGetBoards(12, 0);
-        setDefaultBoards(result);
-      }
-      if (boardCategory === BoardCategory.TRENDING) {
-        const result = await axiosGetTrendingBoards(12, 0);
-        setTrendingBoards(result);
-      }
-      if (boardCategory === BoardCategory.FOLLOWING) {
-        const result = await axiosGetFollowingBoards(12, 0);
-        setFollowingBoards(result);
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
   const getBoardsToRender = () => {
     switch (boardCategory) {
-      case BoardCategory.DEFAULT:
+      case Board.DEFAULT:
         return defaultBoards;
-      case BoardCategory.TRENDING:
+      case Board.TRENDING:
         return trendingBoards;
-      case BoardCategory.FOLLOWING:
+      case Board.FOLLOWING:
         return followingBoards;
       default:
         return null;
@@ -64,33 +44,38 @@ const MainPage = () => {
 
   const currentBoards = getBoardsToRender();
 
+  if (isLoading) {
+    return (
+      <WrapperStyled>
+        <SkeletonBoardTemplate />
+        <LoadingAnimation />
+      </WrapperStyled>
+    );
+  }
+
   return (
     <WrapperStyled>
-      {currentBoards ? (
-        currentBoards.result.map((board: any) => (
-          <BoardTemplate
-            key={board.boardId}
-            boardId={board.boardId}
-            memberName={board.memberName}
-            profileImage={board.profileImage}
-            images={board.images}
-            categories={board.categories}
-            reactionCount={board.reactionCount}
-            commentCount={board.commentCount}
-            isScrapped={board.isScrapped}
-            isReacted={board.isReacted}
-            content={board.content}
-            previewCommentUser={board.previewCommentUser}
-            previewComment={board.previewComment}
-            createdAt={board.createdAt}
-          />
-        ))
-      ) : (
-        <>
-          <SkeletonBoardTemplate />
-          <LoadingAnimation />
-        </>
-      )}
+      {currentBoards.map((board: IBoardInfo) => (
+        <BoardTemplate
+          key={board.boardId}
+          boardId={board.boardId}
+          memberId={board.memberId}
+          memberName={board.memberName}
+          intraName={board.intraName}
+          profileImageUrl={board.profileImageUrl}
+          country={board.country}
+          images={board.images}
+          categories={board.categories}
+          reactionCount={board.reactionCount}
+          commentCount={board.commentCount}
+          isScrapped={board.isScrapped}
+          isReacted={board.isReacted}
+          content={board.content}
+          previewCommentUser={board.previewCommentUser}
+          previewComment={board.previewComment}
+          createdAt={board.createdAt}
+        />
+      ))}
     </WrapperStyled>
   );
 };

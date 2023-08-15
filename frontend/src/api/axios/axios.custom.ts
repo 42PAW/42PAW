@@ -1,15 +1,52 @@
 import axios from "axios";
 import instance from "@/api/axios/axios.instance";
+import { SignUpInfoDTO } from "@/types/dto/member.dto";
 import { CreateBoardDTO } from "@/types/dto/board.dto";
 
-const axiosGetBoardsURL =
-  "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/boards";
+const axiosSignUpURL = "/v1/members";
+export const axiosSignUp = async ({
+  memberName,
+  imageData,
+  statement,
+  categoryFilters,
+}: SignUpInfoDTO): Promise<any> => {
+  try {
+    const formData = new FormData();
+    formData.append("memberName", memberName);
+    formData.append("imageData", imageData ? imageData : "null");
+    formData.append("statement", statement);
+    categoryFilters.map((categoryFilter) => {
+      formData.append("categoryFilters", categoryFilter);
+    });
+    const response = await instance.post(axiosSignUpURL, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosMyInfoURL = "/v1/members/me";
+export const axiosMyInfo = async (): Promise<any> => {
+  try {
+    const response = await instance.get(axiosMyInfoURL);
+    console.log(response);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetBoardsURL = "/v1/boards";
 export const axiosGetBoards = async (
   size: number,
   page: number
 ): Promise<any> => {
   try {
-    const response = await axios.get(axiosGetBoardsURL, {
+    const response = await instance.get(axiosGetBoardsURL, {
       params: { size: size, page: page },
     });
     return response.data;
@@ -80,14 +117,37 @@ export const axiosGetFollowingBoards = async (
   }
 };
 
-const axiosGetBoardCommentsURL =
-  "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/comments/boards/";
-export const axiosGetBoardComments = async (boardId: number): Promise<any> => {
+const axiosGetBoardCommentsURL = "/v1/comments/boards/";
+export const axiosGetBoardComments = async (
+  boardId: number,
+  size: number,
+  page: number
+): Promise<any> => {
   try {
-    const response = await axios.get(
-      axiosGetBoardCommentsURL + boardId.toString()
+    const response = await instance.get(
+      axiosGetBoardCommentsURL + boardId.toString(),
+      {
+        params: { size: size, page: page },
+      }
     );
+    console.log(response.data.result);
     return response.data.result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosCreateCommentURL = "/v1/comments";
+export const axiosCreateComment = async (
+  boardId: number | null,
+  content: string
+): Promise<any> => {
+  try {
+    const response = await instance.post(axiosCreateCommentURL, {
+      boardId,
+      content,
+    });
+    return response;
   } catch (error) {
     throw error;
   }

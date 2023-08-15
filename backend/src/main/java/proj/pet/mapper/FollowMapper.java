@@ -6,7 +6,7 @@ import static org.mapstruct.factory.Mappers.getMapper;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
-import proj.pet.follow.dto.FollowPagenationDto;
+import proj.pet.follow.dto.FollowPaginationDto;
 import proj.pet.member.dto.MemberPreviewResponseDto;
 
 @Mapper(componentModel = "spring",
@@ -16,6 +16,6 @@ public interface FollowMapper {
 
 	FollowMapper INSTANCE = getMapper(FollowMapper.class);
 
-	FollowPagenationDto toFollowResponseDto(List<MemberPreviewResponseDto> result,
+	FollowPaginationDto toFollowResponseDto(List<MemberPreviewResponseDto> result,
 			long totalLength);
 }

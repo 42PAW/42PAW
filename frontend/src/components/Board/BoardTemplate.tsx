@@ -12,8 +12,11 @@ import { currentBoardIdState } from "@/recoil/atom";
 const BoardTemplate = (board: IBoardInfo) => {
   const {
     boardId,
+    memberId,
     memberName,
-    profileImage,
+    intraName,
+    profileImageUrl,
+    country,
     images,
     categories,
     reactionCount,
@@ -46,7 +49,7 @@ const BoardTemplate = (board: IBoardInfo) => {
       <BoardWrapperStyled>
         <BoardHeaderStyled>
           <BoardProfileStyled onClick={handleOpenProfile}>
-            <img src={profileImage} />
+            <img src={profileImageUrl} />
             <div>{memberName} 🇰🇷</div>
           </BoardProfileStyled>
           <BoardOptionButtonStyled>
@@ -85,13 +88,17 @@ const BoardTemplate = (board: IBoardInfo) => {
               <span>{createdAt}</span>
             </DivOne>
             <DivTwo>{content}</DivTwo>
-            <DivThree>
-              <div onClick={handleOpenProfile}>{previewCommentUser}</div>
-              <div>{previewComment}</div>
-              <div onClick={() => handleCommentClick(1)}>
-                {language.moreComments}
-              </div>
-            </DivThree>
+            {previewComment ? (
+              <DivThree>
+                <div onClick={handleOpenProfile}>{previewCommentUser}</div>
+                <div>{previewComment}</div>
+                <div onClick={() => handleCommentClick(boardId)}>
+                  {language.moreComments}
+                </div>
+              </DivThree>
+            ) : (
+              <NoCommentStyled>댓글이 없습니다.</NoCommentStyled>
+            )}
           </BoardContentContainerStyled>
         </BoardBodyStyled>
       </BoardWrapperStyled>
@@ -120,7 +127,7 @@ const BoardHeaderStyled = styled.div`
 const BoardProfileStyled = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 6%;
+  margin-left: 4%;
   width: 40%;
   img {
     cursor: pointer;
@@ -158,7 +165,7 @@ const ButtonZoneStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 1%;
+  margin-top: 10px;
   height: 5%;
 `;
 
@@ -172,25 +179,25 @@ const LikeCommentContainerStyled = styled.div`
   img {
     cursor: pointer;
     margin-left: 7%;
-    width: 13%;
+    width: 22px;
   }
   img:hover {
-    opacity: 0.7;
+    opacity: 0.5;
   }
 `;
 
 const ScrapButtonStyled = styled.div`
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   width: 33.3%;
   img {
-    width: 13%;
+    cursor: pointer;
+    width: 22px;
     margin-right: 15%;
   }
   img:hover {
-    opacity: 0.7;
+    opacity: 0.5;
   }
 `;
 
@@ -238,6 +245,12 @@ const DivThree = styled.div`
     margin-left: 2%;
     color: var(--lightgrey);
   }
+`;
+
+const NoCommentStyled = styled.div`
+  font-weight: 400;
+  color: var(--lightgrey);
+  margin-top: 2%;
 `;
 
 export default BoardTemplate;

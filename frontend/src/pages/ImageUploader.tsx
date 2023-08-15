@@ -54,7 +54,12 @@ const ImageUploader = () => {
   console.log(typeof webpImage);
   return (
     <div>
-      <input type="file" accept="image/*" onChange={handleImageChange} />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+        multiple
+      />
       {selectedImage && (
         <img src={URL.createObjectURL(selectedImage)} alt="Selected" />
       )}

@@ -1,12 +1,12 @@
 package proj.pet.board.dto;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.web.multipart.MultipartFile;
 import proj.pet.category.domain.Species;
 import proj.pet.member.domain.Country;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -16,7 +16,7 @@ public class BoardInfoDto {
 	private final Long memberId;
 	private final String memberName;
 	private final String intraName;
-	private final MultipartFile profileImage;
+	private final String profileImageUrl;
 	private final Country country;
 	private final List<String> images;
 	private final List<Species> categories;

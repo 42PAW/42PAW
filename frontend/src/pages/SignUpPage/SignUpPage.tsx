@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NicknameSection from "@/pages/SignUpPage/Sections/NicknameSection";
 import ProfileImageSection from "@/pages/SignUpPage/Sections/ProfileImageSection";
 import IntroductionSection from "@/pages/SignUpPage/Sections/IntroductionSection";
@@ -8,6 +9,19 @@ import { styled } from "styled-components";
 import ProfileCard from "@/pages/SignUpPage/components/ProfileCard";
 import Toaster from "@/components/toast/Toaster";
 import { SignUpInfoDTO } from "@/types/dto/member.dto";
+import { getCookie } from "@/api/cookie/cookies";
+import jwtDecode from "jwt-decode";
+
+const token = getCookie("access_token");
+
+interface IToken {
+  campus: string;
+  email: string;
+  exp: number;
+  oauthName: string;
+  role: string;
+}
+
 export enum Section {
   Nickname = "NicknameSection",
   ProfileImage = "ProfileImageSection",
@@ -37,6 +51,23 @@ const SignUpPage = () => {
     categoryFilters: [],
   });
   const [step, setStep] = useState<SectionType>(Section.Nickname);
+  const navigator = useNavigate();
+
+  useEffect(() => {
+    if (!token) {
+      navigator("/");
+    }
+    if (token) {
+      try {
+        const decodedToken: IToken = jwtDecode(token);
+        if (decodedToken?.role === "USER") {
+          navigator("/");
+        }
+      } catch (error) {
+        navigator("/");
+      }
+    }
+  }, []);
 
   return (
     <MainStyled>

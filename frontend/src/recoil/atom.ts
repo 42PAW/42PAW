@@ -2,11 +2,16 @@ import { atom } from "recoil";
 import { IRightSectionContentInfo } from "@/types/interface/right.section.interface";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
 import { BoardsInfoDTO, CommentInfoDTO } from "@/types/dto/board.dto";
-import { BoardCategory } from "@/types/enum/board.category.enum";
+import { Board } from "@/types/enum/board.category.enum";
 import { IBanUserInfo } from "@/types/interface/user.interface";
 import { IToastInfo } from "@/types/interface/toast.interface";
 import Translator from "@/languages/Translator";
-import { Language } from "@/types/enum/language.enum";
+import { UserInfoDTO } from "@/types/dto/member.dto";
+
+export const userInfoState = atom<UserInfoDTO | null>({
+  key: "userInfo",
+  default: null,
+});
 
 /**현재까지 불러온 기본 정렬 게시물 목록*/
 export const defaultBoardsState = atom<BoardsInfoDTO>({
@@ -27,9 +32,9 @@ export const followingBoardsState = atom<BoardsInfoDTO>({
 });
 
 /**MainPage에서 게시물 정렬하는 방식(default, trending, following)을 기억하는 state*/
-export const boardCategoryState = atom<BoardCategory>({
+export const boardCategoryState = atom<Board>({
   key: "boardCategory",
-  default: BoardCategory.DEFAULT,
+  default: Board.DEFAULT,
 });
 
 /**현재 게시물의 댓글 목록*/
@@ -96,5 +101,5 @@ export const banUserInfoState = atom<IBanUserInfo>({
 
 export const languageState = atom<any>({
   key: "language",
-  default: Translator.fr,
+  default: Translator.ko,
 });

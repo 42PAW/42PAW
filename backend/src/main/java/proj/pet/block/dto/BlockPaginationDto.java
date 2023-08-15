@@ -1,4 +1,4 @@
-package proj.pet.follow.dto;
+package proj.pet.block.dto;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,7 @@ import proj.pet.member.dto.MemberPreviewResponseDto;
 
 @Getter
 @AllArgsConstructor
-public class FollowPagenationDto {
+public class BlockPaginationDto {
 
 	private final List<MemberPreviewResponseDto> result;
 	private final long totalLength;

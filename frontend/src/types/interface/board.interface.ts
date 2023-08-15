@@ -15,9 +15,12 @@
  */
 export interface IBoardInfo {
   boardId: number;
+  memberId: number;
   memberName: string;
-  profileImage: string;
-  images: IBoardImages[];
+  intraName: string;
+  profileImageUrl: string;
+  country: string;
+  images: string[];
   categories: string[];
   reactionCount: number;
   commentCount: number;
@@ -27,13 +30,4 @@ export interface IBoardInfo {
   previewCommentUser: string;
   previewComment: string;
   createdAt: string;
-}
-
-/**
- * @index 사진의 인덱스
- * @imageUrl 사진의 URL
- */
-export interface IBoardImages {
-  index: number;
-  imageUrl: string;
 }

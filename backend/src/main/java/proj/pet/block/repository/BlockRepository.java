@@ -18,7 +18,8 @@ public interface BlockRepository extends JpaRepository<Block, Long> {
 			"FROM Block b " +
 			"WHERE b.from = :memberId " +
 			"AND b.to = :targetMemberId")
-	Optional<Block> findByMemberCompositeKey(@Param("memberId") Long memberId, @Param("targetMemberId") Long targetMemberId);
+	Optional<Block> findByMemberCompositeKey(@Param("memberId") Long memberId,
+			@Param("targetMemberId") Long targetMemberId);
 
 	@Query("SELECT b " +
 			"FROM Block b " +
@@ -29,4 +30,6 @@ public interface BlockRepository extends JpaRepository<Block, Long> {
 			"FROM Block b " +
 			"WHERE b.from = :memberId")
 	Page<Block> findAllByMemberId(@Param("memberId") Long memberId, Pageable pageable);
+
+	boolean existsByFromIdAndToId(Long fromId, Long toId);
 }

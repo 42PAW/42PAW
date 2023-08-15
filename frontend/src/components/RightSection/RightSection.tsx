@@ -30,7 +30,7 @@ const RightSection = () => {
         </CloseButtonContainerStyled>
         <RightSectionBodyStyled>
           {rightSectionContent.comment && <CommentSection />}
-          {rightSectionContent.search &&  <SearchSection />}
+          {rightSectionContent.search && <SearchSection />}
           {rightSectionContent.animalFilter && <AnimalFilterSection />}
         </RightSectionBodyStyled>
       </RightSectionStyled>
@@ -107,16 +107,15 @@ const CloseButtonContainerStyled = styled.div`
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  height: 50px;
+  height: 45px;
   border-bottom: 1px solid var(--transparent);
 `;
 
 const CloseButtonStyled = styled.button`
-  height: 100%;
   width: 32px;
   background-color: transparent;
   border: none;
-  margin-right: 10px;
+  margin-right: 12px;
   margin-top: 5px;
   img {
     cursor: pointer;
@@ -132,7 +131,7 @@ const RightSectionBodyStyled = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex: 1;
+  height: calc(100% - 45px);
   width: 100%;
 `;
 export default RightSection;

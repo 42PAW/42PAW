@@ -3,7 +3,7 @@ export enum AnimalSpecies {
   CAT = "CAT",
   FISH = "FISH",
   BIRD = "BIRD",
-  SMALLANIMAL = "SMALLANIMAL",
+  SMALLANIMAL = "SMALL_ANIMAL",
   REPTILE = "REPTILE",
   AMPHIBIAN = "AMPHIBIAN",
   INSECT = "INSECT",

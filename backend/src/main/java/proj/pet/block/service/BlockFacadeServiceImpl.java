@@ -1,14 +1,14 @@
 package proj.pet.block.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import proj.pet.block.domain.Block;
 import proj.pet.block.dto.BlockRequestDto;
-import proj.pet.mapper.BlockMapper;
+import proj.pet.follow.domain.FollowType;
+import proj.pet.mapper.MemberMapper;
 import proj.pet.member.dto.MemberPreviewResponseDto;
 import proj.pet.member.dto.UserSessionDto;
 
@@ -18,7 +18,7 @@ public class BlockFacadeServiceImpl implements BlockFacadeService {
 
 	private final BlockService blockService;
 	private final BlockQueryService blockQueryService;
-	private final BlockMapper blockMapper;
+	private final MemberMapper memberMapper;
 
 	@Override
 	public void createBlock(UserSessionDto userSessionDto, BlockRequestDto blockRequestDto) {
@@ -39,8 +39,8 @@ public class BlockFacadeServiceImpl implements BlockFacadeService {
 		Long memberId = userSessionDto.getMemberId();
 		Pageable pageable = PageRequest.of(page, size);
 		List<Block> myBlockList = blockQueryService.getBlockList(memberId, pageable);
-		List<MemberPreviewResponseDto> myBlockDtoList = myBlockList.stream()
-				.map(blockMapper::toMemberPreviewResponseDto).collect(Collectors.toList());
-		return myBlockDtoList;
+		return myBlockList.stream().map((block) ->
+				memberMapper.toMemberPreviewResponseDto(block.getTo(), FollowType.BLOCK)
+		).toList();
 	}
 }

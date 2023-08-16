@@ -3,6 +3,8 @@ package proj.pet.comment.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
+import proj.pet.auth.domain.AuthGuard;
+import proj.pet.auth.domain.AuthLevel;
 import proj.pet.comment.dto.CommentRequestDto;
 import proj.pet.comment.dto.CommentResponseDto;
 import proj.pet.comment.service.CommentFacadeService;
@@ -26,6 +28,7 @@ public class CommentController {
 	}
 
 	@PostMapping
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void createComment(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestBody CommentRequestDto commentRequestDto) {
@@ -33,6 +36,7 @@ public class CommentController {
 	}
 
 	@DeleteMapping("/{commentId}")
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void deleteComment(
 			@UserSession UserSessionDto userSessionDto,
 			@PathVariable("commentId") Long commentId) {

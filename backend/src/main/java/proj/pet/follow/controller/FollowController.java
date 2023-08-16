@@ -1,14 +1,9 @@
 package proj.pet.follow.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import proj.pet.auth.domain.AuthGuard;
+import proj.pet.auth.domain.AuthLevel;
 import proj.pet.follow.dto.FollowPaginationDto;
 import proj.pet.follow.dto.FollowRequestDto;
 import proj.pet.follow.service.FollowFacadeService;
@@ -30,7 +25,8 @@ public class FollowController {
 	 * @param userSessionDto   로그인한 사용자 정보
 	 * @param followRequestDto 팔로우 생성 요청 정보
 	 */
-	@PostMapping("/")
+	@PostMapping
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void createFollow(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestBody FollowRequestDto followRequestDto) {
@@ -46,6 +42,7 @@ public class FollowController {
 	 * @param memberId       팔로우 삭제할 사용자 id
 	 */
 	@DeleteMapping("/members/{memberId}")
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void deleteFollow(
 			@UserSession UserSessionDto userSessionDto,
 			@PathVariable("memberId") Long memberId) {
@@ -61,6 +58,7 @@ public class FollowController {
 	 * @return FollowPaginationDto 내가 팔로우하는 멤버들 페이징 정보
 	 */
 	@GetMapping("/me/followings")
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public FollowPaginationDto getMyFollowings(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("page") int page,
@@ -96,6 +94,7 @@ public class FollowController {
 	 * @return FollowPaginationDto 나를 팔로우하는 멤버들 페이징 정보
 	 */
 	@GetMapping("/me/followers")
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public FollowPaginationDto getMyFollowers(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("page") int page,

@@ -2,14 +2,9 @@ package proj.pet.scrap.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import proj.pet.auth.domain.AuthGuard;
+import proj.pet.auth.domain.AuthLevel;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.member.domain.UserSession;
 import proj.pet.member.dto.UserSessionDto;
@@ -24,6 +19,7 @@ public class ScrapController {
 	private final ScrapFacadeService scrapFacadeService;
 
 	@GetMapping("/members/me")
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public BoardsPaginationDto getMyScraps(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("page") int page,
@@ -34,6 +30,7 @@ public class ScrapController {
 	}
 
 	@PostMapping
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void createScrap(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestBody ScrapCreateRequestDto scrapCreateRequestDto
@@ -42,6 +39,7 @@ public class ScrapController {
 	}
 
 	@DeleteMapping("/boards/{boardId}")
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void deleteScrap(
 			@UserSession UserSessionDto userSessionDto,
 			@PathVariable Long boardId

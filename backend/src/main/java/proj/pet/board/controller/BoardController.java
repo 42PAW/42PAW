@@ -5,6 +5,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import proj.pet.auth.domain.AuthGuard;
+import proj.pet.auth.domain.AuthLevel;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.board.service.BoardFacadeService;
 import proj.pet.category.domain.Species;
@@ -49,6 +51,7 @@ public class BoardController {
 	}
 
 	@GetMapping("/followings")
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public BoardsPaginationDto getFollowingsBoards(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("size") int size,
@@ -60,6 +63,7 @@ public class BoardController {
 	@PostMapping(
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE
 	)
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void createBoard(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestPart(value = "mediaDataList") List<MultipartFile> mediaDataList,
@@ -69,6 +73,7 @@ public class BoardController {
 	}
 
 	@DeleteMapping("/{boardId}")
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void deleteBoard(
 			@UserSession UserSessionDto userSessionDto,
 			@PathVariable("boardId") Long boardId) {

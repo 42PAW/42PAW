@@ -1,9 +1,6 @@
 package proj.pet.member.service;
 
-import static org.mockito.Mockito.mock;
-
 import jakarta.persistence.EntityManager;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +10,12 @@ import proj.pet.board.domain.Board;
 import proj.pet.board.domain.VisibleScope;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.follow.repository.FollowRepository;
-import proj.pet.member.domain.Country;
-import proj.pet.member.domain.Member;
-import proj.pet.member.domain.MemberRole;
-import proj.pet.member.domain.OauthProfile;
-import proj.pet.member.domain.OauthType;
+import proj.pet.member.domain.*;
 import proj.pet.member.repository.MemberRepository;
+
+import java.time.LocalDateTime;
+
+import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 @Transactional
@@ -70,6 +67,7 @@ class MemberQueryServiceTest {
 		OauthProfile oauthProfile = OauthProfile.of(OauthType.FORTY_TWO, "oauthId", "oauthName");
 		return Member.of(oauthProfile,
 				Country.KOREA,
+				Country.Campus.SEOUL,
 				nickname,
 				"statement",
 				memberRole,

@@ -1,9 +1,5 @@
 package proj.pet.member.service;
 
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
-
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,15 +9,16 @@ import proj.pet.category.domain.MemberCategoryFilter;
 import proj.pet.category.domain.Species;
 import proj.pet.category.repository.AnimalCategoryRepository;
 import proj.pet.mapper.MemberMapper;
-import proj.pet.member.domain.Country;
-import proj.pet.member.domain.Language;
-import proj.pet.member.domain.Member;
-import proj.pet.member.domain.MemberImageManager;
-import proj.pet.member.domain.MemberRole;
+import proj.pet.member.domain.*;
 import proj.pet.member.dto.MemberProfileChangeRequestDto;
 import proj.pet.member.dto.MemberProfileChangeResponseDto;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.member.repository.MemberRepository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +54,7 @@ public class MemberServiceImpl implements MemberService {
 				Member.of(
 						payload.getProfile(),
 						country,
+						payload.getCampus(),
 						nickname,
 						statement,
 						MemberRole.USER,
@@ -95,7 +93,7 @@ public class MemberServiceImpl implements MemberService {
 	 */
 	@Override
 	public MemberProfileChangeResponseDto changeMemberProfile(UserSessionDto userSessionDto,
-			MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
+	                                                          MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
 		Member member = memberRepository.findById(userSessionDto.getMemberId())
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		if (memberProfileChangeRequestDto.getMemberName() != null) {

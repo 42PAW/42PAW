@@ -5,11 +5,37 @@ import { ModalType } from "@/types/enum/modal.enum";
 import { currentOpenModalState } from "@/recoil/atom";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
 import OptionButton from "@/components/OptionButton";
+import { useQuery } from "@tanstack/react-query";
+import useFetch from "@/hooks/useFetch";
+import { userInfoState } from "@/recoil/atom";
+import { currentMemberIdState } from "@/recoil/atom";
+import { UserInfoDTO } from "@/types/dto/member.dto";
+import LoadingAnimation from "@/components/loading/LoadingAnimation";
+
 const ProfileCardModal = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
+  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
+  const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
+  const { fetchProfile } = useFetch();
+  const {
+    data: profileData,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["profileCard"],
+    queryFn: fetchProfile,
+  });
 
+  if (isLoading) {
+    return (
+      <>
+        <LoadingAnimation />
+      </>
+    );
+  }
   return (
     <ModalLayout
       modalName={ModalType.PROFILECARD}
@@ -22,29 +48,35 @@ const ProfileCardModal = () => {
         <OptionButtonContainerStyled>
           <OptionButton />
         </OptionButtonContainerStyled>
-        <ProfileImageStyled src="/src/assets/profileImage.jpg" />
+        <ProfileImageStyled src={profileData.profileImageUrl} />
         <MainAreaStyled>
-          <NickNameStyled>아롱오래비</NickNameStyled>
-          <IntraNameStyled>mingkang</IntraNameStyled>
-          <CountryStyled>🇰🇷 서울</CountryStyled>
-          <StatementStyled>안녕하세요. 아롱이 오라버니입니다.</StatementStyled>
+          <NickNameStyled>{profileData.memberName}</NickNameStyled>
+          <IntraNameStyled>{profileData.intraName}</IntraNameStyled>
+          <CountryStyled>🇰🇷 {profileData.country}</CountryStyled>
+          <StatementStyled>{profileData.statement}</StatementStyled>
           <CardInfoStyled>
             <InfoItemStyled>
               게시물
-              <div>7</div>
+              <div>{profileData.boardCount}</div>
             </InfoItemStyled>
             <InfoItemStyled>
               팔로워
-              <div>120</div>
+              <div>{profileData.followerCount}</div>
             </InfoItemStyled>
             <InfoItemStyled>
               팔로잉
-              <div>50</div>
+              <div>{profileData.followingCount}</div>
             </InfoItemStyled>
           </CardInfoStyled>
           <ButtonContainerStyled>
-            <button>프로필</button>
-            <button>팔로우</button>
+            {userInfo?.memberId !== currentMemberId ? (
+              <>
+                <button>프로필</button>
+                <button>팔로우</button>
+              </>
+            ) : (
+              <button>내 프로필</button>
+            )}
           </ButtonContainerStyled>
         </MainAreaStyled>
       </WrapperStyled>
@@ -79,19 +111,19 @@ const LogoStyled = styled.div`
   }
 `;
 
-const OptionButtonContainerStyled = styled.button`
+const OptionButtonContainerStyled = styled.div`
   z-index: 1;
   background-color: transparent;
   padding: none;
   border: none;
   position: absolute;
-  right: 5px;
+  right: 10px;
   top: 8px;
   img {
     width: 30px;
   }
   @media (min-width: 1024px) {
-    right: 10px;
+    right: 15px;
     top: 5px;
   }
 `;
@@ -104,10 +136,11 @@ const ProfileImageStyled = styled.img`
   @media (min-width: 1024px) {
     z-index: 2;
     position: absolute;
-    height: 130%;
+    height: 380px;
+    width: 380px;
     border-radius: 100%;
-    left: -90px;
-    top: -60px;
+    left: -110px;
+    top: -50px;
     box-shadow: 6px 3px 3px rgba(0, 0, 0, 0.25);
   }
 `;
@@ -132,7 +165,7 @@ const MainAreaStyled = styled.div`
   }
   @media (min-width: 1024px) {
     position: absolute;
-    right: -125px;
+    right: -110px;
   }
 `;
 
@@ -170,7 +203,7 @@ const StatementStyled = styled.div`
 
 const CardInfoStyled = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   width: 240px;
   margin-top: 15px;
   div:nth-child(3) {
@@ -191,11 +224,12 @@ const InfoItemStyled = styled.div`
 
 const ButtonContainerStyled = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin-top: 17px;
-  width: 210px;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 18px;
+  width: 230px;
   @media (min-width: 1024px) {
-    margin-top: 30px;
+    margin-top: 40px;
   }
   button {
     height: 33px;

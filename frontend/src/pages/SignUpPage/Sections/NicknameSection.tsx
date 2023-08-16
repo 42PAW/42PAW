@@ -1,8 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { styled, keyframes } from "styled-components";
 import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
 import { Section } from "@/pages/SignUpPage/SignUpPage";
 import useToaster from "@/hooks/useToaster";
+import useDebounce from "@/hooks/useDebounce";
+import { axiosCheckNicknameValid } from "@/api/axios/axios.custom";
 
 const NicknameSection: React.FC<SectionProps> = ({
   registerData,
@@ -11,31 +13,28 @@ const NicknameSection: React.FC<SectionProps> = ({
 }) => {
   const [isWrong, setIsWrong] = useState<boolean>(false);
   const [isFading, setIsFading] = useState<boolean>(true);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const { debounce } = useDebounce();
   const { popToast } = useToaster();
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRegisterData({ ...registerData, memberName: e.target.value });
   };
-  const handleOnClick = () => {
+  const handleOnClick = async () => {
     if (isWrong === true) {
       popToast("잠시 후에 다시 시도해주세요.", "N");
       return;
     }
-    if (
-      registerData.memberName === "중복됨" ||
-      registerData.memberName.length < 3
-    ) {
+    const isMembernameValid = await axiosCheckNicknameValid(
+      registerData.memberName
+    );
+    if (!isMembernameValid || registerData.memberName.length < 3) {
       if (registerData.memberName.length < 3) {
         popToast("닉네임은 3글자 이상이어야 합니다.", "N");
-      } else if (registerData.memberName === "중복됨") {
-        popToast("사용 중인 닉네임입니다.", "N");
+      } else if (!isMembernameValid) {
+        popToast("이미 사용 중인 닉네임입니다.", "N");
       }
       setIsWrong(true);
-      clearTimeout(timeoutRef.current!);
-      timeoutRef.current = setTimeout(() => {
-        setIsWrong(false);
-      }, 1000);
+      debounce(() => setIsWrong(false), 2000);
       return;
     }
     setIsFading(true);

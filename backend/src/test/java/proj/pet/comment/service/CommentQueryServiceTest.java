@@ -62,9 +62,10 @@ class CommentQueryServiceTest {
 
 		//then
 		List<CommentDto> result = commentResponseDto.getResult();
+		assertThat(result.get(0).getCountry()).isEqualTo(Country.KOREA);
 		assertThat(result).hasSize(3)
 				.extracting("comment")
-				.containsExactly("3등이요", "2등이요", "일빠요");
+				.containsExactly("일빠요", "2등이요", "3등이요");
 	}
 
 	private Member stubMember(String nickname, MemberRole memberRole, LocalDateTime now) {

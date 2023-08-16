@@ -16,12 +16,13 @@ import static org.mapstruct.factory.Mappers.getMapper;
 @Component
 public interface CommentMapper {
 	CommentMapper INSTANCE = getMapper(CommentMapper.class);
-	
+
 	@Mapping(target = "commentId", source = "comment.id")
 	@Mapping(target = "memberId", source = "member.id")
 	@Mapping(target = "memberName", source = "member.nickname")
 	@Mapping(target = "comment", source = "comment.content")
 	@Mapping(target = "createdAt", source = "comment.createdAt")
+	@Mapping(target = "country", source = "member.country")
 	CommentDto toCommentDto(Comment comment, Member member);
 
 	CommentResponseDto toCommentResponseDto(List<CommentDto> result, int totalLength);

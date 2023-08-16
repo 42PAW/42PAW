@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import { useSetRecoilState, useRecoilState } from "recoil";
 import styled from "styled-components";
-import { ModalType } from "@/types/enum/modal.enum";
-import useModal from "@/hooks/useModal";
-import {
-  banUserInfoState,
-  currentBoardIdState,
-  currentCommentIdState,
-} from "@/recoil/atom";
-import { IBanUserInfo } from "@/types/interface/user.interface";
-import { languageState } from "@/recoil/atom";
 
 /**
  * @boardId (optional) 신고, 차단, 삭제할 게시물의 id
@@ -18,30 +8,12 @@ import { languageState } from "@/recoil/atom";
  * @memberName 차단 모달에 띄위게 될 차단 유저명
  */
 interface IOptionButtonProps {
-  boardId?: number;
-  commentId?: number;
-  memberId: number;
-  memberName: string;
+  children: React.ReactNode;
 }
 
 /**게시글 및 댓글 오른쪽 상단 ... 버튼. 타인 게시물 댓글에서는 신고 차단, 내 게시물에서는 삭제가 나타남*/
-const OptionButton: React.FC<IOptionButtonProps> = ({
-  boardId,
-  commentId,
-  memberId,
-  memberName,
-}) => {
-  const [language] = useRecoilState<any>(languageState);
+const OptionButton: React.FC<IOptionButtonProps> = ({ children }) => {
   const [isToggled, setIsToggled] = useState<boolean>(false);
-  const setBanUserInfo = useSetRecoilState<IBanUserInfo>(banUserInfoState);
-  const setCurrentBoardId = useSetRecoilState<number | null>(
-    currentBoardIdState
-  );
-  const setCurrentCommentId = useSetRecoilState<number | null>(
-    currentCommentIdState
-  );
-  const { openModal } = useModal();
-  const banUser = { memberId: memberId, userName: memberName };
 
   const handleToggle = (state: string) => {
     if (state === "ON") {
@@ -52,40 +24,13 @@ const OptionButton: React.FC<IOptionButtonProps> = ({
     }
   };
 
-  const handleBan = () => {
-    setBanUserInfo(banUser);
-    openModal(ModalType.BAN);
-  };
-  const handleDelete = () => {
-    if (boardId) {
-      setCurrentBoardId(boardId);
-    } else if (commentId) {
-      setCurrentCommentId(commentId);
-    }
-    openModal(ModalType.DELETE);
-  };
-
   return (
     <WrapperStyled onMouseLeave={() => handleToggle("ON")}>
       <ToggleStyled onClick={() => handleToggle("OFF")}>
         <img src="/src/assets/optionW.png" />
       </ToggleStyled>
       <MenuStyled $isToggled={isToggled}>
-        <MenuList onClick={() => handleToggle("OFF")}>
-          <MenuItemWrapperStyled>
-            <MenuItemStyled onClick={handleBan}>{language.ban}</MenuItemStyled>
-          </MenuItemWrapperStyled>
-          <MenuItemWrapperStyled>
-            <MenuItemStyled onClick={() => openModal(ModalType.REPORT)}>
-              {language.report}
-            </MenuItemStyled>
-          </MenuItemWrapperStyled>
-          <MenuItemWrapperStyled>
-            <MenuItemStyled onClick={handleDelete}>
-              {language.delete}
-            </MenuItemStyled>
-          </MenuItemWrapperStyled>
-        </MenuList>
+        <MenuList onClick={() => handleToggle("OFF")}>{children}</MenuList>
       </MenuStyled>
     </WrapperStyled>
   );
@@ -134,21 +79,6 @@ const MenuStyled = styled.div<{ $isToggled: boolean }>`
 const MenuList = styled.ul`
   list-style: none;
   padding: 0;
-`;
-
-const MenuItemWrapperStyled = styled.li``;
-
-const MenuItemStyled = styled.div`
-  cursor: pointer;
-  font-size: 10px;
-  padding: 2px 5px;
-  color: var(--lightgrey);
-  border-radius: 20px;
-  text-decoration: none;
-  transition: all 0.2s;
-  &:hover {
-    color: var(--lightpurple);
-  }
 `;
 
 export default OptionButton;

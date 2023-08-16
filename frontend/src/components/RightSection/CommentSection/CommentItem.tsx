@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
-import OptionButton from "@/components/OptionButton";
+import BoardOption from "@/components/BoardOption";
 
 const CommentItem = (commentInfo: CommentInfoDTO) => {
   const {
@@ -23,7 +23,7 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
             {memberName} 🇫🇷
             <span>{createdAt}</span>
           </NicknameContainerStyled>
-          <OptionButton
+          <BoardOption
             commentId={commentId}
             memberId={memberId}
             memberName={memberName}

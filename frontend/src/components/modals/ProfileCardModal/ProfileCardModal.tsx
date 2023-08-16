@@ -4,7 +4,7 @@ import ModalLayout from "@/components/modals/ModalLayout";
 import { ModalType } from "@/types/enum/modal.enum";
 import { currentOpenModalState } from "@/recoil/atom";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
-import OptionButton from "@/components/OptionButton";
+import BoardOption from "@/components/BoardOption";
 import { useQuery } from "@tanstack/react-query";
 import useFetch from "@/hooks/useFetch";
 import { userInfoState } from "@/recoil/atom";
@@ -46,7 +46,7 @@ const ProfileCardModal = () => {
           <img src="/src/assets/paw.png" />
         </LogoStyled>
         <OptionButtonContainerStyled>
-          <OptionButton />
+          <BoardOption />
         </OptionButtonContainerStyled>
         <ProfileImageStyled src={profileData.profileImageUrl} />
         <MainAreaStyled>

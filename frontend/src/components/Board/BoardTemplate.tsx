@@ -4,7 +4,7 @@ import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import BoardPhotoBox from "@/components/Board/BoardPhotoBox";
-import OptionButton from "@/components/OptionButton";
+import BoardOption from "@/components/BoardOption";
 import useModal from "@/hooks/useModal";
 import { ModalType } from "@/types/enum/modal.enum";
 import { languageState } from "@/recoil/atom";
@@ -99,7 +99,7 @@ const BoardTemplate = (board: IBoardInfo) => {
             <div>{memberName} 🇰🇷</div>
           </BoardProfileStyled>
           <BoardOptionButtonStyled>
-            <OptionButton
+            <BoardOption
               memberId={memberId}
               boardId={boardId}
               memberName={memberName}

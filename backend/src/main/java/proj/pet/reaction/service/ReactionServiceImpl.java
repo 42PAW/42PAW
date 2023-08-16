@@ -20,11 +20,15 @@ import static proj.pet.exception.ExceptionStatus.*;
 @RequiredArgsConstructor
 public class ReactionServiceImpl implements ReactionService {
 
+	private static final Long NOT_REGISTERED_ID = 0L;
 	private final BoardRepository boardRepository;
 	private final MemberRepository memberRepository;
 	private final ReactionRepository reactionRepository;
 
 	@Override public void createReaction(Long loginUserId, Long boardId, ReactionType reactionType) {
+		if (loginUserId.equals(NOT_REGISTERED_ID)) {
+			throw UNAUTHORIZED.asServiceException();
+		}
 		Member loginUser = memberRepository.findById(loginUserId).orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		Board board = boardRepository.findById(boardId).orElseThrow(NOT_FOUND_BOARD::asServiceException);
 		reactionRepository.save(Reaction.of(board, loginUser, reactionType, LocalDateTime.now()));
@@ -37,6 +41,9 @@ public class ReactionServiceImpl implements ReactionService {
 	 * @param boardId     게시글 아이디
 	 */
 	@Override public void deleteReaction(Long loginUserId, Long boardId) {
+		if (loginUserId.equals(NOT_REGISTERED_ID)) {
+			throw UNAUTHORIZED.asServiceException();
+		}
 		Member loginUser = memberRepository.findById(loginUserId).orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		Board board = boardRepository.findById(boardId).orElseThrow(NOT_FOUND_BOARD::asServiceException);
 		Reaction reaction = reactionRepository.findByBoardAndMember(board.getId(), loginUser.getId())

@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import OptionButton from "../../OptionButton";
+import BoardOption from "../../BoardOption";
 
 interface UserData {
   memberId: number;
   memberName: string;
   intraName: string;
-  statement : string;
+  statement: string;
   country: string;
   relationship: string;
   profileImageUrl: string;
@@ -15,25 +15,19 @@ interface SearchItemProps {
   user: UserData; // Change to user instead of results
 }
 
-const SearchItem: React.FC<SearchItemProps> = ( { user } ) => {  
+const SearchItem: React.FC<SearchItemProps> = ({ user }) => {
   return (
     <SearchItemStyled>
       <UserImageContainerStyled>
-        <img src = "/src/assets/dogLogo.png" />
+        <img src="/src/assets/dogLogo.png" />
       </UserImageContainerStyled>
       <SearchItemRightStyled>
         <NameContainerStyled>
-          <MemberNameStyled>
-            {user.memberName}
-          </MemberNameStyled>
-          <IntraNameStyled>
-            {user.intraName}
-          </IntraNameStyled>
+          <MemberNameStyled>{user.memberName}</MemberNameStyled>
+          <IntraNameStyled>{user.intraName}</IntraNameStyled>
         </NameContainerStyled>
-        <StateButtonStyled>
-          {user.relationship}
-        </StateButtonStyled>  
-        <OptionButton memberId={user.memberId} memberName={user.memberName} />
+        <StateButtonStyled>{user.relationship}</StateButtonStyled>
+        <BoardOption memberId={user.memberId} memberName={user.memberName} />
       </SearchItemRightStyled>
     </SearchItemStyled>
   );
@@ -92,9 +86,9 @@ const IntraNameStyled = styled.div`
 const StateButtonStyled = styled.button`
   width: 20%;
   border-radius: 8px;
-  border: 1px solid rgba(240, 240, 240, 0.60);
-  background: rgba(183, 184, 215, 0.00);
-  cursor: pointer
+  border: 1px solid rgba(240, 240, 240, 0.6);
+  background: rgba(183, 184, 215, 0);
+  cursor: pointer;
 `;
 
 export default SearchItem;

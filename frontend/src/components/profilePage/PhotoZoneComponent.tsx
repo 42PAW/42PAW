@@ -43,11 +43,11 @@ const PhotoZoneComponent = () => {
   //   const [nowActivatedTabValue, setNowActivatedTabValue] = useState("firstBtn");
   const [activeTab, setActiveTab] = useState("myPosts");
 
-  // 게시물 정보를 가져오는 함수
-  const fetchPosts = (tab) => {
-    // 게시물 정보를 가져오는 비동기 요청 등을 수행
-    // 결과를 setPosts로 업데이트
-  };
+  //   // 게시물 정보를 가져오는 함수
+  //   const fetchPosts = (tab) => {
+  //     // 게시물 정보를 가져오는 비동기 요청 등을 수행
+  //     // 결과를 setPosts로 업데이트
+  //   };
   // 탭 변경 시 호출되는 함수
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -91,7 +91,7 @@ const ProfileBodyStyled = styled.div`
   //   overflow: hidden;
   margin-top: 30px;
   border-radius: 20px 20px 0px 0px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  //   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   background: linear-gradient(75deg, #999bc6 50%, #d3c3ce 150%);
 `;
 

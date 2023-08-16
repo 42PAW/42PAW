@@ -107,6 +107,7 @@ const ProfileWrapperStyled = styled.div`
   display: flex; /* Add flex display */
   flex-direction: column; /* Set flex direction to column */
   overflow-y: scroll;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 `;
 
 export default ProfileTemplate;

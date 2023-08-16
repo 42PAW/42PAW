@@ -4,7 +4,7 @@ import ModalLayout from "@/components/modals/ModalLayout";
 import { ModalType } from "@/types/enum/modal.enum";
 import { currentOpenModalState } from "@/recoil/atom";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
-import OptionButton from "@/components/OptionButton";
+import BoardOption from "@/components/BoardOption";
 const ProfileCardModal = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
@@ -20,7 +20,7 @@ const ProfileCardModal = () => {
           <img src="/src/assets/paw.png" />
         </LogoStyled>
         <OptionButtonContainerStyled>
-          <OptionButton />
+          <BoardOption />
         </OptionButtonContainerStyled>
         <ProfileImageStyled src="/src/assets/profileImage.jpg" />
         <MainAreaStyled>

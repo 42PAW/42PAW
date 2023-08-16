@@ -3,7 +3,7 @@ import useModal from "../../hooks/useModal";
 import { ModalType } from "../../types/enum/modal.enum";
 import styled from "styled-components";
 import Button from "@/components/ButtonComponent";
-import OptionButton from "@/components/OptionButton";
+import BoardOption from "@/components/BoardOption";
 
 /* tmp */
 const profileInfo = {
@@ -80,12 +80,15 @@ const ProfileInfoComponent = () => {
         <CaptionSectionStyled>{profileInfo.statement}</CaptionSectionStyled>
         <CountInfoItems />
       </div>
-      <img
+      {/* <img
         className="meatballsMenuIcon"
         alt="Meatballs menu icon"
         src="/src/assets/meatballsMenuIcon.png"
-      />
-      {/* <OptionButton boardId={boardId} memberName={memberName} /> */}
+      /> */}
+      <BoardOptionButtonStyled>
+        <BoardOption boardId={0} memberName={""} />
+      </BoardOptionButtonStyled>
+      {/* <BoardOption boardId={boardId} memberName={memberName} /> */}
     </ProfileHeaderStyled>
   );
 };
@@ -113,6 +116,16 @@ const CountInfoStyled = styled.ul`
   }
 `;
 
+const BoardOptionButtonStyled = styled.div`
+  position: absolute;
+  top: 135px;
+  right: 15px;
+  width: 30px;
+  &:focus {
+    opacity: 0.6;
+  }
+`;
+
 const ProfileHeaderStyled = styled.div`
   position: relative;
   display: flex;
@@ -122,7 +135,7 @@ const ProfileHeaderStyled = styled.div`
   color: var(--white);
   width: 100%;
   min-height: 386px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  //   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   font-size: 1.6rem;
 
   @media (min-width: 1023px) {

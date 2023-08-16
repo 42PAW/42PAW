@@ -11,6 +11,8 @@ import { userInfoState } from "@/recoil/atom";
 import { currentMemberIdState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
+import useNavigateCustom from "@/hooks/useNavigateCustom";
+import useModal from "@/hooks/useModal";
 
 const ProfileCardModal = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
@@ -19,6 +21,8 @@ const ProfileCardModal = () => {
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
   const { fetchProfile } = useFetch();
+  const { moveToMyProfile } = useNavigateCustom();
+  const { closeModal } = useModal();
   const {
     data: profileData,
     isLoading,
@@ -29,6 +33,11 @@ const ProfileCardModal = () => {
     queryFn: fetchProfile,
   });
 
+  const toMyProfile = () => {
+    moveToMyProfile();
+    closeModal(ModalType.PROFILECARD);
+  };
+
   if (isLoading) {
     return (
       <>
@@ -36,6 +45,7 @@ const ProfileCardModal = () => {
       </>
     );
   }
+
   return (
     <ModalLayout
       modalName={ModalType.PROFILECARD}
@@ -71,11 +81,13 @@ const ProfileCardModal = () => {
           <ButtonContainerStyled>
             {userInfo?.memberId !== currentMemberId ? (
               <>
-                <button>프로필</button>
-                <button>팔로우</button>
+                <ButtonStyled>프로필</ButtonStyled>
+                <ButtonStyled>팔로우</ButtonStyled>
               </>
             ) : (
-              <button>내 프로필</button>
+              <MyProfileButtonStyled onClick={toMyProfile}>
+                내 프로필
+              </MyProfileButtonStyled>
             )}
           </ButtonContainerStyled>
         </MainAreaStyled>
@@ -231,18 +243,33 @@ const ButtonContainerStyled = styled.div`
   @media (min-width: 1024px) {
     margin-top: 40px;
   }
-  button {
-    height: 33px;
-    width: 90px;
-    border-radius: 10px;
-    border: 1px solid var(--white);
-    background-color: transparent;
-    color: var(--white);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    &:hover {
-      background-color: var(--white);
-      color: var(--pink);
-    }
+`;
+
+const ButtonStyled = styled.button`
+  height: 33px;
+  width: 90px;
+  border-radius: 10px;
+  border: 1px solid var(--white);
+  background-color: transparent;
+  color: var(--white);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  &:hover {
+    background-color: var(--white);
+    color: var(--pink);
+  }
+`;
+
+const MyProfileButtonStyled = styled.button`
+  height: 33px;
+  width: 120px;
+  border-radius: 10px;
+  border: 1px solid var(--white);
+  background-color: transparent;
+  color: var(--white);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  &:hover {
+    background-color: var(--white);
+    color: var(--pink);
   }
 `;
 

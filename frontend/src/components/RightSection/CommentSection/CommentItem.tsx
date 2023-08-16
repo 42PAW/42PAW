@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
 import BoardOption from "@/components/BoardOption";
+import useParseDate from "@/hooks/useParseDate";
 
 const CommentItem = (commentInfo: CommentInfoDTO) => {
   const {
@@ -11,6 +12,8 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
     profileImageUrl,
     createdAt,
   } = commentInfo;
+  const { parseDate } = useParseDate();
+  const parsedDate = parseDate(createdAt);
 
   return (
     <CommentItemStyled>
@@ -21,7 +24,7 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
         <NicknameToggleContainerStyled>
           <NicknameContainerStyled>
             {memberName} 🇫🇷
-            <span>{createdAt}</span>
+            <span>{parsedDate}</span>
           </NicknameContainerStyled>
           <BoardOption
             commentId={commentId}
@@ -77,10 +80,13 @@ const NicknameContainerStyled = styled.div`
   width: 60%;
   font-size: 14px;
   font-weight: bold;
+  position: relative;
   span {
-    margin-left: 5px;
+    position: absolute;
+    margin-top: 2px;
+    margin-left: 7px;
     font-weight: 300;
-    font-size: 11px;
+    font-size: 1rem;
   }
 `;
 

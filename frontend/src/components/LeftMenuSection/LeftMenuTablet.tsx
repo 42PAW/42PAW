@@ -71,11 +71,7 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
             />
           )}
           <BannerLogoStyled>
-            42PAW
-            <span>
-              Pets Are the World
-              <img src="/src/assets/dogLogo.png" />
-            </span>
+            <img src="/src/assets/paw.png" />
           </BannerLogoStyled>
           <SettingButtonContainerStyled>
             <SettingButton />
@@ -83,7 +79,7 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
         </BannerStyled>
       )}
       <MenuStyled>
-        <LogoImageStyled src="/src/assets/dogLogo.png" />
+        <LogoImageStyled src="/src/assets/paw.png" />
         <nav>
           <MenuListStyled>
             <li onClick={moveToMain}>
@@ -145,15 +141,9 @@ const BannerLogoStyled = styled.div`
   margin-top: 10px;
   color: var(--white);
   font-size: 1.8rem;
-  span {
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    img {
-      width: 17px;
-      margin-left: 4px;
-      margin-bottom: 2px;
-    }
+  img {
+    width: 40px;
+    margin-bottom: 5px;
   }
 `;
 

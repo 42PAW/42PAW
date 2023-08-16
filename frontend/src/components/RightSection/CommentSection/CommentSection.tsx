@@ -43,7 +43,6 @@ const CommentSection = () => {
       popToast("댓글 내용을 입력해주세요.", "N");
       return;
     }
-    console.log("h");
     await axiosCreateComment(currentBoardId, comment);
   };
 

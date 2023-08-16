@@ -15,6 +15,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 	@Query("SELECT c " +
 			"FROM Comment c " +
 			"WHERE c.board.id = :boardId " +
-			"ORDER BY c.createdAt DESC")
+			"ORDER BY c.createdAt ASC")
 	Page<Comment> findDescOrderByBoardId(@Param("boardId") Long boardId, PageRequest pageRequest);
 }

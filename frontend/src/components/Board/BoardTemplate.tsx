@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import { useState } from "react";
+import styled, { css } from "styled-components";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import { IBoardInfo } from "@/types/interface/board.interface";
@@ -7,7 +8,13 @@ import BoardOption from "@/components/BoardOption";
 import useModal from "@/hooks/useModal";
 import { ModalType } from "@/types/enum/modal.enum";
 import { languageState } from "@/recoil/atom";
-import { currentBoardIdState } from "@/recoil/atom";
+import { currentBoardIdState, currentMemberIdState } from "@/recoil/atom";
+import {
+  axiosReactComment,
+  axiosUndoReactComment,
+} from "@/api/axios/axios.custom";
+import useDebounce from "@/hooks/useDebounce";
+import { useSpring, animated } from "react-spring";
 
 const BoardTemplate = (board: IBoardInfo) => {
   const {
@@ -21,27 +28,66 @@ const BoardTemplate = (board: IBoardInfo) => {
     categories,
     reactionCount,
     commentCount,
-    isScrapped,
-    isReacted,
+    scrapped,
+    reacted,
     content,
     previewCommentUser,
     previewComment,
     createdAt,
   } = board;
 
+  const [isReactedRender, setIsReactedRender] = useState<boolean>(reacted);
+  const [lastReaction, setLastReaction] = useState<boolean>(reacted);
+  const [reactionCountRender, setReactionCountRender] =
+    useState<number>(reactionCount);
   const [language] = useRecoilState<any>(languageState);
   const setCurrentBoardId = useSetRecoilState<number | null>(
     currentBoardIdState
   );
+  const setCurrentMemberId = useSetRecoilState<number | null>(
+    currentMemberIdState
+  );
   const { openCommentSection } = useRightSectionHandler();
   const { openModal } = useModal();
+  const { debounce } = useDebounce();
+  const ReactionAnimation = useSpring({
+    to: {
+      opacity: isReactedRender ? 1 : 0,
+      transform: isReactedRender ? "scale(1)" : "scale(0)",
+    },
+    config: { tension: 300, friction: 12 },
+  });
 
   const handleCommentClick = (boardId: number) => {
     openCommentSection();
     setCurrentBoardId(boardId);
   };
+
   const handleOpenProfile = () => {
-    openModal(ModalType.PROFILECARD); // PROFILECARD -> 바꿔야 돼 다시
+    setCurrentMemberId(memberId);
+    openModal(ModalType.PROFILECARD);
+  };
+
+  const callReactionApi = () => {
+    if (!isReactedRender && !lastReaction) {
+      axiosReactComment(boardId, "LIKE");
+      setLastReaction(!lastReaction);
+    } else if (isReactedRender && lastReaction) {
+      axiosUndoReactComment(boardId);
+      setLastReaction(!lastReaction);
+    }
+  };
+
+  const handleReaction = (action: string) => {
+    if (action === "do") setReactionCountRender(reactionCountRender + 1);
+    if (action === "undo") setReactionCountRender(reactionCountRender - 1);
+    setIsReactedRender(!isReactedRender);
+
+    debounce(callReactionApi, 500);
+  };
+
+  const handleClick = () => {
+    handleReaction(isReactedRender ? "undo" : "do");
   };
 
   return (
@@ -53,26 +99,37 @@ const BoardTemplate = (board: IBoardInfo) => {
             <div>{memberName} 🇰🇷</div>
           </BoardProfileStyled>
           <BoardOptionButtonStyled>
-            <BoardOption boardId={boardId} memberName={memberName} />
+            <BoardOption
+              memberId={memberId}
+              boardId={boardId}
+              memberName={memberName}
+            />
           </BoardOptionButtonStyled>
         </BoardHeaderStyled>
         <BoardBodyStyled>
           <BoardPhotoBox boardImages={images} />
           <ButtonZoneStyled>
-            <LikeCommentContainerStyled>
-              {isReacted ? (
-                <img src="/src/assets/likeR.png" />
-              ) : (
-                <img src="/src/assets/like.png" />
-              )}
-
+            <ReactionCommentContainerStyled>
+              <ReactionStyled onClick={handleClick}>
+                <HeartIcon
+                  style={ReactionAnimation}
+                  src="/src/assets/likeR.png"
+                />
+                <img
+                  src={
+                    isReactedRender
+                      ? "/src/assets/likeR.png"
+                      : "/src/assets/like.png"
+                  }
+                />
+              </ReactionStyled>
               <img
                 src="/src/assets/comment.png"
                 onClick={() => handleCommentClick(boardId)}
               />
-            </LikeCommentContainerStyled>
+            </ReactionCommentContainerStyled>
             <ScrapButtonStyled>
-              {isScrapped ? (
+              {scrapped ? (
                 <img src="/src/assets/scrapB.png" />
               ) : (
                 <img src="/src/assets/scrap.png" />
@@ -82,7 +139,7 @@ const BoardTemplate = (board: IBoardInfo) => {
           <BoardContentContainerStyled>
             <DivOne>
               <div>
-                {reactionCount} {language.like}, {commentCount}{" "}
+                {reactionCountRender} {language.like}, {commentCount}{" "}
                 {language.comment}
               </div>
               <span>{createdAt}</span>
@@ -132,6 +189,7 @@ const BoardProfileStyled = styled.div`
   img {
     cursor: pointer;
     width: 20%;
+    aspect-ratio: 1 / 1;
     border-radius: 100%;
   }
   div {
@@ -169,13 +227,10 @@ const ButtonZoneStyled = styled.div`
   height: 5%;
 `;
 
-const LikeCommentContainerStyled = styled.div`
+const ReactionCommentContainerStyled = styled.div`
   display: flex;
   align-items: center;
   width: 33.3%;
-  img:nth-child(1) {
-    margin-left: 15%;
-  }
   img {
     cursor: pointer;
     margin-left: 7%;
@@ -184,6 +239,24 @@ const LikeCommentContainerStyled = styled.div`
   img:hover {
     opacity: 0.5;
   }
+`;
+
+const ReactionStyled = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  img {
+    margin-left: 23px;
+  }
+`;
+
+const HeartIcon = styled(animated.img)`
+  position: absolute;
+  top: 0;
+  left: 0px;
+  width: 22px;
+  height: 22px;
 `;
 
 const ScrapButtonStyled = styled.div`

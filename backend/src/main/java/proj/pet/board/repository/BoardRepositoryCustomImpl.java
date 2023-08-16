@@ -85,6 +85,20 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	}
 
 	/**
+	 * 사용자가 팔로우한 멤버들의 게시글 목록을 가져온다.
+	 *
+	 * @param memberId    특정 멤버 ID
+	 * @param pageRequest 페이지네이션
+	 * @return 해당 멤버의 생성시각 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
+	 */
+	@Override public List<Board> getFollowingsBoards(Long memberId, PageRequest pageRequest) {
+		return getBoardsWithFetchJoin(
+				board.member.followers.any().id.memberId.eq(memberId),
+				board.createdAt.desc(),
+				pageRequest);
+	}
+
+	/**
 	 * predicate와 orderSpecifier 조건을 만족하는 {@link Board} List를 조회한다.
 	 *
 	 * @param predicate      where 조건
@@ -93,7 +107,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @return {@link Board} 페이지네이션 - Page 아님
 	 */
 	private List<Board> getBoardsWithFetchJoin(Predicate predicate,
-			OrderSpecifier<?> orderSpecifier, PageRequest pageRequest) {
+	                                           OrderSpecifier<?> orderSpecifier, PageRequest pageRequest) {
 		return queryFactory.selectFrom(board)
 				.where(predicate)
 				.orderBy(orderSpecifier)

@@ -119,8 +119,11 @@ const ProfileCardFormStyled = styled.form`
 `;
 
 const ProfileCardSectionStyled = styled.div`
+  text-align: center;
   margin-top: 10px;
   font-size: 1.4rem;
+  width: 75%;
+  line-height: 20px;
 `;
 
 export default ProfileCard;

@@ -61,6 +61,11 @@ export const rightSectionContentState = atom<IRightSectionContentInfo>({
   },
 });
 
+export const currentMemberIdState = atom<number | null>({
+  key: "currentMemberId",
+  default: null,
+});
+
 /**현재 게시물의 id */
 export const currentBoardIdState = atom<number | null>({
   key: "currentBoardId",

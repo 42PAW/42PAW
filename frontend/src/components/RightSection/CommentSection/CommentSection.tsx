@@ -10,17 +10,24 @@ import { Board } from "@/types/enum/board.category.enum";
 import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
 import { IBoardInfo } from "@/types/interface/board.interface";
-import useFetchComments from "@/hooks/useFetchComments";
+import useFetch from "@/hooks/useFetch";
+import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation";
+import { CommentInfoDTO } from "@/types/dto/board.dto";
+import { boardCategoryState } from "@/recoil/atom";
+import useToaster from "@/hooks/useToaster";
+
 const CommentSection = () => {
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
-  const { fetchComments } = useFetchComments();
+  const { fetchComments } = useFetch();
   const [currentBoardId] = useRecoilState<number | null>(currentBoardIdState);
+  const [boardCategory] = useRecoilState<Board>(boardCategoryState);
   const [comment, setComment] = useState<string>("");
   const queryClient = useQueryClient();
+  const { popToast } = useToaster();
   const {
+    data: comments,
     isLoading,
     isError,
-    data: comments,
     error,
   } = useQuery({
     queryKey: ["comments", currentBoardId],
@@ -32,17 +39,22 @@ const CommentSection = () => {
   };
 
   const uploadComment = async () => {
-    const response = await axiosCreateComment(currentBoardId, comment);
-    console.log(response);
+    if (comment === "") {
+      popToast("댓글 내용을 입력해주세요.", "N");
+      return;
+    }
+    console.log("h");
+    await axiosCreateComment(currentBoardId, comment);
   };
 
   const commentMutation = useMutation(uploadComment, {
     onSuccess: async () => {
+      if (comment === "") return;
+
       await queryClient.setQueryData(
-        [Board.DEFAULT],
+        ["boards", boardCategory],
         (prevData: IBoardInfo[] | any) => {
           if (!prevData) return prevData;
-
           const updatedBoards = prevData.map((board: IBoardInfo) => {
             if (board.boardId === currentBoardId) {
               return {
@@ -63,11 +75,28 @@ const CommentSection = () => {
     },
   });
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      if (!event.nativeEvent.isComposing) {
+        event.preventDefault();
+        commentMutation.mutate();
+      }
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <WrapperStyled>
+        <LoadingCircleAnimation />
+      </WrapperStyled>
+    );
+  }
+
   return (
     <WrapperStyled>
       <CommentItemWrapperStyled>
-        {comments ? (
-          comments.map((comment: any) => (
+        {comments.length > 0 ? (
+          comments.map((comment: CommentInfoDTO) => (
             <CommentItem
               key={comment.commentId}
               commentId={comment.commentId}
@@ -88,8 +117,9 @@ const CommentSection = () => {
         <input
           value={comment}
           placeholder="댓글을 입력해주세요"
-          onChange={handleOnchange}
           maxLength={50}
+          onChange={handleOnchange}
+          onKeyDown={handleKeyDown}
         />
         <button onClick={() => commentMutation.mutate()}>게시</button>
       </CommentInputContainerStyled>
@@ -101,6 +131,7 @@ const WrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   height: 100%;
   flex: 1;
   width: 100%;

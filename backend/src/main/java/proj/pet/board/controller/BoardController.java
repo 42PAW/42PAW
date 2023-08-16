@@ -1,23 +1,17 @@
 package proj.pet.board.controller;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.board.service.BoardFacadeService;
 import proj.pet.category.domain.Species;
 import proj.pet.member.domain.UserSession;
 import proj.pet.member.dto.UserSessionDto;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/boards")
@@ -52,6 +46,15 @@ public class BoardController {
 			@PathVariable("memberId") Long memberId) {
 		PageRequest pageRequest = PageRequest.of(page, size);
 		return boardFacadeService.getMemberBoards(userSessionDto, memberId, pageRequest);
+	}
+
+	@GetMapping("/followings")
+	public BoardsPaginationDto getFollowingsBoards(
+			@UserSession UserSessionDto userSessionDto,
+			@RequestParam("size") int size,
+			@RequestParam("page") int page) {
+		PageRequest pageRequest = PageRequest.of(page, size);
+		return boardFacadeService.getFollowingsBoards(userSessionDto, pageRequest);
 	}
 
 	@PostMapping(

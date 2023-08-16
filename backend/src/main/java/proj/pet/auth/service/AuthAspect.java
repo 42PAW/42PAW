@@ -53,6 +53,7 @@ public class AuthAspect {
 			cookieManager.deleteCookie(response, jwtProperties.getTokenName());
 			throw new ServiceException(UNAUTHORIZED);
 		}
+		System.out.println("token = " + token);
 		JwtPayload jwtPayload = jwtTokenManager.createFtPayload(token);
 		MemberRole role = jwtPayload.getRole();
 		if (role.equals(NOT_REGISTERED)) {

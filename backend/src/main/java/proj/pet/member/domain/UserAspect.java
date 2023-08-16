@@ -67,7 +67,7 @@ public class UserAspect {
 		if (optionalToken.isEmpty()) {
 			return new UserSessionDto(NOT_REGISTERED_ID, EMPTY_NICKNAME, MemberRole.NOT_REGISTERED);
 		}
-
+		System.out.println("optionalToken = " + optionalToken.get());
 		JwtPayload ftPayload = tokenManager.createFtPayload(optionalToken.get());
 		Optional<Member> member = memberRepository.findByOauthName(ftPayload.getProfile().getName());
 		if (member.isPresent()) {

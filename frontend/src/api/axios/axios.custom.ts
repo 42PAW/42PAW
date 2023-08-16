@@ -4,7 +4,7 @@ import { SignUpInfoDTO } from "@/types/dto/member.dto";
 import { CreateBoardDTO } from "@/types/dto/board.dto";
 import { getCookie } from "../cookie/cookies";
 
-const token = getCookie("access_token");
+const token = getCookie("access_token") ?? null;
 
 const axiosSignUpURL = "/v1/members";
 export const axiosSignUp = async ({
@@ -171,6 +171,7 @@ export const axiosReactComment = async (
   reactionType: string
 ): Promise<any> => {
   try {
+    console.log(token);
     const response = await instance.post(axiosReactCommentURL, {
       boardId,
       reactionType,
@@ -184,7 +185,13 @@ export const axiosReactComment = async (
 const axiosUndoReactCommentURL = "/v1/reactions/boards/";
 export const axiosUndoReactComment = async (boardId: number): Promise<any> => {
   try {
-    const response = await instance.delete(
+    if (token) {
+      const response = await instance.delete(
+        axiosUndoReactCommentURL + boardId.toString()
+      );
+      return response;
+    }
+    const response = await axios.delete(
       axiosUndoReactCommentURL + boardId.toString()
     );
     return response;

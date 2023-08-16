@@ -14,6 +14,7 @@ import {
   axiosUndoReactComment,
 } from "@/api/axios/axios.custom";
 import useDebounce from "@/hooks/useDebounce";
+import useParseDate from "@/hooks/useParseDate";
 import { useSpring, animated } from "react-spring";
 
 const BoardTemplate = (board: IBoardInfo) => {
@@ -50,6 +51,7 @@ const BoardTemplate = (board: IBoardInfo) => {
   const { openCommentSection } = useRightSectionHandler();
   const { openModal } = useModal();
   const { debounce } = useDebounce();
+  const { parseDate } = useParseDate();
   const ReactionAnimation = useSpring({
     to: {
       opacity: isReactedRender ? 1 : 0,
@@ -57,6 +59,8 @@ const BoardTemplate = (board: IBoardInfo) => {
     },
     config: { tension: 300, friction: 12 },
   });
+
+  const parsedDate = parseDate(createdAt);
 
   const handleCommentClick = (boardId: number) => {
     openCommentSection();
@@ -142,7 +146,7 @@ const BoardTemplate = (board: IBoardInfo) => {
                 {reactionCountRender} {language.like}, {commentCount}{" "}
                 {language.comment}
               </div>
-              <span>{createdAt}</span>
+              <span>{parsedDate}</span>
             </DivOne>
             <DivTwo>{content}</DivTwo>
             {previewComment ? (

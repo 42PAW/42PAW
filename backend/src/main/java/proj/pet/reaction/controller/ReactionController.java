@@ -2,6 +2,8 @@ package proj.pet.reaction.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import proj.pet.auth.domain.AuthGuard;
+import proj.pet.auth.domain.AuthLevel;
 import proj.pet.member.domain.UserSession;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.reaction.dto.ReactionRequestDto;
@@ -15,6 +17,7 @@ public class ReactionController {
 	private final ReactionFacadeService reactionFacadeService;
 
 	@PostMapping
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void createReaction(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestBody ReactionRequestDto reactionRequestDto) {

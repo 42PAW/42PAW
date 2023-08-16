@@ -8,10 +8,12 @@ import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTempla
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import useFetch from "@/hooks/useFetch";
 import { IBoardInfo } from "@/types/interface/board.interface";
+import { useNavigate } from "react-router-dom";
 
 const MainPage = () => {
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
   const { fetchBoards } = useFetch();
+  const navigator = useNavigate();
   const {
     isLoading,
     isError,
@@ -29,6 +31,10 @@ const MainPage = () => {
         <LoadingAnimation />
       </WrapperStyled>
     );
+  }
+
+  if (isError) {
+    navigator("/error");
   }
 
   return (

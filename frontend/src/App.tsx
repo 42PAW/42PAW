@@ -8,6 +8,7 @@ import NoticePage from "@/pages/NoticePage";
 import ProfilePage from "@/pages/ProfilePage";
 import UploadPage from "@/pages/UploadPage";
 import SignUpPage from "@/pages/SignUpPage/SignUpPage";
+import NotFoundPage from "./pages/NotFoundPage";
 // const MainPage = lazy(() => import("@/pages/Mainpage"));
 // const NoticePage = lazy(() => import("@/pages/NoticePage"));
 // const ProfilePage = lazy(() => import("@/pages/ProfilePage"));
@@ -26,6 +27,7 @@ function App() {
             <Route path="upload" element={<UploadPage />} />
           </Route>
           <Route path="/sign-up" element={<SignUpPage />} />
+          <Route path="/error" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

@@ -14,3 +14,16 @@ export interface UserInfoDTO {
   profileImageUrl: string;
   language: string;
 }
+
+export interface ProfileInfoDTO {
+  memberName: string;
+  intraName: string;
+  nicknameUpdatedAt: Date;
+  profileImageUrl: string;
+  country: string;
+  statement: string;
+  followingCount: number;
+  followerCount: number;
+  boardCount: number;
+  followType: string;
+}

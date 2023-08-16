@@ -22,17 +22,14 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
             <li onClick={moveToMain}>
               <img alt="Main" src="/src/assets/home.png" />
             </li>
+            <li onClick={moveToUpload}>
+              <img alt="Upload" src="/src/assets/upload.png" />
+            </li>
             <li onClick={openSearchSection}>
               <img alt="Search" src="/src/assets/search.png" />
             </li>
             <li onClick={moveToMyProfile}>
               <img alt="MyProfile" src="/src/assets/profile.png" />
-            </li>
-            <li onClick={moveToUpload}>
-              <img alt="Upload" src="/src/assets/upload.png" />
-            </li>
-            <li onClick={moveToNotice}>
-              <img alt="Notice" src="/src/assets/notice.png" />
             </li>
           </MenuListStyled>
           {userInfo ? (

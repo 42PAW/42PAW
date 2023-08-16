@@ -227,7 +227,13 @@ export const axiosDeleteScrap = async (boardId: number): Promise<any> => {
 const axiosGetProfileURL = "/v1/members/";
 export const axiosGetProfile = async (memberId: number): Promise<any> => {
   try {
-    const response = await instance.get(
+    if (token) {
+      const response = await instance.get(
+        axiosGetProfileURL + memberId.toString() + "/profile"
+      );
+      return response.data;
+    }
+    const response = await axios.get(
       axiosGetProfileURL + memberId.toString() + "/profile"
     );
     return response.data;

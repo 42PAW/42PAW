@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Table(name = "SCRAP")
+@Table(name = "SCRAP",
+		uniqueConstraints = {@UniqueConstraint(name = "UNIQUE_SCRAP", columnNames = {"MEMBER_ID", "BOARD_ID"})})
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 public class Scrap extends IdDomain implements Validatable {

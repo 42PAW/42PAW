@@ -18,7 +18,11 @@ import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor(access = PROTECTED)
 @Entity
-@Table(name = "REPORT")
+@Table(name = "REPORT",
+		uniqueConstraints = {
+				@UniqueConstraint(name = "UNIQUE_BOARD_REPORT", columnNames = {"MEMBER_ID", "REPORTED_MEMBER_ID", "BOARD_ID"}),
+				@UniqueConstraint(name = "UNIQUE_COMMENT_REPORT", columnNames = {"MEMBER_ID", "REPORTED_MEMBER_ID", "COMMENT_ID"})
+		})
 @Getter
 public class Report extends IdDomain implements Validatable {
 

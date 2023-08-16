@@ -14,7 +14,10 @@ import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor(access = PROTECTED)
 @Entity
-@Table(name = "BLOCK")
+@Table(name = "BLOCK",
+		uniqueConstraints = {
+				@UniqueConstraint(name = "UNIQUE_BLOCK", columnNames = {"MEMBER_ID", "TARGET_MEMBER_ID"})
+		})
 @Getter
 public class Block implements Validatable {
 

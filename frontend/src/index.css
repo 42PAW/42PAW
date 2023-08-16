@@ -6,7 +6,9 @@
   --black: #000000;
   --white: #ffffff;
   --grey: #4a494ed5;
+  --grey2: #676767;
   --lightgrey: #929292;
+  --lightgrey2: #d1cdcd;
   --purple: #878abe;
   --lightpurple: #dbdcfe;
   --pink: #d1c1cd;
@@ -51,6 +53,12 @@ body {
 *::-webkit-scrollbar {
   display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
+
 button {
   cursor: pointer;
+}
+
+div,
+h1 {
+  cursor: default;
 }

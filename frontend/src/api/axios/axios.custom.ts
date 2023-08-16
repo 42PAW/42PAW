@@ -2,6 +2,9 @@ import axios from "axios";
 import instance from "@/api/axios/axios.instance";
 import { SignUpInfoDTO } from "@/types/dto/member.dto";
 import { CreateBoardDTO } from "@/types/dto/board.dto";
+import { getCookie } from "../cookie/cookies";
+
+const token = getCookie("access_token");
 
 const axiosSignUpURL = "/v1/members";
 export const axiosSignUp = async ({
@@ -23,6 +26,7 @@ export const axiosSignUp = async ({
         "Content-Type": "multipart/form-data",
       },
     });
+
     return response.data;
   } catch (error) {
     throw error;
@@ -33,23 +37,7 @@ const axiosMyInfoURL = "/v1/members/me";
 export const axiosMyInfo = async (): Promise<any> => {
   try {
     const response = await instance.get(axiosMyInfoURL);
-    console.log(response);
     return response;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const axiosGetBoardsURL = "/v1/boards";
-export const axiosGetBoards = async (
-  size: number,
-  page: number
-): Promise<any> => {
-  try {
-    const response = await instance.get(axiosGetBoardsURL, {
-      params: { size: size, page: page },
-    });
-    return response.data;
   } catch (error) {
     throw error;
   }
@@ -85,13 +73,39 @@ export const axiosCreateBoard = async ({
   }
 };
 
-const axiosGetTrendingBoardsURL =
-  "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/boards/hot";
+const axiosGetBoardsURL = "/v1/boards";
+export const axiosGetBoards = async (
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    if (token) {
+      const response = await instance.get(axiosGetBoardsURL, {
+        params: { size: size, page: page },
+      });
+      return response.data;
+    }
+    const response = await axios.get(axiosGetBoardsURL, {
+      params: { size: size, page: page },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetTrendingBoardsURL = "/v1/boards/hot";
 export const axiosGetTrendingBoards = async (
   size: number,
   page: number
 ): Promise<any> => {
   try {
+    if (token) {
+      const response = await instance.get(axiosGetTrendingBoardsURL, {
+        params: { size: size, page: page },
+      });
+      return response.data;
+    }
     const response = await axios.get(axiosGetTrendingBoardsURL, {
       params: { size: size, page: page },
     });
@@ -101,14 +115,13 @@ export const axiosGetTrendingBoards = async (
   }
 };
 
-const axiosGetFollowingBoardsURL =
-  "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/boards/following";
+const axiosGetFollowingBoardsURL = "/v1/boards/following";
 export const axiosGetFollowingBoards = async (
   size: number,
   page: number
 ): Promise<any> => {
   try {
-    const response = await axios.get(axiosGetFollowingBoardsURL, {
+    const response = await instance.get(axiosGetFollowingBoardsURL, {
       params: { size: size, page: page },
     });
     return response.data;
@@ -130,7 +143,6 @@ export const axiosGetBoardComments = async (
         params: { size: size, page: page },
       }
     );
-    console.log(response.data.result);
     return response.data.result;
   } catch (error) {
     throw error;
@@ -153,23 +165,27 @@ export const axiosCreateComment = async (
   }
 };
 
-const axiosLikeCommentURL =
-  "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/reactions";
-export const axiosLikeComment = async (boardId: number): Promise<any> => {
+const axiosReactCommentURL = "/v1/reactions";
+export const axiosReactComment = async (
+  boardId: number,
+  reactionType: string
+): Promise<any> => {
   try {
-    const response = await axios.post(axiosLikeCommentURL, { boardId });
+    const response = await instance.post(axiosReactCommentURL, {
+      boardId,
+      reactionType,
+    });
     return response;
   } catch (error) {
     throw error;
   }
 };
 
-const axiosDeleteLikeURL =
-  "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/reactions/boards/";
-export const axiosDeleteLike = async (boardId: number): Promise<any> => {
+const axiosUndoReactCommentURL = "/v1/reactions/boards/";
+export const axiosUndoReactComment = async (boardId: number): Promise<any> => {
   try {
-    const response = await axios.delete(
-      axiosDeleteLikeURL + boardId.toString()
+    const response = await instance.delete(
+      axiosUndoReactCommentURL + boardId.toString()
     );
     return response;
   } catch (error) {
@@ -196,6 +212,40 @@ export const axiosDeleteScrap = async (boardId: number): Promise<any> => {
       axiosDeleteScrapURL + boardId.toString()
     );
     return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetProfileURL = "/v1/members/";
+export const axiosGetProfile = async (memberId: number): Promise<any> => {
+  try {
+    const response = await instance.get(
+      axiosGetProfileURL + memberId.toString() + "/profile"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetMyProfileURL = "/v1/members/me/profile";
+export const axiosGetMyProfile = async (): Promise<any> => {
+  try {
+    const response = await instance.get(axiosGetMyProfileURL);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosCheckNicknameValidURL = "/v1/members/valid";
+export const axiosCheckNicknameValid = async (name: string): Promise<any> => {
+  try {
+    const response = await instance.get(axiosCheckNicknameValidURL, {
+      params: { name: name },
+    });
+    return response.data.valid;
   } catch (error) {
     throw error;
   }

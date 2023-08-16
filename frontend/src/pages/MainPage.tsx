@@ -2,47 +2,25 @@ import { useQuery } from "@tanstack/react-query";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import BoardTemplate from "@/components/Board/BoardTemplate";
-import {
-  trendingBoardsState,
-  followingBoardsState,
-  boardCategoryState,
-} from "@/recoil/atom";
-import { BoardsInfoDTO } from "@/types/dto/board.dto";
+import { boardCategoryState } from "@/recoil/atom";
 import { Board } from "@/types/enum/board.category.enum";
 import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTemplate";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
-import useFetchBoards from "@/hooks/useFetchBoards";
+import useFetch from "@/hooks/useFetch";
 import { IBoardInfo } from "@/types/interface/board.interface";
 
 const MainPage = () => {
-  const [trendingBoards] = useRecoilState<BoardsInfoDTO>(trendingBoardsState);
-  const [followingBoards] = useRecoilState<BoardsInfoDTO>(followingBoardsState);
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
-  const { fetchBoards } = useFetchBoards();
+  const { fetchBoards } = useFetch();
   const {
     isLoading,
     isError,
-    data: defaultBoards,
+    data: boards,
     error,
   } = useQuery({
-    queryKey: [Board.DEFAULT],
+    queryKey: ["boards", boardCategory],
     queryFn: fetchBoards,
   });
-
-  const getBoardsToRender = () => {
-    switch (boardCategory) {
-      case Board.DEFAULT:
-        return defaultBoards;
-      case Board.TRENDING:
-        return trendingBoards;
-      case Board.FOLLOWING:
-        return followingBoards;
-      default:
-        return null;
-    }
-  };
-
-  const currentBoards = getBoardsToRender();
 
   if (isLoading) {
     return (
@@ -55,7 +33,7 @@ const MainPage = () => {
 
   return (
     <WrapperStyled>
-      {currentBoards.map((board: IBoardInfo) => (
+      {boards.map((board: IBoardInfo) => (
         <BoardTemplate
           key={board.boardId}
           boardId={board.boardId}
@@ -68,8 +46,8 @@ const MainPage = () => {
           categories={board.categories}
           reactionCount={board.reactionCount}
           commentCount={board.commentCount}
-          isScrapped={board.isScrapped}
-          isReacted={board.isReacted}
+          scrapped={board.scrapped}
+          reacted={board.reacted}
           content={board.content}
           previewCommentUser={board.previewCommentUser}
           previewComment={board.previewComment}

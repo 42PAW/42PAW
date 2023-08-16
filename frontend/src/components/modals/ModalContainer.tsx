@@ -18,7 +18,7 @@ const ModalContainer = () => {
       {currentOpenModal.reportModal && <ReportModal />}
       {currentOpenModal.profileCardModal && <ProfileCardModal />}
       {currentOpenModal.deleteModal && <DeleteModal />}
-      {/* {currentOpenModal.profileEditModal && <ProfileEditModal />} */}
+      {currentOpenModal.profileEditModal && <ProfileEditModal />}
       {currentOpenModal.languageModal && <LanguageModal />}
     </>
   );

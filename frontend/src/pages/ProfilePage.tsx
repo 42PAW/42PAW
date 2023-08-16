@@ -3,9 +3,9 @@ import ProfileTemplate from "@/components/ProfileTemplate";
 
 const ProfilePage = () => {
   return (
-    <WrapperStyled>
-      <ProfileTemplate></ProfileTemplate>
-    </WrapperStyled>
+    // <WrapperStyled>
+    <ProfileTemplate></ProfileTemplate>
+    // </WrapperStyled>
   );
 };
 

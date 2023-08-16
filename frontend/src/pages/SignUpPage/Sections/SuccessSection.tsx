@@ -15,11 +15,10 @@ const SuccessSection: React.FC<SectionProps> = ({ registerData }) => {
   });
 
   const signUpComplete = async () => {
-    const response = await axiosSignUp(registerData);
-    console.log(response);
+    await axiosSignUp(registerData);
     setTimeout(() => {
       navigator("/");
-    }, 1000);
+    }, 2000);
   };
 
   useEffect(() => {

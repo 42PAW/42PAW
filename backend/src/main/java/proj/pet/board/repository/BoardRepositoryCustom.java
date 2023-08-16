@@ -1,8 +1,9 @@
 package proj.pet.board.repository;
 
-import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import proj.pet.board.domain.Board;
+
+import java.util.List;
 
 public interface BoardRepositoryCustom {
 
@@ -14,5 +15,8 @@ public interface BoardRepositoryCustom {
 
 	List<Board> getScrapBoards(Long loginUserId, PageRequest pageRequest);
 
+	List<Board> getFollowingsBoards(Long memberId, PageRequest pageRequest);
+
 	long countByMemberId(Long memberId);
+
 }

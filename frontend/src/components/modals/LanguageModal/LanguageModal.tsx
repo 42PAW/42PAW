@@ -9,6 +9,10 @@ import { languageState } from "@/recoil/atom";
 import Translator from "@/languages/Translator";
 import useModal from "@/hooks/useModal";
 import useToaster from "@/hooks/useToaster";
+import { axiosChangeLanguage } from "@/api/axios/axios.custom";
+import { getCookie } from "@/api/cookie/cookies";
+
+const token = getCookie("access_token");
 
 const LanguageModal = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
@@ -61,6 +65,7 @@ const LanguageModal = () => {
     }
     if (translatedLanguage) {
       setLanguage(translatedLanguage);
+      if (token) axiosChangeLanguage(currentLanguage);
       popToast(translatedLanguage.languageChangedToast, "P");
     }
     closeModal(ModalType.LANGUAGE);

@@ -3,6 +3,7 @@ import instance from "@/api/axios/axios.instance";
 import { SignUpInfoDTO } from "@/types/dto/member.dto";
 import { CreateBoardDTO } from "@/types/dto/board.dto";
 import { getCookie } from "../cookie/cookies";
+import { Language } from "@/types/enum/language.enum";
 
 const token = getCookie("access_token") ?? null;
 
@@ -259,6 +260,16 @@ export const axiosCheckNicknameValid = async (name: string): Promise<any> => {
       params: { name: name },
     });
     return response.data.valid;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosChangeLanguageURL = "v1/members/me/language";
+export const axiosChangeLanguage = async (language: Language): Promise<any> => {
+  try {
+    const response = await instance.patch(axiosChangeLanguageURL, { language });
+    return response;
   } catch (error) {
     throw error;
   }

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { isRightSectionOpenedState } from "@/recoil/atom";
 import LeftMenuSection from "@/components/LeftMenuSection/LeftMenuSection";
@@ -12,6 +12,8 @@ import { getCookie } from "@/api/cookie/cookies";
 import { axiosMyInfo } from "@/api/axios/axios.custom";
 import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
+import { languageState } from "@/recoil/atom";
+import useTranslator from "@/hooks/useTranslator";
 
 const Layout = () => {
   const location = useLocation();
@@ -19,9 +21,11 @@ const Layout = () => {
   const [userInfo, setUserInfo] = useRecoilState<UserInfoDTO | null>(
     userInfoState
   );
+  const setLanugage = useSetRecoilState(languageState);
   const [isRightSectionOpened] = useRecoilState<boolean>(
     isRightSectionOpenedState
   );
+  const { translator } = useTranslator();
 
   /**메인 화면일 때만 게시글 정렬 버튼 보여주기*/
   const isMainPage: boolean = location.pathname === "/";
@@ -32,6 +36,7 @@ const Layout = () => {
     try {
       const { data: myInfo } = await axiosMyInfo();
       setUserInfo(myInfo);
+      translator(myInfo.language);
     } catch (error) {
       throw error;
     }

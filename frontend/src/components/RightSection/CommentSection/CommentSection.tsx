@@ -16,6 +16,10 @@ import { CommentInfoDTO } from "@/types/dto/board.dto";
 import { boardCategoryState } from "@/recoil/atom";
 import useToaster from "@/hooks/useToaster";
 
+const isOnlyWhitespace = (str: string) => {
+  return str.trim() === "";
+};
+
 const CommentSection = () => {
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const { fetchComments } = useFetch();
@@ -39,7 +43,7 @@ const CommentSection = () => {
   };
 
   const uploadComment = async () => {
-    if (comment === "") {
+    if (comment === "" || isOnlyWhitespace(comment)) {
       popToast("댓글 내용을 입력해주세요.", "N");
       return;
     }
@@ -48,7 +52,7 @@ const CommentSection = () => {
 
   const commentMutation = useMutation(uploadComment, {
     onSuccess: async () => {
-      if (comment === "") return;
+      if (comment === "" || isOnlyWhitespace(comment)) return;
 
       await queryClient.setQueryData(
         ["boards", boardCategory],
@@ -82,7 +86,6 @@ const CommentSection = () => {
       }
     }
   };
-
   if (isLoading) {
     return (
       <WrapperStyled>

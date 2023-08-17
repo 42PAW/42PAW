@@ -61,6 +61,10 @@ const BoardTemplate = (board: IBoardInfo) => {
   });
 
   const parsedDate = parseDate(createdAt);
+  const parsedPreviewComment =
+    previewComment.length > 15
+      ? previewComment.substring(0, 15) + ".."
+      : previewComment;
 
   const handleCommentClick = (boardId: number) => {
     openCommentSection();
@@ -151,8 +155,8 @@ const BoardTemplate = (board: IBoardInfo) => {
             <DivTwo>{content}</DivTwo>
             {previewComment ? (
               <DivThree>
-                <div onClick={handleOpenProfile}>{previewCommentUser}</div>
-                <div>{previewComment}</div>
+                <div>{previewCommentUser}</div>
+                <div>{parsedPreviewComment}</div>
                 <div onClick={() => handleCommentClick(boardId)}>
                   {language.moreComments}
                 </div>
@@ -313,7 +317,6 @@ const DivThree = styled.div`
   margin-top: 2%;
   font-size: 100%;
   div:nth-child(1) {
-    cursor: pointer;
     margin-right: 1%;
     font-weight: bold;
   }

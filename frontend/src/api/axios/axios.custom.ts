@@ -172,7 +172,6 @@ export const axiosReactComment = async (
   reactionType: string
 ): Promise<any> => {
   try {
-    console.log(token);
     const response = await instance.post(axiosReactCommentURL, {
       boardId,
       reactionType,
@@ -265,10 +264,34 @@ export const axiosCheckNicknameValid = async (name: string): Promise<any> => {
   }
 };
 
-const axiosChangeLanguageURL = "v1/members/me/language";
+const axiosChangeLanguageURL = "/v1/members/me/language";
 export const axiosChangeLanguage = async (language: Language): Promise<any> => {
   try {
     const response = await instance.patch(axiosChangeLanguageURL, { language });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosDeleteBoardURL = "/v1/boards/";
+export const axiosDeleteBoard = async (boardId: number): Promise<any> => {
+  try {
+    const response = await instance.delete(
+      axiosDeleteBoardURL + boardId.toString()
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosDeleteCommentURL = "/v1/comments/";
+export const axiosDeleteComment = async (commentId: number): Promise<any> => {
+  try {
+    const response = await instance.delete(
+      axiosDeleteCommentURL + commentId.toString()
+    );
     return response;
   } catch (error) {
     throw error;

@@ -3,14 +3,14 @@ import { useSetRecoilState, useRecoilState } from "recoil";
 import styled from "styled-components";
 import { ModalType } from "@/types/enum/modal.enum";
 import useModal from "@/hooks/useModal";
-import {
-  banUserInfoState,
-  currentBoardIdState,
-  currentCommentIdState,
-} from "@/recoil/atom";
+import { banUserInfoState } from "@/recoil/atom";
 import { IBanUserInfo } from "@/types/interface/user.interface";
 import { languageState } from "@/recoil/atom";
 import OptionButton from "./OptionButton";
+import { userInfoState } from "@/recoil/atom";
+import { UserInfoDTO } from "@/types/dto/member.dto";
+import { deleteInfoState } from "@/recoil/atom";
+import { IDeleteInfo } from "@/types/interface/option.interface";
 
 /**
  * @boardId (optional) 신고, 차단, 삭제할 게시물의 id
@@ -34,43 +34,42 @@ const BoardOption: React.FC<IOptionButtonProps> = ({
 }) => {
   const [language] = useRecoilState<any>(languageState);
   const setBanUserInfo = useSetRecoilState<IBanUserInfo>(banUserInfoState);
-  const setCurrentBoardId = useSetRecoilState<number | null>(
-    currentBoardIdState
-  );
-  const setCurrentCommentId = useSetRecoilState<number | null>(
-    currentCommentIdState
-  );
+  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
+  const setDeleteInfo = useSetRecoilState<IDeleteInfo>(deleteInfoState);
   const { openModal } = useModal();
+
   const banUser = { memberId: memberId, userName: memberName };
 
   const handleBan = () => {
     setBanUserInfo(banUser);
     openModal(ModalType.BAN);
   };
+
   const handleDelete = () => {
-    if (boardId) {
-      setCurrentBoardId(boardId);
-    } else if (commentId) {
-      setCurrentCommentId(commentId);
-    }
+    setDeleteInfo({ boardId: boardId ?? null, commentId: commentId ?? null });
     openModal(ModalType.DELETE);
   };
 
   return (
     <OptionButton>
-      <MenuItemWrapperStyled>
-        <MenuItemStyled onClick={handleBan}>{language.ban}</MenuItemStyled>
-      </MenuItemWrapperStyled>
-      <MenuItemWrapperStyled>
-        <MenuItemStyled onClick={() => openModal(ModalType.REPORT)}>
-          {language.report}
-        </MenuItemStyled>
-      </MenuItemWrapperStyled>
-      <MenuItemWrapperStyled>
-        <MenuItemStyled onClick={handleDelete}>
-          {language.delete}
-        </MenuItemStyled>
-      </MenuItemWrapperStyled>
+      {userInfo?.memberId !== memberId ? (
+        <>
+          <MenuItemWrapperStyled>
+            <MenuItemStyled onClick={handleBan}>{language.ban}</MenuItemStyled>
+          </MenuItemWrapperStyled>
+          <MenuItemWrapperStyled>
+            <MenuItemStyled onClick={() => openModal(ModalType.REPORT)}>
+              {language.report}
+            </MenuItemStyled>
+          </MenuItemWrapperStyled>
+        </>
+      ) : (
+        <MenuItemWrapperStyled>
+          <MenuItemStyled onClick={handleDelete}>
+            {language.delete}
+          </MenuItemStyled>
+        </MenuItemWrapperStyled>
+      )}
     </OptionButton>
   );
 };

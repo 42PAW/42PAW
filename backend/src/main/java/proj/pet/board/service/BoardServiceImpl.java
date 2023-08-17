@@ -2,7 +2,6 @@ package proj.pet.board.service;
 
 import static proj.pet.exception.ExceptionStatus.NOT_FOUND_BOARD;
 import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
-import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -98,10 +97,13 @@ public class BoardServiceImpl implements BoardService {
 	public void deleteBoard(Long memberId, Long boardId) {
 		Board board = boardRepository.findById(boardId)
 				.orElseThrow(() -> new ServiceException(NOT_FOUND_BOARD));
-		if (!board.isId(memberId)) {
-			throw new ServiceException(UNAUTHENTICATED);
+		//TODO: 찾아온 board에서 boradId != memberId이면 ServiceException ?? -> 로직 확인 필요
+//		if (!board.isId(memberId)) {
+//			throw new ServiceException(UNAUTHENTICATED);
+//		}
+		if (board.getComments().size() != 0) {
+			commentRepository.deleteAll(board.getComments());
 		}
-		commentRepository.deleteAll(board.getComments());
 		boardCategoryFilterRepository.deleteAll(board.getCategoryFilters());
 		boardMediaManager.deleteMediaByList(board.getMediaList());
 		boardMediaRepository.deleteAll(board.getMediaList());

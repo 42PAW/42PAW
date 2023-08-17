@@ -3,6 +3,7 @@ import instance from "@/api/axios/axios.instance";
 import { SignUpInfoDTO } from "@/types/dto/member.dto";
 import { CreateBoardDTO } from "@/types/dto/board.dto";
 import { getCookie } from "../cookie/cookies";
+import { Language } from "@/types/enum/language.enum";
 
 const token = getCookie("access_token") ?? null;
 
@@ -227,7 +228,13 @@ export const axiosDeleteScrap = async (boardId: number): Promise<any> => {
 const axiosGetProfileURL = "/v1/members/";
 export const axiosGetProfile = async (memberId: number): Promise<any> => {
   try {
-    const response = await instance.get(
+    if (token) {
+      const response = await instance.get(
+        axiosGetProfileURL + memberId.toString() + "/profile"
+      );
+      return response.data;
+    }
+    const response = await axios.get(
       axiosGetProfileURL + memberId.toString() + "/profile"
     );
     return response.data;
@@ -253,6 +260,16 @@ export const axiosCheckNicknameValid = async (name: string): Promise<any> => {
       params: { name: name },
     });
     return response.data.valid;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosChangeLanguageURL = "v1/members/me/language";
+export const axiosChangeLanguage = async (language: Language): Promise<any> => {
+  try {
+    const response = await instance.patch(axiosChangeLanguageURL, { language });
+    return response;
   } catch (error) {
     throw error;
   }

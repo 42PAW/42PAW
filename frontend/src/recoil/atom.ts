@@ -106,5 +106,5 @@ export const banUserInfoState = atom<IBanUserInfo>({
 
 export const languageState = atom<any>({
   key: "language",
-  default: Translator.ko,
+  default: Translator.en,
 });

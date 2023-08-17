@@ -5,7 +5,7 @@ import LoadingAnimation from "@/components/loading/LoadingAnimation";
 
 import MainPage from "@/pages/MainPage";
 import NoticePage from "@/pages/NoticePage";
-import ProfilePage from "@/pages/ProfilePage";
+import ProfilePage from "@/pages/ProfilePage/ProfilePage";
 import UploadPage from "@/pages/UploadPage";
 import SignUpPage from "@/pages/SignUpPage/SignUpPage";
 import NotFoundPage from "./pages/NotFoundPage";

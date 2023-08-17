@@ -1,6 +1,6 @@
 import { useState } from "react";
-import useModal from "../../hooks/useModal";
-import { ModalType } from "../../types/enum/modal.enum";
+import useModal from "../../../hooks/useModal";
+import { ModalType } from "../../../types/enum/modal.enum";
 import styled from "styled-components";
 import Button from "@/components/ButtonComponent";
 import BoardOption from "@/components/BoardOption";

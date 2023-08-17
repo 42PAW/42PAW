@@ -13,6 +13,8 @@ import { ProfileInfoDTO, UserInfoDTO } from "@/types/dto/member.dto";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import useNavigateCustom from "@/hooks/useNavigateCustom";
 import useModal from "@/hooks/useModal";
+import { useCountryEmoji } from "@/hooks/useCountryEmoji";
+import { Country } from "@/types/enum/country.enum";
 
 const ProfileCardModal = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
@@ -23,8 +25,13 @@ const ProfileCardModal = () => {
   const { fetchProfile } = useFetch();
   const { moveToMyProfile } = useNavigateCustom();
   const { closeModal } = useModal();
-  const { data: profileData, isLoading } = useQuery({
-    queryKey: ["profileCard", currentMemberId],
+  const {
+    data: profileData,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["profile", currentMemberId],
     queryFn: fetchProfile,
   });
 
@@ -51,13 +58,21 @@ const ProfileCardModal = () => {
           <img src="/src/assets/paw.png" />
         </LogoStyled>
         <OptionButtonContainerStyled>
-          <BoardOption />
+          {currentMemberId !== userInfo?.memberId && (
+            <BoardOption
+              memberId={currentMemberId as number}
+              memberName={profileData.memberName}
+            />
+          )}
         </OptionButtonContainerStyled>
         <ProfileImageStyled src={profileData.profileImageUrl} />
         <MainAreaStyled>
           <NickNameStyled>{profileData.memberName}</NickNameStyled>
           <IntraNameStyled>{profileData.intraName}</IntraNameStyled>
-          <CountryStyled>🇰🇷 {profileData.country}</CountryStyled>
+          <CountryStyled>
+            {useCountryEmoji(profileData.country as Country)}{" "}
+            {profileData.country}
+          </CountryStyled>
           <StatementStyled>{profileData.statement}</StatementStyled>
           <CardInfoStyled>
             <InfoItemStyled>

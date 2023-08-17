@@ -200,30 +200,6 @@ export const axiosUndoReactComment = async (boardId: number): Promise<any> => {
   }
 };
 
-const axiosScrapCommentURL =
-  "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/scraps";
-export const axiosScrapComment = async (boardId: number): Promise<any> => {
-  try {
-    const response = await axios.post(axiosScrapCommentURL, { boardId });
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const axiosDeleteScrapURL =
-  "https://0dcc640b-fbc6-43f0-b2b0-3c731df8e55e.mock.pstmn.io/v1/scraps/boards/";
-export const axiosDeleteScrap = async (boardId: number): Promise<any> => {
-  try {
-    const response = await axios.delete(
-      axiosDeleteScrapURL + boardId.toString()
-    );
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
-
 const axiosGetProfileURL = "/v1/members/";
 export const axiosGetProfile = async (memberId: number): Promise<any> => {
   try {
@@ -291,6 +267,28 @@ export const axiosDeleteComment = async (commentId: number): Promise<any> => {
   try {
     const response = await instance.delete(
       axiosDeleteCommentURL + commentId.toString()
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosScrapURL = "/v1/scraps";
+export const axiosScrap = async (boardId: number): Promise<any> => {
+  try {
+    const response = await instance.post(axiosScrapURL, { boardId });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosUndoScrapURL = "/v1/scraps/boards/";
+export const axiosUndoScrap = async (boardId: number): Promise<any> => {
+  try {
+    const response = await instance.delete(
+      axiosUndoScrapURL + boardId.toString()
     );
     return response;
   } catch (error) {

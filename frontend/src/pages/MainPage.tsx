@@ -18,10 +18,10 @@ const MainPage = () => {
     isLoading,
     isError,
     data: boards,
-    error,
   } = useQuery({
     queryKey: ["boards", boardCategory],
     queryFn: fetchBoards,
+    keepPreviousData: true,
   });
 
   if (isLoading) {

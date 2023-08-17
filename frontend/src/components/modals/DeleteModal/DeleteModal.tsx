@@ -26,11 +26,10 @@ const DeleteModal = () => {
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
   const resetDeleteInfo = useResetRecoilState(deleteInfoState);
   const queryClient = useQueryClient();
-
   const { closeModal } = useModal();
   const { popToast } = useToaster();
 
-  const deleteComment = async () => {
+  const deleteContent = async () => {
     if (deleteInfo.boardId) await axiosDeleteBoard(deleteInfo.boardId);
     if (deleteInfo.commentId) await axiosDeleteComment(deleteInfo.commentId);
     resetDeleteInfo();
@@ -38,7 +37,7 @@ const DeleteModal = () => {
     popToast("해당 글이 삭제되었습니다.", "P");
   };
 
-  const commentMutation = useMutation(deleteComment, {
+  const commentMutation = useMutation(deleteContent, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(["comments", currentBoardId]);
 
@@ -73,19 +72,42 @@ const DeleteModal = () => {
     },
   });
 
+  const boardMutation = useMutation(deleteContent, {
+    onSuccess: async () => {
+      await queryClient.setQueryData(
+        ["boards", boardCategory],
+        (prevData: IBoardInfo[] | any) => {
+          if (!prevData) return prevData;
+
+          const updatedBoards: IBoardInfo[] = prevData.filter(
+            (board: IBoardInfo) => board.boardId !== currentBoardId
+          );
+
+          return updatedBoards;
+        }
+      );
+    },
+  });
+
   return (
     <ModalLayout
       modalName={ModalType.DELETE}
       isOpen={currentOpenModal.deleteModal}
     >
       <WrapperStyled>
-        {currentBoardId ? <h1>게시물 삭제</h1> : <h1>댓글 삭제</h1>}
-        {currentBoardId ? (
-          <ContentStyled>해당 게시물을 삭제하시겠습니까?</ContentStyled>
+        {deleteInfo.commentId ? (
+          <>
+            <h1>댓글 삭제</h1>
+            <ContentStyled>해당 댓글을 삭제하시겠습니까?</ContentStyled>
+            <button onClick={() => commentMutation.mutate()}>삭제</button>
+          </>
         ) : (
-          <ContentStyled>해당 댓글을 삭제하시겠습니까?</ContentStyled>
+          <>
+            <h1>게시물 삭제</h1>
+            <ContentStyled>해당 게시물을 삭제하시겠습니까?</ContentStyled>
+            <button onClick={() => boardMutation.mutate()}>삭제</button>
+          </>
         )}
-        <button onClick={() => commentMutation.mutate()}>삭제</button>
       </WrapperStyled>
     </ModalLayout>
   );

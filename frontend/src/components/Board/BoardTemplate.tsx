@@ -12,10 +12,14 @@ import { currentBoardIdState, currentMemberIdState } from "@/recoil/atom";
 import {
   axiosReactComment,
   axiosUndoReactComment,
+  axiosScrap,
+  axiosUndoScrap,
 } from "@/api/axios/axios.custom";
 import useDebounce from "@/hooks/useDebounce";
 import useParseDate from "@/hooks/useParseDate";
 import { useSpring, animated } from "react-spring";
+import { useCountryEmoji } from "@/hooks/useCountryEmoji";
+import { Country } from "@/types/enum/country.enum";
 
 const BoardTemplate = (board: IBoardInfo) => {
   const {
@@ -38,7 +42,9 @@ const BoardTemplate = (board: IBoardInfo) => {
   } = board;
 
   const [isReactedRender, setIsReactedRender] = useState<boolean>(reacted);
+  const [isScrappedRender, setIsScrappedRender] = useState<boolean>(scrapped);
   const [lastReaction, setLastReaction] = useState<boolean>(reacted);
+  const [lastScrap, setLastScrap] = useState<boolean>(scrapped);
   const [reactionCountRender, setReactionCountRender] =
     useState<number>(reactionCount);
   const [language] = useRecoilState<any>(languageState);
@@ -60,6 +66,7 @@ const BoardTemplate = (board: IBoardInfo) => {
     config: { tension: 300, friction: 12 },
   });
 
+  const countryEmoji = useCountryEmoji(country as Country);
   const parsedDate = parseDate(createdAt);
   const parsedPreviewComment =
     previewComment && previewComment.length > 15
@@ -86,6 +93,16 @@ const BoardTemplate = (board: IBoardInfo) => {
     }
   };
 
+  const callScrapApi = () => {
+    if (!isScrappedRender && !lastScrap) {
+      axiosScrap(boardId);
+      setLastReaction(!lastScrap);
+    } else if (isScrappedRender && lastScrap) {
+      axiosUndoScrap(boardId);
+      setLastReaction(!lastScrap);
+    }
+  };
+
   const handleReaction = (action: string) => {
     if (action === "do") setReactionCountRender(reactionCountRender + 1);
     if (action === "undo") setReactionCountRender(reactionCountRender - 1);
@@ -94,8 +111,13 @@ const BoardTemplate = (board: IBoardInfo) => {
     debounce(callReactionApi, 500);
   };
 
-  const handleClick = () => {
+  const handleClickReaction = () => {
     handleReaction(isReactedRender ? "undo" : "do");
+  };
+
+  const handleClickScrap = () => {
+    setIsScrappedRender(!isScrappedRender);
+    debounce(callScrapApi, 500);
   };
 
   return (
@@ -104,7 +126,9 @@ const BoardTemplate = (board: IBoardInfo) => {
         <BoardHeaderStyled>
           <BoardProfileStyled onClick={handleOpenProfile}>
             <img src={profileImageUrl} />
-            <div>{memberName} 🇰🇷</div>
+            <div>
+              {memberName} {countryEmoji}
+            </div>
           </BoardProfileStyled>
           <BoardOptionButtonStyled>
             <BoardOption
@@ -118,7 +142,7 @@ const BoardTemplate = (board: IBoardInfo) => {
           <BoardPhotoBox boardImages={images} />
           <ButtonZoneStyled>
             <ReactionCommentContainerStyled>
-              <ReactionStyled onClick={handleClick}>
+              <ReactionStyled onClick={handleClickReaction}>
                 <HeartIcon
                   style={ReactionAnimation}
                   src="/src/assets/likeR.png"
@@ -136,8 +160,8 @@ const BoardTemplate = (board: IBoardInfo) => {
                 onClick={() => handleCommentClick(boardId)}
               />
             </ReactionCommentContainerStyled>
-            <ScrapButtonStyled>
-              {scrapped ? (
+            <ScrapButtonStyled onClick={handleClickScrap}>
+              {isScrappedRender ? (
                 <img src="/src/assets/scrapB.png" />
               ) : (
                 <img src="/src/assets/scrap.png" />

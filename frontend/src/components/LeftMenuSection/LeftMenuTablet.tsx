@@ -63,7 +63,10 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
       {isMainPage && (
         <BannerStyled $isBannerVisible={isBannerVisible}>
           {userInfo ? (
-            <ProfileImageStyled src={userInfo.profileImageUrl} />
+            <ProfileImageStyled
+              src={userInfo.profileImageUrl}
+              onClick={moveToMyProfile}
+            />
           ) : (
             <ProfileImageStyled
               src="/src/assets/userW.png"
@@ -90,9 +93,6 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
             </li>
             <li onClick={openSearchSection}>
               <img alt="Search" src="/src/assets/search.png" />
-            </li>
-            <li onClick={moveToMyProfile}>
-              <img alt="MyProfile" src="/src/assets/profile.png" />
             </li>
           </MenuListStyled>
         </nav>

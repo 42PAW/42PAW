@@ -17,7 +17,7 @@ import proj.pet.board.domain.Board;
 @RequiredArgsConstructor
 public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
-	private static final Predicate EMPTY_PREDICATE = board.member.id.isNull();
+	private static final Predicate EMPTY_PREDICATE = board.member.deletedAt.isNull();
 	private final JPAQueryFactory queryFactory;
 
 	/**

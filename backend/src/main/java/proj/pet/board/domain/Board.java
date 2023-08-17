@@ -128,4 +128,8 @@ public class Board extends IdDomain implements Validatable {
 				.map(BoardMedia::getMediaUrl)
 				.toList();
 	}
+
+	public void delete() {
+		this.deletedAt = LocalDateTime.now();
+	}
 }

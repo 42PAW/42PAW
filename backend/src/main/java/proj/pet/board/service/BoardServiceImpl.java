@@ -97,6 +97,9 @@ public class BoardServiceImpl implements BoardService {
 	public void deleteBoard(Long memberId, Long boardId) {
 		Board board = boardRepository.findById(boardId)
 				.orElseThrow(() -> new ServiceException(NOT_FOUND_BOARD));
+		if (board.getDeletedAt() != null) {
+			throw new ServiceException(NOT_FOUND_BOARD);
+		}
 		//TODO: 찾아온 board에서 boradId != memberId이면 ServiceException ?? -> 로직 확인 필요
 //		if (!board.isId(memberId)) {
 //			throw new ServiceException(UNAUTHENTICATED);
@@ -107,6 +110,6 @@ public class BoardServiceImpl implements BoardService {
 		boardCategoryFilterRepository.deleteAll(board.getCategoryFilters());
 		boardMediaManager.deleteMediaByList(board.getMediaList());
 		boardMediaRepository.deleteAll(board.getMediaList());
-		boardRepository.delete(board);
+		board.delete();
 	}
 }

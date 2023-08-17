@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import useFetch from "@/hooks/useFetch";
 import { userInfoState } from "@/recoil/atom";
 import { currentMemberIdState } from "@/recoil/atom";
-import { UserInfoDTO } from "@/types/dto/member.dto";
+import { ProfileInfoDTO, UserInfoDTO } from "@/types/dto/member.dto";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import useNavigateCustom from "@/hooks/useNavigateCustom";
 import useModal from "@/hooks/useModal";
@@ -23,13 +23,8 @@ const ProfileCardModal = () => {
   const { fetchProfile } = useFetch();
   const { moveToMyProfile } = useNavigateCustom();
   const { closeModal } = useModal();
-  const {
-    data: profileData,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["profileCard"],
+  const { data: profileData, isLoading } = useQuery({
+    queryKey: ["profileCard", currentMemberId],
     queryFn: fetchProfile,
   });
 
@@ -56,10 +51,7 @@ const ProfileCardModal = () => {
           <img src="/src/assets/paw.png" />
         </LogoStyled>
         <OptionButtonContainerStyled>
-          <BoardOption
-            memberId={currentMemberId as number}
-            memberName={profileData.memberName}
-          />
+          <BoardOption />
         </OptionButtonContainerStyled>
         <ProfileImageStyled src={profileData.profileImageUrl} />
         <MainAreaStyled>

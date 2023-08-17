@@ -69,7 +69,16 @@ const useFetch = () => {
     }
   };
 
-  return { fetchBoards, fetchComments, fetchProfile };
+  const fetchMyProfile = async () => {
+    try {
+      const response = await axiosGetMyProfile();
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return { fetchBoards, fetchComments, fetchProfile, fetchMyProfile };
 };
 
 export default useFetch;

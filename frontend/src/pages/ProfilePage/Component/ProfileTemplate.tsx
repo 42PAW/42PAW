@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import useModal from "../hooks/useModal";
-import { ModalType } from "../types/enum/modal.enum";
+import useModal from "../../../hooks/useModal";
+import { ModalType } from "../../../types/enum/modal.enum";
 import Button from "@/components/ButtonComponent";
 import styled from "styled-components";
 import ProfileInfoComponent from "@/pages/ProfilePage/Component/ProfileInfoComponent";
 import PhotoZoneComponent from "@/pages/ProfilePage/Component/PhotoZoneComponent";
+import { ProfileInfoDTO } from "@/types/dto/member.dto";
 
 /* tmp */
 const imgs = [
@@ -80,17 +81,21 @@ const dummy = {
   totalLength: 21,
 };
 
-{
-  /* <Button
+// {
+/* <Button
   handleClick={handleOpenProfile}
   size="lg"
   children="프로필 편집"
 /> */
+// }
+interface ProfileTemplateProps {
+  userInfo: ProfileInfoDTO | null; // userInfo를 props로 받음
 }
-const ProfileTemplate = () => {
+
+const ProfileTemplate: React.FC<ProfileTemplateProps> = ({ userInfo }) => {
   return (
     <ProfileWrapperStyled>
-      <ProfileInfoComponent />
+      <ProfileInfoComponent userInfo={userInfo} />
       <PhotoZoneComponent />
     </ProfileWrapperStyled>
   );

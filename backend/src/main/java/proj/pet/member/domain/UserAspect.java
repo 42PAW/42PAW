@@ -1,6 +1,8 @@
 package proj.pet.member.domain;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.lang.reflect.Parameter;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -13,9 +15,6 @@ import proj.pet.auth.domain.jwt.JwtPayload;
 import proj.pet.auth.domain.jwt.JwtTokenManager;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.member.repository.MemberRepository;
-
-import java.lang.reflect.Parameter;
-import java.util.Optional;
 
 /**
  * 컨트롤러에서 UserSessionDto를 받는 메소드에 대해 UserSessionDto를 AOP로 set하기 위한 Aspect 클래스
@@ -49,7 +48,8 @@ public class UserAspect {
 
 		for (int i = 0; i < parameters.length; i++) {
 			Parameter parameter = parameters[i];
-			if (parameter.getAnnotation(UserSession.class) != null && parameter.getType().equals(UserSessionDto.class)) {
+			if (parameter.getAnnotation(UserSession.class) != null && parameter.getType()
+					.equals(UserSessionDto.class)) {
 				args[i] = getUserSessionDtoByRequest(request);
 			}
 		}
@@ -67,12 +67,13 @@ public class UserAspect {
 		if (optionalToken.isEmpty()) {
 			return new UserSessionDto(NOT_REGISTERED_ID, EMPTY_NICKNAME, MemberRole.NOT_REGISTERED);
 		}
-		System.out.println("optionalToken = " + optionalToken.get());
 		JwtPayload ftPayload = tokenManager.createFtPayload(optionalToken.get());
-		Optional<Member> member = memberRepository.findByOauthName(ftPayload.getProfile().getName());
+		Optional<Member> member = memberRepository.findByOauthName(
+				ftPayload.getProfile().getName());
 		if (member.isPresent()) {
 			Member presentMember = member.get();
-			return new UserSessionDto(presentMember.getId(), presentMember.getNickname(), presentMember.getMemberRole());
+			return new UserSessionDto(presentMember.getId(), presentMember.getNickname(),
+					presentMember.getMemberRole());
 		} else {
 			return new UserSessionDto(NOT_REGISTERED_ID, EMPTY_NICKNAME, MemberRole.NOT_REGISTERED);
 		}

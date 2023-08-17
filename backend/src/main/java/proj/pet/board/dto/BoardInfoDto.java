@@ -1,12 +1,11 @@
 package proj.pet.board.dto;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import proj.pet.category.domain.Species;
 import proj.pet.member.domain.Country;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -22,8 +21,8 @@ public class BoardInfoDto {
 	private final List<Species> categories;
 	private final int reactionCount;
 	private final int commentCount;
-	private final boolean isScrapped;
-	private final boolean isReacted;
+	private final boolean scrapped;
+	private final boolean reacted;
 	private final String content;
 	private final String previewCommentUser;
 	private final String previewComment;

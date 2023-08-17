@@ -1,7 +1,12 @@
 package proj.pet.auth.service;
 
+import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
+import static proj.pet.exception.ExceptionStatus.UNAUTHORIZED;
+import static proj.pet.member.domain.MemberRole.NOT_REGISTERED;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -15,12 +20,6 @@ import proj.pet.auth.domain.jwt.JwtProperties;
 import proj.pet.auth.domain.jwt.JwtTokenManager;
 import proj.pet.exception.ServiceException;
 import proj.pet.member.domain.MemberRole;
-
-import java.io.IOException;
-
-import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
-import static proj.pet.exception.ExceptionStatus.UNAUTHORIZED;
-import static proj.pet.member.domain.MemberRole.NOT_REGISTERED;
 
 @Aspect
 @Component
@@ -53,7 +52,6 @@ public class AuthAspect {
 			cookieManager.deleteCookie(response, jwtProperties.getTokenName());
 			throw new ServiceException(UNAUTHORIZED);
 		}
-		System.out.println("token = " + token);
 		JwtPayload jwtPayload = jwtTokenManager.createFtPayload(token);
 		MemberRole role = jwtPayload.getRole();
 		if (role.equals(NOT_REGISTERED)) {

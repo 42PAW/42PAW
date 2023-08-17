@@ -56,7 +56,10 @@ const ProfileCardModal = () => {
           <img src="/src/assets/paw.png" />
         </LogoStyled>
         <OptionButtonContainerStyled>
-          <BoardOption />
+          <BoardOption
+            memberId={currentMemberId as number}
+            memberName={profileData.memberName}
+          />
         </OptionButtonContainerStyled>
         <ProfileImageStyled src={profileData.profileImageUrl} />
         <MainAreaStyled>

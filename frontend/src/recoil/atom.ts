@@ -7,6 +7,7 @@ import { IBanUserInfo } from "@/types/interface/user.interface";
 import { IToastInfo } from "@/types/interface/toast.interface";
 import Translator from "@/languages/Translator";
 import { UserInfoDTO } from "@/types/dto/member.dto";
+import { IDeleteInfo } from "@/types/interface/option.interface";
 
 export const userInfoState = atom<UserInfoDTO | null>({
   key: "userInfo",
@@ -101,6 +102,14 @@ export const banUserInfoState = atom<IBanUserInfo>({
   key: "banUserInfo",
   default: {
     userName: "",
+  },
+});
+
+export const deleteInfoState = atom<IDeleteInfo>({
+  key: "deleteInfo",
+  default: {
+    boardId: null,
+    commentId: null,
   },
 });
 

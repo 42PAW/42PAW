@@ -62,7 +62,7 @@ const BoardTemplate = (board: IBoardInfo) => {
 
   const parsedDate = parseDate(createdAt);
   const parsedPreviewComment =
-    previewComment.length > 15
+    previewComment && previewComment.length > 15
       ? previewComment.substring(0, 15) + ".."
       : previewComment;
 

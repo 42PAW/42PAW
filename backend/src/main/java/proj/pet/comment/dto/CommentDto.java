@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 public class CommentDto {
 	private Long commentId;
-	private String memberId;
+	private Long memberId;
 	private String memberName;
 	private String comment;
 	private String profileImageUrl;

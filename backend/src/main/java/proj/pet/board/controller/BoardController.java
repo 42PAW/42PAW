@@ -15,6 +15,8 @@ import proj.pet.member.dto.UserSessionDto;
 
 import java.util.List;
 
+import static proj.pet.auth.domain.AuthLevel.ANYONE;
+
 @RestController
 @RequestMapping("/v1/boards")
 @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class BoardController {
 	private final BoardFacadeService boardFacadeService;
 
 	@GetMapping
+	@AuthGuard(level = ANYONE)
 	public BoardsPaginationDto getMainViewBoards(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("size") int size,
@@ -32,6 +35,7 @@ public class BoardController {
 	}
 
 	@GetMapping("/hot")
+	@AuthGuard(level = ANYONE)
 	public BoardsPaginationDto getHotBoards(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("size") int size,
@@ -41,6 +45,7 @@ public class BoardController {
 	}
 
 	@GetMapping("/members/{memberId}")
+	@AuthGuard(level = ANYONE)
 	public BoardsPaginationDto getMemberBoards(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("size") int size,

@@ -11,6 +11,8 @@ import proj.pet.comment.service.CommentFacadeService;
 import proj.pet.member.domain.UserSession;
 import proj.pet.member.dto.UserSessionDto;
 
+import static proj.pet.auth.domain.AuthLevel.ANYONE;
+
 @RestController
 @RequestMapping("/v1/comments")
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ public class CommentController {
 	private final CommentFacadeService commentFacadeService;
 
 	@GetMapping("/boards/{boardId}")
+	@AuthGuard(level = ANYONE)
 	public CommentResponseDto getCommentsByBoardId(
 			@PathVariable("boardId") Long boardId,
 			@RequestParam("page") int page,

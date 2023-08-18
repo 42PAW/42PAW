@@ -1,19 +1,6 @@
 package proj.pet.member.domain;
 
-import static jakarta.persistence.FetchType.LAZY;
-import static lombok.AccessLevel.PROTECTED;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -25,6 +12,13 @@ import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.domain.IdDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor(access = PROTECTED)
 @Entity
@@ -39,6 +33,10 @@ public class Member extends IdDomain implements Validatable {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "COUNTRY", nullable = false, length = 32)
 	private Country country;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "CAMPUS", nullable = false, length = 32)
+	private Country.Campus campus;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "LANGUAGE", nullable = false, length = 32)
@@ -108,10 +106,11 @@ public class Member extends IdDomain implements Validatable {
 			orphanRemoval = true)
 	private List<Scrap> scraps = new ArrayList<>();
 
-	private Member(OauthProfile oauthProfile, Country country, Language language, String nickname,
-			String statement, MemberRole memberRole, LocalDateTime now) {
+	private Member(OauthProfile oauthProfile, Country country, Country.Campus campus, Language language, String nickname,
+	               String statement, MemberRole memberRole, LocalDateTime now) {
 		this.oauthProfile = oauthProfile;
 		this.country = country;
+		this.campus = campus;
 		this.language = language;
 		this.nickname = nickname;
 		this.statement = statement;
@@ -121,9 +120,9 @@ public class Member extends IdDomain implements Validatable {
 		RuntimeExceptionThrower.checkValidity(this);
 	}
 
-	public static Member of(OauthProfile oauthProfile, Country country, String nickname,
-			String statement, MemberRole memberRole, LocalDateTime now) {
-		return new Member(oauthProfile, country, country.getDefaultLanguage(), nickname, statement,
+	public static Member of(OauthProfile oauthProfile, Country country, Country.Campus campus, String nickname,
+	                        String statement, MemberRole memberRole, LocalDateTime now) {
+		return new Member(oauthProfile, country, campus, country.getDefaultLanguage(), nickname, statement,
 				memberRole, now);
 	}
 
@@ -131,6 +130,7 @@ public class Member extends IdDomain implements Validatable {
 	public boolean isValid() {
 		return oauthProfile != null
 				&& country != null
+				&& campus != null
 				&& language != null
 				&& nickname != null
 				&& memberRole != null

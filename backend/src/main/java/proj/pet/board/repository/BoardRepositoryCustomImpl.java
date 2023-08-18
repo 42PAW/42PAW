@@ -1,15 +1,16 @@
 package proj.pet.board.repository;
 
-import static proj.pet.board.domain.QBoard.board;
-import static proj.pet.scrap.domain.QScrap.scrap;
-
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import proj.pet.board.domain.Board;
+
+import java.util.List;
+
+import static proj.pet.board.domain.QBoard.board;
+import static proj.pet.scrap.domain.QScrap.scrap;
 
 /**
  * QueryDSL을 사용하는 BoardRepository의 커스텀 구현체
@@ -29,7 +30,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	@Override
 	public List<Board> getMainViewBoards(PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
-				EMPTY_PREDICATE,
+				board.deletedAt.isNull(),
 				board.createdAt.desc(),
 				pageRequest);
 	}
@@ -43,7 +44,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	@Override
 	public List<Board> getHotBoards(PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
-				EMPTY_PREDICATE,
+				board.deletedAt.isNull(),
 				board.reactions.size().desc(),
 				pageRequest);
 	}
@@ -58,7 +59,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	@Override
 	public List<Board> getMemberBoards(Long memberId, PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
-				board.member.id.eq(memberId).and(board.deletedAt.isNull()),
+				board.member.id.eq(memberId)
+						.and(board.deletedAt.isNull()),
 				board.createdAt.desc(),
 				pageRequest);
 	}
@@ -94,7 +96,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	@Override
 	public List<Board> getFollowingsBoards(Long memberId, PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
-				board.member.followers.any().id.memberId.eq(memberId),
+				board.member.followers.any().id.memberId.eq(memberId)
+						.and(board.deletedAt.isNull()),
 				board.createdAt.desc(),
 				pageRequest);
 	}
@@ -108,7 +111,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @return {@link Board} 페이지네이션 - Page 아님
 	 */
 	private List<Board> getBoardsWithFetchJoin(Predicate predicate,
-			OrderSpecifier<?> orderSpecifier, PageRequest pageRequest) {
+	                                           OrderSpecifier<?> orderSpecifier, PageRequest pageRequest) {
 		return queryFactory.selectFrom(board)
 				.where(predicate)
 				.orderBy(orderSpecifier)

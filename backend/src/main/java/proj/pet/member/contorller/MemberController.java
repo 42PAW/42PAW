@@ -12,7 +12,8 @@ import proj.pet.member.domain.UserSession;
 import proj.pet.member.dto.*;
 import proj.pet.member.service.MemberFacadeService;
 
-import static proj.pet.auth.domain.AuthLevel.*;
+import static proj.pet.auth.domain.AuthLevel.ANYONE;
+import static proj.pet.auth.domain.AuthLevel.USER_OR_ADMIN;
 
 @RestController
 @RequestMapping("/v1/members")
@@ -60,7 +61,7 @@ public class MemberController {
 	 * @return MemberMyInfoResponseDto  내 정보
 	 */
 	@GetMapping("/me")
-	@AuthGuard(level = ANY_TOKEN)
+	@AuthGuard(level = USER_OR_ADMIN)
 	public MemberMyInfoResponseDto getMyInfo(@UserSession UserSessionDto userSessionDto) {
 		return memberFacadeService.getMyInfo(userSessionDto);
 	}

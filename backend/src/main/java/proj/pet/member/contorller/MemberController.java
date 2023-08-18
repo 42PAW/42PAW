@@ -48,7 +48,7 @@ public class MemberController {
 	 * @return MemberNicknameValidateResponseDto    닉네임 중복 검사 결과
 	 */
 	@GetMapping("/valid")
-	@AuthGuard(level = USER_OR_ADMIN)
+	@AuthGuard(level = ANYONE)
 	public MemberNicknameValidateResponseDto validateMemberNickname(
 			@RequestParam("name") String name) {
 		return memberFacadeService.validateMemberNickname(name);

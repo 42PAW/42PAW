@@ -24,6 +24,8 @@ public enum AuthLevel {
 	 */
 	ANY_TOKEN {
 		@Override public boolean isMatchWith(MemberRole role) {
+			System.out.println("role = " + role);
+			System.out.println("ALL_ROLES = " + ALL_ROLES);
 			return ALL_ROLES.contains(role);
 		}
 	},

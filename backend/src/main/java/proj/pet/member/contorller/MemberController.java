@@ -32,7 +32,7 @@ public class MemberController {
 	 * @param memberCreateRequestDto 회원 가입 정보
 	 */
 	@PostMapping(consumes = "multipart/form-data")
-	@AuthGuard(level = USER_OR_ADMIN)
+	@AuthGuard(level = ANYONE)
 	public void createMember(
 			@UserSession UserSessionDto userSessionDto,
 			HttpServletRequest req, HttpServletResponse res,

@@ -1,34 +1,18 @@
 package proj.pet.member.contorller;
 
-import static proj.pet.auth.domain.AuthLevel.USER_OR_ADMIN;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import proj.pet.auth.domain.AuthGuard;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.member.domain.UserSession;
-import proj.pet.member.dto.MemberCreateRequestDto;
-import proj.pet.member.dto.MemberLanguageChangeRequestDto;
-import proj.pet.member.dto.MemberMyInfoResponseDto;
-import proj.pet.member.dto.MemberNicknameValidateResponseDto;
-import proj.pet.member.dto.MemberProfileChangeRequestDto;
-import proj.pet.member.dto.MemberProfileChangeResponseDto;
-import proj.pet.member.dto.MemberProfileResponseDto;
-import proj.pet.member.dto.MemberSearchPaginationDto;
-import proj.pet.member.dto.UserSessionDto;
+import proj.pet.member.dto.*;
 import proj.pet.member.service.MemberFacadeService;
+
+import static proj.pet.auth.domain.AuthLevel.*;
 
 @RestController
 @RequestMapping("/v1/members")
@@ -47,6 +31,7 @@ public class MemberController {
 	 * @param memberCreateRequestDto 회원 가입 정보
 	 */
 	@PostMapping(consumes = "multipart/form-data")
+	@AuthGuard(level = USER_OR_ADMIN)
 	public void createMember(
 			@UserSession UserSessionDto userSessionDto,
 			HttpServletRequest req, HttpServletResponse res,
@@ -62,6 +47,7 @@ public class MemberController {
 	 * @return MemberNicknameValidateResponseDto    닉네임 중복 검사 결과
 	 */
 	@GetMapping("/valid")
+	@AuthGuard(level = USER_OR_ADMIN)
 	public MemberNicknameValidateResponseDto validateMemberNickname(
 			@RequestParam("name") String name) {
 		return memberFacadeService.validateMemberNickname(name);
@@ -74,7 +60,7 @@ public class MemberController {
 	 * @return MemberMyInfoResponseDto  내 정보
 	 */
 	@GetMapping("/me")
-	@AuthGuard(level = USER_OR_ADMIN)
+	@AuthGuard(level = ANY_TOKEN)
 	public MemberMyInfoResponseDto getMyInfo(@UserSession UserSessionDto userSessionDto) {
 		return memberFacadeService.getMyInfo(userSessionDto);
 	}
@@ -99,6 +85,7 @@ public class MemberController {
 	 * @return MemberProfileResponseDto 멤버 프로필
 	 */
 	@GetMapping("{memberId}/profile")
+	@AuthGuard(level = ANYONE)
 	public MemberProfileResponseDto getMemberProfile(
 			@UserSession UserSessionDto userSessionDto,
 			@PathVariable("memberId") Long memberId) {
@@ -150,6 +137,7 @@ public class MemberController {
 	 * @return BoardsResponseDto    게시글 목록
 	 */
 	@GetMapping("{memberId}/boards")
+	@AuthGuard(level = ANYONE)
 	public BoardsPaginationDto getMemberBoards(
 			@UserSession UserSessionDto userSessionDto,
 			@PathVariable("memberId") Long memberId,
@@ -169,6 +157,7 @@ public class MemberController {
 	 * @return MemberSearchResponseDto  멤버 검색 결과
 	 */
 	@GetMapping("/search")
+	@AuthGuard(level = ANYONE)
 	public MemberSearchPaginationDto searchMemberByName(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("name") String name,

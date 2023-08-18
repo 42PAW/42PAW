@@ -18,8 +18,8 @@ public class MemberProfileResponseDto {
 	private final Country country;
 	private final Country.Campus campus;
 	private final String statement;
-	private final int followingCount;
-	private final int followerCount;
-	private final int boardCount;
+	private final long followingCount;
+	private final long followerCount;
+	private final long boardCount;
 	private final FollowType followType;
 }

@@ -91,9 +91,7 @@ public class Board extends IdDomain implements Validatable {
 				&& this.visibleScope != null
 				&& this.content != null
 				&& this.updatedAt != null
-				&& this.createdAt != null
-				&& !this.mediaList.isEmpty()
-				&& !this.categoryFilters.isEmpty();
+				&& this.createdAt != null;
 	}
 
 	public void addCategoryFilters(List<BoardCategoryFilter> categoryFilters) {

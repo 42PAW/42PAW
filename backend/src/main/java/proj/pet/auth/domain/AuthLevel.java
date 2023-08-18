@@ -2,10 +2,20 @@ package proj.pet.auth.domain;
 
 import proj.pet.member.domain.MemberRole;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 권한 설정을 위한 열거형 클래스
  */
 public enum AuthLevel {
+
+
+	ALL_AVAILABLE {
+		@Override public boolean isMatchWith(MemberRole role) {
+			return ALL_ROLES.contains(role);
+		}
+	},
 	USER_ONLY {
 		@Override public boolean isMatchWith(MemberRole role) {
 			return role.equals(MemberRole.USER);
@@ -22,6 +32,8 @@ public enum AuthLevel {
 		}
 	},
 	;
+
+	private static final List<MemberRole> ALL_ROLES = Arrays.asList(MemberRole.values());
 
 	public abstract boolean isMatchWith(MemberRole role);
 }

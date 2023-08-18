@@ -1,4 +1,5 @@
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
+import { followType } from "../enum/followType.enum";
 
 export interface SignUpInfoDTO {
   memberName: string;
@@ -25,5 +26,5 @@ export interface ProfileInfoDTO {
   followingCount: number;
   followerCount: number;
   boardCount: number;
-  followType: string;
+  followType: followType;
 }

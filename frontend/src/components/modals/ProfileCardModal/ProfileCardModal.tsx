@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { styled } from "styled-components";
 import ModalLayout from "@/components/modals/ModalLayout";
@@ -15,6 +16,11 @@ import useNavigateCustom from "@/hooks/useNavigateCustom";
 import useModal from "@/hooks/useModal";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
+import FollowTypeButton from "../../FollowTypeButton";
+import { followType } from "@/types/enum/followType.enum";
+import useDebounce from "@/hooks/useDebounce";
+import { axiosFollow } from "@/api/axios/axios.custom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ProfileCardModal = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
@@ -22,27 +28,33 @@ const ProfileCardModal = () => {
   );
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
+  const [isButtonLoading, setIsButtonLoading] = useState<boolean>(false);
   const { fetchProfile } = useFetch();
   const { moveToMyProfile, moveToProfile } = useNavigateCustom();
   const { closeModal } = useModal();
-  const {
-    data: profileData,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { debounce } = useDebounce();
+  const queryClient = useQueryClient();
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["profile", currentMemberId],
     queryFn: fetchProfile,
   });
+
+  const profileData = data as ProfileInfoDTO;
 
   const toMyProfile = () => {
     moveToMyProfile();
     closeModal(ModalType.PROFILECARD);
   };
 
-  const toProfile = () => {
-    moveToProfile();
-    closeModal(ModalType.PROFILECARD);
+  const handleClickFollowType = async () => {
+    await axiosFollow(currentMemberId as number);
+    queryClient.invalidateQueries(["profile", currentMemberId]);
+    setIsButtonLoading(false);
+  };
+
+  const handleClickFollowTypeButton = () => {
+    setIsButtonLoading(true);
+    debounce(handleClickFollowType, 1000);
   };
 
   if (isLoading) {
@@ -96,8 +108,13 @@ const ProfileCardModal = () => {
           <ButtonContainerStyled>
             {userInfo?.memberId !== currentMemberId ? (
               <>
-                <ButtonStyled onClick={toProfile}>프로필</ButtonStyled>
-                <ButtonStyled>팔로우</ButtonStyled>
+                <ButtonStyled>프로필</ButtonStyled>
+                <div onClick={handleClickFollowTypeButton}>
+                  <FollowTypeButton
+                    status={profileData.followType}
+                    isLoading={isButtonLoading}
+                  />
+                </div>
               </>
             ) : (
               <MyProfileButtonStyled onClick={toMyProfile}>
@@ -166,7 +183,7 @@ const ProfileImageStyled = styled.img`
     position: absolute;
     height: 380px;
     width: 380px;
-    border-radius: 100%;
+    border-radius: 50%;
     left: -110px;
     top: -50px;
     box-shadow: 6px 3px 3px rgba(0, 0, 0, 0.25);

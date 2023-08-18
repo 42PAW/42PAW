@@ -23,7 +23,7 @@ const ProfileCardModal = () => {
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
   const { fetchProfile } = useFetch();
-  const { moveToMyProfile } = useNavigateCustom();
+  const { moveToMyProfile, moveToProfile } = useNavigateCustom();
   const { closeModal } = useModal();
   const {
     data: profileData,
@@ -37,6 +37,11 @@ const ProfileCardModal = () => {
 
   const toMyProfile = () => {
     moveToMyProfile();
+    closeModal(ModalType.PROFILECARD);
+  };
+
+  const toProfile = () => {
+    moveToProfile();
     closeModal(ModalType.PROFILECARD);
   };
 
@@ -91,7 +96,7 @@ const ProfileCardModal = () => {
           <ButtonContainerStyled>
             {userInfo?.memberId !== currentMemberId ? (
               <>
-                <ButtonStyled>프로필</ButtonStyled>
+                <ButtonStyled onClick={toProfile}>프로필</ButtonStyled>
                 <ButtonStyled>팔로우</ButtonStyled>
               </>
             ) : (

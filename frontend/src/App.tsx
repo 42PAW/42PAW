@@ -5,6 +5,7 @@ import LoadingAnimation from "@/components/loading/LoadingAnimation";
 
 import MainPage from "@/pages/MainPage";
 import NoticePage from "@/pages/NoticePage";
+import ProfilePage from "@/pages/ProfilePage/ProfilePage";
 import MyProfilePage from "@/pages/ProfilePage/MyProfilePage";
 import UploadPage from "@/pages/UploadPage";
 import SignUpPage from "@/pages/SignUpPage/SignUpPage";
@@ -24,7 +25,7 @@ function App() {
             <Route path="/" element={<MainPage />} />
             <Route path="notice" element={<NoticePage />} />
             <Route path="my-profile" element={<MyProfilePage />} />
-            {/* <Route path="profile" element={<ProfilePage />} /> */}
+            <Route path="profile" element={<ProfilePage />} />
             <Route path="upload" element={<UploadPage />} />
           </Route>
           <Route path="/sign-up" element={<SignUpPage />} />

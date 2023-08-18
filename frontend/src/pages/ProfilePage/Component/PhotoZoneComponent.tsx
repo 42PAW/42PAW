@@ -5,19 +5,6 @@ const imgs = [
   "/src/assets/oduck.png",
   "/src/assets/oduck.png",
   "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
 ];
 
 const imgs2 = [
@@ -112,16 +99,16 @@ const PhotoCategoryToggleStyled = styled.div`
     width: 50%;
     position: relative;
   }
-  button:not(:last-child)::before {
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1.5px;
-    height: 30px;
-    background-color: #ffffff;
-  }
+  // button:not(:last-child)::before {
+  //   content: "";
+  //   position: absolute;
+  //   right: 0;
+  //   top: 50%;
+  //   transform: translateY(-50%);
+  //   width: 1.5px;
+  //   height: 30px;
+  //   background-color: #ffffff;
+  // }
   button:hover {
     background-color: #fdfdfd39;
   }

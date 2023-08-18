@@ -45,7 +45,7 @@ const UserInfoItems = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   );
 };
 
-const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO }> = ({
+const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
   userInfo,
 }) => {
   //   const { openModal } = useModal();
@@ -53,6 +53,7 @@ const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO }> = ({
   //   const handleOpenProfile = () => {
   //     openModal(ModalType.PROFILEEDIT); // PROFILECARD -> 바꿔야 돼 다시
   //   };
+  if (!userInfo) return <div>No user information available.</div>;
   return (
     <ProfileHeaderStyled>
       <img

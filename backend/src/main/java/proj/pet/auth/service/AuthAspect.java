@@ -1,12 +1,7 @@
 package proj.pet.auth.service;
 
-import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
-import static proj.pet.exception.ExceptionStatus.UNAUTHORIZED;
-import static proj.pet.member.domain.MemberRole.NOT_REGISTERED;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -14,12 +9,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import proj.pet.auth.domain.AuthGuard;
+import proj.pet.auth.domain.AuthLevel;
 import proj.pet.auth.domain.CookieManager;
 import proj.pet.auth.domain.jwt.JwtPayload;
 import proj.pet.auth.domain.jwt.JwtProperties;
 import proj.pet.auth.domain.jwt.JwtTokenManager;
 import proj.pet.exception.ServiceException;
 import proj.pet.member.domain.MemberRole;
+
+import java.io.IOException;
+
+import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
+import static proj.pet.exception.ExceptionStatus.UNAUTHORIZED;
 
 @Aspect
 @Component
@@ -46,17 +47,16 @@ public class AuthAspect {
 				.getRequest();
 		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getResponse();
-
+		if (authGuard.level().equals(AuthLevel.ANYONE)) {
+			return;
+		}
 		String token = jwtTokenManager.extractTokenFrom(request);
-		if (!jwtTokenManager.isTokenValid(token, jwtProperties.createSigningKey())) {
+		if (token == null || !jwtTokenManager.isTokenValid(token, jwtProperties.createSigningKey())) {
 			cookieManager.deleteCookie(response, jwtProperties.getTokenName());
 			throw new ServiceException(UNAUTHORIZED);
 		}
 		JwtPayload jwtPayload = jwtTokenManager.createFtPayload(token);
 		MemberRole role = jwtPayload.getRole();
-		if (role.equals(NOT_REGISTERED)) {
-			throw new ServiceException(UNAUTHENTICATED);
-		}
 		if (!authGuard.level().isMatchWith(role)) {
 			cookieManager.deleteCookie(response, jwtProperties.getTokenName());
 			throw new ServiceException(UNAUTHENTICATED);

@@ -1,6 +1,5 @@
 package proj.pet.follow.repository;
 
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import proj.pet.follow.domain.Follow;
+
+import java.util.Optional;
 
 @Repository
 public interface FollowRepository extends JpaRepository<Follow, Long> {
@@ -78,7 +79,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 	@Query("SELECT COUNT(f) " +
 			"FROM Follow f " +
 			"WHERE f.from.id = :memberId")
-	long countByFollowingId(@Param("memberId") Long memberId);
+	int countByFollowingId(@Param("memberId") Long memberId);
 
 	/**
 	 * 팔로우 하는 사람과 팔로우 받는 사람의 id를 받아 팔로우가 존재하는지 확인한다.

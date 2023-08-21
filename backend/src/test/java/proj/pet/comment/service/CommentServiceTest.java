@@ -101,6 +101,7 @@ class CommentServiceTest {
 		OauthProfile oauthProfile = OauthProfile.of(OauthType.FORTY_TWO, "oauthId", "oauthName");
 		return Member.of(oauthProfile,
 				Country.KOREA,
+				Country.Campus.SEOUL,
 				nickname,
 				"statement",
 				memberRole,

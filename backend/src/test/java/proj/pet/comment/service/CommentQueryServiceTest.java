@@ -62,15 +62,17 @@ class CommentQueryServiceTest {
 
 		//then
 		List<CommentDto> result = commentResponseDto.getResult();
+		assertThat(result.get(0).getCountry()).isEqualTo(Country.KOREA);
 		assertThat(result).hasSize(3)
 				.extracting("comment")
-				.containsExactly("3등이요", "2등이요", "일빠요");
+				.containsExactly("일빠요", "2등이요", "3등이요");
 	}
 
 	private Member stubMember(String nickname, MemberRole memberRole, LocalDateTime now) {
 		OauthProfile oauthProfile = OauthProfile.of(OauthType.FORTY_TWO, "oauthId", "oauthName");
 		return Member.of(oauthProfile,
 				Country.KOREA,
+				Country.Campus.SEOUL,
 				nickname,
 				"statement",
 				memberRole,

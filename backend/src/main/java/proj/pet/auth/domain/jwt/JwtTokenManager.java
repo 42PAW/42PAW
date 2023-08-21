@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static proj.pet.exception.ExceptionStatus.INTERNAL_SERVER_ERROR;
-import static proj.pet.exception.ExceptionStatus.UNAUTHORIZED;
 import static proj.pet.member.domain.OauthType.FORTY_TWO;
 
 @Log4j2
@@ -120,7 +119,7 @@ public class JwtTokenManager {
 	public String extractTokenFrom(HttpServletRequest req) {
 		String authHeader = req.getHeader(AUTH_HEADER);
 		if (authHeader == null || !authHeader.startsWith(AUTH_TYPE)) {
-			throw new DomainException(UNAUTHORIZED);
+			return null;
 		}
 		return authHeader.substring(AUTH_TYPE.length() + 1);
 	}

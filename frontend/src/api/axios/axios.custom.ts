@@ -295,3 +295,13 @@ export const axiosUndoScrap = async (boardId: number): Promise<any> => {
     throw error;
   }
 };
+
+const axiosFollowURL = "/v1/follows";
+export const axiosFollow = async (memberId: number): Promise<any> => {
+  try {
+    const response = await instance.post(axiosFollowURL, { memberId });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

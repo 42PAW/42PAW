@@ -44,15 +44,6 @@ const fadeIn = keyframes`
   }
 `;
 
-const fadeOut = keyframes`
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-`;
-
 const ModalOverlay = styled.div`
   z-index: 999;
   display: flex;
@@ -64,8 +55,8 @@ const ModalOverlay = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  animation: ${fadeIn} 0.2s;
-  backdrop-filter: blur(5px);
+  animation: ${fadeIn} 0.3s;
+  /* backdrop-filter: blur(5px); */
 `;
 
 const ModalContainer = styled.div`
@@ -73,8 +64,8 @@ const ModalContainer = styled.div`
   flex-direction: column;
   align-items: center;
   border-radius: 15px;
-  box-shadow: var(--modal-shadow);
-  animation: ${fadeIn} 0.2s;
+  box-shadow: var(--default-shadow);
+  animation: ${fadeIn} 0.3s;
 `;
 
 export default ModalLayout;

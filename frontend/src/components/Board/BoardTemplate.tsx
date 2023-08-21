@@ -94,6 +94,7 @@ const BoardTemplate = (board: IBoardInfo) => {
   };
 
   const callScrapApi = () => {
+    console.log("Hello");
     if (!isScrappedRender && !lastScrap) {
       axiosScrap(boardId);
       setLastReaction(!lastScrap);

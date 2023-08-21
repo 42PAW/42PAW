@@ -13,6 +13,7 @@ public class MemberPreviewResponseDto {
 	private final String intraName;
 	private final String profileImageUrl;
 	private final Country country;
+	private final Country.Campus campus;
 	private final String statement;
 	private final FollowType relationship;
 }

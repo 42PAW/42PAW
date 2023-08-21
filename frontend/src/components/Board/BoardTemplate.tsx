@@ -270,6 +270,9 @@ const ReactionCommentContainerStyled = styled.div`
   img:hover {
     opacity: 0.5;
   }
+  @media (max-width: 1023px) {
+    margin-left: -5px;
+  }
 `;
 
 const ReactionStyled = styled.div`

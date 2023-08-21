@@ -94,6 +94,9 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
             <li onClick={openSearchSection}>
               <img alt="Search" src="/src/assets/search.png" />
             </li>
+            <li>
+              <img alt="DashBoard" src="/src/assets/dashboard.png" />
+            </li>
           </MenuListStyled>
         </nav>
         {userInfo ? (

@@ -156,7 +156,7 @@ const NoCommentMessageStyled = styled.div`
   justify-content: center;
   height: calc(100% - 40px);
   text-align: center;
-  font-size: 1.8rem;
+  font-size: 2rem;
   color: var(--white);
   opacity: 0.7;
 `;

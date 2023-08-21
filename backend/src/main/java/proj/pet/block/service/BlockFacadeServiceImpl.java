@@ -28,9 +28,8 @@ public class BlockFacadeServiceImpl implements BlockFacadeService {
 	}
 
 	@Override
-	public void deleteBlock(UserSessionDto userSessionDto, Long memberId) {
-		Long blockMemberId = userSessionDto.getMemberId();
-		blockService.deleteBlock(memberId, blockMemberId);
+	public void deleteBlock(UserSessionDto userSessionDto, Long blockedMemberId) {
+		blockService.deleteBlock(userSessionDto.getMemberId(), blockedMemberId);
 	}
 
 	@Override

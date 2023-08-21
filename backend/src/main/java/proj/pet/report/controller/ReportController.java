@@ -24,8 +24,6 @@ public class ReportController {
 	public void createReport(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestBody ReportRequestDto reportRequestDto) {
-		System.out.println("userSessionDto = " + userSessionDto);
-		System.out.println("reportRequestDto = " + reportRequestDto);
 		reportFacadeService.createReport(userSessionDto, reportRequestDto);
 	}
 }

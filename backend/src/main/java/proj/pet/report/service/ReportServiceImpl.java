@@ -35,7 +35,6 @@ public class ReportServiceImpl implements ReportService {
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		if (boardId == null) {
 			Report entity = Report.ofMember(from, to, reason, content, now);
-			System.out.println("entity = " + entity);
 			reportRepository.save(entity);
 		} else {
 			Board board = boardRepository.findById(boardId)

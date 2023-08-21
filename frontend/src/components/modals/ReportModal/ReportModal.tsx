@@ -48,6 +48,7 @@ const reportOptions = [
 ];
 
 const ReportModal: React.FC = () => {
+  const [content, setContent] = useState<string>("");
   const [reportUserInfo] = useRecoilState<ReportDTO>(reportUserInfoState);
   const resetReportUserInfo = useResetRecoilState(reportUserInfoState);
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
@@ -67,16 +68,19 @@ const ReportModal: React.FC = () => {
       popToast("신고 사유를 선택해주세요.", "N");
       return;
     }
-    console.log(reportUserInfo, selectedCategory);
     await axiosReport(
       reportUserInfo.reportedMemberId as number,
-      "hello",
+      content,
       selectedCategory,
       reportUserInfo.boardId,
       reportUserInfo.commentId
     );
     popToast("신고가 접수됐습니다.", "P");
     resetReportUserInfo();
+  };
+
+  const handleContent = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setContent(e.target.value);
   };
 
   return (
@@ -98,7 +102,12 @@ const ReportModal: React.FC = () => {
             />
           ))}
         </CategoryContatinerStyled>
-        <EtcInputStyled placeholder="사유를 적어주세요" maxLength={50} />
+        <EtcInputStyled
+          placeholder="사유를 적어주세요"
+          value={content}
+          maxLength={50}
+          onChange={handleContent}
+        />
         <button onClick={handleSubmitReport}>제출</button>
       </WrapperStyled>
     </ModalLayout>

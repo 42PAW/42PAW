@@ -78,11 +78,9 @@ const DeleteModal = () => {
         ["boards", boardCategory],
         (prevData: IBoardInfo[] | any) => {
           if (!prevData) return prevData;
-
           const updatedBoards: IBoardInfo[] = prevData.filter(
-            (board: IBoardInfo) => board.boardId !== currentBoardId
+            (board: IBoardInfo) => board.boardId !== deleteInfo.boardId
           );
-
           return updatedBoards;
         }
       );

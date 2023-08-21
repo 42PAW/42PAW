@@ -1,11 +1,20 @@
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 import { followType } from "../enum/followType.enum";
+import { ReportReason } from "../enum/report.enum";
 
 export interface SignUpInfoDTO {
   memberName: string;
   imageData: Blob | null;
   statement: string;
   categoryFilters: AnimalSpecies[];
+}
+
+export interface ReportDTO {
+  reportedMemberId: number | null;
+  boardId: number | null;
+  commentId: number | null;
+  reason: ReportReason | null;
+  content: string;
 }
 
 export interface UserInfoDTO {

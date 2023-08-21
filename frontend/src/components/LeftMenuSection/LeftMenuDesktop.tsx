@@ -15,7 +15,7 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
   return (
     <>
       <LeftMenuStyled>
-        <LogoImageStyled src="/src/assets/paw.png" />
+        <LogoImageStyled src="/src/assets/paw.png" onClick={moveToMain} />
         <nav>
           <MenuListStyled>
             <li onClick={moveToMain}>
@@ -26,6 +26,9 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
             </li>
             <li onClick={openSearchSection}>
               <img alt="Search" src="/src/assets/search.png" />
+            </li>
+            <li>
+              <img alt="DashBoard" src="/src/assets/dashboard.png" />
             </li>
           </MenuListStyled>
           {userInfo ? (
@@ -80,6 +83,7 @@ const LeftMenuStyled = styled.div`
 `;
 
 const LogoImageStyled = styled.img`
+  cursor: pointer;
   width: 60px;
   margin-top: 30%;
 `;
@@ -95,10 +99,11 @@ const MenuListStyled = styled.ul`
     cursor: pointer;
     padding: 10px 10px;
     width: 25px;
+    transition: all 0.3s ease;
   }
   img:hover {
     background-color: var(--transparent);
-    border-radius: 50%;
+    border-radius: 30%;
   }
 `;
 

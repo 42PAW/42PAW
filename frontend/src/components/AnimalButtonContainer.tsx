@@ -28,6 +28,7 @@ const AnimalButtonContainer = ({
   const [selectedAnimals, setSelectedAnimals] = useState<Set<string>>(
     new Set([AnimalSpecies.DOG, AnimalSpecies.CAT])
   );
+
   const buttons: string[] = [
     AnimalSpecies.DOG,
     AnimalSpecies.CAT,

@@ -71,9 +71,9 @@ const ToastWrapperStyled = styled.div<{
   top: ${({ $index }) => 50 * $index + 20}px;
   right: 20px;
   background-color: ${({ $type }) =>
-    $type === "P" ? "#eaf3ea" : $type === "N" ? "#fae4e3" : "#fae4e3"};
+    $type === "P" ? "var(--white)" : $type === "N" ? "#fae4e3" : "#fae4e3"};
   color: ${({ $type }) =>
-    $type === "P" ? "#0a5f0a" : $type === "N" ? "#dd4e48" : "#dd4e48"};
+    $type === "P" ? "var(--grey)" : $type === "N" ? "#dd4e48" : "#dd4e48"};
   padding: 5px 20px;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);

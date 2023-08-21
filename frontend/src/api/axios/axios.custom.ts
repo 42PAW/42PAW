@@ -4,6 +4,7 @@ import { SignUpInfoDTO } from "@/types/dto/member.dto";
 import { CreateBoardDTO } from "@/types/dto/board.dto";
 import { getCookie } from "../cookie/cookies";
 import { Language } from "@/types/enum/language.enum";
+import { ReportReason } from "@/types/enum/report.enum";
 
 const token = getCookie("access_token") ?? null;
 
@@ -116,7 +117,7 @@ export const axiosGetTrendingBoards = async (
   }
 };
 
-const axiosGetFollowingBoardsURL = "/v1/boards/following";
+const axiosGetFollowingBoardsURL = "/v1/boards/followings";
 export const axiosGetFollowingBoards = async (
   size: number,
   page: number
@@ -300,6 +301,66 @@ const axiosFollowURL = "/v1/follows";
 export const axiosFollow = async (memberId: number): Promise<any> => {
   try {
     const response = await instance.post(axiosFollowURL, { memberId });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosUnfollowURL = "/v1/follows/members/";
+export const axiosUnfollow = async (memberId: number): Promise<any> => {
+  try {
+    const response = await instance.delete(
+      axiosUnfollowURL + memberId.toString()
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosBlockUserURL = "/v1/blocks";
+export const axiosBlockUser = async (blockMemberId: number): Promise<any> => {
+  try {
+    const response = await instance.post(axiosBlockUserURL, { blockMemberId });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosUndoBlockUserURL = "/v1/blocks/members/";
+export const axiosUndoBlockUser = async (
+  blockMemberId: number
+): Promise<any> => {
+  try {
+    const response = await instance.delete(
+      axiosUndoBlockUserURL + blockMemberId.toString()
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosReportURL = "/v1/reports";
+export const axiosReport = async (
+  reportedMemberId: number,
+  content: string,
+  reason: ReportReason,
+  boardId: number | null,
+  commentId: number | null
+): Promise<any> => {
+  try {
+    console.log(reportedMemberId, boardId, commentId, reason, content);
+    const response = await instance.post(axiosReportURL, {
+      reportedMemberId,
+      boardId,
+      commentId,
+      reason,
+      content,
+    });
+
     return response;
   } catch (error) {
     throw error;

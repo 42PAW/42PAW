@@ -43,8 +43,6 @@ instance.interceptors.response.use(
         });
         removeCookie("access_token", { path: "/", domain: "42paw.com" });
       }
-      window.location.href = "/";
-      alert(error.response.data.message);
     }
     return Promise.reject(error);
   }

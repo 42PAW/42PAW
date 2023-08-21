@@ -12,21 +12,24 @@ interface IModalLayoutProps {
   modalName: ModalType;
   isOpen: boolean;
   children: ReactNode;
+  zIndex?: number;
 }
 
 const ModalLayout: React.FC<IModalLayoutProps> = ({
   modalName,
   isOpen,
   children,
+  zIndex,
 }) => {
   const { closeModal } = useModal();
-
   if (!isOpen) return null;
+
   return (
     <ModalOverlay
       onClick={() => {
         if (modalName != ModalType.PROFILEEDIT) closeModal(modalName);
       }}
+      $zIndex={zIndex}
     >
       <ModalContainer onClick={(e: React.MouseEvent) => e.stopPropagation()}>
         {children}
@@ -44,8 +47,8 @@ const fadeIn = keyframes`
   }
 `;
 
-const ModalOverlay = styled.div`
-  z-index: 999;
+const ModalOverlay = styled.div<{ $zIndex: number | undefined }>`
+  z-index: ${(props) => (props.$zIndex ? props.$zIndex : 9999)};
   display: flex;
   align-items: center;
   justify-content: center;

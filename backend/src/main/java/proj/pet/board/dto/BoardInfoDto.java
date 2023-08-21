@@ -4,11 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import proj.pet.category.domain.Species;
 import proj.pet.member.domain.Country;
 
 @Getter
 @AllArgsConstructor
+@ToString
 public class BoardInfoDto {
 
 	private final Long boardId;

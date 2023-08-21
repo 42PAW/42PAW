@@ -19,8 +19,9 @@ import { Country } from "@/types/enum/country.enum";
 import FollowTypeButton from "../../FollowTypeButton";
 import { followType } from "@/types/enum/followType.enum";
 import useDebounce from "@/hooks/useDebounce";
-import { axiosFollow } from "@/api/axios/axios.custom";
+import { axiosFollow, axiosUnfollow } from "@/api/axios/axios.custom";
 import { useQueryClient } from "@tanstack/react-query";
+import { axiosUndoBlockUser } from "@/api/axios/axios.custom";
 
 const ProfileCardModal = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
@@ -47,14 +48,19 @@ const ProfileCardModal = () => {
   };
 
   const handleClickFollowType = async () => {
-    await axiosFollow(currentMemberId as number);
+    if (profileData.followType === followType.NONE)
+      await axiosFollow(currentMemberId as number);
+    if (profileData.followType === followType.FOLLOWING)
+      await axiosUnfollow(currentMemberId as number);
+    if (profileData.followType === followType.BLOCK)
+      await axiosUndoBlockUser(currentMemberId as number);
     queryClient.invalidateQueries(["profile", currentMemberId]);
     setIsButtonLoading(false);
   };
 
   const handleClickFollowTypeButton = () => {
     setIsButtonLoading(true);
-    debounce(handleClickFollowType, 1000);
+    debounce("follow", handleClickFollowType, 500);
   };
 
   if (isLoading) {
@@ -69,6 +75,7 @@ const ProfileCardModal = () => {
     <ModalLayout
       modalName={ModalType.PROFILECARD}
       isOpen={currentOpenModal.profileCardModal}
+      zIndex={9998}
     >
       <WrapperStyled>
         <LogoStyled>

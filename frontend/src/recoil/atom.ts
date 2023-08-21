@@ -6,7 +6,7 @@ import { Board } from "@/types/enum/board.category.enum";
 import { IBanUserInfo } from "@/types/interface/user.interface";
 import { IToastInfo } from "@/types/interface/toast.interface";
 import Translator from "@/languages/Translator";
-import { UserInfoDTO } from "@/types/dto/member.dto";
+import { UserInfoDTO, ReportUserDTO } from "@/types/dto/member.dto";
 import { IDeleteInfo } from "@/types/interface/option.interface";
 
 export const userInfoState = atom<UserInfoDTO | null>({
@@ -101,7 +101,19 @@ export const toastMessagesState = atom<IToastInfo[]>({
 export const banUserInfoState = atom<IBanUserInfo>({
   key: "banUserInfo",
   default: {
+    memberId: null,
     userName: "",
+  },
+});
+
+export const reportUserInfoState = atom<ReportUserDTO>({
+  key: "reportUserInfo",
+  default: {
+    reportedMemberId: null,
+    boardId: null,
+    commentId: null,
+    reason: null,
+    content: "",
   },
 });
 

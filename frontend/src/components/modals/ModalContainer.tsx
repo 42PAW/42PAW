@@ -7,11 +7,29 @@ import ProfileCardModal from "@/components/modals/ProfileCardModal/ProfileCardMo
 import ProfileEditModal from "@/components/modals/ProfileEditModal/ProfileEditModal";
 import DeleteModal from "@/components/modals/DeleteModal/DeleteModal";
 import LanguageModal from "@/components/modals/LanguageModal/LanguageModal";
+import instance from "@/api/axios/axios.instance";
+import { STATUS_401_UNAUTHORIZED } from "@/types/constants/StatusCode";
+import useModal from "@/hooks/useModal";
+import { ModalType } from "@/types/enum/modal.enum";
 
 const ModalContainer = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
+  const { openModal } = useModal();
+
+  instance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      if (error.response?.status === STATUS_401_UNAUTHORIZED) {
+        openModal(ModalType.LANGUAGE);
+      }
+      return Promise.reject(error);
+    }
+  );
+
   return (
     <>
       {currentOpenModal.banModal && <BanModal />}

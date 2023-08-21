@@ -8,6 +8,7 @@ import proj.pet.block.repository.BlockRepository;
 import proj.pet.follow.repository.FollowRepository;
 import proj.pet.member.domain.Member;
 import proj.pet.member.repository.MemberRepository;
+import proj.pet.utils.domain.MemberCompositeKey;
 
 import java.time.LocalDateTime;
 
@@ -28,10 +29,10 @@ public class BlockServiceImpl implements BlockService {
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		Member blockedMember = memberRepository.findById(blockMemberId)
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
-		followRepository.findByMemberCompositeKey(memberId, blockMemberId)
-				.ifPresent(followRepository::delete);
-		followRepository.findByMemberCompositeKey(blockMemberId, memberId)
-				.ifPresent(followRepository::delete);
+		followRepository.deleteById(MemberCompositeKey.of(memberId, blockMemberId));
+//				.ifPresent(followRepository::delete);
+		followRepository.deleteById(MemberCompositeKey.of(blockMemberId, memberId));
+//				.ifPresent(followRepository::delete);
 		Block block = Block.of(member, blockedMember, LocalDateTime.now());
 		return blockRepository.save(block);
 	}

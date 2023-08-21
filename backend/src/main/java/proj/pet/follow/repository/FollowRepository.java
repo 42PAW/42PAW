@@ -7,11 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import proj.pet.follow.domain.Follow;
+import proj.pet.utils.domain.MemberCompositeKey;
 
 import java.util.Optional;
 
 @Repository
-public interface FollowRepository extends JpaRepository<Follow, Long> {
+public interface FollowRepository extends JpaRepository<Follow, MemberCompositeKey> {
 
 	/**
 	 * 팔로우 하는 사람과 팔로우 받는 사람의 id를 받아 팔로우를 찾는다.
@@ -22,12 +23,12 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 	 * @param targetMemberId 팔로우 받는 사람의 id
 	 * @return Optional<Follow> 팔로우 반환
 	 */
-	@Query("SELECT f " +
-			"FROM Follow f " +
-			"WHERE f.from = :memberId " +
-			"AND f.to = :targetMemberId")
-	Optional<Follow> findByMemberCompositeKey(
-			@Param("memberId") Long memberId, @Param("targetMemberId") Long targetMemberId);
+//	@Query("SELECT f " +
+//			"FROM Follow f " +
+//			"WHERE f.from = :memberId " +
+//			"AND f.to = :targetMemberId")
+//	Optional<Follow> findByMemberCompositeKey(
+//			@Param("memberId") Long memberId, @Param("targetMemberId") Long targetMemberId);
 
 	/**
 	 * 팔로우 하는 사람의 id를 받아 팔로우를 찾는다.

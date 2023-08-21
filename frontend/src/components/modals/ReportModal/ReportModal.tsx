@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { styled } from "styled-components";
 import ModalLayout from "@/components/modals//ModalLayout";
 import ReportCategoryOption from "@/components/modals/ReportModal/ReportCategoryOption";
@@ -7,8 +7,10 @@ import { ReportReason } from "@/types/enum/report.enum";
 import { ModalType } from "@/types/enum/modal.enum";
 import { currentOpenModalState } from "@/recoil/atom";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
-
-interface IReportModalProps {}
+import useToaster from "@/hooks/useToaster";
+import { axiosReport } from "@/api/axios/axios.custom";
+import { reportUserInfoState } from "@/recoil/atom";
+import { ReportDTO } from "@/types/dto/member.dto";
 
 const reportOptions = [
   {
@@ -45,14 +47,36 @@ const reportOptions = [
   },
 ];
 
-const ReportModal: React.FC<IReportModalProps> = ({}) => {
+const ReportModal: React.FC = () => {
+  const [reportUserInfo] = useRecoilState<ReportDTO>(reportUserInfoState);
+  const resetReportUserInfo = useResetRecoilState(reportUserInfoState);
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<ReportReason | null>(
+    null
+  );
+  const { popToast } = useToaster();
 
   const handleSelectCategory = (category: ReportReason) => {
     setSelectedCategory(category);
+  };
+
+  const handleSubmitReport = async () => {
+    if (!selectedCategory) {
+      popToast("신고 사유를 선택해주세요.", "N");
+      return;
+    }
+    console.log(reportUserInfo, selectedCategory);
+    await axiosReport(
+      reportUserInfo.reportedMemberId as number,
+      "hello",
+      selectedCategory,
+      reportUserInfo.boardId,
+      reportUserInfo.commentId
+    );
+    popToast("신고가 접수됐습니다.", "P");
+    resetReportUserInfo();
   };
 
   return (
@@ -75,7 +99,7 @@ const ReportModal: React.FC<IReportModalProps> = ({}) => {
           ))}
         </CategoryContatinerStyled>
         <EtcInputStyled placeholder="사유를 적어주세요" maxLength={50} />
-        <button>제출</button>
+        <button onClick={handleSubmitReport}>제출</button>
       </WrapperStyled>
     </ModalLayout>
   );

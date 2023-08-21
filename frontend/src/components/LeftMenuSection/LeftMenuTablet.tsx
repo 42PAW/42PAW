@@ -82,7 +82,7 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
         </BannerStyled>
       )}
       <MenuStyled>
-        <LogoImageStyled src="/src/assets/paw.png" />
+        <LogoImageStyled src="/src/assets/paw.png" onClick={moveToMain} />
         <nav>
           <MenuListStyled>
             <li onClick={moveToMain}>
@@ -181,6 +181,7 @@ const MenuStyled = styled.div`
 `;
 
 const LogoImageStyled = styled.img`
+  cursor: pointer;
   width: 0px;
   margin-top: 30%;
 `;

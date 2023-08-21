@@ -8,16 +8,23 @@ import { banUserInfoState } from "@/recoil/atom";
 import { IBanUserInfo } from "@/types/interface/user.interface";
 import useModal from "@/hooks/useModal";
 import useToaster from "@/hooks/useToaster";
+import { axiosBlockUser } from "@/api/axios/axios.custom";
+import { useQueryClient } from "@tanstack/react-query";
+import { currentMemberIdState } from "@/recoil/atom";
 
 const BanModal: React.FC = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
+  const [currentMemberId] = useRecoilState(currentMemberIdState);
   const [banUserInfo] = useRecoilState<IBanUserInfo>(banUserInfoState);
+  const queryClient = useQueryClient();
   const { closeModal } = useModal();
   const { popToast } = useToaster();
 
-  const handleOnClick = () => {
+  const handleOnClick = async () => {
+    await axiosBlockUser(banUserInfo.memberId);
+    queryClient.invalidateQueries(["profile", currentMemberId]);
     closeModal(ModalType.BAN);
     popToast(`${banUserInfo.userName} 님이 차단됐습니다.`, "N");
   };

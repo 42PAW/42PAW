@@ -30,6 +30,7 @@ public class BoardController {
 			@UserSession UserSessionDto userSessionDto,
 			@RequestParam("size") int size,
 			@RequestParam("page") int page) {
+		System.out.println(userSessionDto);
 		PageRequest pageRequest = PageRequest.of(page, size);
 		return boardFacadeService.getMainViewBoards(userSessionDto, pageRequest);
 	}

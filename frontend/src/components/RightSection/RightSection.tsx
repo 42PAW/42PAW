@@ -73,7 +73,7 @@ const RightSectionStyled = styled.div<{
   flex-direction: column;
   align-items: center;
   width: 490px;
-  height: 800px;
+  height: 700px;
   max-height: 860px;
 
   margin-left: 20px;

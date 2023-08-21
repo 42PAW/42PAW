@@ -3,7 +3,7 @@
  * @userName 차단할 유저 닉네임
  */
 export interface IBanUserInfo {
-  memberId?: number;
+  memberId: number | null;
   userName: string;
 }
 

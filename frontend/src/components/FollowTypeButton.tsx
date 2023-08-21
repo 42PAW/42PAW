@@ -8,7 +8,6 @@ interface FollowTypeButtonsProps {
 }
 
 const FollowTypeButton = ({ status, isLoading }: FollowTypeButtonsProps) => {
-  console.log(isLoading);
   if (status === followType.NONE)
     return (
       <FollowButtonStyled disabled={isLoading}>
@@ -21,7 +20,7 @@ const FollowTypeButton = ({ status, isLoading }: FollowTypeButtonsProps) => {
         {isLoading ? <LoadingDotsAnimation status={status} /> : "팔로잉"}
       </FollowingButtonStyled>
     );
-  if (status === followType.BANNED)
+  if (status === followType.BLOCK)
     return (
       <BannedButtonStyled disabled={isLoading}>
         {isLoading ? <LoadingDotsAnimation status={status} /> : "차단됨"}

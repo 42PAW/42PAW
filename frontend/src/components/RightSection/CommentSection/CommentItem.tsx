@@ -2,6 +2,10 @@ import styled from "styled-components";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
 import BoardOption from "@/components/BoardOption";
 import useParseDate from "@/hooks/useParseDate";
+import { useSetRecoilState } from "recoil";
+import { currentMemberIdState } from "@/recoil/atom";
+import useModal from "@/hooks/useModal";
+import { ModalType } from "@/types/enum/modal.enum";
 
 const CommentItem = (commentInfo: CommentInfoDTO) => {
   const {
@@ -12,17 +16,25 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
     profileImageUrl,
     createdAt,
   } = commentInfo;
+
+  const setCurrentMemberId = useSetRecoilState(currentMemberIdState);
+  const { openModal } = useModal();
   const { parseDate } = useParseDate();
   const parsedDate = parseDate(createdAt);
+
+  const handleOpenProfile = () => {
+    setCurrentMemberId(memberId);
+    openModal(ModalType.PROFILECARD);
+  };
 
   return (
     <CommentItemStyled>
       <UserImageContainerStyled>
-        <img src={profileImageUrl} />
+        <img src={profileImageUrl} onClick={handleOpenProfile} />
       </UserImageContainerStyled>
       <CommentItemRightStyled>
         <NicknameToggleContainerStyled>
-          <NicknameContainerStyled>
+          <NicknameContainerStyled onClick={handleOpenProfile}>
             {memberName} 🇫🇷
             <span>{parsedDate}</span>
           </NicknameContainerStyled>
@@ -50,6 +62,7 @@ const UserImageContainerStyled = styled.div`
   width: 70px;
   height: 70px;
   img {
+    cursor: pointer;
     width: 45px;
     height: 45px;
     border-radius: 100%;
@@ -77,11 +90,13 @@ const NicknameToggleContainerStyled = styled.div`
 `;
 
 const NicknameContainerStyled = styled.div`
+  cursor: pointer;
   width: 60%;
   font-size: 14px;
   font-weight: bold;
   position: relative;
   span {
+    cursor: default;
     position: absolute;
     margin-top: 2px;
     margin-left: 7px;

@@ -11,6 +11,8 @@ import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
 import { deleteInfoState } from "@/recoil/atom";
 import { IDeleteInfo } from "@/types/interface/option.interface";
+import { reportUserInfoState } from "@/recoil/atom";
+import { ReportDTO } from "@/types/dto/member.dto";
 
 /**
  * @boardId (optional) 신고, 차단, 삭제할 게시물의 id
@@ -34,6 +36,8 @@ const BoardOption: React.FC<IOptionButtonProps> = ({
 }) => {
   const [language] = useRecoilState<any>(languageState);
   const setBanUserInfo = useSetRecoilState<IBanUserInfo>(banUserInfoState);
+  const [reportUserInfo, setReportUserInfo] =
+    useRecoilState<ReportDTO>(reportUserInfoState);
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const setDeleteInfo = useSetRecoilState<IDeleteInfo>(deleteInfoState);
   const { openModal } = useModal();
@@ -43,6 +47,16 @@ const BoardOption: React.FC<IOptionButtonProps> = ({
   const handleBan = () => {
     setBanUserInfo(banUser);
     openModal(ModalType.BAN);
+  };
+
+  const handleReport = () => {
+    setReportUserInfo({
+      ...reportUserInfo,
+      reportedMemberId: memberId,
+      boardId: boardId ?? null,
+      commentId: commentId ?? null,
+    });
+    openModal(ModalType.REPORT);
   };
 
   const handleDelete = () => {
@@ -58,7 +72,7 @@ const BoardOption: React.FC<IOptionButtonProps> = ({
             <MenuItemStyled onClick={handleBan}>{language.ban}</MenuItemStyled>
           </MenuItemWrapperStyled>
           <MenuItemWrapperStyled>
-            <MenuItemStyled onClick={() => openModal(ModalType.REPORT)}>
+            <MenuItemStyled onClick={handleReport}>
               {language.report}
             </MenuItemStyled>
           </MenuItemWrapperStyled>
@@ -74,7 +88,9 @@ const BoardOption: React.FC<IOptionButtonProps> = ({
   );
 };
 
-const MenuItemWrapperStyled = styled.li``;
+const MenuItemWrapperStyled = styled.li`
+  margin: 3px 5px;
+`;
 
 const MenuItemStyled = styled.div`
   cursor: pointer;

@@ -34,7 +34,7 @@ const NicknameSection: React.FC<SectionProps> = ({
         popToast("이미 사용 중인 닉네임입니다.", "N");
       }
       setIsWrong(true);
-      debounce(() => setIsWrong(false), 2000);
+      debounce("nickname", () => setIsWrong(false), 2000);
       return;
     }
     setIsFading(true);

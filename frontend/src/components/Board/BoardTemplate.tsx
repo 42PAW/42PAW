@@ -94,13 +94,12 @@ const BoardTemplate = (board: IBoardInfo) => {
   };
 
   const callScrapApi = () => {
-    console.log("Hello");
     if (!isScrappedRender && !lastScrap) {
       axiosScrap(boardId);
-      setLastReaction(!lastScrap);
+      setLastScrap(!lastScrap);
     } else if (isScrappedRender && lastScrap) {
       axiosUndoScrap(boardId);
-      setLastReaction(!lastScrap);
+      setLastScrap(!lastScrap);
     }
   };
 
@@ -108,8 +107,7 @@ const BoardTemplate = (board: IBoardInfo) => {
     if (action === "do") setReactionCountRender(reactionCountRender + 1);
     if (action === "undo") setReactionCountRender(reactionCountRender - 1);
     setIsReactedRender(!isReactedRender);
-
-    debounce(callReactionApi, 500);
+    debounce("reaction", callReactionApi, 500);
   };
 
   const handleClickReaction = () => {
@@ -118,7 +116,7 @@ const BoardTemplate = (board: IBoardInfo) => {
 
   const handleClickScrap = () => {
     setIsScrappedRender(!isScrappedRender);
-    debounce(callScrapApi, 500);
+    debounce("scrap", callScrapApi, 500);
   };
 
   return (

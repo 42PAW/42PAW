@@ -63,8 +63,9 @@ const MenuStyled = styled.div<{ $isToggled: boolean }>`
   flex-direction: column;
   justify-content: space-around;
   text-align: center;
-  margin-top: 30px;
-  min-width: 50px;
+  margin-top: 25px;
+  min-width: 45px;
+
   border-radius: 10px;
   color: var(--grey);
   background: var(--white);
@@ -78,7 +79,8 @@ const MenuStyled = styled.div<{ $isToggled: boolean }>`
 
 const MenuList = styled.ul`
   list-style: none;
-  padding: 0;
+  padding: 5px 0px;
+  margin: 0;
 `;
 
 export default OptionButton;

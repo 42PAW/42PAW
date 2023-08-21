@@ -10,6 +10,7 @@ import proj.pet.follow.domain.Follow;
 import proj.pet.follow.repository.FollowRepository;
 import proj.pet.member.domain.Member;
 import proj.pet.member.repository.MemberRepository;
+import proj.pet.utils.domain.MemberCompositeKey;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +45,8 @@ public class FollowServiceImpl implements FollowService {
 	 */
 	@Override
 	public void deleteFollow(Long memberId, Long followMemberId) {
-		followRepository.findByMemberCompositeKey(memberId, followMemberId)
-				.ifPresent(followRepository::delete);
+		followRepository.deleteById(MemberCompositeKey.of(memberId, followMemberId));
+//		followRepository.findByMemberCompositeKey(memberId, followMemberId)
+//				.ifPresent(followRepository::delete);
 	}
 }

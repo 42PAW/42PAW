@@ -22,6 +22,7 @@ const MainPage = () => {
     queryKey: ["boards", boardCategory],
     queryFn: fetchBoards,
     keepPreviousData: true,
+    retry: 5,
   });
 
   if (isLoading) {

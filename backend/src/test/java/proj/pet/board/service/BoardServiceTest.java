@@ -16,11 +16,13 @@ import proj.pet.board.repository.BoardRepository;
 import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.Species;
 import proj.pet.category.repository.AnimalCategoryRepository;
+import proj.pet.comment.repository.CommentRepository;
 import proj.pet.member.domain.*;
 import proj.pet.member.repository.MemberRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
@@ -51,10 +53,13 @@ class BoardServiceTest {
 	@Autowired
 	private AnimalCategoryRepository animalCategoryRepository;
 
+	@Autowired
+	private CommentRepository commentRepository;
+
 	@BeforeEach
 	void setUp() {
 		boardMediaManager = mock(BoardMediaManager.class);
-		boardService = new BoardServiceImpl(boardRepository, memberRepository, boardCategoryFilterRepository, boardMediaManager, boardMediaRepository, animalCategoryRepository);
+		boardService = new BoardServiceImpl(boardRepository, memberRepository, boardCategoryFilterRepository, boardMediaManager, boardMediaRepository, animalCategoryRepository, commentRepository);
 	}
 
 	@DisplayName("게시글을 생성할 수 있다.")
@@ -77,8 +82,8 @@ class BoardServiceTest {
 				mockImageFile,
 				mockVideoFile);
 		String content = "게시글 내용";
-		when(boardMediaManager.uploadMedia(mockImageFile)).thenReturn("imagePath");
-		when(boardMediaManager.uploadMedia(mockVideoFile)).thenReturn("videoPath");
+		when(boardMediaManager.uploadMedia(mockImageFile, UUID.randomUUID().toString())).thenReturn("imagePath");
+		when(boardMediaManager.uploadMedia(mockVideoFile, UUID.randomUUID().toString())).thenReturn("videoPath");
 		em.flush();
 		em.clear();
 		List<Species> speciesList = List.of(Species.CAT, Species.DOG, Species.ETC);

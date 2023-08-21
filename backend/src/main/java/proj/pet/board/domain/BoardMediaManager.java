@@ -10,7 +10,6 @@ import proj.pet.exception.ExceptionStatus;
 
 import java.net.MalformedURLException;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 게시글의 이미지를 관리하는 클래스
@@ -26,10 +25,10 @@ public class BoardMediaManager {
 	 * 이미지를 업로드하고, 업로드된 이미지의 URL을 반환한다.
 	 *
 	 * @param mediaData 이미지 데이터
+	 * @param fileName
 	 * @return 업로드된 이미지의 URL
 	 */
-	public String uploadMedia(MultipartFile mediaData) {
-		String fileName = UUID.randomUUID().toString();
+	public String uploadMedia(MultipartFile mediaData, String fileName) {
 		return awsS3Manager.uploadFileToBucket(
 				awsS3Properties.getBucketName(),
 				awsS3Properties.getBoardImageDirectory(),

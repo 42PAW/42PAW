@@ -32,6 +32,7 @@ import proj.pet.scrap.repository.ScrapRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -79,7 +80,7 @@ class BoardQueryServiceTest {
 		boardMediaManager = mock(BoardMediaManager.class);
 		boardService = new BoardServiceImpl(boardRepository, memberRepository,
 				boardCategoryFilterRepository, boardMediaManager, boardMediaRepository,
-				animalCategoryRepository);
+				animalCategoryRepository, commentRepository);
 	}
 
 	@DisplayName("")
@@ -101,8 +102,8 @@ class BoardQueryServiceTest {
 				mockImageFile,
 				mockImageFile,
 				mockVideoFile);
-		when(boardMediaManager.uploadMedia(mockImageFile)).thenReturn("imagePath");
-		when(boardMediaManager.uploadMedia(mockVideoFile)).thenReturn("videoPath");
+		when(boardMediaManager.uploadMedia(mockImageFile, UUID.randomUUID().toString())).thenReturn("imagePath");
+		when(boardMediaManager.uploadMedia(mockVideoFile, UUID.randomUUID().toString())).thenReturn("videoPath");
 		List<Species> speciesList = List.of(Species.CAT, Species.DOG, Species.ETC);
 		Board board = boardService.createBoard(author.getId(), speciesList, mediaDtoList, "content",
 				now);

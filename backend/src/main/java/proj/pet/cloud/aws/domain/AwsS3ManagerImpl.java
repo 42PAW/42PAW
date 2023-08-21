@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static proj.pet.exception.ExceptionStatus.INTERNAL_SERVER_ERROR;
 import static proj.pet.exception.ExceptionStatus.INVALID_ARGUMENT;
 
 
@@ -35,7 +36,7 @@ public class AwsS3ManagerImpl implements AwsS3Manager {
 		try {
 			s3.putObject(createPutObjectRequest(bucketName, directory, file, filename));
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw INTERNAL_SERVER_ERROR.asDomainException();
 		}
 		return createFileUrl(s3.getUrl(bucketName, filename), directory, filename);
 	}

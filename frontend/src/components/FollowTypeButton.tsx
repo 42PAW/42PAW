@@ -67,13 +67,12 @@ const BannedButtonStyled = styled.button`
   height: 33px;
   width: 90px;
   border-radius: 10px;
-  border: 1px solid var(--white);
-  background-color: transparent;
+  border: 1px solid #fc5656;
+  background-color: #fc5656;
   color: var(--white);
   transition: background-color 0.3s ease, color 0.3s ease;
   &:hover {
-    background-color: var(--white);
-    color: var(--pink);
+    opacity: 0.8;
   }
 `;
 

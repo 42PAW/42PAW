@@ -14,7 +14,7 @@ import { ReportDTO } from "@/types/dto/member.dto";
 
 const reportOptions = [
   {
-    value: ReportReason.WRONG_ANIMAL,
+    value: ReportReason.WRONG_ANIMAL_CATEGORY,
     label: "잘못된 동물 카테고리",
   },
   {

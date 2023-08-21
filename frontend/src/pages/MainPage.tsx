@@ -38,6 +38,17 @@ const MainPage = () => {
     navigator("/error");
   }
 
+  if (!boards.length) {
+    return (
+      <WrapperStyled>
+        <NoBoardsStyled>
+          <img src="/src/assets/noBoard.png" />
+          게시물이 존재하지 않습니다.
+        </NoBoardsStyled>
+      </WrapperStyled>
+    );
+  }
+
   return (
     <WrapperStyled>
       {boards.map((board: IBoardInfo) => (
@@ -69,9 +80,23 @@ const WrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* justify-content: center; */
   overflow-y: scroll;
   width: 100%;
   height: 100vh;
+`;
+
+const NoBoardsStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--white);
+  font-size: 1.2rem;
+  img {
+    width: 60px;
+    margin-bottom: 5px;
+  }
 `;
 
 export default MainPage;

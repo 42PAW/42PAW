@@ -38,6 +38,7 @@ const ProfileCardModal = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["profile", currentMemberId],
     queryFn: fetchProfile,
+    keepPreviousData: true,
   });
 
   const profileData = data as ProfileInfoDTO;
@@ -171,10 +172,10 @@ const OptionButtonContainerStyled = styled.div`
   right: 10px;
   top: 8px;
   img {
-    width: 30px;
+    width: 25px;
   }
   @media (min-width: 1024px) {
-    right: 15px;
+    right: 10px;
     top: 5px;
   }
 `;

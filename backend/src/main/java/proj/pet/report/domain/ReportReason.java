@@ -1,5 +1,8 @@
 package proj.pet.report.domain;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public enum ReportReason {
 	WRONG_ANIMAL_CATEGORY,
 	INSULTS,

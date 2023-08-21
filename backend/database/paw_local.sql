@@ -128,17 +128,13 @@ create table report
 (
     id                 bigint auto_increment
         primary key,
-    board_id           bigint                                                                                                                 not null,
-    comment_id         bigint                                                                                                                 not null,
-    member_id          bigint                                                                                                                 not null,
-    reported_member_id bigint                                                                                                                 not null,
+    board_id           bigint,
+    comment_id         bigint,
+    member_id          bigint not null,
+    reported_member_id bigint not null,
     reason             varchar(32) not null,
-    content            varchar(255)                                                                                                           null,
-    created_at         datetime(6)                                                                                                            not null,
-    constraint FK1dw2gwqqspkllnye2ylaiabqx
-        foreign key (comment_id) references comment (id),
-    constraint FK2mf8ehoy689ord40esx24n26e
-        foreign key (board_id) references board (id),
+    content            varchar(255) null,
+    created_at         datetime(6) not null,
     constraint FK3f6hlh2lko9py15mptqpwllkx
         foreign key (reported_member_id) references member (id),
     constraint FKel7y5wyx42a6njav1dbe2torl

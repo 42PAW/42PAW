@@ -34,17 +34,21 @@ public class ReportServiceImpl implements ReportService {
 		Member to = memberRepository.findById(reportedMemberId)
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		if (boardId == null) {
-			reportRepository.save(Report.ofMember(from, to, reason, content, now));
+			Report entity = Report.ofMember(from, to, reason, content, now);
+			System.out.println("entity = " + entity);
+			reportRepository.save(entity);
 		} else {
 			Board board = boardRepository.findById(boardId)
 					.orElseThrow(NOT_FOUND_BOARD::asServiceException);
 			if (commentId == null) {
-				reportRepository.save(Report.ofBoard(from, to, board, reason, content, now));
+				reportRepository.save(
+						Report.ofBoard(from, to, board.getId(), reason, content, now));
 			} else {
 				Comment comment = commentRepository.findById(commentId)
 						.orElseThrow(NOT_FOUND_COMMENT::asServiceException);
 				reportRepository.save(
-						Report.ofComment(from, to, board, comment, reason, content, now));
+						Report.ofComment(from, to, board.getId(), comment.getId(), reason, content,
+								now));
 			}
 		}
 	}

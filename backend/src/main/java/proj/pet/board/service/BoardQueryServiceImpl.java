@@ -1,5 +1,8 @@
 package proj.pet.board.service;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import proj.pet.board.domain.Board;
@@ -11,10 +14,6 @@ import proj.pet.mapper.BoardMapper;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
 
 @QueryService
 @RequiredArgsConstructor
@@ -41,7 +40,6 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 		List<BoardInfoDto> result = boardRepository.getMainViewBoards(pageRequest).stream()
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
-		System.out.println();
 		return boardMapper.toBoardsResponseDto(result, result.size());
 	}
 	// TODO: result.size가 아닌 전체 길이를 가져오도록 수정 및 최적화 필요, 혹시 변할 수도 있으니 아직 함수 중복에 대해서는 리팩터링하지 않았음.
@@ -56,22 +54,26 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
 	@Override
 	public BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId,
-	                                           PageRequest pageRequest) {
+			PageRequest pageRequest) {
 		List<BoardInfoDto> result = boardRepository.getMemberBoards(memberId, pageRequest).stream()
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());
 	}
 
-	@Override public BoardsPaginationDto getScraps(Long loginUserId, PageRequest pageRequest) {
-		List<BoardInfoDto> result = boardRepository.getScrapBoards(loginUserId, pageRequest).stream()
+	@Override
+	public BoardsPaginationDto getScraps(Long loginUserId, PageRequest pageRequest) {
+		List<BoardInfoDto> result = boardRepository.getScrapBoards(loginUserId, pageRequest)
+				.stream()
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());
 	}
 
-	@Override public BoardsPaginationDto getFollowingsBoards(Long memberId, PageRequest pageRequest) {
-		List<BoardInfoDto> result = boardRepository.getFollowingsBoards(memberId, pageRequest).stream()
+	@Override
+	public BoardsPaginationDto getFollowingsBoards(Long memberId, PageRequest pageRequest) {
+		List<BoardInfoDto> result = boardRepository.getFollowingsBoards(memberId, pageRequest)
+				.stream()
 				.map(board -> createBoardInfoDto(memberId, board))
 				.toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());

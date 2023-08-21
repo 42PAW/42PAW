@@ -14,8 +14,7 @@ import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import proj.pet.board.domain.Board;
-import proj.pet.comment.domain.Comment;
+import lombok.ToString;
 import proj.pet.member.domain.Member;
 import proj.pet.utils.domain.IdDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
@@ -31,19 +30,8 @@ import proj.pet.utils.domain.Validatable;
 						"REPORTED_MEMBER_ID", "COMMENT_ID"})
 		})
 @Getter
+@ToString
 public class Report extends IdDomain implements Validatable {
-
-	@Column(name = "MEMBER_ID", nullable = false, insertable = false, updatable = false)
-	private Long memberId;
-
-	@Column(name = "REPORTED_MEMBER_ID", nullable = false, insertable = false, updatable = false)
-	private Long reportedMemberId;
-
-	@Column(name = "BOARD_ID", insertable = false, updatable = false)
-	private Long boardId;
-
-	@Column(name = "COMMENT_ID", insertable = false, updatable = false)
-	private Long commentId;
 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "MEMBER_ID", nullable = false, updatable = false)
@@ -53,13 +41,11 @@ public class Report extends IdDomain implements Validatable {
 	@JoinColumn(name = "REPORTED_MEMBER_ID", nullable = false, updatable = false)
 	private Member to;
 
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "BOARD_ID", updatable = false)
-	private Board board;
+	@Column(name = "BOARD_ID")
+	private Long boardId;
 
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "COMMENT_ID", updatable = false)
-	private Comment comment;
+	@Column(name = "COMMENT_ID")
+	private Long commentId;
 
 	@Column(name = "REASON", nullable = false, length = 32)
 	@Enumerated(EnumType.STRING)
@@ -85,18 +71,18 @@ public class Report extends IdDomain implements Validatable {
 		return new Report(from, to, reason, content, now);
 	}
 
-	public static Report ofBoard(Member from, Member to, Board board, ReportReason reason,
+	public static Report ofBoard(Member from, Member to, Long boardId, ReportReason reason,
 			String content, LocalDateTime now) {
 		Report report = new Report(from, to, reason, content, now);
-		report.board = board;
+		report.boardId = boardId;
 		return report;
 	}
 
-	public static Report ofComment(Member from, Member to, Board board, Comment comment,
+	public static Report ofComment(Member from, Member to, Long boardId, Long commentId,
 			ReportReason reason, String content, LocalDateTime now) {
 		Report report = new Report(from, to, reason, content, now);
-		report.board = board;
-		report.comment = comment;
+		report.boardId = boardId;
+		report.commentId = commentId;
 		return report;
 	}
 

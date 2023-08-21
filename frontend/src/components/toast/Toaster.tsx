@@ -75,7 +75,7 @@ const ToastWrapperStyled = styled.div<{
   color: ${({ $type }) =>
     $type === "P" ? "var(--grey)" : $type === "N" ? "#dd4e48" : "#dd4e48"};
   padding: 5px 20px;
-  border-radius: 10px;
+  border-radius: 50px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 9999;
   transition: opacity 0.3s ease-in-out;

@@ -16,10 +16,9 @@ public interface BlockRepository extends JpaRepository<Block, Long> {
 
 	@Query("SELECT b " +
 			"FROM Block b " +
-			"WHERE b.from = :memberId " +
-			"AND b.to = :targetMemberId")
-	Optional<Block> findByMemberCompositeKey(@Param("memberId") Long memberId,
-			@Param("targetMemberId") Long targetMemberId);
+			"WHERE b.id = :memberCompositeKey")
+	Optional<Block> findByMemberCompositeKey(
+			@Param("memberCompositeKey") MemberCompositeKey memberCompositeKey);
 
 	@Query("SELECT b " +
 			"FROM Block b " +

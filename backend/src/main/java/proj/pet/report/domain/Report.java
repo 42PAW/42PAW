@@ -1,7 +1,17 @@
 package proj.pet.report.domain;
 
-import jakarta.persistence.*;
-import lombok.Builder;
+import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.board.domain.Board;
@@ -11,17 +21,14 @@ import proj.pet.utils.domain.IdDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
 
-import java.time.LocalDateTime;
-
-import static jakarta.persistence.FetchType.LAZY;
-import static lombok.AccessLevel.PROTECTED;
-
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "REPORT",
 		uniqueConstraints = {
-				@UniqueConstraint(name = "UNIQUE_BOARD_REPORT", columnNames = {"MEMBER_ID", "REPORTED_MEMBER_ID", "BOARD_ID"}),
-				@UniqueConstraint(name = "UNIQUE_COMMENT_REPORT", columnNames = {"MEMBER_ID", "REPORTED_MEMBER_ID", "COMMENT_ID"})
+				@UniqueConstraint(name = "UNIQUE_BOARD_REPORT", columnNames = {"MEMBER_ID",
+						"REPORTED_MEMBER_ID", "BOARD_ID"}),
+				@UniqueConstraint(name = "UNIQUE_COMMENT_REPORT", columnNames = {"MEMBER_ID",
+						"REPORTED_MEMBER_ID", "COMMENT_ID"})
 		})
 @Getter
 public class Report extends IdDomain implements Validatable {
@@ -64,23 +71,37 @@ public class Report extends IdDomain implements Validatable {
 	@Column(name = "CREATED_AT", nullable = false)
 	private LocalDateTime createdAt;
 
-	@Builder
-	private Report(Member from, Member to, Board board, Comment comment, ReportReason reason, String content, LocalDateTime now) {
+	private Report(Member from, Member to, ReportReason reason, String content, LocalDateTime now) {
 		this.from = from;
 		this.to = to;
-		this.board = board;
-		this.comment = comment;
 		this.reason = reason;
 		this.content = content;
 		this.createdAt = now;
 		RuntimeExceptionThrower.checkValidity(this);
 	}
 
-	public static Report of(Member from, Member to, Board board, Comment comment, ReportReason reason, String content, LocalDateTime now) {
-		return new Report(from, to, board, comment, reason, content, now);
+	public static Report ofMember(Member from, Member to, ReportReason reason, String content,
+			LocalDateTime now) {
+		return new Report(from, to, reason, content, now);
 	}
 
-	@Override public boolean isValid() {
+	public static Report ofBoard(Member from, Member to, Board board, ReportReason reason,
+			String content, LocalDateTime now) {
+		Report report = new Report(from, to, reason, content, now);
+		report.board = board;
+		return report;
+	}
+
+	public static Report ofComment(Member from, Member to, Board board, Comment comment,
+			ReportReason reason, String content, LocalDateTime now) {
+		Report report = new Report(from, to, reason, content, now);
+		report.board = board;
+		report.comment = comment;
+		return report;
+	}
+
+	@Override
+	public boolean isValid() {
 		return from != null && !from.isNew()
 				&& to != null && !to.isNew()
 				&& reason != null

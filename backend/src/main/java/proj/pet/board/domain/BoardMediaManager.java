@@ -4,11 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import proj.pet.cloud.aws.config.AwsS3Properties;
-import proj.pet.cloud.aws.domain.AwsS3Manager;
-import proj.pet.exception.DomainException;
-import proj.pet.exception.ExceptionStatus;
+import proj.pet.cloud.aws.domain.AwsS3ManagerImpl;
 
-import java.net.MalformedURLException;
 import java.util.List;
 
 /**
@@ -19,7 +16,7 @@ import java.util.List;
 public class BoardMediaManager {
 
 	private final AwsS3Properties awsS3Properties;
-	private final AwsS3Manager awsS3Manager;
+	private final AwsS3ManagerImpl awsS3ManagerImpl;
 
 	/**
 	 * 이미지를 업로드하고, 업로드된 이미지의 URL을 반환한다.
@@ -29,7 +26,7 @@ public class BoardMediaManager {
 	 * @return 업로드된 이미지의 URL
 	 */
 	public String uploadMedia(MultipartFile mediaData, String fileName) {
-		return awsS3Manager.uploadFileToBucket(
+		return awsS3ManagerImpl.uploadFileToBucket(
 				awsS3Properties.getBucketName(),
 				awsS3Properties.getBoardImageDirectory(),
 				mediaData,
@@ -43,11 +40,7 @@ public class BoardMediaManager {
 	 */
 	public void deleteMediaByList(List<BoardMedia> mediaList) {
 		mediaList.forEach(media -> {
-					try {
-						awsS3Manager.deleteFileByUrl(awsS3Properties.getBucketName(), media.getMediaUrl());
-					} catch (MalformedURLException e) {
-						throw new DomainException(ExceptionStatus.MALFORMED_URL);
-					}
+					awsS3ManagerImpl.deleteFileByUrl(awsS3Properties.getBucketName(), media.getMediaUrl());
 				}
 		);
 	}

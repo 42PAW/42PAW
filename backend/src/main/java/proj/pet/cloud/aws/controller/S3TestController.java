@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import proj.pet.cloud.aws.config.AwsS3Properties;
-import proj.pet.cloud.aws.domain.AwsS3Manager;
+import proj.pet.cloud.aws.domain.AwsS3ManagerImpl;
 import proj.pet.dto.ImageUploadRequest;
 
 import java.net.MalformedURLException;
@@ -26,7 +26,7 @@ public class S3TestController {
 	 */
 	private static final long IMAGE_BYTE_SIZE_LIMIT = 1024L * 1024L * 100L;
 	private final AwsS3Properties s3Properties;
-	private final AwsS3Manager awsS3Manager;
+	private final AwsS3ManagerImpl awsS3ManagerImpl;
 
 	@PostMapping(value = "/upload",
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE
@@ -41,7 +41,7 @@ public class S3TestController {
 		}
 		String bucketName = s3Properties.getBucketName();
 		String directory = s3Properties.getProfileImageDirectory();
-		String s = awsS3Manager.uploadFileToBucket(bucketName, directory, profileImageData, affixUuid(dto.getNickname()));
+		String s = awsS3ManagerImpl.uploadFileToBucket(bucketName, directory, profileImageData, affixUuid(dto.getNickname()));
 	}
 
 	@PostMapping
@@ -51,7 +51,7 @@ public class S3TestController {
 		 * 이 부분은 Facade가 진행할 부분입니다.
 		 */
 		String bucketName = s3Properties.getBucketName();
-		awsS3Manager.deleteFileByUrl(bucketName, body.get("fileUrl"));
+		awsS3ManagerImpl.deleteFileByUrl(bucketName, body.get("fileUrl"));
 	}
 
 	// 비즈니스 로직

@@ -132,6 +132,27 @@ export const axiosGetFollowingBoards = async (
   }
 };
 
+const axiosGetMyBoardsURL = "/v1/members/me/boards";
+export const axiosGetMyBoards = async (
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    if (token) {
+      const response = await instance.get(axiosGetMyBoardsURL, {
+        params: { size: size, page: page },
+      });
+      return response.data;
+    }
+    const response = await axios.get(axiosGetMyBoardsURL, {
+      params: { size: size, page: page },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const axiosGetBoardCommentsURL = "/v1/comments/boards/";
 export const axiosGetBoardComments = async (
   boardId: number,

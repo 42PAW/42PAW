@@ -6,16 +6,22 @@ import styled from "styled-components";
 import ProfileInfoComponent from "@/pages/ProfilePage/Component/ProfileInfoComponent";
 import PhotoZoneComponent from "@/pages/ProfilePage/Component/PhotoZoneComponent";
 import { ProfileInfoDTO } from "@/types/dto/member.dto";
+// import { BoardsInfoDTO } from "@/types/dto/board.dto";
+import { IBoardInfo } from "@/types/interface/board.interface";
 
 interface ProfileTemplateProps {
   userInfo: ProfileInfoDTO | null; // userInfo를 props로 받음
+  boards: IBoardInfo[] | null;
 }
 
-const ProfileTemplate: React.FC<ProfileTemplateProps> = ({ userInfo }) => {
+const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
+  userInfo,
+  boards,
+}) => {
   return (
     <ProfileWrapperStyled>
       <ProfileInfoComponent userInfo={userInfo} />
-      <PhotoZoneComponent />
+      <PhotoZoneComponent boards={boards} />
     </ProfileWrapperStyled>
   );
 };

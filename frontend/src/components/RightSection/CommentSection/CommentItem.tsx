@@ -107,9 +107,10 @@ const NicknameContainerStyled = styled.div`
 
 const CommentContentContainerStyled = styled.div`
   width: 90%;
-  font-size: 13px;
+  font-size: 1.3rem;
   color: var(--white);
-  line-height: 21px;
+  line-height: 17px;
+  font-weight: 400;
 `;
 
 export default CommentItem;

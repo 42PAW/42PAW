@@ -41,7 +41,6 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 		List<BoardInfoDto> result = boardRepository.getMainViewBoards(pageRequest).stream()
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
-		System.out.println();
 		return boardMapper.toBoardsResponseDto(result, result.size());
 	}
 	// TODO: result.size가 아닌 전체 길이를 가져오도록 수정 및 최적화 필요, 혹시 변할 수도 있으니 아직 함수 중복에 대해서는 리팩터링하지 않았음.
@@ -80,27 +79,11 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	/**
 	 * 게시글의 반응과 내용, 그리고 해당 게시글에 대한 사용자의 Scrap과 Reaction 여부를 포함한 {@link BoardInfoDto}로 변환한다.
 	 *
-	 * @param scraps    사용자의 전체 Scrap의 Set
-	 * @param reactions 사용자의 전체 Reaction의 Set
-	 * @param board     게시글
+	 * @param loginUserId 로그인한 유저의 id - 로그인하지 않았다면 0
+	 *                    <br>   참고 : {@link proj.pet.member.domain.UserAspect}
+	 * @param board       변환할 게시글
 	 * @return {@link BoardInfoDto}
 	 */
-//	private BoardInfoDto createBoardInfoDto(Collection<Scrap> scraps, Collection<Reaction> reactions, Board board) {
-//		boolean isScrapped = scraps.stream().anyMatch(scrap -> scrap.getBoard().equals(board));
-//		boolean isReacted = reactions.stream().anyMatch(reaction -> reaction.getBoard().equals(board));
-//		int reactionCount = board.getReactions().size();
-//		int commentCount = board.getComments().size();
-//		Optional<Comment> latestComment = board.findLatestComment();
-//		String previewCommentUserName = latestComment.map(comment -> comment.getMember().getNickname()).orElse(EMPTY_STRING);
-//		String previewCommentContent = latestComment.map(Comment::getContent).orElse(EMPTY_STRING);
-//
-//		return boardMapper.toBoardInfoDto(
-//				board, board.getMember(),
-//				board.findBoardMediaUrls(), board.getCategoriesAsSpecies(),
-//				isScrapped, isReacted,
-//				reactionCount, commentCount,
-//				previewCommentUserName, previewCommentContent);
-//	}
 	private BoardInfoDto createBoardInfoDto(Long loginUserId, Board board) {
 		List<Scrap> scrapsToBoard = board.getScraps();
 		List<Reaction> reactionsToBoard = board.getReactions();

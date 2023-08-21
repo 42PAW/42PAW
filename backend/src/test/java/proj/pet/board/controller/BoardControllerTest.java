@@ -24,12 +24,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class BoardControllerTest extends E2ETest {
 
 	private final static String BEARER = "Bearer ";
-	private Member member1;
-	private Member member2;
 	private AnimalCategory dog;
 
 	@BeforeEach
@@ -85,28 +86,37 @@ class BoardControllerTest extends E2ETest {
 		private final String PATH = "/v1/boards";
 
 		@Test
-		@DisplayName("게시글 목록을 조회한다.")
-		void getMainViewBoards() {
+		@DisplayName("가입한 사용자가 좋아요, 스크랩 한 게시글 목록을 조회한다.")
+		void getMainViewBoards() throws Exception {
 			// given
 			LocalDateTime now = LocalDateTime.now();
-			member1 = stubMember("email1", "nickname1", now);
-			member2 = stubMember("email2", "nickname2", now);
-			em.persist(member1);
-			em.persist(member2);
-			Board board1 = stubBoard(member1, now);
-			Board board2 = stubBoard(member1, now);
-			Board board3 = stubBoard(member1, now);
+			Member author = stubMember("email1", "nickname1", now);
+			Member loginUser = stubMember("email2", "nickname2", now);
+			em.persist(author);
+			em.persist(loginUser);
+			Board board1 = stubBoard(author, now);
+			Board board2 = stubBoard(author, now);
+			Board board3 = stubBoard(author, now);
 			Arrays.asList(board1, board2, board3).forEach(em::persist);
-			em.persist(Reaction.of(board1, member2, ReactionType.LIKE, now));
-			em.persist(Scrap.of(member2, board2, now));
+			em.persist(Reaction.of(board1, loginUser, ReactionType.LIKE, now));
+			em.persist(Scrap.of(loginUser, board2, now));
+			em.flush();
+			em.clear();
 
 
-			String token = stubToken(member1, now, 28);
-			System.out.println("token = " + token);
-			MockHttpServletRequestBuilder req = get(PATH).header(HttpHeaders.AUTHORIZATION, BEARER + token);
+			String token = stubToken(loginUser, now, 28);
+			MockHttpServletRequestBuilder req = get(PATH)
+					.header(HttpHeaders.AUTHORIZATION, BEARER + token)
+					.param("page", "0")
+					.param("size", "10");
 
 			// when
-//			mockMvc.perform();
+			mockMvc.perform(req)
+					.andDo(print())
+					.andExpect(status().isOk())
+					.andExpect(jsonPath("totalLength").value(3))
+					.andExpect(jsonPath("result[0].content").value(board1.getContent()))
+					.andExpect(jsonPath("result[0].reacted").value(true));
 
 
 		}

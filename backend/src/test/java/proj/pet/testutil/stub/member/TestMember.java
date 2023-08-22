@@ -46,7 +46,7 @@ public class TestMember {
 	@Builder.Default
 	private final LocalDateTime deletedAt = null;
 
-	public Member as(LocalDateTime now) {
+	public Member asEntity(LocalDateTime now) {
 		return Member.of(
 				this.getOauthProfile(),
 				this.getCountry(),

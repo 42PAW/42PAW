@@ -50,10 +50,10 @@ class BoardControllerTest extends E2ETest {
 		LocalDateTime now = LocalDateTime.now();
 		author = TestMember.builder()
 				.oauthProfile(OauthProfile.of(OauthType.FORTY_TWO, "email1", "nickname1"))
-				.build().as(now);
+				.build().asEntity(now);
 		loginUser = TestMember.builder()
 				.oauthProfile(OauthProfile.of(OauthType.FORTY_TWO, "email2", "nickname2"))
-				.build().as(now);
+				.build().asEntity(now);
 	}
 
 	private Member stubMember(String email, String nickname, String statement, Country.Campus campus, LocalDateTime now) {

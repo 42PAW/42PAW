@@ -17,7 +17,7 @@ import proj.pet.member.domain.*;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.reaction.domain.ReactionType;
 import proj.pet.scrap.domain.Scrap;
-import proj.pet.testutil.E2ETest;
+import proj.pet.testutil.test.E2ETest;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;

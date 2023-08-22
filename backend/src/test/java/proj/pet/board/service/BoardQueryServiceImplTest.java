@@ -11,7 +11,7 @@ import proj.pet.board.repository.BoardRepository;
 import proj.pet.category.domain.Species;
 import proj.pet.mapper.BoardMapper;
 import proj.pet.member.domain.Member;
-import proj.pet.testutil.UnitTest;
+import proj.pet.testutil.test.UnitTest;
 
 import java.util.List;
 

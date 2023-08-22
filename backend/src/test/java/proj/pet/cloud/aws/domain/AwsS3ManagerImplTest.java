@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.web.multipart.MultipartFile;
-import proj.pet.testutil.UnitTest;
+import proj.pet.testutil.test.UnitTest;
 
 import java.net.URL;
 

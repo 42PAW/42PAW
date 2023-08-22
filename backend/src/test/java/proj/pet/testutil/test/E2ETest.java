@@ -1,4 +1,4 @@
-package proj.pet.testutil;
+package proj.pet.testutil.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
@@ -17,6 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import proj.pet.auth.domain.jwt.JwtProperties;
 import proj.pet.member.domain.Member;
+import proj.pet.testutil.ExternalDependenciesBreaker;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ import java.util.Map;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@Import(ExternalDependencyBreaker.class)
+@Import(ExternalDependenciesBreaker.class)
 @Transactional
 public abstract class E2ETest {
 

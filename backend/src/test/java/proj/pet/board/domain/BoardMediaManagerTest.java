@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.springframework.web.multipart.MultipartFile;
 import proj.pet.cloud.aws.config.AwsS3Properties;
 import proj.pet.cloud.aws.domain.AwsS3ManagerImpl;
-import proj.pet.testutil.UnitTest;
+import proj.pet.testutil.test.UnitTest;
 
 import java.util.List;
 

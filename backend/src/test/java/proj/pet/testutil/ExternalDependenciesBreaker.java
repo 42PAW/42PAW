@@ -10,7 +10,7 @@ import proj.pet.cloud.aws.domain.AwsS3ManagerImpl;
  * 외부 의존성을 끊어내는 설정
  */
 @TestConfiguration
-public class ExternalDependencyBreaker {
+public class ExternalDependenciesBreaker {
 
 	@Bean
 	public AwsS3Manager AwsS3Manger() {

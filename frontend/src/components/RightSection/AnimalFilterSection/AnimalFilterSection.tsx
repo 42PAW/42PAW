@@ -1,15 +1,35 @@
+import { useState, useEffect } from "react";
+import { useRecoilState } from "recoil";
 import { styled } from "styled-components";
 import AnimalButtonContainer from "@/components/AnimalButtonContainer";
+import { userInfoState } from "@/recoil/atom";
+import { UserInfoDTO } from "@/types/dto/member.dto";
+import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 
 const AnimalFilterSection = () => {
+  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
+  const [animalCategory, setAnimalCategory] = useState<AnimalSpecies[]>([]);
+
+  useEffect(() => {
+    if (userInfo) setAnimalCategory(userInfo.animalCategories);
+  }, []);
+
+  const handleOnClick = () => {
+    console.log(animalCategory);
+  };
+
   return (
     <WrapperStyled>
       <CategoryIconContainerStyled>
         <img src="/src/assets/categoryW.png" />
         필터
       </CategoryIconContainerStyled>
-      <AnimalButtonContainer columns={2} />
-      <SubmitButtonStyled>확인</SubmitButtonStyled>
+      <AnimalButtonContainer
+        columns={2}
+        array={animalCategory}
+        setter={setAnimalCategory}
+      />
+      <SubmitButtonStyled onClick={handleOnClick}>확인</SubmitButtonStyled>
     </WrapperStyled>
   );
 };

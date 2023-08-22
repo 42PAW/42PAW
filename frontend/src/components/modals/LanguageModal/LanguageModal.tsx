@@ -100,7 +100,7 @@ const WrapperStyled = styled.div`
   align-items: center;
   padding: 0px 0px;
   padding-bottom: 20px;
-  border-radius: 15px;
+  border-radius: 10px;
   background-color: var(--white);
 `;
 
@@ -119,6 +119,7 @@ const HeaderStyled = styled.h1`
   background-color: var(--white);
   color: var(--grey);
   font-size: 1.4rem;
+  font-weight: 500;
 `;
 
 const LanguageItemContainerStyled = styled.div`

@@ -23,6 +23,7 @@ export interface UserInfoDTO {
   intraName: string;
   profileImageUrl: string;
   language: string;
+  animalCategories: AnimalSpecies[];
 }
 
 export interface ProfileInfoDTO {

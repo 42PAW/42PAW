@@ -387,3 +387,13 @@ export const axiosReport = async (
     throw error;
   }
 };
+
+const axiosGetWorldStatisticsURL = "/v1/statistics/world";
+export const axiosGetWorldStatistics = async (): Promise<any> => {
+  try {
+    const response = await axios.get(axiosGetWorldStatisticsURL);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

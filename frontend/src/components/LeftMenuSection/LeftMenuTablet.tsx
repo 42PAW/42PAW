@@ -12,7 +12,8 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   language,
 }) => {
   const [isBannerVisible, setIsBannerVisible] = useState(true);
-  const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
+  const { moveToMain, moveToMyProfile, moveToUpload, moveToDashboard } =
+    useNavigateCustom();
   const { openSearchSection } = useRightSectionHandler();
   const touchStartY = useRef<number | null>(null);
 
@@ -94,7 +95,7 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
             <li onClick={openSearchSection}>
               <img alt="Search" src="/src/assets/search.png" />
             </li>
-            <li>
+            <li onClick={moveToDashboard}>
               <img alt="DashBoard" src="/src/assets/dashboard.png" />
             </li>
           </MenuListStyled>

@@ -71,6 +71,7 @@ const MainPage = () => {
           createdAt={board.createdAt}
         />
       ))}
+      <BoardsEndStyled>더 이상 게시물이 존재하지 않습니다.</BoardsEndStyled>
     </WrapperStyled>
   );
 };
@@ -83,6 +84,15 @@ const WrapperStyled = styled.div<{ $boardExists?: boolean }>`
   overflow-y: scroll;
   width: 100%;
   height: 100vh;
+`;
+
+const BoardsEndStyled = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  color: var(--white);
 `;
 
 const NoBoardsStyled = styled.div`

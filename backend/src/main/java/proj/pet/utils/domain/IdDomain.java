@@ -1,7 +1,13 @@
 package proj.pet.utils.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PostLoad;
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.Transient;
+import org.hibernate.proxy.HibernateProxy;
 import org.springframework.data.domain.Persistable;
+
+import java.io.Serializable;
 
 /**
  * Long인 단일 Id를 가지는 엔티티의 추상 클래스입니다.
@@ -15,27 +21,28 @@ import org.springframework.data.domain.Persistable;
  * {@link #equals(Object)}와 {@link #hashCode()} 메서드를 구현합니다.
  */
 @MappedSuperclass
-public abstract class IdDomain implements Persistable<Long> {
+public abstract class IdDomain<ID extends Serializable> implements Persistable<ID> {
 
-	@Id @Column(name = "ID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id = null;
 	@Transient
 	private boolean isNew = true;
-
-	@Override
-	public Long getId() {
-		return id;
-	}
 
 	/**
 	 * Long 타입 Id를 갖는 엔티티의 경우, Equals와 HashCode는 고정이므로, final로 선언합니다.
 	 */
 	@Override
-	public final boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || !getClass().equals(o.getClass())) return false;
-		return getId() != null && getId().equals(((IdDomain) o).getId());
+	public boolean equals(Object o) {
+		if (o == null || getId() == null) {
+			return false;
+		}
+		if (!(o instanceof HibernateProxy)
+				&& this.getClass() != o.getClass()) {
+			return false;
+		}
+		@SuppressWarnings("unchecked")
+		Serializable oid = o instanceof HibernateProxy
+				? (Serializable) ((HibernateProxy) o).getHibernateLazyInitializer().getIdentifier() :
+				((IdDomain<ID>) o).getId();
+		return getId().equals(oid);
 	}
 
 	@Override
@@ -52,9 +59,5 @@ public abstract class IdDomain implements Persistable<Long> {
 	@PostPersist
 	protected void markNotNew() {
 		this.isNew = false;
-	}
-
-	public boolean isId(Long id) {
-		return this.id.equals(id);
 	}
 }

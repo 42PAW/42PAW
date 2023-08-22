@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.board.domain.Board;
 import proj.pet.member.domain.Member;
-import proj.pet.utils.domain.IdDomain;
+import proj.pet.utils.domain.IdentityDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
 
@@ -18,7 +18,7 @@ import static lombok.AccessLevel.PROTECTED;
 		uniqueConstraints = {@UniqueConstraint(name = "UNIQUE_SCRAP", columnNames = {"MEMBER_ID", "BOARD_ID"})})
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-public class Scrap extends IdDomain implements Validatable {
+public class Scrap extends IdentityDomain implements Validatable {
 
 	@Column(name = "MEMBER_ID", nullable = false, insertable = false, updatable = false)
 	private Long memberId;

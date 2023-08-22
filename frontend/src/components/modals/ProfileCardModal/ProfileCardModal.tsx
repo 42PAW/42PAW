@@ -48,6 +48,11 @@ const ProfileCardModal = () => {
     closeModal(ModalType.PROFILECARD);
   };
 
+  const toProfile = () => {
+    moveToProfile();
+    closeModal(ModalType.PROFILECARD);
+  };
+
   const handleClickFollowType = async () => {
     if (profileData.followType === followType.NONE)
       await axiosFollow(currentMemberId as number);
@@ -116,7 +121,7 @@ const ProfileCardModal = () => {
           <ButtonContainerStyled>
             {userInfo?.memberId !== currentMemberId ? (
               <>
-                <ButtonStyled>프로필</ButtonStyled>
+                <ButtonStyled onClick={toProfile}>프로필</ButtonStyled>
                 <div onClick={handleClickFollowTypeButton}>
                   <FollowTypeButton
                     status={profileData.followType}

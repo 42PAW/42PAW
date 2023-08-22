@@ -1,7 +1,28 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { IBoardInfo } from "@/types/interface/board.interface";
+// import { BoardsInfoDTO } from "@/types/dto/board.dto";
+import PostList from "./PostList";
+import { useNavigate } from "react-router-dom";
+import useNavigateCustom from "@/hooks/useNavigateCustom";
 
 const imgs = [
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
+  "/src/assets/oduck.png",
   "/src/assets/oduck.png",
   "/src/assets/oduck.png",
   "/src/assets/oduck.png",
@@ -26,9 +47,12 @@ const imgs2 = [
   "/src/assets/userG.png",
 ];
 
-const PhotoZoneComponent = () => {
+const PhotoZoneComponent: React.FC<{ boards: IBoardInfo[] | null }> = ({
+  boards,
+}) => {
   //   const [nowActivatedTabValue, setNowActivatedTabValue] = useState("firstBtn");
   const [activeTab, setActiveTab] = useState("myPosts");
+  const { moveToMain } = useNavigateCustom();
 
   //   // 게시물 정보를 가져오는 함수
   //   const fetchPosts = (tab) => {
@@ -64,10 +88,11 @@ const PhotoZoneComponent = () => {
         </button>
       </PhotoCategoryToggleStyled>
       <PhotoZoneWrapperStyled>
-        {activeTab === "myPosts" &&
+        <PostList posts={boards} onClickItem={moveToMain} />
+        {/* {activeTab === "myPosts" &&
           imgs.map((prop, index) => <img key={index} src={prop} />)}
         {activeTab === "scrapPosts" &&
-          imgs2.map((prop, index) => <img key={index} src={prop} />)}
+          imgs2.map((prop, index) => <img key={index} src={prop} />)} */}
       </PhotoZoneWrapperStyled>
     </ProfileBodyStyled>
   );
@@ -127,13 +152,13 @@ const PhotoZoneWrapperStyled = styled.div`
     border-radius: 1%;
   }
   border: 1px;
-  &::before {
-    content: ""; /* 가상 요소 내용 없음 */
-    position: absolute; /* 절대 위치 설정 */
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
+  // &::before {
+  //   content: ""; /* 가상 요소 내용 없음 */
+  //   position: absolute; /* 절대 위치 설정 */
+  //   top: 0;
+  //   left: 0;
+  //   width: 100%;
+  // }
 `;
 
 export default PhotoZoneComponent;

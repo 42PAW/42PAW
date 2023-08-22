@@ -11,6 +11,7 @@ import {
   axiosGetBoards,
   axiosGetTrendingBoards,
   axiosGetFollowingBoards,
+  axiosGetMyBoards,
   axiosGetBoardComments,
   axiosGetMyProfile,
   axiosGetProfile,
@@ -31,6 +32,10 @@ const useFetch = () => {
       }
       if (boardCategory === Board.FOLLOWING) {
         const response = await axiosGetFollowingBoards(20, 0);
+        return response.result;
+      }
+      if (boardCategory === Board.MINE) {
+        const response = await axiosGetMyBoards(20, 0);
         return response.result;
       }
     } catch (error) {

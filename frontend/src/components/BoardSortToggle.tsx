@@ -56,10 +56,15 @@ const SortTabStyled = styled.div<{ $buttonToggled: number }>`
   width: 33.3%;
   height: 100%;
   position: absolute;
+  background-color: ${({ $buttonToggled }) =>
+    $buttonToggled === 0
+      ? "var(--lightpurple)"
+      : $buttonToggled === 1
+      ? "var(--lightpurple)"
+      : "var(--lightpurple)"};
   margin-left: ${({ $buttonToggled }) => $buttonToggled * 85}px;
-  transition: margin-left 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
   border-radius: 30px;
-  background-color: var(--lightpurple);
 `;
 
 const BoardSortToggleStyled = styled.div<{ $buttonToggled: number }>`

@@ -38,6 +38,7 @@ const ProfileCardModal = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["profile", currentMemberId],
     queryFn: fetchProfile,
+    keepPreviousData: true,
   });
 
   const profileData = data as ProfileInfoDTO;
@@ -171,10 +172,10 @@ const OptionButtonContainerStyled = styled.div`
   right: 10px;
   top: 8px;
   img {
-    width: 30px;
+    width: 25px;
   }
   @media (min-width: 1024px) {
-    right: 15px;
+    right: 10px;
     top: 5px;
   }
 `;
@@ -210,6 +211,7 @@ const MainAreaStyled = styled.div`
     #d1c1cd 52.34%,
     #e6dade 76.75%
   );
+
   @media (max-width: 1023px) {
     position: absolute;
     bottom: -290px;
@@ -217,7 +219,10 @@ const MainAreaStyled = styled.div`
   }
   @media (min-width: 1024px) {
     position: absolute;
-    right: -110px;
+    right: -130px;
+    padding-left: 130px;
+    width: 550px;
+    height: 300px;
   }
 `;
 

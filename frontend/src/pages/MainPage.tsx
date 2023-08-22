@@ -22,12 +22,11 @@ const MainPage = () => {
     queryKey: ["boards", boardCategory],
     queryFn: fetchBoards,
     keepPreviousData: true,
-    retry: 5,
   });
 
   if (isLoading) {
     return (
-      <WrapperStyled>
+      <WrapperStyled $boardExists={true}>
         <SkeletonBoardTemplate />
         <LoadingAnimation />
       </WrapperStyled>
@@ -38,8 +37,19 @@ const MainPage = () => {
     navigator("/error");
   }
 
+  if (!boards.length) {
+    return (
+      <WrapperStyled $boardExists={false}>
+        <NoBoardsStyled>
+          <img src="/src/assets/noBoard.png" />
+          게시물이 존재하지 않습니다
+        </NoBoardsStyled>
+      </WrapperStyled>
+    );
+  }
+
   return (
-    <WrapperStyled>
+    <WrapperStyled $boardExists={true}>
       {boards.map((board: IBoardInfo) => (
         <BoardTemplate
           key={board.boardId}
@@ -61,17 +71,42 @@ const MainPage = () => {
           createdAt={board.createdAt}
         />
       ))}
+      <BoardsEndStyled>더 이상 게시물이 존재하지 않습니다.</BoardsEndStyled>
     </WrapperStyled>
   );
 };
 
-const WrapperStyled = styled.div`
+const WrapperStyled = styled.div<{ $boardExists?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: ${(props) => (props.$boardExists ? "none" : "center")};
   overflow-y: scroll;
   width: 100%;
   height: 100vh;
+`;
+
+const BoardsEndStyled = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  color: var(--white);
+`;
+
+const NoBoardsStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--white);
+  font-size: 1.2rem;
+  opacity: 0.7;
+  img {
+    width: 50px;
+    margin-bottom: 5px;
+  }
 `;
 
 export default MainPage;

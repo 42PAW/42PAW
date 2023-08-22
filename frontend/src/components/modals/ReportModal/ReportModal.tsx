@@ -14,7 +14,7 @@ import { ReportDTO } from "@/types/dto/member.dto";
 
 const reportOptions = [
   {
-    value: ReportReason.WRONG_ANIMAL,
+    value: ReportReason.WRONG_ANIMAL_CATEGORY,
     label: "잘못된 동물 카테고리",
   },
   {
@@ -48,6 +48,7 @@ const reportOptions = [
 ];
 
 const ReportModal: React.FC = () => {
+  const [content, setContent] = useState<string>("");
   const [reportUserInfo] = useRecoilState<ReportDTO>(reportUserInfoState);
   const resetReportUserInfo = useResetRecoilState(reportUserInfoState);
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
@@ -67,16 +68,19 @@ const ReportModal: React.FC = () => {
       popToast("신고 사유를 선택해주세요.", "N");
       return;
     }
-    console.log(reportUserInfo, selectedCategory);
     await axiosReport(
       reportUserInfo.reportedMemberId as number,
-      "hello",
+      content,
       selectedCategory,
       reportUserInfo.boardId,
       reportUserInfo.commentId
     );
     popToast("신고가 접수됐습니다.", "P");
     resetReportUserInfo();
+  };
+
+  const handleContent = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setContent(e.target.value);
   };
 
   return (
@@ -86,7 +90,6 @@ const ReportModal: React.FC = () => {
     >
       <WrapperStyled>
         <h1>신고하기</h1>
-        <img src="/src/assets/report.png" />
         <CategoryContatinerStyled>
           {reportOptions.map((option) => (
             <ReportCategoryOption
@@ -98,7 +101,12 @@ const ReportModal: React.FC = () => {
             />
           ))}
         </CategoryContatinerStyled>
-        <EtcInputStyled placeholder="사유를 적어주세요" maxLength={50} />
+        <EtcInputStyled
+          placeholder="사유를 적어주세요(50자 이내)"
+          value={content}
+          maxLength={50}
+          onChange={handleContent}
+        />
         <button onClick={handleSubmitReport}>제출</button>
       </WrapperStyled>
     </ModalLayout>
@@ -109,33 +117,34 @@ const WrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 400px;
-  width: 270px;
+
+  height: 317px;
+  width: 250px;
   background-color: var(--white);
-  border-radius: 15px;
+  border-radius: 10px;
   color: var(--grey);
   h1 {
-    font-size: 16px;
-    margin-top: 28px;
-    margin-bottom: 7px;
+    font-size: 1.4rem;
+    margin-top: 20px;
+    font-weight: 500;
   }
   img {
     width: 25px;
   }
   button {
     cursor: pointer;
-    margin-top: 30px;
-    height: 30px;
-    width: 90px;
+    margin-top: 20px;
+    height: 40px;
+    width: 100%;
+    font-size: 1.2rem;
+    color: var(--grey);
     border: none;
-    background-color: var(--grey);
-    color: var(--white);
-    border: none;
-    border-radius: 5px;
+    background-color: transparent;
+    border-top: 0.5px solid #eaeaea;
   }
   button:hover {
-    background-color: var(--purple);
-    transition: background-color 0.2s ease-in-out;
+    opacity: 0.8;
+    transition: all 0.2s ease;
   }
 `;
 
@@ -145,8 +154,8 @@ const CategoryContatinerStyled = styled.div`
   justify-content: space-between;
   height: 160px;
   width: 100%;
-  margin-top: 35px;
-  margin-left: 90px;
+  margin-top: 15px;
+  margin-left: 80px;
 `;
 
 const EtcInputStyled = styled.input`
@@ -157,10 +166,10 @@ const EtcInputStyled = styled.input`
   height: 25px;
   outline: none;
   color: var(--grey);
-  font-size: 12px;
+  font-size: 1rem;
   &::placeholder {
     color: var(--lightgrey);
-    font-size: 12px;
+    font-size: 1rem;
   }
 `;
 

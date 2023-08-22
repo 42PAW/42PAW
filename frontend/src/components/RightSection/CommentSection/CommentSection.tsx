@@ -7,8 +7,6 @@ import { currentBoardIdState } from "@/recoil/atom";
 import { axiosCreateComment } from "@/api/axios/axios.custom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Board } from "@/types/enum/board.category.enum";
-import { userInfoState } from "@/recoil/atom";
-import { UserInfoDTO } from "@/types/dto/member.dto";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import useFetch from "@/hooks/useFetch";
 import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation";
@@ -21,7 +19,6 @@ const isOnlyWhitespace = (str: string) => {
 };
 
 const CommentSection = () => {
-  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const { fetchComments } = useFetch();
   const [currentBoardId] = useRecoilState<number | null>(currentBoardIdState);
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
@@ -54,17 +51,23 @@ const CommentSection = () => {
     onSuccess: async () => {
       if (comment === "" || isOnlyWhitespace(comment)) return;
 
+      await queryClient.invalidateQueries(["comments", currentBoardId]);
+      const newComments: CommentInfoDTO[] | undefined =
+        await queryClient.getQueryData(["comments", currentBoardId]);
+
       await queryClient.setQueryData(
         ["boards", boardCategory],
         (prevData: IBoardInfo[] | any) => {
           if (!prevData) return prevData;
+          if (!newComments) return prevData;
           const updatedBoards = prevData.map((board: IBoardInfo) => {
             if (board.boardId === currentBoardId) {
               return {
                 ...board,
-                previewCommentUser: userInfo?.memberName,
-                previewComment: comment,
-                commentCount: board.commentCount + 1,
+                previewCommentUser:
+                  newComments[newComments?.length - 1].memberName,
+                previewComment: newComments[newComments?.length - 1].comment,
+                commentCount: newComments?.length,
               };
             }
             return board;
@@ -73,7 +76,6 @@ const CommentSection = () => {
           return updatedBoards;
         }
       );
-      await queryClient.invalidateQueries(["comments", currentBoardId]);
       setComment("");
     },
   });
@@ -141,6 +143,7 @@ const WrapperStyled = styled.div`
 `;
 
 const CommentItemWrapperStyled = styled.div`
+  padding-top: 5px;
   width: 100%;
   height: calc(100% - 40px);
   overflow-y: scroll;
@@ -153,7 +156,7 @@ const NoCommentMessageStyled = styled.div`
   justify-content: center;
   height: calc(100% - 40px);
   text-align: center;
-  font-size: 1.8rem;
+  font-size: 2rem;
   color: var(--white);
   opacity: 0.7;
 `;

@@ -1,5 +1,8 @@
 package proj.pet.board.service;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import proj.pet.board.domain.Board;
@@ -11,10 +14,6 @@ import proj.pet.mapper.BoardMapper;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
 
 @QueryService
 @RequiredArgsConstructor
@@ -55,22 +54,26 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
 	@Override
 	public BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId,
-	                                           PageRequest pageRequest) {
+			PageRequest pageRequest) {
 		List<BoardInfoDto> result = boardRepository.getMemberBoards(memberId, pageRequest).stream()
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());
 	}
 
-	@Override public BoardsPaginationDto getScraps(Long loginUserId, PageRequest pageRequest) {
-		List<BoardInfoDto> result = boardRepository.getScrapBoards(loginUserId, pageRequest).stream()
+	@Override
+	public BoardsPaginationDto getScraps(Long loginUserId, PageRequest pageRequest) {
+		List<BoardInfoDto> result = boardRepository.getScrapBoards(loginUserId, pageRequest)
+				.stream()
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());
 	}
 
-	@Override public BoardsPaginationDto getFollowingsBoards(Long memberId, PageRequest pageRequest) {
-		List<BoardInfoDto> result = boardRepository.getFollowingsBoards(memberId, pageRequest).stream()
+	@Override
+	public BoardsPaginationDto getFollowingsBoards(Long memberId, PageRequest pageRequest) {
+		List<BoardInfoDto> result = boardRepository.getFollowingsBoards(memberId, pageRequest)
+				.stream()
 				.map(board -> createBoardInfoDto(memberId, board))
 				.toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());

@@ -17,7 +17,7 @@ import {
 } from "@/api/axios/axios.custom";
 import useDebounce from "@/hooks/useDebounce";
 import useParseDate from "@/hooks/useParseDate";
-import { useSpring, animated } from "react-spring";
+import { useSpring, animated } from "@react-spring/web";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
 
@@ -269,6 +269,9 @@ const ReactionCommentContainerStyled = styled.div`
   }
   img:hover {
     opacity: 0.5;
+  }
+  @media (max-width: 1023px) {
+    margin-left: -5px;
   }
 `;
 

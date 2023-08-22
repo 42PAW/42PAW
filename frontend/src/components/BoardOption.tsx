@@ -90,18 +90,22 @@ const BoardOption: React.FC<IOptionButtonProps> = ({
 
 const MenuItemWrapperStyled = styled.li`
   margin: 3px 5px;
+  height: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const MenuItemStyled = styled.div`
+  position: absolute;
   cursor: pointer;
   font-size: 10px;
   padding: 2px 5px;
   color: var(--lightgrey);
   border-radius: 20px;
   text-decoration: none;
-  transition: all 0.2s;
   &:hover {
-    color: var(--lightpurple);
+    font-weight: bold;
   }
 `;
 

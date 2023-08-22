@@ -1,4 +1,4 @@
-package proj.pet.testutil.test;
+package proj.pet.testutil;
 
 import jakarta.persistence.EntityManager;
 import proj.pet.utils.domain.IdDomain;

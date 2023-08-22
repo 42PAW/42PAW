@@ -20,11 +20,11 @@ import proj.pet.member.domain.OauthType;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.reaction.domain.ReactionType;
 import proj.pet.scrap.domain.Scrap;
+import proj.pet.testutil.PersistHelper;
 import proj.pet.testutil.stub.board.TestBoard;
 import proj.pet.testutil.stub.board.TestBoardMedia;
 import proj.pet.testutil.stub.member.TestMember;
 import proj.pet.testutil.test.E2ETest;
-import proj.pet.testutil.test.PersistHelper;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;

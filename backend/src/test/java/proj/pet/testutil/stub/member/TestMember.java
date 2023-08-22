@@ -21,7 +21,7 @@ public class TestMember {
 	public static final Language DEFAULT_LANGUAGE = Language.KOREAN;
 	public static final MemberRole DEFAULT_MEMBER_ROLE = MemberRole.USER;
 	public static final LocalDateTime DEFAULT_NICKNAME_UPDATED_AT = LocalDateTime.of(LocalDate.EPOCH, LocalTime.MIDNIGHT);
-	public static final LocalDateTime DEFAULT_CREATED_AT = LocalDateTime.of(LocalDate.EPOCH, LocalTime.MIDNIGHT);
+	public static final LocalDateTime DEFAULT_TIME = LocalDateTime.of(LocalDate.EPOCH, LocalTime.MIDNIGHT);
 
 	@Builder.Default
 	private final String profileImageUrl = DEFAULT_PROFILE_IMAGE_URL;
@@ -42,18 +42,18 @@ public class TestMember {
 	@Builder.Default
 	private final MemberRole memberRole = DEFAULT_MEMBER_ROLE;
 	@Builder.Default
-	private final LocalDateTime createdAt = DEFAULT_CREATED_AT;
+	private final LocalDateTime createdAt = DEFAULT_TIME;
 	@Builder.Default
 	private final LocalDateTime deletedAt = null;
 
-	public Member asEntity(LocalDateTime now) {
+	public Member asEntity() {
 		return Member.of(
-				this.getOauthProfile(),
-				this.getCountry(),
-				this.getCampus(),
-				this.getNickname(),
-				this.getStatement(),
-				this.getMemberRole(),
-				now);
+				this.oauthProfile,
+				this.country,
+				this.campus,
+				this.nickname,
+				this.statement,
+				this.memberRole,
+				this.createdAt);
 	}
 }

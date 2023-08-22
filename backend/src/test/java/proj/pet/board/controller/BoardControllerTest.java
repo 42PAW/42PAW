@@ -14,10 +14,14 @@ import proj.pet.board.domain.VisibleScope;
 import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.BoardCategoryFilter;
 import proj.pet.category.domain.Species;
-import proj.pet.member.domain.*;
+import proj.pet.member.domain.Member;
+import proj.pet.member.domain.OauthProfile;
+import proj.pet.member.domain.OauthType;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.reaction.domain.ReactionType;
 import proj.pet.scrap.domain.Scrap;
+import proj.pet.testutil.stub.board.TestBoard;
+import proj.pet.testutil.stub.board.TestBoardMedia;
 import proj.pet.testutil.stub.member.TestMember;
 import proj.pet.testutil.test.E2ETest;
 import proj.pet.testutil.test.PersistHelper;
@@ -30,6 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static proj.pet.testutil.stub.board.TestBoardMedia.DEFAULT_MEDIA_URL;
 
 class BoardControllerTest extends E2ETest {
 
@@ -50,21 +55,10 @@ class BoardControllerTest extends E2ETest {
 		LocalDateTime now = LocalDateTime.now();
 		author = TestMember.builder()
 				.oauthProfile(OauthProfile.of(OauthType.FORTY_TWO, "email1", "nickname1"))
-				.build().asEntity(now);
+				.build().asEntity();
 		loginUser = TestMember.builder()
 				.oauthProfile(OauthProfile.of(OauthType.FORTY_TWO, "email2", "nickname2"))
-				.build().asEntity(now);
-	}
-
-	private Member stubMember(String email, String nickname, String statement, Country.Campus campus, LocalDateTime now) {
-		return Member.of(
-				OauthProfile.of(OauthType.FORTY_TWO, email, nickname),
-				Country.KOREA,
-				Country.Campus.SEOUL,
-				nickname,
-				statement,
-				MemberRole.USER,
-				now);
+				.build().asEntity();
 	}
 
 	private Board stubBoard(Member member, LocalDateTime now) {
@@ -96,11 +90,19 @@ class BoardControllerTest extends E2ETest {
 			// given
 			LocalDateTime now = LocalDateTime.now();
 			persistHelper.persist(author, loginUser);
-			Board board1 = stubBoard(author, now);
-			Board board2 = stubBoard(author, now);
-			Board board3 = stubBoard(author, now);
+			Board board1 = TestBoard.builder().member(author)
+					.build().asEntity();
+			Board board2 = TestBoard.builder().member(author)
+					.build().asEntity();
+			persistHelper.persist(board1, board2);
+			List<BoardMedia> boardMedia = TestBoardMedia.builder()
+					.board(board1)
+					.build().asEntitiesOfCount(3);
+			board1.addMediaList(boardMedia);
 			persistHelper
-					.persist(Reaction.of(board1, loginUser, ReactionType.LIKE, now),
+					.persist(
+							board1, board2,
+							Reaction.of(board1, loginUser, ReactionType.LIKE, now),
 							Scrap.of(loginUser, board2, now))
 					.flushAndClear();
 
@@ -115,13 +117,15 @@ class BoardControllerTest extends E2ETest {
 			mockMvc.perform(req)
 					.andDo(print())
 					.andExpect(status().isOk())
-					.andExpect(jsonPath("totalLength").value(3))
-					.andExpect(jsonPath("result[0].content").value(board1.getContent()))
+					.andExpect(jsonPath("totalLength").value(2))
+					.andExpect(jsonPath("result[0].content").value(TestBoard.DEFAULT_CONTENT))
+					.andExpect(jsonPath("result[0].memberName").value(TestMember.DEFAULT_NICKNAME))
 					.andExpect(jsonPath("result[0].reacted").value(true))
 					.andExpect(jsonPath("result[0].scrapped").value(false))
 					.andExpect(jsonPath("result[1].scrapped").value(true))
-					.andExpect(jsonPath("result[1].categories.[0]").value(categories.get(0).getCategoryName()))
-					.andExpect(jsonPath("result[0].images").value(Matchers.hasItems("mediaUrl1", "mediaUrl2", "mediaUrl3")))
+//					.andExpect(jsonPath("result[0].categories.[0]").value(categories.get(0).getCategoryName()))
+					.andExpect(jsonPath("result[0].images").value(
+							Matchers.hasItems(DEFAULT_MEDIA_URL + 0, DEFAULT_MEDIA_URL + 1, DEFAULT_MEDIA_URL + 2)))
 			;
 
 

@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import proj.pet.utils.domain.IdDomain;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,13 @@ public class PersistHelper {
 	}
 
 	public PersistHelper persist(IdDomain<?>... entities) {
+		for (IdDomain<?> entity : entities) {
+			this.em.persist(entity);
+		}
+		return this;
+	}
+
+	public <E extends IdDomain<?>> PersistHelper persist(Collection<E> entities) {
 		for (IdDomain<?> entity : entities) {
 			this.em.persist(entity);
 		}

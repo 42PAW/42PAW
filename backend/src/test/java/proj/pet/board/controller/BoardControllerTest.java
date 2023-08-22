@@ -1,5 +1,6 @@
 package proj.pet.board.controller;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,10 +18,12 @@ import proj.pet.member.domain.*;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.reaction.domain.ReactionType;
 import proj.pet.scrap.domain.Scrap;
+import proj.pet.testutil.stub.member.TestMember;
 import proj.pet.testutil.test.E2ETest;
 import proj.pet.testutil.test.PersistHelper;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,30 +33,36 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class BoardControllerTest extends E2ETest {
 
+	/*------------------------------UTIL------------------------------*/
 	private final static String BEARER = "Bearer ";
-	private AnimalCategory dog;
-
 	private PersistHelper persistHelper;
 
+	/*---------------------------TEST-DOUBLE---------------------------*/
+	private List<AnimalCategory> categories;
 	private Member author;
 	private Member loginUser;
 
 	@BeforeEach
 	void setup() {
 		persistHelper = PersistHelper.start(em);
-		dog = persistHelper.persistAndReturn(AnimalCategory.of(Species.DOG));
+		categories = Arrays.stream(Species.values()).map(AnimalCategory::of).toList();
+		persistHelper.persist(categories).flushAndClear();
 		LocalDateTime now = LocalDateTime.now();
-		author = persistHelper.persistAndReturn(stubMember("email.com", "author", now));
-		loginUser = persistHelper.persistAndReturn(stubMember("loginUser.com", "loginUser", now));
+		author = TestMember.builder()
+				.oauthProfile(OauthProfile.of(OauthType.FORTY_TWO, "email1", "nickname1"))
+				.build().as(now);
+		loginUser = TestMember.builder()
+				.oauthProfile(OauthProfile.of(OauthType.FORTY_TWO, "email2", "nickname2"))
+				.build().as(now);
 	}
 
-	private Member stubMember(String email, String nickname, LocalDateTime now) {
+	private Member stubMember(String email, String nickname, String statement, Country.Campus campus, LocalDateTime now) {
 		return Member.of(
 				OauthProfile.of(OauthType.FORTY_TWO, email, nickname),
 				Country.KOREA,
 				Country.Campus.SEOUL,
 				nickname,
-				"statement",
+				statement,
 				MemberRole.USER,
 				now);
 	}
@@ -68,10 +77,9 @@ class BoardControllerTest extends E2ETest {
 		board.addMediaList(boardMedia);
 		List<BoardCategoryFilter> boardCategoryFilters = persistHelper.persistAndReturn(
 				List.of(
-						BoardCategoryFilter.of(board, dog))
-		);
+						BoardCategoryFilter.of(board, categories.get(0))
+				));
 		board.addCategoryFilters(boardCategoryFilters);
-		persistHelper.persist(board);
 		return board;
 	}
 
@@ -87,7 +95,7 @@ class BoardControllerTest extends E2ETest {
 		void getMainViewBoards() throws Exception {
 			// given
 			LocalDateTime now = LocalDateTime.now();
-			System.out.println("author = " + author.getId());
+			persistHelper.persist(author, loginUser);
 			Board board1 = stubBoard(author, now);
 			Board board2 = stubBoard(author, now);
 			Board board3 = stubBoard(author, now);
@@ -112,7 +120,9 @@ class BoardControllerTest extends E2ETest {
 					.andExpect(jsonPath("result[0].reacted").value(true))
 					.andExpect(jsonPath("result[0].scrapped").value(false))
 					.andExpect(jsonPath("result[1].scrapped").value(true))
-					.andExpect(jsonPath("result[1].categories.[0]").value(dog.getSpecies().name()));
+					.andExpect(jsonPath("result[1].categories.[0]").value(categories.get(0).getCategoryName()))
+					.andExpect(jsonPath("result[0].images").value(Matchers.hasItems("mediaUrl1", "mediaUrl2", "mediaUrl3")))
+			;
 
 
 		}

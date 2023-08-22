@@ -27,7 +27,9 @@ public abstract class IdDomain<ID extends Serializable> implements Persistable<I
 	private boolean isNew = true;
 
 	/**
-	 * Long 타입 Id를 갖는 엔티티의 경우, Equals와 HashCode는 고정이므로, final로 선언합니다.
+	 * 프록시 객체인 경우에 대한 처리를 위해 {@link HibernateProxy}를 사용합니다.
+	 * <p>
+	 * 영속화 된 엔티티의 ID 와 비교합니다.
 	 */
 	@Override
 	public boolean equals(Object o) {
@@ -40,8 +42,8 @@ public abstract class IdDomain<ID extends Serializable> implements Persistable<I
 		}
 		@SuppressWarnings("unchecked")
 		Serializable oid = o instanceof HibernateProxy
-				? (Serializable) ((HibernateProxy) o).getHibernateLazyInitializer().getIdentifier() :
-				((IdDomain<ID>) o).getId();
+				? (Serializable) ((HibernateProxy) o).getHibernateLazyInitializer().getIdentifier()
+				: ((IdDomain<ID>) o).getId();
 		return getId().equals(oid);
 	}
 

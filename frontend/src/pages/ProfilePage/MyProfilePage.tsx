@@ -22,7 +22,7 @@ const MyProfilePage = () => {
 
   useEffect(() => {
     setBoard(Board.MINE);
-  }, []); // 빈 배열을 넣어 마운트 시 한 번만 실행되도록 함
+  }, []);
 
   // const {
   //   isLoading: boardLoading,

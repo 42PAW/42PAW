@@ -12,6 +12,7 @@ import {
   axiosGetTrendingBoards,
   axiosGetFollowingBoards,
   axiosGetMyBoards,
+  axiosGetOtherBoards,
   axiosGetBoardComments,
   axiosGetMyProfile,
   axiosGetProfile,
@@ -19,6 +20,7 @@ import {
 
 const useFetch = () => {
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
+  const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
 
   const fetchBoards = async () => {
     try {
@@ -36,6 +38,13 @@ const useFetch = () => {
       }
       if (boardCategory === Board.MINE) {
         const response = await axiosGetMyBoards(20, 0);
+        return response.result;
+      }
+      if (boardCategory === Board.OTHER) {
+        if (!currentMemberId) {
+          return;
+        }
+        const response = await axiosGetOtherBoards(currentMemberId, 20, 0);
         return response.result;
       }
     } catch (error) {
@@ -58,7 +67,6 @@ const useFetch = () => {
   };
 
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
-  const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
 
   const fetchProfile = async () => {
     try {

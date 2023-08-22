@@ -138,15 +138,37 @@ export const axiosGetMyBoards = async (
   page: number
 ): Promise<any> => {
   try {
-    if (token) {
-      const response = await instance.get(axiosGetMyBoardsURL, {
-        params: { size: size, page: page },
-      });
-      return response.data;
-    }
-    const response = await axios.get(axiosGetMyBoardsURL, {
+    const response = await instance.get(axiosGetMyBoardsURL, {
       params: { size: size, page: page },
     });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetOtherBoardsURL = "/v1/boards/members/";
+export const axiosGetOtherBoards = async (
+  memberId: number,
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    if (token) {
+      const response = await instance.get(
+        axiosGetOtherBoardsURL + memberId.toString(),
+        {
+          params: { size: size, page: page },
+        }
+      );
+      return response.data;
+    }
+    const response = await axios.get(
+      axiosGetOtherBoardsURL + memberId.toString(),
+      {
+        params: { size: size, page: page },
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;

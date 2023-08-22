@@ -9,9 +9,11 @@ import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import useFetch from "@/hooks/useFetch";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const MainPage = () => {
-  const [boardCategory] = useRecoilState<Board>(boardCategoryState);
+  const [boardCategory, setBoardCategory] =
+    useRecoilState<Board>(boardCategoryState);
   const { fetchBoards } = useFetch();
   const navigator = useNavigate();
   const {
@@ -24,6 +26,10 @@ const MainPage = () => {
     keepPreviousData: true,
     retry: 5,
   });
+
+  useEffect(() => {
+    setBoardCategory(Board.DEFAULT);
+  }, []);
 
   if (isLoading) {
     return (

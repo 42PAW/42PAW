@@ -18,9 +18,9 @@ import proj.pet.reaction.domain.Reaction;
 import proj.pet.reaction.domain.ReactionType;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.testutil.test.E2ETest;
+import proj.pet.testutil.test.PersistHelper;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -33,10 +33,18 @@ class BoardControllerTest extends E2ETest {
 	private final static String BEARER = "Bearer ";
 	private AnimalCategory dog;
 
+	private PersistHelper persistHelper;
+
+	private Member author;
+	private Member loginUser;
+
 	@BeforeEach
 	void setup() {
-		dog = AnimalCategory.of(Species.DOG);
-		em.persist(dog);
+		persistHelper = PersistHelper.start(em);
+		dog = persistHelper.persistAndReturn(AnimalCategory.of(Species.DOG));
+		LocalDateTime now = LocalDateTime.now();
+		author = persistHelper.persistAndReturn(stubMember("email.com", "author", now));
+		loginUser = persistHelper.persistAndReturn(stubMember("loginUser.com", "loginUser", now));
 	}
 
 	private Member stubMember(String email, String nickname, LocalDateTime now) {
@@ -50,31 +58,20 @@ class BoardControllerTest extends E2ETest {
 				now);
 	}
 
-	private BoardMedia stubBoardMedia(Board board, Integer index) {
-		return BoardMedia.of(board, "mediaUrl", index, MediaType.IMAGE);
-	}
-
-	private List<BoardMedia> stubMediaList(Board board) {
-		return List.of(
-				stubBoardMedia(board, 0),
-				stubBoardMedia(board, 1),
-				stubBoardMedia(board, 2));
-	}
-
-	private List<BoardCategoryFilter> stubBoardCategoryFilter(Board board) {
-		BoardCategoryFilter boardCategoryFilter = BoardCategoryFilter.of(board, dog);
-		return List.of(boardCategoryFilter);
-	}
-
 	private Board stubBoard(Member member, LocalDateTime now) {
-		Board board = Board.of(member, VisibleScope.PUBLIC, "title", now);
-		em.persist(board);
-		List<BoardMedia> boardMedia = stubMediaList(board);
-		boardMedia.forEach(em::persist);
+		Board board =
+				persistHelper.persistAndReturn(Board.of(member, VisibleScope.PUBLIC, "title", now));
+		List<BoardMedia> boardMedia = persistHelper.persistAndReturn(
+				BoardMedia.of(board, "mediaUrl1", 0, MediaType.IMAGE),
+				BoardMedia.of(board, "mediaUrl2", 1, MediaType.IMAGE),
+				BoardMedia.of(board, "mediaUrl3", 2, MediaType.VIDEO));
 		board.addMediaList(boardMedia);
-		List<BoardCategoryFilter> boardCategoryFilters = stubBoardCategoryFilter(board);
-		boardCategoryFilters.forEach(em::persist);
+		List<BoardCategoryFilter> boardCategoryFilters = persistHelper.persistAndReturn(
+				List.of(
+						BoardCategoryFilter.of(board, dog))
+		);
 		board.addCategoryFilters(boardCategoryFilters);
+		persistHelper.persist(board);
 		return board;
 	}
 
@@ -90,18 +87,14 @@ class BoardControllerTest extends E2ETest {
 		void getMainViewBoards() throws Exception {
 			// given
 			LocalDateTime now = LocalDateTime.now();
-			Member author = stubMember("email1", "nickname1", now);
-			Member loginUser = stubMember("email2", "nickname2", now);
-			em.persist(author);
-			em.persist(loginUser);
+			System.out.println("author = " + author.getId());
 			Board board1 = stubBoard(author, now);
 			Board board2 = stubBoard(author, now);
 			Board board3 = stubBoard(author, now);
-			Arrays.asList(board1, board2, board3).forEach(em::persist);
-			em.persist(Reaction.of(board1, loginUser, ReactionType.LIKE, now));
-			em.persist(Scrap.of(loginUser, board2, now));
-			em.flush();
-			em.clear();
+			persistHelper
+					.persist(Reaction.of(board1, loginUser, ReactionType.LIKE, now),
+							Scrap.of(loginUser, board2, now))
+					.flushAndClear();
 
 
 			String token = stubToken(loginUser, now, 28);
@@ -116,7 +109,10 @@ class BoardControllerTest extends E2ETest {
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("totalLength").value(3))
 					.andExpect(jsonPath("result[0].content").value(board1.getContent()))
-					.andExpect(jsonPath("result[0].reacted").value(true));
+					.andExpect(jsonPath("result[0].reacted").value(true))
+					.andExpect(jsonPath("result[0].scrapped").value(false))
+					.andExpect(jsonPath("result[1].scrapped").value(true))
+					.andExpect(jsonPath("result[1].categories.[0]").value(dog.getSpecies().name()));
 
 
 		}

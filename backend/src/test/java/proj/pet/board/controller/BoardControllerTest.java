@@ -161,7 +161,7 @@ class BoardControllerTest extends E2ETest {
 		private final Member randomMember3 = TestMember.builder().build().asEntity();
 
 		@Test
-		@DisplayName("사용자는 인기 게시글을 조회할 수 있다.")
+		@DisplayName("사용자는 인기 게시글을 조회할 수 있다. 좋아요 순, 그리고 최신 순으로 정렬된다.")
 		void getHotBoards() throws Exception {
 			// given
 			persistHelper.persist(author, loginUser, randomMember1, randomMember2, randomMember3);

@@ -16,7 +16,7 @@ public class TestAnimalCategory implements TestEntity<AnimalCategory> {
 	@Builder.Default
 	private final Species species = DEFAULT_SPECIES;
 
-	List<AnimalCategory> getAllSpeciesAsCategories() {
+	public static List<AnimalCategory> getAllSpeciesAsCategories() {
 		return Arrays.stream(Species.values()).map(AnimalCategory::of).toList();
 	}
 

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.board.domain.Board;
 import proj.pet.utils.domain.ConsumptionCompositeKey;
+import proj.pet.utils.domain.IdDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
 
@@ -15,10 +16,10 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "BOARD_CATEGORY_FILTER")
 @Getter
-public class BoardCategoryFilter implements Validatable {
+public class BoardCategoryFilter extends IdDomain<ConsumptionCompositeKey> implements Validatable {
 
 	@EmbeddedId
-	private ConsumptionCompositeKey key;
+	private ConsumptionCompositeKey id;
 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "CONSUMER_ID", nullable = false, insertable = false, updatable = false)
@@ -29,7 +30,7 @@ public class BoardCategoryFilter implements Validatable {
 	private AnimalCategory animalCategory;
 
 	private BoardCategoryFilter(Board board, AnimalCategory animalCategory) {
-		this.key = ConsumptionCompositeKey.of(board.getId(), animalCategory.getId());
+		this.id = ConsumptionCompositeKey.of(board.getId(), animalCategory.getId());
 		this.board = board;
 		this.animalCategory = animalCategory;
 		RuntimeExceptionThrower.checkValidity(this);

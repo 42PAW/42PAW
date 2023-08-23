@@ -29,12 +29,22 @@ import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.Species;
 import proj.pet.category.repository.AnimalCategoryRepository;
 import proj.pet.comment.repository.CommentRepository;
+import proj.pet.member.domain.*;
+import proj.pet.comment.repository.CommentRepository;
 import proj.pet.member.domain.Country;
 import proj.pet.member.domain.Member;
 import proj.pet.member.domain.MemberRole;
 import proj.pet.member.domain.OauthProfile;
 import proj.pet.member.domain.OauthType;
 import proj.pet.member.repository.MemberRepository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @Transactional
@@ -92,8 +102,8 @@ class BoardServiceTest {
 				mockImageFile,
 				mockVideoFile);
 		String content = "게시글 내용";
-		when(boardMediaManager.uploadMedia(mockImageFile)).thenReturn("imagePath");
-		when(boardMediaManager.uploadMedia(mockVideoFile)).thenReturn("videoPath");
+		when(boardMediaManager.uploadMedia(mockImageFile, UUID.randomUUID().toString())).thenReturn("imagePath");
+		when(boardMediaManager.uploadMedia(mockVideoFile, UUID.randomUUID().toString())).thenReturn("videoPath");
 		em.flush();
 		em.clear();
 		List<Species> speciesList = List.of(Species.CAT, Species.DOG, Species.ETC);

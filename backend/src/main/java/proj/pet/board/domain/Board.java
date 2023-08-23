@@ -9,7 +9,7 @@ import proj.pet.comment.domain.Comment;
 import proj.pet.member.domain.Member;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
-import proj.pet.utils.domain.IdDomain;
+import proj.pet.utils.domain.IdentityDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
 
@@ -24,7 +24,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "BOARD")
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-public class Board extends IdDomain implements Validatable {
+public class Board extends IdentityDomain implements Validatable {
 
 	@OneToMany(mappedBy = "board",
 			targetEntity = BoardMedia.class,

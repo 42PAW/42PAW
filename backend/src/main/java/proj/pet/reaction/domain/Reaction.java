@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.board.domain.Board;
 import proj.pet.member.domain.Member;
-import proj.pet.utils.domain.IdDomain;
+import proj.pet.utils.domain.IdentityDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
 
@@ -19,7 +19,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "REACTION",
 		uniqueConstraints = {@UniqueConstraint(name = "UNIQUE_REACTION", columnNames = {"MEMBER_ID", "BOARD_ID"})})
 @Getter
-public class Reaction extends IdDomain implements Validatable {
+public class Reaction extends IdentityDomain implements Validatable {
 
 	@Column(name = "MEMBER_ID", nullable = false, insertable = false, updatable = false)
 	private Long memberId;

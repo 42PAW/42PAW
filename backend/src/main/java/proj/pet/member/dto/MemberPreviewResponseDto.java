@@ -9,6 +9,7 @@ import proj.pet.member.domain.Country;
 @AllArgsConstructor
 public class MemberPreviewResponseDto {
 
+	private final Long memberId;
 	private final String memberName;
 	private final String intraName;
 	private final String profileImageUrl;

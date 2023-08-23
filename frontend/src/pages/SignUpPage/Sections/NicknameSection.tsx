@@ -4,17 +4,7 @@ import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
 import { Section } from "@/pages/SignUpPage/SignUpPage";
 import useToaster from "@/hooks/useToaster";
 import useDebounce from "@/hooks/useDebounce";
-import { axiosCheckNicknameValid } from "@/api/axios/axios.custom";
-
-const hasWhitespace = (str: string) => {
-  return str.indexOf(" ") >= 0;
-};
-
-const hasSpecialLetter = (str: string) => {
-  const forbiddenCharacters =
-    /[!@#$%^&*()_+={}\[\]|\\:;"'<>.,\/?`ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣㅐㅒㅔㅖㅘㅙㅚㅝㅞㅟㅢ]/;
-  return forbiddenCharacters.test(str);
-};
+import useNicknameValidation from "@/hooks/useNicknameValidation";
 
 const NicknameSection: React.FC<SectionProps> = ({
   registerData,
@@ -23,36 +13,17 @@ const NicknameSection: React.FC<SectionProps> = ({
 }) => {
   const [isWrong, setIsWrong] = useState<boolean>(false);
   const [isFading, setIsFading] = useState<boolean>(true);
+  const { nicknameValidation } = useNicknameValidation();
   const { debounce } = useDebounce();
   const { popToast } = useToaster();
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRegisterData({ ...registerData, memberName: e.target.value });
-  };
-
-  const handleOnClick = async () => {
+  const submitNickname = async () => {
     if (isWrong === true) {
       popToast("잠시 후에 다시 시도해주세요.", "N");
       return;
     }
-    const isMembernameValid = await axiosCheckNicknameValid(
-      registerData.memberName
-    );
-    if (
-      registerData.memberName.length < 3 ||
-      hasWhitespace(registerData.memberName) ||
-      hasSpecialLetter(registerData.memberName) ||
-      !isMembernameValid
-    ) {
-      if (registerData.memberName.length < 3) {
-        popToast("닉네임은 3글자 이상이어야 합니다.", "N");
-      } else if (hasWhitespace(registerData.memberName)) {
-        popToast("닉네임에 띄어쓰기는 포함될 수 없습니다.", "N");
-      } else if (hasSpecialLetter(registerData.memberName)) {
-        popToast("유효하지 않은 문자가 포함돼 있습니다.", "N");
-      } else if (!isMembernameValid) {
-        popToast("이미 사용 중인 닉네임입니다.", "N");
-      }
+    const isValid = await nicknameValidation(registerData.memberName);
+    if (!isValid) {
       setIsWrong(true);
       debounce("nickname", () => setIsWrong(false), 2000);
       return;
@@ -61,6 +32,14 @@ const NicknameSection: React.FC<SectionProps> = ({
     setTimeout(() => {
       setStep(Section.ProfileImage);
     }, 200);
+  };
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRegisterData({ ...registerData, memberName: e.target.value });
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") submitNickname();
   };
 
   useEffect(() => {
@@ -79,8 +58,9 @@ const NicknameSection: React.FC<SectionProps> = ({
           onChange={handleOnChange}
           minLength={3}
           maxLength={10}
+          onKeyDown={handleKeyDown}
         ></input>
-        <button onClick={handleOnClick}>
+        <button onClick={submitNickname}>
           <img src="/src/assets/arrowW.png" />
         </button>
       </InputContainer>

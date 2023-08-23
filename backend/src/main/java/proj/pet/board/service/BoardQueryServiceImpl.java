@@ -106,7 +106,6 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 				.map(comment -> comment.getMember().getNickname()).orElse(EMPTY_STRING);
 		String previewCommentContent = latestComment
 				.map(Comment::getContent).orElse(EMPTY_STRING);
-		System.out.println("board.getCategoryFilters() = " + board.getCategoryFilters());
 
 		return boardMapper.toBoardInfoDto(
 				board, board.getMember(),

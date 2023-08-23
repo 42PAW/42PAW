@@ -42,7 +42,6 @@ class BoardControllerTest extends E2ETest {
 
 	/*---------------------------TEST-DOUBLE---------------------------*/
 	private List<AnimalCategory> categories;
-
 	private Member author;
 	private Member loginUser;
 
@@ -147,6 +146,11 @@ class BoardControllerTest extends E2ETest {
 		}
 	}
 
+	/**
+	 * req : {@link UserSessionDto}, int page, int size
+	 * <br>
+	 * res : {@link BoardsPaginationDto}
+	 */
 	@Nested
 	@DisplayName("GET /v1/boards/hot")
 	class GetHotBoards {
@@ -175,13 +179,13 @@ class BoardControllerTest extends E2ETest {
 							TestReaction.ofMany(board1, ReactionType.LIKE, now,
 									randomMember1, randomMember2, randomMember3),
 							TestReaction.ofMany(board2, ReactionType.LIKE, now,
-									randomMember1, randomMember2, randomMember3),
+									randomMember1, randomMember2),
 							TestReaction.ofMany(board3, ReactionType.LIKE, now,
-									randomMember1, randomMember2, randomMember3),
+									randomMember1),
 							TestReaction.ofMany(board4, ReactionType.LIKE, now,
-									randomMember1, randomMember2, randomMember3),
+									randomMember1),
 							TestReaction.ofMany(board6, ReactionType.LIKE, now,
-									randomMember1, randomMember2, randomMember3))
+									randomMember1))
 					.flushAndClear();
 
 			String token = stubToken(loginUser, now, 28);
@@ -195,11 +199,11 @@ class BoardControllerTest extends E2ETest {
 					.andDo(print())
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("totalLength").value(5))
-					.andExpect(jsonPath("result[*].content").value(Matchers.not(Matchers.hasItem(notHotContent))))
-					.andExpect(jsonPath("result[0].content").value(TestBoard.DEFAULT_CONTENT))
-					.andExpect(jsonPath("result[0].memberName").value(TestMember.DEFAULT_NICKNAME))
-			;
-
+					.andExpect(jsonPath("result.[*].boardId").value(Matchers.contains(
+							board1.getId().intValue(), board2.getId().intValue(), board6.getId().intValue(), board4.getId().intValue(), board3.getId().intValue())))
+					.andExpect(jsonPath("result.[*].content").value(Matchers.not(Matchers.hasItem(notHotContent))))
+					.andExpect(jsonPath("result.[0].content").value(TestBoard.DEFAULT_CONTENT))
+					.andExpect(jsonPath("result.[0].memberName").value(TestMember.DEFAULT_NICKNAME));
 		}
 
 	}

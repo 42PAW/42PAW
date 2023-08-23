@@ -152,7 +152,6 @@ class BoardControllerTest extends E2ETest {
 	class GetHotBoards {
 		private final String PATH = "/v1/boards/hot";
 		private final LocalDateTime now = LocalDateTime.now();
-
 		private final Member randomMember1 = TestMember.builder().build().asEntity();
 		private final Member randomMember2 = TestMember.builder().build().asEntity();
 		private final Member randomMember3 = TestMember.builder().build().asEntity();

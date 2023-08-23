@@ -32,6 +32,7 @@ export interface ProfileInfoDTO {
   nicknameUpdatedAt: Date;
   profileImageUrl: string;
   country: string;
+  campus: string;
   statement: string;
   followingCount: number;
   followerCount: number;
@@ -44,7 +45,7 @@ export interface MemberSearchResponseDTO {
   memberName: string;
   intraName: string;
   profileImageUrl: string;
-  country : string;
-  statement : string;
+  country: string;
+  statement: string;
   relationship: string;
 }

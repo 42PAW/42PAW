@@ -59,7 +59,7 @@ const SearchSection = () => {
       submitSearch();
     }
   };
-  console.log(searchResults);
+
   return (
     <WrapperStyled>
       <SearchBarStyled $isInput={isInput} onKeyDown={handleKeyDown}>

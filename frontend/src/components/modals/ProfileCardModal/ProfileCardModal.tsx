@@ -71,7 +71,7 @@ const ProfileCardModal = () => {
           <IntraNameStyled>{profileData.intraName}</IntraNameStyled>
           <CountryStyled>
             {useCountryEmoji(profileData.country as Country)}{" "}
-            {profileData.country}
+            {profileData.campus}
           </CountryStyled>
           <StatementStyled>{profileData.statement}</StatementStyled>
           <CardInfoStyled>

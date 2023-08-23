@@ -5,6 +5,7 @@ import { CreateBoardDTO } from "@/types/dto/board.dto";
 import { getCookie } from "../cookie/cookies";
 import { Language } from "@/types/enum/language.enum";
 import { ReportReason } from "@/types/enum/report.enum";
+import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 
 const token = getCookie("access_token") ?? null;
 
@@ -373,7 +374,6 @@ export const axiosReport = async (
   commentId: number | null
 ): Promise<any> => {
   try {
-    console.log(reportedMemberId, boardId, commentId, reason, content);
     const response = await instance.post(axiosReportURL, {
       reportedMemberId,
       boardId,
@@ -409,13 +409,26 @@ export const axiosGetSearchResults = async (
       const response = await instance.get(axiosGetSearchResultsURL, {
         params: { name: name, size: size, page: page },
       });
-      console.log(response.data.result);
       return response.data.result;
     }
     const response = await axios.get(axiosGetSearchResultsURL, {
       params: { name: name, size: size, page: page },
     });
     return response.data.result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosUpdateAnimalCategoryURL = "/v1/categories/members/me";
+export const axiosUpdateAnimalCategory = async (
+  categories: AnimalSpecies[]
+): Promise<any> => {
+  try {
+    const response = await instance.patch(axiosUpdateAnimalCategoryURL, {
+      categories,
+    });
+    return response;
   } catch (error) {
     throw error;
   }

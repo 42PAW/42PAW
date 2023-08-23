@@ -1,7 +1,13 @@
 import { useState } from "react";
 import styled, { css } from "styled-components";
 
-const BoardPhotoBox = ({ boardImages }: { boardImages: string[] }) => {
+const BoardPhotoBox = ({
+  boardImages,
+  handleClickReaction,
+}: {
+  boardImages: string[];
+  handleClickReaction: () => void;
+}) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [photoIndex, setPhotoIndex] = useState<number>(0);
   const [startX, setStartX] = useState<number | null>(null);
@@ -49,6 +55,7 @@ const BoardPhotoBox = ({ boardImages }: { boardImages: string[] }) => {
         $photoIndex={photoIndex}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
+        onDoubleClick={handleClickReaction}
       >
         {boardImages.map((boardImage, index) => (
           <img key={index} src={boardImage} alt={`Image ${index}`} />

@@ -397,3 +397,26 @@ export const axiosGetWorldStatistics = async (): Promise<any> => {
     throw error;
   }
 };
+
+const axiosGetSearchResultsURL = "/v1/members/search";
+export const axiosGetSearchResults = async (
+  name: string,
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    if (token) {
+      const response = await instance.get(axiosGetSearchResultsURL, {
+        params: { name: name, size: size, page: page },
+      });
+      console.log(response.data.result);
+      return response.data.result;
+    }
+    const response = await axios.get(axiosGetSearchResultsURL, {
+      params: { name: name, size: size, page: page },
+    });
+    return response.data.result;
+  } catch (error) {
+    throw error;
+  }
+};

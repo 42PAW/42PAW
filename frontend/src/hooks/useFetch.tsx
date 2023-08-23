@@ -13,6 +13,7 @@ import {
   axiosGetFollowingBoards,
   axiosGetMyBoards,
   axiosGetOtherBoards,
+  axiosGetScrappedBoards,
   axiosGetBoardComments,
   axiosGetMyProfile,
   axiosGetProfile,
@@ -45,6 +46,10 @@ const useFetch = () => {
           return;
         }
         const response = await axiosGetOtherBoards(currentMemberId, 20, 0);
+        return response.result;
+      }
+      if (boardCategory === Board.SCRAPPED) {
+        const response = await axiosGetScrappedBoards(20, 0);
         return response.result;
       }
     } catch (error) {

@@ -174,6 +174,20 @@ export const axiosGetOtherBoards = async (
     throw error;
   }
 };
+const axiosGetScrappedBoardsURL = "/v1/scraps/members/me";
+export const axiosGetScrappedBoards = async (
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    const response = await instance.get(axiosGetScrappedBoardsURL, {
+      params: { size: size, page: page },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const axiosGetBoardCommentsURL = "/v1/comments/boards/";
 export const axiosGetBoardComments = async (

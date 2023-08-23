@@ -12,16 +12,24 @@ import { IBoardInfo } from "@/types/interface/board.interface";
 interface ProfileTemplateProps {
   userInfo: ProfileInfoDTO | null; // userInfo를 props로 받음
   boards: IBoardInfo[] | null;
+  tabState?: string;
+  onTabChange?: (newTabState: string) => void;
 }
 
 const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
   userInfo,
   boards,
+  tabState,
+  onTabChange,
 }) => {
   return (
     <ProfileWrapperStyled>
       <ProfileInfoComponent userInfo={userInfo} />
-      <PhotoZoneComponent boards={boards} />
+      <PhotoZoneComponent
+        boards={boards}
+        tabState={tabState}
+        onTabChange={onTabChange}
+      />
     </ProfileWrapperStyled>
   );
 };

@@ -61,6 +61,7 @@ const SearchItem = (user: MemberSearchResponseDTO) => {
 const SearchItemStyled = styled.div`
   display: flex;
   padding: 10px;
+  width: 85%;
   margin-bottom: 20px;
   margin-left: 10px;
   margin-right: 10px;

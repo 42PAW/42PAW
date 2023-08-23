@@ -9,7 +9,7 @@ import proj.pet.category.domain.MemberCategoryFilter;
 import proj.pet.follow.domain.Follow;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
-import proj.pet.utils.domain.IdDomain;
+import proj.pet.utils.domain.IdentityDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
 
@@ -25,7 +25,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "MEMBER")
 @Getter
 @ToString
-public class Member extends IdDomain implements Validatable {
+public class Member extends IdentityDomain implements Validatable {
 
 	@Embedded
 	private OauthProfile oauthProfile;
@@ -69,42 +69,42 @@ public class Member extends IdDomain implements Validatable {
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
-	private List<Block> blocks = new ArrayList<>();
+	private final List<Block> blocks = new ArrayList<>();
 
 	@ToString.Exclude
 	@OneToMany(mappedBy = "from",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
-	private List<Follow> followings = new ArrayList<>();
+	private final List<Follow> followings = new ArrayList<>();
 
 	@ToString.Exclude
 	@OneToMany(mappedBy = "to",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
-	private List<Follow> followers = new ArrayList<>();
+	private final List<Follow> followers = new ArrayList<>();
 
 	@ToString.Exclude
 	@OneToMany(mappedBy = "member",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
-	private List<MemberCategoryFilter> memberCategoryFilters = new ArrayList<>();
+	private final List<MemberCategoryFilter> memberCategoryFilters = new ArrayList<>();
 
 	@ToString.Exclude
 	@OneToMany(mappedBy = "member",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
-	private List<Reaction> reactions = new ArrayList<>();
+	private final List<Reaction> reactions = new ArrayList<>();
 
 	@ToString.Exclude
 	@OneToMany(mappedBy = "member",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
-	private List<Scrap> scraps = new ArrayList<>();
+	private final List<Scrap> scraps = new ArrayList<>();
 
 	private Member(OauthProfile oauthProfile, Country country, Country.Campus campus, Language language, String nickname,
 	               String statement, MemberRole memberRole, LocalDateTime now) {

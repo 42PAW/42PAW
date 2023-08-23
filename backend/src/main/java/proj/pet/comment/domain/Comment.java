@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.board.domain.Board;
 import proj.pet.member.domain.Member;
-import proj.pet.utils.domain.IdDomain;
+import proj.pet.utils.domain.IdentityDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
 
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "COMMENT")
 @Getter
-public class Comment extends IdDomain implements Validatable {
+public class Comment extends IdentityDomain implements Validatable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "BOARD_ID", nullable = false, updatable = false)

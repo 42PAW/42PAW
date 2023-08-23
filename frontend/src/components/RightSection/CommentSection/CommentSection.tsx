@@ -104,6 +104,7 @@ const CommentSection = () => {
               commentId={comment.commentId}
               memberId={comment.memberId}
               memberName={comment.memberName}
+              country={comment.country}
               comment={comment.comment}
               profileImageUrl={comment.profileImageUrl}
               createdAt={comment.createdAt}

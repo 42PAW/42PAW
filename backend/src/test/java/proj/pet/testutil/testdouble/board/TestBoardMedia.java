@@ -1,4 +1,4 @@
-package proj.pet.testutil.stub.board;
+package proj.pet.testutil.testdouble.board;
 
 import lombok.Builder;
 import lombok.Setter;

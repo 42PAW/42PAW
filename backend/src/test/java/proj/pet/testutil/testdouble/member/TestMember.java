@@ -1,4 +1,4 @@
-package proj.pet.testutil.stub.member;
+package proj.pet.testutil.testdouble.member;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -15,8 +15,6 @@ import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.BoardCategoryFilter;
 import proj.pet.category.domain.Species;
 import proj.pet.member.domain.Member;
-import proj.pet.member.domain.OauthProfile;
-import proj.pet.member.domain.OauthType;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.reaction.domain.ReactionType;
 import proj.pet.scrap.domain.Scrap;
@@ -53,10 +51,10 @@ class BoardControllerTest extends E2ETest {
 		categories = Arrays.stream(Species.values()).map(AnimalCategory::of).toList();
 		persistHelper.persist(categories).flushAndClear();
 		author = TestMember.builder()
-				.oauthProfile(OauthProfile.of(OauthType.FORTY_TWO, "email1", "nickname1"))
+				.oauthName("oauthName1")
 				.build().asEntity();
 		loginUser = TestMember.builder()
-				.oauthProfile(OauthProfile.of(OauthType.FORTY_TWO, "email2", "nickname2"))
+				.oauthName("oauthName2")
 				.build().asEntity();
 	}
 
@@ -94,9 +92,7 @@ class BoardControllerTest extends E2ETest {
 			Board board2 = TestBoard.builder().member(author)
 					.build().asEntity();
 			persistHelper.persist(board1, board2);
-			List<BoardMedia> boardMedia = TestBoardMedia.builder()
-					.board(board1)
-					.build().asEntitiesOfCount(3);
+			List<BoardMedia> boardMedia = TestBoardMedia.createEntitiesOf(board1, DEFAULT_MEDIA_URL + 0, DEFAULT_MEDIA_URL + 1, DEFAULT_MEDIA_URL + 2);
 			board1.addMediaList(boardMedia);
 			persistHelper
 					.persist(

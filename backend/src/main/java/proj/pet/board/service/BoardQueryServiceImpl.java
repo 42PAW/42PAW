@@ -1,8 +1,5 @@
 package proj.pet.board.service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import proj.pet.board.domain.Board;
@@ -14,6 +11,10 @@ import proj.pet.mapper.BoardMapper;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 @QueryService
 @RequiredArgsConstructor
@@ -54,7 +55,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
 	@Override
 	public BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId,
-			PageRequest pageRequest) {
+	                                           PageRequest pageRequest) {
 		List<BoardInfoDto> result = boardRepository.getMemberBoards(memberId, pageRequest).stream()
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
@@ -105,6 +106,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 				.map(comment -> comment.getMember().getNickname()).orElse(EMPTY_STRING);
 		String previewCommentContent = latestComment
 				.map(Comment::getContent).orElse(EMPTY_STRING);
+		System.out.println("board.getCategoryFilters() = " + board.getCategoryFilters());
 
 		return boardMapper.toBoardInfoDto(
 				board, board.getMember(),

@@ -3,6 +3,7 @@ package proj.pet.board.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import proj.pet.category.domain.BoardCategoryFilter;
 import proj.pet.category.domain.Species;
 import proj.pet.comment.domain.Comment;
@@ -24,6 +25,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "BOARD")
 @NoArgsConstructor(access = PROTECTED)
 @Getter
+@ToString
 public class Board extends IdentityDomain implements Validatable {
 
 	@OneToMany(mappedBy = "board",

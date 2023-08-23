@@ -45,7 +45,7 @@ public class BoardMedia extends IdentityDomain implements Validatable {
 		return board != null
 				&& !board.isNew()
 				&& mediaUrl != null
-				&& index != null
+				&& index != null && index >= 0
 				&& mediaType != null;
 	}
 }

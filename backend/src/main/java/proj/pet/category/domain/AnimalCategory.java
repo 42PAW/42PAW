@@ -34,4 +34,8 @@ public class AnimalCategory extends IdentityDomain implements Validatable {
 		return species != null
 				&& species.name().length() <= MAX_NAME_LENGTH;
 	}
+
+	public String getCategoryName() {
+		return species.name();
+	}
 }

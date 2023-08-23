@@ -129,3 +129,8 @@ export const languageState = atom<any>({
   key: "language",
   default: Translator.en,
 });
+
+export const searchInputState = atom<string>({
+  key: "searchInput",
+  default: "",
+});

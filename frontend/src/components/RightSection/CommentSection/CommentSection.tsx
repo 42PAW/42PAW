@@ -53,7 +53,7 @@ const CommentSection = () => {
 
       await queryClient.invalidateQueries(["comments", currentBoardId]);
       const newComments: CommentInfoDTO[] | undefined =
-        await queryClient.getQueryData(["comments", currentBoardId]);
+      await queryClient.getQueryData(["comments", currentBoardId]);
 
       await queryClient.setQueryData(
         ["boards", boardCategory],

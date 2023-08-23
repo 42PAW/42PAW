@@ -1,33 +1,58 @@
 import styled from "styled-components";
-import BoardOption from "../../BoardOption";
+import OptionButton from "../../OptionButton";
+import { useState } from "react";
+import useToaster from "@/hooks/useToaster";
+import FollowTypeButton from "@/components/FollowTypeButton";
+import { useCountryEmoji } from "@/hooks/useCountryEmoji";
+import { MemberSearchResponseDTO } from "@/types/dto/member.dto.ts";
+import useModal from "@/hooks/useModal";
+import { ModalType } from "@/types/enum/modal.enum";
 
-interface UserData {
-  memberId: number;
-  memberName: string;
-  intraName: string;
-  statement: string;
-  country: string;
-  relationship: string;
-  profileImageUrl: string;
-}
+const SearchItem = (user: MemberSearchResponseDTO) => {
+  const {
+    memberId,
+    memberName,
+    intraName,
+    profileImageUrl,
+    country,
+    statement,
+    relationship,
+  } = user;
 
-interface SearchItemProps {
-  user: UserData; // Change to user instead of results
-}
+  const { openModal } = useModal();
+  const { popToast } = useToaster();
+  const [relation, setRelation] = useState(user.relationship);
 
-const SearchItem: React.FC<SearchItemProps> = ({ user }) => {
+  const handleOpenProfile = () => {
+    openModal(ModalType.PROFILECARD);
+  };
+
+  const handleStateChange = () => {
+    if (relation === "FOLLOWING") {
+      setRelation("NONE");
+      popToast(`${user.memberName}의 팔로우를 취소했습니다`, "P");
+    } else if (relation === "NONE") setRelation("FOLLOWING");
+    else {
+      setRelation("NONE");
+      popToast(`${user.memberName}의 차단을 해제했습니다`, "P");
+    }
+  };
+
   return (
     <SearchItemStyled>
       <UserImageContainerStyled>
-        <img src="/src/assets/dogLogo.png" />
+        <img src={profileImageUrl} onClick={handleOpenProfile} />
       </UserImageContainerStyled>
       <SearchItemRightStyled>
-        <NameContainerStyled>
-          <MemberNameStyled>{user.memberName}</MemberNameStyled>
+        <NameContainerStyled onClick={handleOpenProfile}>
+          <MemberNameStyled>
+            {user.memberName}
+            {useCountryEmoji(user.country)}
+          </MemberNameStyled>
           <IntraNameStyled>{user.intraName}</IntraNameStyled>
         </NameContainerStyled>
-        <StateButtonStyled>{user.relationship}</StateButtonStyled>
-        <BoardOption memberId={user.memberId} memberName={user.memberName} />
+        <FollowTypeButton status={user.relationship} isLoading={false} />
+        <OptionButton memberId={user.memberId} memberName={user.memberName} />
       </SearchItemRightStyled>
     </SearchItemStyled>
   );
@@ -37,6 +62,8 @@ const SearchItemStyled = styled.div`
   display: flex;
   padding: 10px;
   margin-bottom: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
   border-radius: 30px;
   background: var(--transparent);
 `;
@@ -83,12 +110,23 @@ const IntraNameStyled = styled.div`
   font-size: 10px;
 `;
 
-const StateButtonStyled = styled.button`
-  width: 20%;
-  border-radius: 8px;
-  border: 1px solid rgba(240, 240, 240, 0.6);
-  background: rgba(183, 184, 215, 0);
-  cursor: pointer;
-`;
+// const StateButtonStyled = styled.button`
+//   width: 22%;
+//   border-radius: 8px;
+//   text-align: center;
+//   border: 1px solid var(--white);
+//   background: rgba(183, 184, 215, 0.00);
+//   cursor: pointer;
+//   background-color: ${props => {
+//     if (props.rel === "FOLLOWING")
+//         return "var(--transparent)";
+//     else if (props.rel === "NONE")
+//         return "var(--lightpurple)";
+//     else if (props.rel === "BLOCKED")
+//         return "var(--purple)";
+//   }};
+//   color: var(--white);
+//   transition: background-color ease-in-out;
+// `;
 
 export default SearchItem;

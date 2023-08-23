@@ -38,3 +38,13 @@ export interface ProfileInfoDTO {
   boardCount: number;
   followType: followType;
 }
+
+export interface MemberSearchResponseDTO {
+  memberId: number;
+  memberName: string;
+  intraName: string;
+  profileImageUrl: string;
+  country : string;
+  statement : string;
+  relationship: string;
+}

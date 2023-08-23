@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 public class TestMemberCategoryFilter {
 
-	public static List<MemberCategoryFilter> of(Member member, AnimalCategory... categories) {
+	public static List<MemberCategoryFilter> ofMany(Member member, AnimalCategory... categories) {
 		return Stream.of(categories)
 				.map(category -> MemberCategoryFilter.of(member, category))
 				.toList();

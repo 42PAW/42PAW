@@ -138,7 +138,10 @@ const BoardTemplate = (board: IBoardInfo) => {
           </BoardOptionButtonStyled>
         </BoardHeaderStyled>
         <BoardBodyStyled>
-          <BoardPhotoBox boardImages={images} />
+          <BoardPhotoBox
+            boardImages={images}
+            handleClickReaction={handleClickReaction}
+          />
           <ButtonZoneStyled>
             <ReactionCommentContainerStyled>
               <ReactionStyled onClick={handleClickReaction}>

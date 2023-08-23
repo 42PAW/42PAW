@@ -89,7 +89,7 @@ const SearchSection = () => {
             />
           ))
         ) : (
-          <NoSearchMessageStyled>검색 결과가 없습니다 🙈</NoSearchMessageStyled>
+          <NoSearchMessageStyled>검색 결과가 없습니다</NoSearchMessageStyled>
         )}
       </SearchItemWrapperStyled>
     </WrapperStyled>

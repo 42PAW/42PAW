@@ -118,8 +118,8 @@ const WrapperStyled = styled.div`
   flex-direction: column;
   align-items: center;
 
-  height: 317px;
-  width: 250px;
+  height: 300px;
+  width: 220px;
   background-color: var(--white);
   border-radius: 10px;
   color: var(--grey);
@@ -133,7 +133,7 @@ const WrapperStyled = styled.div`
   }
   button {
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 10px;
     height: 40px;
     width: 100%;
     font-size: 1.2rem;
@@ -141,10 +141,6 @@ const WrapperStyled = styled.div`
     border: none;
     background-color: transparent;
     border-top: 0.5px solid #eaeaea;
-  }
-  button:hover {
-    opacity: 0.8;
-    transition: all 0.2s ease;
   }
 `;
 
@@ -155,15 +151,15 @@ const CategoryContatinerStyled = styled.div`
   height: 160px;
   width: 100%;
   margin-top: 15px;
-  margin-left: 80px;
+  margin-left: 90px;
 `;
 
 const EtcInputStyled = styled.input`
-  margin-top: 5px;
+  margin-top: 8px;
   border: none;
   border-bottom: 0.7px solid var(--grey);
-  width: 170px;
-  height: 25px;
+  width: 130px;
+  height: 15px;
   outline: none;
   color: var(--grey);
   font-size: 1rem;

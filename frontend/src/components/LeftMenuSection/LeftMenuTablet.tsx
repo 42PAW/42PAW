@@ -17,7 +17,8 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   const { openSearchSection } = useRightSectionHandler();
   const touchStartY = useRef<number | null>(null);
 
-  const isMainPage: boolean = location.pathname === "/";
+  const isProfilePage: boolean =
+    location.pathname === "/my-profile" || location.pathname === "/profile";
 
   useEffect(() => {
     window.addEventListener("wheel", handleWheel);
@@ -61,7 +62,7 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
 
   return (
     <>
-      {isMainPage && (
+      {!isProfilePage && (
         <BannerStyled $isBannerVisible={isBannerVisible}>
           {userInfo ? (
             <ProfileImageStyled

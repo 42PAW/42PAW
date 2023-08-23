@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.member.domain.Member;
+import proj.pet.utils.domain.IdDomain;
 import proj.pet.utils.domain.MemberCompositeKey;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
@@ -19,7 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 				@UniqueConstraint(name = "UNIQUE_BLOCK", columnNames = {"MEMBER_ID", "TARGET_MEMBER_ID"})
 		})
 @Getter
-public class Block implements Validatable {
+public class Block extends IdDomain<MemberCompositeKey> implements Validatable {
 
 	@EmbeddedId
 	private MemberCompositeKey id;

@@ -9,9 +9,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+
 @Builder
 @Getter
-public class TestMember implements TestEntity<Member> {
+public class TestMember implements TestEntity<Member, Long> {
 
 	public static final String DEFAULT_PROFILE_IMAGE_URL = "https://cdn.intra.42.fr/users/default.png";
 	public static final String DEFAULT_OAUTH_ID = "oauthId";
@@ -48,7 +51,7 @@ public class TestMember implements TestEntity<Member> {
 	public static Member asDefaultEntity() {
 		return TestMember.builder().build().asEntity();
 	}
-	
+
 	@Override
 	public Member asEntity() {
 		return Member.of(
@@ -59,5 +62,18 @@ public class TestMember implements TestEntity<Member> {
 				this.statement,
 				this.memberRole,
 				this.createdAt);
+	}
+
+	@Override public Member asMockEntity(Long id) {
+		Member member = mock(Member.class);
+		lenient().when(member.getId()).thenReturn(id);
+		lenient().when(member.getOauthProfile()).thenReturn(OauthProfile.of(this.oauthType, this.oauthId, this.oauthName));
+		lenient().when(member.getCountry()).thenReturn(this.country);
+		lenient().when(member.getCampus()).thenReturn(this.campus);
+		lenient().when(member.getNickname()).thenReturn(this.nickname);
+		lenient().when(member.getStatement()).thenReturn(this.statement);
+		lenient().when(member.getMemberRole()).thenReturn(this.memberRole);
+		lenient().when(member.getCreatedAt()).thenReturn(this.createdAt);
+		return member;
 	}
 }

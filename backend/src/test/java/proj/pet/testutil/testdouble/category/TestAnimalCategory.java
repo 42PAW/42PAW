@@ -8,8 +8,11 @@ import proj.pet.testutil.testdouble.TestEntity;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+
 @Builder
-public class TestAnimalCategory implements TestEntity<AnimalCategory> {
+public class TestAnimalCategory implements TestEntity<AnimalCategory, Long> {
 
 	public static final Species DEFAULT_SPECIES = Species.DOG;
 
@@ -24,5 +27,12 @@ public class TestAnimalCategory implements TestEntity<AnimalCategory> {
 		return AnimalCategory.of(
 				this.species
 		);
+	}
+
+	@Override public AnimalCategory asMockEntity(Long id) {
+		AnimalCategory animalCategory = mock(AnimalCategory.class);
+		lenient().when(animalCategory.getId()).thenReturn(id);
+		lenient().when(animalCategory.getSpecies()).thenReturn(this.species);
+		return animalCategory;
 	}
 }

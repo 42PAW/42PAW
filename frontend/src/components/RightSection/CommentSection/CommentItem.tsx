@@ -6,12 +6,14 @@ import { useSetRecoilState } from "recoil";
 import { currentMemberIdState } from "@/recoil/atom";
 import useModal from "@/hooks/useModal";
 import { ModalType } from "@/types/enum/modal.enum";
+import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 
 const CommentItem = (commentInfo: CommentInfoDTO) => {
   const {
     commentId,
     memberId,
     memberName,
+    country,
     comment,
     profileImageUrl,
     createdAt,
@@ -35,7 +37,7 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
       <CommentItemRightStyled>
         <NicknameToggleContainerStyled>
           <NicknameContainerStyled onClick={handleOpenProfile}>
-            {memberName} 🇫🇷
+            {memberName} {useCountryEmoji(country)}
             <span>{parsedDate}</span>
           </NicknameContainerStyled>
           <BoardOption
@@ -92,15 +94,15 @@ const NicknameToggleContainerStyled = styled.div`
 const NicknameContainerStyled = styled.div`
   cursor: pointer;
   width: 60%;
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 13px;
+  font-weight: 500;
   position: relative;
   span {
     cursor: default;
     position: absolute;
     margin-top: 2px;
-    margin-left: 7px;
-    font-weight: 300;
+    margin-left: 5px;
+    font-weight: 200;
     font-size: 1rem;
   }
 `;

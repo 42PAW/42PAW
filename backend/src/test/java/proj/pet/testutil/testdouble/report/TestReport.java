@@ -14,8 +14,11 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+
 @Builder
-public class TestReport implements TestEntity<Report> {
+public class TestReport implements TestEntity<Report, Long> {
 
 	public static final String DEFAULT_CONTENT = "content";
 	public static final LocalDateTime DEFAULT_TIME = LocalDateTime.of(LocalDate.EPOCH, LocalTime.MIDNIGHT);
@@ -114,5 +117,18 @@ public class TestReport implements TestEntity<Report> {
 				this.content,
 				this.createdAt
 		);
+	}
+
+	@Override public Report asMockEntity(Long id) {
+		Report report = mock(Report.class);
+		lenient().when(report.getId()).thenReturn(id);
+		lenient().when(report.getFrom()).thenReturn(this.from);
+		lenient().when(report.getTo()).thenReturn(this.to);
+		lenient().when(report.getBoardId()).thenReturn(this.boardId);
+		lenient().when(report.getCommentId()).thenReturn(this.commentId);
+		lenient().when(report.getReason()).thenReturn(this.reportReason);
+		lenient().when(report.getContent()).thenReturn(this.content);
+		lenient().when(report.getCreatedAt()).thenReturn(this.createdAt);
+		return report;
 	}
 }

@@ -116,6 +116,12 @@ public class Board extends IdentityDomain implements Validatable {
 				.toList();
 	}
 
+	public void setCategoryFilters(List<BoardCategoryFilter> categoryFilters) {
+		this.categoryFilters.clear();
+		this.categoryFilters.addAll(categoryFilters);
+		RuntimeExceptionThrower.checkValidity(this);
+	}
+
 	public List<String> findBoardMediaUrls() {
 		return this.mediaList.stream()
 				.map(BoardMedia::getMediaUrl)

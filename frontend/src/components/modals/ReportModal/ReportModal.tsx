@@ -11,6 +11,7 @@ import useToaster from "@/hooks/useToaster";
 import { axiosReport } from "@/api/axios/axios.custom";
 import { reportUserInfoState } from "@/recoil/atom";
 import { ReportDTO } from "@/types/dto/member.dto";
+import useModal from "@/hooks/useModal";
 
 const reportOptions = [
   {
@@ -58,6 +59,7 @@ const ReportModal: React.FC = () => {
     null
   );
   const { popToast } = useToaster();
+  const { closeModal } = useModal();
 
   const handleSelectCategory = (category: ReportReason) => {
     setSelectedCategory(category);
@@ -76,6 +78,7 @@ const ReportModal: React.FC = () => {
       reportUserInfo.commentId
     );
     popToast("신고가 접수됐습니다.", "P");
+    closeModal(ModalType.REPORT);
     resetReportUserInfo();
   };
 

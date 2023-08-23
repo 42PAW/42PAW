@@ -12,9 +12,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+
 @Builder
 @Setter
-public class TestBoardMedia implements TestEntity<BoardMedia> {
+public class TestBoardMedia implements TestEntity<BoardMedia, Long> {
 	public static final String DEFAULT_MEDIA_URL = "default_url";
 	public static final MediaType DEFAULT_MEDIA_TYPE = MediaType.IMAGE;
 	public static final Integer DEFAULT_INDEX = 0;
@@ -51,5 +54,15 @@ public class TestBoardMedia implements TestEntity<BoardMedia> {
 				this.mediaUrl,
 				this.index,
 				this.mediaType);
+	}
+
+	@Override public BoardMedia asMockEntity(Long id) {
+		BoardMedia boardMedia = mock(BoardMedia.class);
+		lenient().when(boardMedia.getId()).thenReturn(id);
+		lenient().when(boardMedia.getBoard()).thenReturn(this.board);
+		lenient().when(boardMedia.getMediaUrl()).thenReturn(this.mediaUrl);
+		lenient().when(boardMedia.getIndex()).thenReturn(this.index);
+		lenient().when(boardMedia.getMediaType()).thenReturn(this.mediaType);
+		return boardMedia;
 	}
 }

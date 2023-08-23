@@ -12,8 +12,11 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+
 @Builder
-public class TestComment implements TestEntity<Comment> {
+public class TestComment implements TestEntity<Comment, Long> {
 
 	public static final String DEFAULT_CONTENT = "content";
 	public static final LocalDateTime DEFAULT_TIME = LocalDateTime.of(LocalDate.EPOCH, LocalTime.MIDNIGHT);
@@ -51,5 +54,15 @@ public class TestComment implements TestEntity<Comment> {
 				this.content,
 				this.localDateTime
 		);
+	}
+
+	@Override public Comment asMockEntity(Long id) {
+		Comment comment = mock(Comment.class);
+		lenient().when(comment.getId()).thenReturn(id);
+		lenient().when(comment.getBoard()).thenReturn(this.board);
+		lenient().when(comment.getMember()).thenReturn(this.member);
+		lenient().when(comment.getContent()).thenReturn(this.content);
+		lenient().when(comment.getCreatedAt()).thenReturn(this.localDateTime);
+		return comment;
 	}
 }

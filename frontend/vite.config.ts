@@ -18,4 +18,12 @@ export default defineConfig({
       path: "/hmr/",
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: "./index.html",
+        serviceWorker: "./serviceWorker.js",
+      },
+    },
+  },
 });

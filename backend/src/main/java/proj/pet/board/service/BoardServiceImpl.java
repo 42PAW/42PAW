@@ -46,6 +46,7 @@ public class BoardServiceImpl implements BoardService {
 	// TODO: 책임 분산이 필요할지도? + mediaData의 ContentType이 not null임을 검증해야 함.
 	// v1.5 이벤트로 미디어 업로드 책임 분리
 
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -55,33 +56,42 @@ public class BoardServiceImpl implements BoardService {
 	public Board createBoard(
 			Long memberId,
 			List<Species> speciesList,
-			List<MultipartFile> mediaDtoList,
+			List<MultipartFile> mediaDataList,
 			String content,
 			LocalDateTime now
 	) {
 		Member member = memberRepository.findById(memberId)
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
-		Board board = boardRepository.save(Board.of(member, VisibleScope.PUBLIC, content, now));
+		Board board = boardRepository.save(
+				Board.of(member, VisibleScope.PUBLIC, content, now));
 
-		List<AnimalCategory> animalCategories = animalCategoryRepository.findBySpeciesIn(
-				speciesList);
-		List<BoardCategoryFilter> categoryFilters = animalCategories.stream()
-				.map(category -> BoardCategoryFilter.of(board, category))
-				.toList();
+		List<AnimalCategory> animalCategories = animalCategoryRepository.findBySpeciesIn(speciesList);
+		List<BoardCategoryFilter> categoryFilters = convertToBoardCategoryFilters(animalCategories, board);
 		categoryFilters = boardCategoryFilterRepository.saveAll(categoryFilters);
 		board.addCategoryFilters(categoryFilters);
 
+		List<BoardMedia> mediaList = convertToBoardMedia(mediaDataList, board);
+		mediaList = boardMediaRepository.saveAll(mediaList);
+		board.addMediaList(mediaList);
+
+		return boardRepository.save(board);
+	}
+
+	private List<BoardCategoryFilter> convertToBoardCategoryFilters(List<AnimalCategory> animalCategories, Board board) {
+		return animalCategories.stream()
+				.map(category -> BoardCategoryFilter.of(board, category))
+				.toList();
+	}
+
+	private List<BoardMedia> convertToBoardMedia(List<MultipartFile> mediaDataList, Board board) {
 		AtomicInteger index = new AtomicInteger(0);
-		List<BoardMedia> mediaList = mediaDtoList.stream()
+		List<BoardMedia> mediaList = mediaDataList.stream()
 				.map(data -> {
 					String mediaUrl = boardMediaManager.uploadMedia(data, UUID.randomUUID().toString());
 					return BoardMedia.of(board, mediaUrl, index.getAndIncrement(),
 							MediaType.from(data));
 				}).collect(Collectors.toList());
-		mediaList = boardMediaRepository.saveAll(mediaList);
-		board.addMediaList(mediaList);
-
-		return boardRepository.save(board);
+		return mediaList;
 	}
 
 	/**

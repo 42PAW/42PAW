@@ -23,6 +23,7 @@ export interface UserInfoDTO {
   intraName: string;
   profileImageUrl: string;
   language: string;
+  animalCategories: AnimalSpecies[];
 }
 
 export interface ProfileInfoDTO {
@@ -31,9 +32,20 @@ export interface ProfileInfoDTO {
   nicknameUpdatedAt: Date;
   profileImageUrl: string;
   country: string;
+  campus: string;
   statement: string;
   followingCount: number;
   followerCount: number;
   boardCount: number;
   followType: followType;
+}
+
+export interface MemberSearchResponseDTO {
+  memberId: number;
+  memberName: string;
+  intraName: string;
+  profileImageUrl: string;
+  country: string;
+  statement: string;
+  relationship: string;
 }

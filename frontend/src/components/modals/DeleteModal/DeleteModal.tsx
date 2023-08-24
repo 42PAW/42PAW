@@ -78,11 +78,9 @@ const DeleteModal = () => {
         ["boards", boardCategory],
         (prevData: IBoardInfo[] | any) => {
           if (!prevData) return prevData;
-
           const updatedBoards: IBoardInfo[] = prevData.filter(
-            (board: IBoardInfo) => board.boardId !== currentBoardId
+            (board: IBoardInfo) => board.boardId !== deleteInfo.boardId
           );
-
           return updatedBoards;
         }
       );
@@ -117,37 +115,36 @@ const WrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 140px;
+  height: 105px;
   background-color: var(--white);
-  border-radius: 15px;
+  border-radius: 10px;
   color: var(--grey);
   h1 {
-    font-size: 16px;
-    margin-top: 24px;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-top: 15px;
     margin-bottom: 5px;
   }
   button {
     cursor: pointer;
-    margin-top: 13px;
-    height: 30px;
-    width: 90px;
+    margin-top: 10px;
+    height: 50px;
+    width: 100%;
     border: none;
-    background-color: var(--grey);
-    color: var(--white);
+    background-color: transparent;
+    color: var(--red);
     border: none;
-    border-radius: 5px;
-  }
-  button:hover {
-    background-color: var(--red);
-    transition: background-color 0.2s ease-in-out;
+    border-top: 0.5px solid #eaeaea;
+    font-weight: 500;
+    font-size: 1.2rem;
   }
 `;
 
 const ContentStyled = styled.div`
-  margin-top: 10px;
-  font-size: 12px;
+  font-size: 1rem;
+  font-weight: 400;
   text-align: center;
-  padding: 0px 20px;
+  padding: 0px 40px;
 `;
 
 export default DeleteModal;

@@ -38,18 +38,19 @@ const LabelStyled = styled.label<{ $isSelected: boolean }>`
   align-items: center;
   cursor: pointer;
   position: relative;
-  padding-left: 25px;
-  font-size: 12px;
+  padding-left: 20px;
+  font-size: 1rem;
+  font-weight: 400;
   &::before {
     content: "";
     position: absolute;
     left: 0;
-    width: 8px;
-    height: 8px;
-    border: 2px solid var(--grey);
+    width: 5px;
+    height: 5px;
+    border: 1px solid var(--grey);
     border-radius: 50%;
     background-color: ${(props) =>
-      props.$isSelected ? "var(--grey)" : "transparent"};
+      props.$isSelected ? "black" : "transparent"};
     transition: background-color 0.2s ease;
   }
 `;

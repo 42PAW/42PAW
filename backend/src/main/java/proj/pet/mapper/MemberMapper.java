@@ -6,6 +6,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
+import proj.pet.category.domain.Species;
 import proj.pet.follow.domain.FollowType;
 import proj.pet.member.domain.Member;
 import proj.pet.member.dto.MemberMyInfoResponseDto;
@@ -21,6 +22,7 @@ public interface MemberMapper {
 
 	MemberMapper INSTANCE = getMapper(MemberMapper.class);
 
+	@Mapping(target = "memberId", source = "member.id")
 	@Mapping(target = "memberName", source = "member.nickname")
 	@Mapping(target = "intraName", source = "member.oauthProfile.name")
 	MemberPreviewResponseDto toMemberPreviewResponseDto(Member member, FollowType relationship);
@@ -29,7 +31,8 @@ public interface MemberMapper {
 	@Mapping(target = "memberId", source = "member.id")
 	@Mapping(target = "memberName", source = "member.nickname")
 	@Mapping(target = "intraName", source = "member.oauthProfile.name")
-	MemberMyInfoResponseDto toMemberMyInfoResponseDto(Member member);
+	MemberMyInfoResponseDto toMemberMyInfoResponseDto(Member member,
+			List<Species> animalCategories);
 
 	MemberNicknameValidateResponseDto toMemberNicknameValidateResponseDto(Boolean isValid);
 

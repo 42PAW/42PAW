@@ -1,27 +1,23 @@
 package proj.pet.follow.domain;
 
-import static lombok.AccessLevel.PROTECTED;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.member.domain.Member;
+import proj.pet.utils.domain.IdDomain;
 import proj.pet.utils.domain.MemberCompositeKey;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
+
+import java.time.LocalDateTime;
+
+import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "FOLLOW")
 @Getter
-public class Follow implements Validatable {
+public class Follow extends IdDomain<MemberCompositeKey> implements Validatable {
 
 	@EmbeddedId
 	private MemberCompositeKey id;

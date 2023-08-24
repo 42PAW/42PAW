@@ -102,7 +102,6 @@ const MainAreaStyled = styled.main<{
     props.$isProfilePage
       ? `calc(100% - ${props.$isRightSectionOpened ? "570px" : "0px"})`
       : "500px"};
-  //   transition: margin-left 0.5s ease-in-out, width 0.5s ease-in-out;
 `;
 
 export default Layout;

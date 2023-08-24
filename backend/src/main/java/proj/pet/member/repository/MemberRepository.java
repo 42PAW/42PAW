@@ -35,7 +35,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	 * nickname의 일부분으로 해당 이름을 포함하고 있는 모든 Member를 찾는다.
 	 *
 	 * @param partialName 닉네임 일부분
-	 * @return Page<Member> nickname을 포함하는 Member들
+	 * @return Page<Member> partialName을 nickname 혹은 intraId에 포함하는 Member들
 	 */
-	Page<Member> findByNicknameContaining(String partialName, PageRequest pageable);
+	@Query("SELECT m " +
+			"FROM Member m " +
+			"WHERE m.oauthProfile.name LIKE %:partialName% " +
+			"OR m.nickname LIKE %:partialName%")
+	Page<Member> findByNicknameContaining(@Param("partialName") String partialName,
+			PageRequest pageable);
 }

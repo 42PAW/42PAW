@@ -16,21 +16,15 @@ const MyProfilePage = () => {
     refetchOnMount: "always",
   });
   const { fetchBoards } = useFetch();
-  const [boardCategory] = useRecoilState<Board>(boardCategoryState);
-  const setBoard = useSetRecoilState<Board>(boardCategoryState);
-  const [tabState, setTabState] = useState("myPosts");
+  const [boardCategory, setBoardCategory] =
+    useRecoilState<Board>(boardCategoryState);
 
-  const handleTabState = (newTabState: string) => {
-    setTabState(newTabState);
-    if (newTabState === "myPosts") {
-      setBoard(Board.MINE);
-    } else if (newTabState === "scrapPosts") {
-      setBoard(Board.SCRAPPED);
-    }
+  const handleTabState = (newTabState: Board) => {
+    setBoardCategory(newTabState);
   };
 
   useEffect(() => {
-    setBoard(Board.MINE);
+    setBoardCategory(Board.MINE);
   }, []);
 
   const boardsQuery = useQuery<IBoardInfo[]>({
@@ -49,7 +43,7 @@ const MyProfilePage = () => {
     <ProfileTemplate
       userInfo={profileQuery.data || null}
       boards={boardsQuery.data || null}
-      tabState={tabState}
+      tabState={boardCategory}
       onTabChange={handleTabState}
     />
   );

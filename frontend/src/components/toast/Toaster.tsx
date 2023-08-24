@@ -16,12 +16,12 @@ const Toast: React.FC = () => {
     return () => clearTimeout(timer);
   }, [toastMessages]);
 
-  const closeAllToasts = async () => {
+  const closeAllToasts = () => {
     const updatedToasts = toastMessages.map((toast) => ({
       ...toast,
       isPopped: false,
     }));
-    await setToastMessages(updatedToasts);
+    setToastMessages(updatedToasts);
     setTimeout(() => {
       resetToastMessage();
     }, 200);
@@ -75,7 +75,7 @@ const ToastWrapperStyled = styled.div<{
   color: ${({ $type }) =>
     $type === "P" ? "var(--grey)" : $type === "N" ? "#dd4e48" : "#dd4e48"};
   padding: 5px 20px;
-  border-radius: 50px;
+  border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 9999;
   transition: opacity 0.3s ease-in-out;

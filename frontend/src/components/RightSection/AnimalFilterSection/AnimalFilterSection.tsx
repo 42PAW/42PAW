@@ -1,15 +1,46 @@
+import { useState, useEffect } from "react";
+import { useRecoilState } from "recoil";
 import { styled } from "styled-components";
 import AnimalButtonContainer from "@/components/AnimalButtonContainer";
+import { userInfoState } from "@/recoil/atom";
+import { UserInfoDTO } from "@/types/dto/member.dto";
+import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
+import { axiosUpdateAnimalCategory } from "@/api/axios/axios.custom";
+import useToaster from "@/hooks/useToaster";
+import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 
 const AnimalFilterSection = () => {
+  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
+  const [animalCategory, setAnimalCategory] = useState<AnimalSpecies[] | null>(
+    null
+  );
+  const { popToast } = useToaster();
+  const { closeRightSection } = useRightSectionHandler();
+
+  useEffect(() => {
+    if (userInfo) setAnimalCategory(userInfo.animalCategories);
+  }, []);
+
+  const handleOnClick = () => {
+    axiosUpdateAnimalCategory(animalCategory as AnimalSpecies[]);
+    closeRightSection();
+    popToast("동물 카테고리가 변경되었습니다.", "P");
+  };
+
   return (
     <WrapperStyled>
       <CategoryIconContainerStyled>
         <img src="/src/assets/categoryW.png" />
         필터
       </CategoryIconContainerStyled>
-      <AnimalButtonContainer columns={2} />
-      <SubmitButtonStyled>확인</SubmitButtonStyled>
+      {animalCategory && (
+        <AnimalButtonContainer
+          columns={2}
+          array={animalCategory}
+          setter={setAnimalCategory}
+        />
+      )}
+      <SubmitButtonStyled onClick={handleOnClick}>확인</SubmitButtonStyled>
     </WrapperStyled>
   );
 };

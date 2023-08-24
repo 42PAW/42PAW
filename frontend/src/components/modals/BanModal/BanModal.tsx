@@ -23,7 +23,7 @@ const BanModal: React.FC = () => {
   const { popToast } = useToaster();
 
   const handleOnClick = async () => {
-    await axiosBlockUser(banUserInfo.memberId);
+    await axiosBlockUser(banUserInfo.memberId as number);
     queryClient.invalidateQueries(["profile", currentMemberId]);
     closeModal(ModalType.BAN);
     popToast(`${banUserInfo.userName} 님이 차단됐습니다.`, "N");
@@ -33,7 +33,6 @@ const BanModal: React.FC = () => {
     <ModalLayout modalName={ModalType.BAN} isOpen={currentOpenModal.banModal}>
       <WrapperStyled>
         <h1>차단하기</h1>
-        <img src="/src/assets/ban.png" />
         <ContentStyled>
           {banUserInfo.userName} 님을 차단하시겠습니까?
         </ContentStyled>
@@ -47,41 +46,36 @@ const WrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 149px;
+  height: 105px;
   background-color: var(--white);
-  border-radius: 15px;
+  border-radius: 10px;
   color: var(--grey);
   h1 {
-    font-size: 16px;
-    margin-top: 16px;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-top: 15px;
     margin-bottom: 5px;
-  }
-  img {
-    width: 25px;
   }
   button {
     cursor: pointer;
     margin-top: 10px;
-    height: 30px;
-    width: 90px;
+    height: 50px;
+    width: 100%;
     border: none;
-    background-color: var(--grey);
-    color: var(--white);
+    background-color: transparent;
+    color: var(--red);
     border: none;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-  button:hover {
-    background-color: var(--red);
-    transition: background-color 0.2s ease-in-out;
+    border-top: 0.5px solid #eaeaea;
+    font-weight: 500;
+    font-size: 1.2rem;
   }
 `;
 
 const ContentStyled = styled.div`
-  margin-top: 10px;
-  font-size: 12px;
+  font-size: 1rem;
+  font-weight: 400;
   text-align: center;
-  padding: 0px 20px;
+  padding: 0px 40px;
 `;
 
 export default BanModal;

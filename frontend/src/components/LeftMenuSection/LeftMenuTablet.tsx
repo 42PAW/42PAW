@@ -12,11 +12,13 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   language,
 }) => {
   const [isBannerVisible, setIsBannerVisible] = useState(true);
-  const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
+  const { moveToMain, moveToMyProfile, moveToUpload, moveToDashboard } =
+    useNavigateCustom();
   const { openSearchSection } = useRightSectionHandler();
   const touchStartY = useRef<number | null>(null);
 
-  const isMainPage: boolean = location.pathname === "/";
+  const isProfilePage: boolean =
+    location.pathname === "/my-profile" || location.pathname === "/profile";
 
   useEffect(() => {
     window.addEventListener("wheel", handleWheel);
@@ -60,7 +62,7 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
 
   return (
     <>
-      {isMainPage && (
+      {!isProfilePage && (
         <BannerStyled $isBannerVisible={isBannerVisible}>
           {userInfo ? (
             <ProfileImageStyled
@@ -93,6 +95,9 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
             </li>
             <li onClick={openSearchSection}>
               <img alt="Search" src="/src/assets/search.png" />
+            </li>
+            <li onClick={moveToDashboard}>
+              <img alt="DashBoard" src="/src/assets/dashboard.png" />
             </li>
           </MenuListStyled>
         </nav>

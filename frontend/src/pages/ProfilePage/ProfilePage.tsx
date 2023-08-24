@@ -18,11 +18,11 @@ const ProfilePage = () => {
     refetchOnMount: "always",
   });
   const { fetchBoards } = useFetch();
-  const [boardCategory] = useRecoilState<Board>(boardCategoryState);
-  const setBoard = useSetRecoilState<Board>(boardCategoryState);
+  const [boardCategory, setBoardCategory] =
+    useRecoilState<Board>(boardCategoryState);
 
   useEffect(() => {
-    setBoard(Board.OTHER);
+    setBoardCategory(Board.OTHER);
   }, []); // 빈 배열을 넣어 마운트 시 한 번만 실행되도록 함
 
   const boardsQuery = useQuery<IBoardInfo[]>({

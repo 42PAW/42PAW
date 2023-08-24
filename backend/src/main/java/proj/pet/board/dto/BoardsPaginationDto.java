@@ -1,11 +1,14 @@
 package proj.pet.board.dto;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
+
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
+@ToString
 public class BoardsPaginationDto {
 
 	private final List<BoardInfoDto> result;

@@ -6,14 +6,15 @@ import styled from "styled-components";
 import ProfileInfoComponent from "@/pages/ProfilePage/Component/ProfileInfoComponent";
 import PhotoZoneComponent from "@/pages/ProfilePage/Component/PhotoZoneComponent";
 import { ProfileInfoDTO } from "@/types/dto/member.dto";
+import { Board } from "@/types/enum/board.category.enum";
 // import { BoardsInfoDTO } from "@/types/dto/board.dto";
 import { IBoardInfo } from "@/types/interface/board.interface";
 
 interface ProfileTemplateProps {
   userInfo: ProfileInfoDTO | null; // userInfo를 props로 받음
   boards: IBoardInfo[] | null;
-  tabState?: string;
-  onTabChange?: (newTabState: string) => void;
+  tabState?: Board;
+  onTabChange?: (newTabState: Board) => void;
 }
 
 const ProfileTemplate: React.FC<ProfileTemplateProps> = ({

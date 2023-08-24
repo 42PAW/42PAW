@@ -1,7 +1,9 @@
 package proj.pet.member.dto;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import proj.pet.category.domain.Species;
 import proj.pet.member.domain.Language;
 
 @Getter
@@ -13,4 +15,5 @@ public class MemberMyInfoResponseDto {
 	private final String intraName;
 	private final String profileImageUrl;
 	private final Language language;
+	private final List<Species> animalCategories;
 }

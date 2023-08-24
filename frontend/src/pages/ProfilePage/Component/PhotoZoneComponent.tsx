@@ -5,11 +5,12 @@ import { IBoardInfo } from "@/types/interface/board.interface";
 import PostList from "./PostList";
 import { useNavigate } from "react-router-dom";
 import useNavigateCustom from "@/hooks/useNavigateCustom";
+import { Board } from "@/types/enum/board.category.enum";
 
 interface PhotoZoneComponentProps {
   boards: IBoardInfo[] | null;
-  tabState?: string;
-  onTabChange?: (newTabState: string) => void;
+  tabState?: Board;
+  onTabChange?: (newTabState: Board) => void;
 }
 
 const PhotoZoneComponent: React.FC<PhotoZoneComponentProps> = ({
@@ -23,19 +24,19 @@ const PhotoZoneComponent: React.FC<PhotoZoneComponentProps> = ({
     <ProfileBodyStyled>
       {tabState && (
         <PhotoCategoryToggleStyled>
-          <button onClick={() => onTabChange?.("myPosts")}>
+          <button onClick={() => onTabChange?.(Board.MINE)}>
             <img
               src={
-                tabState === "myPosts"
+                tabState === Board.MINE
                   ? "/src/assets/feedWB.png"
                   : "/src/assets/feedW.png"
               }
             />
           </button>
-          <button onClick={() => onTabChange?.("scrapPosts")}>
+          <button onClick={() => onTabChange?.(Board.SCRAPPED)}>
             <img
               src={
-                tabState === "scrapPosts"
+                tabState === Board.SCRAPPED
                   ? "/src/assets/scrapWB.png"
                   : "/src/assets/scrapW.png"
               }

@@ -39,6 +39,11 @@ const ProfileCardModal = () => {
     closeModal(ModalType.PROFILECARD);
   };
 
+  const toProfile = () => {
+    moveToProfile();
+    closeModal(ModalType.PROFILECARD);
+  };
+
   if (isLoading) {
     return (
       <>
@@ -91,7 +96,7 @@ const ProfileCardModal = () => {
           <ButtonContainerStyled>
             {userInfo?.memberId !== currentMemberId ? (
               <>
-                <ButtonStyled>프로필</ButtonStyled>
+                <ButtonStyled onClick={toProfile}>프로필</ButtonStyled>
                 <FollowTypeButton
                   memberId={currentMemberId as number}
                   status={profileData.followType}

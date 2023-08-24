@@ -1,5 +1,5 @@
 import ProfileTemplate from "@/pages/ProfilePage/Component/ProfileTemplate";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import useFetch from "@/hooks/useFetch";
 import { useQuery } from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
@@ -10,25 +10,23 @@ import { IBoardInfo } from "@/types/interface/board.interface";
 
 const MyProfilePage = () => {
   const { fetchMyProfile } = useFetch();
-  // const { data: profileData, isLoading: profileLoading } = useQuery({
   const profileQuery = useQuery({
     queryKey: ["myProfile"],
     queryFn: fetchMyProfile,
     refetchOnMount: "always",
   });
   const { fetchBoards } = useFetch();
-  const [boardCategory] = useRecoilState<Board>(boardCategoryState);
-  const setBoard = useSetRecoilState<Board>(boardCategoryState);
+  const [boardCategory, setBoardCategory] =
+    useRecoilState<Board>(boardCategoryState);
+
+  const handleTabState = (newTabState: Board) => {
+    setBoardCategory(newTabState);
+  };
 
   useEffect(() => {
-    setBoard(Board.MINE);
-  }, []); // 빈 배열을 넣어 마운트 시 한 번만 실행되도록 함
+    setBoardCategory(Board.MINE);
+  }, []);
 
-  // const {
-  //   isLoading: boardLoading,
-  //   isError,
-  //   data: boards,
-  // } = useQuery({
   const boardsQuery = useQuery<IBoardInfo[]>({
     queryKey: ["boards", boardCategory], // 여기서 boardCategory를 그냥 Board.MINE하는게?
     queryFn: fetchBoards,
@@ -45,6 +43,8 @@ const MyProfilePage = () => {
     <ProfileTemplate
       userInfo={profileQuery.data || null}
       boards={boardsQuery.data || null}
+      tabState={boardCategory}
+      onTabChange={handleTabState}
     />
   );
 };

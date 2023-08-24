@@ -88,6 +88,7 @@ const WrapperStyled = styled.div<{ $boardExists?: boolean }>`
   align-items: center;
   justify-content: ${(props) => (props.$boardExists ? "none" : "center")};
   overflow-y: scroll;
+  overflow-x: hidden;
   width: 100%;
   height: 100vh;
 `;

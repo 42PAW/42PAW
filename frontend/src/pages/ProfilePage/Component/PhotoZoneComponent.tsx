@@ -6,47 +6,6 @@ import PostList from "./PostList";
 import { useNavigate } from "react-router-dom";
 import useNavigateCustom from "@/hooks/useNavigateCustom";
 
-const imgs = [
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-  "/src/assets/oduck.png",
-];
-
-const imgs2 = [
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-  "/src/assets/userG.png",
-];
-
 interface PhotoZoneComponentProps {
   boards: IBoardInfo[] | null;
   tabState?: string;
@@ -84,7 +43,7 @@ const PhotoZoneComponent: React.FC<PhotoZoneComponentProps> = ({
           </button>
         </PhotoCategoryToggleStyled>
       )}
-      <PhotoZoneWrapperStyled hasTab={!!tabState}>
+      <PhotoZoneWrapperStyled $hasTab={!!tabState}>
         <PostList posts={boards} onClickItem={moveToMain} />
       </PhotoZoneWrapperStyled>
     </ProfileBodyStyled>
@@ -136,11 +95,11 @@ const PhotoCategoryToggleStyled = styled.div`
   }
 `;
 
-const PhotoZoneWrapperStyled = styled.div<{ hasTab: boolean }>`
+const PhotoZoneWrapperStyled = styled.div<{ $hasTab: boolean }>`
   display: flex;
   flex-wrap: wrap;
   max-height: calc(100% - 50px);
-  margin-top: ${({ hasTab }) => (hasTab ? "0" : "25px")};
+  margin-top: ${({ $hasTab }) => ($hasTab ? "0" : "25px")};
   img {
     width: calc(33.3%);
     border-radius: 1%;

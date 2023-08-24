@@ -29,9 +29,9 @@ const MyProfilePage = () => {
     }
   };
 
-  // useEffect(() => {
-  //   setBoard(Board.MINE);
-  // }, []);
+  useEffect(() => {
+    setBoard(Board.MINE);
+  }, []);
 
   const boardsQuery = useQuery<IBoardInfo[]>({
     queryKey: ["boards", boardCategory], // 여기서 boardCategory를 그냥 Board.MINE하는게?

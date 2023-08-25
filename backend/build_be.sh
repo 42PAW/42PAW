@@ -15,6 +15,9 @@ echo -e $YELLOW"Intellij에서 설정 - 빌드,실행,배포 - Gradle에서 JVM�
 echo -e $RESET"1초 뒤 실행됩니다."
 sleep 1
 
+git submodule update --init
+git submodule update --remote
+
 arg=$1
 
 echo -en $CYAN

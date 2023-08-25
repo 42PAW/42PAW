@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 
+@Builder
 public class TestMemberCategoryFilter implements TestEntity<MemberCategoryFilter, ConsumptionCompositeKey> {
 
 	@Builder.Default

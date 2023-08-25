@@ -146,7 +146,7 @@ const BannerLogoStyled = styled.div`
   font-size: 1.8rem;
   img {
     cursor: pointer;
-    width: 30px;
+    width: 45px;
     margin-bottom: 5px;
   }
 `;

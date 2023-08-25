@@ -81,8 +81,8 @@ const LeftMenuStyled = styled.div`
 
 const LogoImageStyled = styled.img`
   cursor: pointer;
-  width: 40px;
-  margin-top: 30%;
+  width: 60px;
+  margin-top: 15%;
 `;
 
 const MenuListStyled = styled.ul`

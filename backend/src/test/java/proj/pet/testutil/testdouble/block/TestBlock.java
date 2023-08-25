@@ -6,7 +6,9 @@ import proj.pet.member.domain.Member;
 import proj.pet.testutil.testdouble.TestEntity;
 import proj.pet.utils.domain.MemberCompositeKey;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -15,13 +17,14 @@ import static org.mockito.Mockito.mock;
 
 @Builder
 public class TestBlock implements TestEntity<Block, MemberCompositeKey> {
+	public static final LocalDateTime DEFAULT_TIME = LocalDateTime.of(LocalDate.EPOCH, LocalTime.MIDNIGHT);
 
 	@Builder.Default
-	private Member from;
+	private Member from = null;
 	@Builder.Default
-	private Member to;
+	private Member to = null;
 	@Builder.Default
-	private LocalDateTime blockedAt;
+	private LocalDateTime blockedAt = DEFAULT_TIME;
 
 	public static List<Block> ofMany(Member to, LocalDateTime now, Member... froms) {
 		return Stream.of(froms)

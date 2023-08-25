@@ -153,6 +153,5 @@ gradle-app.setting
 !src/test/resources/application.yml
 application*.yml
 !application-test.yml
-/backend_config
 
 bin

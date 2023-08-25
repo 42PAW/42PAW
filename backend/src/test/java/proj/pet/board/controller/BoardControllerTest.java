@@ -166,15 +166,21 @@ class BoardControllerTest extends E2ETest {
 			// given
 			persistHelper.persist(author, loginUser, randomMember1, randomMember2, randomMember3);
 			String notHotContent = "this is not hot";
-			Board board1 = TestBoard.builder().member(author).build().asEntity();
-			Board board2 = TestBoard.builder().member(author).build().asEntity();
-			Board board3 = TestBoard.builder().member(author).build().asEntity();
-			Board board4 = TestBoard.builder().member(author).build().asEntity();
+			Board board1 = TestBoard.asDefaultEntity(author);
+			Board board2 = TestBoard.asDefaultEntity(author);
+			Board board3 = TestBoard.builder().member(author)
+					.createdAt(now.plusHours(1))
+					.build().asEntity();
+			Board board4 = TestBoard.builder().member(author)
+					.createdAt(now.plusHours(2))
+					.build().asEntity();
 			Board board5 = TestBoard.builder().member(author)
+					.createdAt(now.plusHours(3))
+					.build().asEntity();
+			Board notHotBoard = TestBoard.builder().member(author)
 					.content(notHotContent)
 					.build().asEntity();
-			Board board6 = TestBoard.builder().member(author).build().asEntity();
-			persistHelper.persist(board1, board2, board3, board4, board5, board6)
+			persistHelper.persist(board1, board2, board3, board4, notHotBoard, board5)
 					.and().persist(
 							TestReaction.ofMany(board1, ReactionType.LIKE, now,
 									randomMember1, randomMember2, randomMember3),
@@ -184,7 +190,7 @@ class BoardControllerTest extends E2ETest {
 									randomMember1),
 							TestReaction.ofMany(board4, ReactionType.LIKE, now,
 									randomMember1),
-							TestReaction.ofMany(board6, ReactionType.LIKE, now,
+							TestReaction.ofMany(board5, ReactionType.LIKE, now,
 									randomMember1))
 					.flushAndClear();
 
@@ -200,7 +206,7 @@ class BoardControllerTest extends E2ETest {
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("totalLength").value(5))
 					.andExpect(jsonPath("result.[*].boardId").value(Matchers.contains(
-							board1.getId().intValue(), board2.getId().intValue(), board6.getId().intValue(), board4.getId().intValue(), board3.getId().intValue())))
+							board1.getId().intValue(), board2.getId().intValue(), board5.getId().intValue(), board4.getId().intValue(), board3.getId().intValue())))
 					.andExpect(jsonPath("result.[*].content").value(Matchers.not(Matchers.hasItem(notHotContent))))
 					.andExpect(jsonPath("result.[0].content").value(TestBoard.DEFAULT_CONTENT))
 					.andExpect(jsonPath("result.[0].memberName").value(TestMember.DEFAULT_NICKNAME));

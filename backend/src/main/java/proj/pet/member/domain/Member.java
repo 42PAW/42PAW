@@ -9,7 +9,7 @@ import proj.pet.category.domain.MemberCategoryFilter;
 import proj.pet.follow.domain.Follow;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
-import proj.pet.utils.domain.IdDomain;
+import proj.pet.utils.domain.IdentityDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
 
@@ -25,86 +25,70 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "MEMBER")
 @Getter
 @ToString
-public class Member extends IdDomain implements Validatable {
-
-	@Embedded
-	private OauthProfile oauthProfile;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "COUNTRY", nullable = false, length = 32)
-	private Country country;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "CAMPUS", nullable = false, length = 32)
-	private Country.Campus campus;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "LANGUAGE", nullable = false, length = 32)
-	private Language language;
-
-	@Column(name = "PROFILE_IMAGE_URL")
-	private String profileImageUrl = null;
-
-	@Column(name = "NICKNAME", nullable = false, length = 12)
-	private String nickname;
-
-	@Column(name = "NICKNAME_UPDATED_AT", nullable = false)
-	private LocalDateTime nicknameUpdatedAt;
-
-	@Column(name = "STATEMENT", length = 30)
-	private String statement;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "ROLE", nullable = false, length = 32)
-	private MemberRole memberRole;
-
-	@Column(name = "CREATED_AT", nullable = false)
-	private LocalDateTime createdAt;
-
-	@Column(name = "DELETED_AT")
-	private LocalDateTime deletedAt;
+public class Member extends IdentityDomain implements Validatable {
 
 	@ToString.Exclude
 	@OneToMany(mappedBy = "from",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
-	private List<Block> blocks = new ArrayList<>();
-
+	private final List<Block> blocks = new ArrayList<>();
 	@ToString.Exclude
 	@OneToMany(mappedBy = "from",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
-	private List<Follow> followings = new ArrayList<>();
-
+	private final List<Follow> followings = new ArrayList<>();
 	@ToString.Exclude
 	@OneToMany(mappedBy = "to",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
-	private List<Follow> followers = new ArrayList<>();
-
+	private final List<Follow> followers = new ArrayList<>();
 	@ToString.Exclude
 	@OneToMany(mappedBy = "member",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
-	private List<MemberCategoryFilter> memberCategoryFilters = new ArrayList<>();
-
+	private final List<MemberCategoryFilter> memberCategoryFilters = new ArrayList<>();
 	@ToString.Exclude
 	@OneToMany(mappedBy = "member",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
-	private List<Reaction> reactions = new ArrayList<>();
-
+	private final List<Reaction> reactions = new ArrayList<>();
 	@ToString.Exclude
 	@OneToMany(mappedBy = "member",
 			fetch = LAZY,
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
-	private List<Scrap> scraps = new ArrayList<>();
+	private final List<Scrap> scraps = new ArrayList<>();
+	@Embedded
+	private OauthProfile oauthProfile;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "COUNTRY", nullable = false, length = 32)
+	private Country country;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "CAMPUS", nullable = false, length = 32)
+	private Country.Campus campus;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "LANGUAGE", nullable = false, length = 32)
+	private Language language;
+	@Column(name = "PROFILE_IMAGE_URL")
+	private String profileImageUrl = null;
+	@Column(name = "NICKNAME", nullable = false, length = 12)
+	private String nickname;
+	@Column(name = "NICKNAME_UPDATED_AT", nullable = false)
+	private LocalDateTime nicknameUpdatedAt;
+	@Column(name = "STATEMENT", length = 30)
+	private String statement;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "ROLE", nullable = false, length = 32)
+	private MemberRole memberRole;
+	@Column(name = "CREATED_AT", nullable = false)
+	private LocalDateTime createdAt;
+	@Column(name = "DELETED_AT")
+	private LocalDateTime deletedAt;
 
 	private Member(OauthProfile oauthProfile, Country country, Country.Campus campus, Language language, String nickname,
 	               String statement, MemberRole memberRole, LocalDateTime now) {
@@ -150,6 +134,12 @@ public class Member extends IdDomain implements Validatable {
 	}
 
 	public void addCategoryFilters(List<MemberCategoryFilter> categoryFilters) {
+		this.memberCategoryFilters.addAll(categoryFilters);
+		RuntimeExceptionThrower.checkValidity(this);
+	}
+
+	public void setCategoryFilters(List<MemberCategoryFilter> categoryFilters) {
+		this.memberCategoryFilters.clear();
 		this.memberCategoryFilters.addAll(categoryFilters);
 		RuntimeExceptionThrower.checkValidity(this);
 	}

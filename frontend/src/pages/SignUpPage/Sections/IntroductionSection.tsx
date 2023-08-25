@@ -21,11 +21,15 @@ const IntroductionSection: React.FC<SectionProps> = ({
     setRegisterData({ ...registerData, statement: e.target.value });
   };
 
-  const handleOnClick = () => {
+  const submitStatement = () => {
     setIsFading(true);
     setTimeout(() => {
       setStep(Section.AnimalFilter);
     }, 200);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") submitStatement();
   };
 
   return (
@@ -44,8 +48,9 @@ const IntroductionSection: React.FC<SectionProps> = ({
           value={registerData.statement}
           onChange={handleOnChange}
           maxLength={40}
+          onKeyDown={handleKeyDown}
         ></input>
-        <button onClick={handleOnClick}>
+        <button onClick={submitStatement}>
           <img src="/src/assets/arrowW.png" />
         </button>
       </InputContainer>

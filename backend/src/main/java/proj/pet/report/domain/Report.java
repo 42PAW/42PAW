@@ -1,24 +1,18 @@
 package proj.pet.report.domain;
 
-import static jakarta.persistence.FetchType.LAZY;
-import static lombok.AccessLevel.PROTECTED;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import proj.pet.member.domain.Member;
-import proj.pet.utils.domain.IdDomain;
+import proj.pet.utils.domain.IdentityDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
+
+import java.time.LocalDateTime;
+
+import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor(access = PROTECTED)
 @Entity
@@ -31,7 +25,7 @@ import proj.pet.utils.domain.Validatable;
 		})
 @Getter
 @ToString
-public class Report extends IdDomain implements Validatable {
+public class Report extends IdentityDomain implements Validatable {
 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "MEMBER_ID", nullable = false, updatable = false)
@@ -67,19 +61,19 @@ public class Report extends IdDomain implements Validatable {
 	}
 
 	public static Report ofMember(Member from, Member to, ReportReason reason, String content,
-			LocalDateTime now) {
+	                              LocalDateTime now) {
 		return new Report(from, to, reason, content, now);
 	}
 
 	public static Report ofBoard(Member from, Member to, Long boardId, ReportReason reason,
-			String content, LocalDateTime now) {
+	                             String content, LocalDateTime now) {
 		Report report = new Report(from, to, reason, content, now);
 		report.boardId = boardId;
 		return report;
 	}
 
 	public static Report ofComment(Member from, Member to, Long boardId, Long commentId,
-			ReportReason reason, String content, LocalDateTime now) {
+	                               ReportReason reason, String content, LocalDateTime now) {
 		Report report = new Report(from, to, reason, content, now);
 		report.boardId = boardId;
 		report.commentId = commentId;

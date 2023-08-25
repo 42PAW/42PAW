@@ -12,7 +12,6 @@ import useFetch from "@/hooks/useFetch";
 import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
 import { boardCategoryState } from "@/recoil/atom";
-import useToaster from "@/hooks/useToaster";
 
 const isOnlyWhitespace = (str: string) => {
   return str.trim() === "";
@@ -24,7 +23,6 @@ const CommentSection = () => {
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
   const [comment, setComment] = useState<string>("");
   const queryClient = useQueryClient();
-  const { popToast } = useToaster();
   const {
     data: comments,
     isLoading,
@@ -41,7 +39,7 @@ const CommentSection = () => {
 
   const uploadComment = async () => {
     if (comment === "" || isOnlyWhitespace(comment)) {
-      popToast("댓글 내용을 입력해주세요.", "N");
+      setComment("");
       return;
     }
     await axiosCreateComment(currentBoardId, comment);
@@ -53,7 +51,7 @@ const CommentSection = () => {
 
       await queryClient.invalidateQueries(["comments", currentBoardId]);
       const newComments: CommentInfoDTO[] | undefined =
-      await queryClient.getQueryData(["comments", currentBoardId]);
+        await queryClient.getQueryData(["comments", currentBoardId]);
 
       await queryClient.setQueryData(
         ["boards", boardCategory],
@@ -106,6 +104,7 @@ const CommentSection = () => {
               commentId={comment.commentId}
               memberId={comment.memberId}
               memberName={comment.memberName}
+              country={comment.country}
               comment={comment.comment}
               profileImageUrl={comment.profileImageUrl}
               createdAt={comment.createdAt}
@@ -113,7 +112,7 @@ const CommentSection = () => {
           ))
         ) : (
           <NoCommentMessageStyled>
-            이 게시글의 첫번째 댓글이 되어주세요 🙈
+            이 게시글의 첫번째 댓글이 되어주세요
           </NoCommentMessageStyled>
         )}
       </CommentItemWrapperStyled>

@@ -46,8 +46,8 @@ const WrapperStyled = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   background-color: transparent;
   border: none;
   img {

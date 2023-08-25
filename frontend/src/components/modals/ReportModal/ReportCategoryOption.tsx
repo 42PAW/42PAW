@@ -38,7 +38,7 @@ const LabelStyled = styled.label<{ $isSelected: boolean }>`
   align-items: center;
   cursor: pointer;
   position: relative;
-  padding-left: 25px;
+  padding-left: 20px;
   font-size: 1rem;
   font-weight: 400;
   &::before {

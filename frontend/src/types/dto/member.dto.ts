@@ -33,6 +33,7 @@ export interface ProfileInfoDTO {
   nicknameUpdatedAt: Date;
   profileImageUrl: string;
   country: string;
+  campus: string;
   statement: string;
   followingCount: number;
   followerCount: number;

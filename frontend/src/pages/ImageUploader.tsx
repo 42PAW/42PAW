@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import { useState } from "react";
 import { axiosCreateBoard } from "@/api/axios/axios.custom";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
@@ -53,7 +54,7 @@ const ImageUploader = () => {
 
   console.log(typeof webpImage);
   return (
-    <div>
+    <WrapperStyled>
       <input
         type="file"
         accept="image/*"
@@ -65,8 +66,15 @@ const ImageUploader = () => {
       )}
       {/* {webpImage && <img src={URL.createObjectURL(webpImage)} alt="WebP" />} */}
       <button onClick={upload}>백으로 보내 이자식아</button>
-    </div>
+    </WrapperStyled>
   );
 };
+
+const WrapperStyled = styled.div`
+  display: flex;
+  width: 505px;
+  height: 100%;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
+`;
 
 export default ImageUploader;

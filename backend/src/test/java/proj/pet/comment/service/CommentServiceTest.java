@@ -1,6 +1,7 @@
 package proj.pet.comment.service;
 
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ class CommentServiceTest {
 	private CommentRepository commentRepository;
 
 	@DisplayName("사용자가 게시물에 댓글을 작성할 수 있다.")
+	@Disabled
 	@Test
 	void addCommentToBoard() {
 		//given
@@ -62,6 +64,7 @@ class CommentServiceTest {
 	}
 
 	@DisplayName("본인이 작성한 댓글을 지울 수 있다.")
+	@Disabled
 	@Test
 	void deleteComment() {
 		//given

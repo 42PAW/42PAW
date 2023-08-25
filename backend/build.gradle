@@ -91,6 +91,10 @@ tasks.named('processTestResources') {
     dependsOn 'copyTestConfig'
 }
 
+jar {
+    enabled = false
+}
+
 test {
     useJUnitPlatform()
 }

@@ -7,6 +7,7 @@ import { LeftMenuProps } from "./LeftMenuSection";
 const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
   handleLogin,
   handleLogout,
+  handleClickLogo,
   userInfo,
   language,
 }) => {
@@ -15,7 +16,7 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
   return (
     <>
       <LeftMenuStyled>
-        <LogoImageStyled src="/src/assets/paw.png" onClick={moveToMain} />
+        <LogoImageStyled src="/src/assets/paw.png" onClick={handleClickLogo} />
         <nav>
           <MenuListStyled>
             <li onClick={moveToMain}>

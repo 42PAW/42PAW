@@ -11,6 +11,7 @@ let token = getCookie("access_token");
 const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   handleLogin,
   handleLogout,
+  handleClickLogo,
   userInfo,
 }) => {
   const [isBannerVisible, setIsBannerVisible] = useState(true);
@@ -82,7 +83,7 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
             />
           )}
           <BannerLogoStyled>
-            <img src="/src/assets/paw.png" />
+            <img src="/src/assets/paw.png" onClick={handleClickLogo} />
           </BannerLogoStyled>
           <SettingButtonContainerStyled>
             <SettingButton />

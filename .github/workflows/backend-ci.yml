@@ -57,7 +57,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
       - name: Upload build file to S3 and trigger CodeDeploy
-        if: ${{ github.ref == 'refs/heads/dev' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
             mkdir -p before-deploy
             cp backend/build/libs/pet-*.jar before-deploy/

@@ -38,7 +38,7 @@ fi
 echo -en $CYAN
 if [ "$arg" == "run" ] || [ "$arg" == "re" ] || [ "$arg" == "all" ]; then
     echo "Spring Boot Run"
-    java -jar -Dspring.profiles.active=local ./build/libs/pet-0.0.1-SNAPSHOT.jar
+    java -jar -Dspring.profiles.active=local ./build/libs/pet-*.jar
 fi
 
 echo -en $RESET

@@ -70,7 +70,7 @@ dependencies {
 }
 
 ext {
-    configDirectory = file("backend/backend_config")
+    configDirectory = file("backend_config")
 }
 
 tasks.register('copyMainConfig', Copy) {

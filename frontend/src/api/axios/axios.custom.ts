@@ -5,6 +5,7 @@ import { CreateBoardDTO } from "@/types/dto/board.dto";
 import { getCookie } from "../cookie/cookies";
 import { Language } from "@/types/enum/language.enum";
 import { ReportReason } from "@/types/enum/report.enum";
+import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 
 const token = getCookie("access_token") ?? null;
 
@@ -138,13 +139,49 @@ export const axiosGetMyBoards = async (
   page: number
 ): Promise<any> => {
   try {
+    const response = await instance.get(axiosGetMyBoardsURL, {
+      params: { size: size, page: page },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetOtherBoardsURL = "/v1/boards/members/";
+export const axiosGetOtherBoards = async (
+  memberId: number,
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
     if (token) {
-      const response = await instance.get(axiosGetMyBoardsURL, {
-        params: { size: size, page: page },
-      });
+      const response = await instance.get(
+        axiosGetOtherBoardsURL + memberId.toString(),
+        {
+          params: { size: size, page: page },
+        }
+      );
       return response.data;
     }
-    const response = await axios.get(axiosGetMyBoardsURL, {
+    const response = await axios.get(
+      axiosGetOtherBoardsURL + memberId.toString(),
+      {
+        params: { size: size, page: page },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+const axiosGetScrappedBoardsURL = "/v1/scraps/members/me";
+export const axiosGetScrappedBoards = async (
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    const response = await instance.get(axiosGetScrappedBoardsURL, {
       params: { size: size, page: page },
     });
     return response.data;
@@ -373,7 +410,6 @@ export const axiosReport = async (
   commentId: number | null
 ): Promise<any> => {
   try {
-    console.log(reportedMemberId, boardId, commentId, reason, content);
     const response = await instance.post(axiosReportURL, {
       reportedMemberId,
       boardId,
@@ -409,13 +445,26 @@ export const axiosGetSearchResults = async (
       const response = await instance.get(axiosGetSearchResultsURL, {
         params: { name: name, size: size, page: page },
       });
-      console.log(response.data.result);
       return response.data.result;
     }
     const response = await axios.get(axiosGetSearchResultsURL, {
       params: { name: name, size: size, page: page },
     });
     return response.data.result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosUpdateAnimalCategoryURL = "/v1/categories/members/me";
+export const axiosUpdateAnimalCategory = async (
+  categories: AnimalSpecies[]
+): Promise<any> => {
+  try {
+    const response = await instance.patch(axiosUpdateAnimalCategoryURL, {
+      categories,
+    });
+    return response;
   } catch (error) {
     throw error;
   }

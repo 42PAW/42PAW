@@ -7,7 +7,6 @@ const DashboardPage = () => {
   //   queryKey: ["worldStatistics"],
   //   queryFn: axiosGetWorldStatistics,
   // });
-  // console.log(data);
   return <WrapperStyled></WrapperStyled>;
 };
 

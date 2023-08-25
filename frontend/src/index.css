@@ -33,7 +33,7 @@ body {
   margin: 0;
   height: 100%;
   /* min-width: 갤럭시 폴드 기준 */
-  min-width: 280px;
+  min-width: 262px;
   overflow: hidden;
   font-size: 10px;
   font-weight: 500;
@@ -60,4 +60,15 @@ button {
 div,
 h1 {
   cursor: default;
+}
+
+.swiper-pagination-bullet-active {
+  color: white;
+  background: var(--white, var(--transparent2));
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-size: 3rem;
+  color: var(--white);
 }

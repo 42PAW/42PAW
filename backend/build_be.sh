@@ -15,6 +15,9 @@ echo -e $YELLOW"Intellij에서 설정 - 빌드,실행,배포 - Gradle에서 JVM�
 echo -e $RESET"1초 뒤 실행됩니다."
 sleep 1
 
+git submodule update --init
+git submodule update --remote
+
 arg=$1
 
 echo -en $CYAN
@@ -35,7 +38,7 @@ fi
 echo -en $CYAN
 if [ "$arg" == "run" ] || [ "$arg" == "re" ] || [ "$arg" == "all" ]; then
     echo "Spring Boot Run"
-    java -jar -Dspring.profiles.active=local ./build/libs/pet-0.0.1-SNAPSHOT.jar
+    java -jar -Dspring.profiles.active=local ./build/libs/pet-*.jar
 fi
 
 echo -en $RESET

@@ -39,6 +39,11 @@ const ProfileCardModal = () => {
     closeModal(ModalType.PROFILECARD);
   };
 
+  const toProfile = () => {
+    moveToProfile();
+    closeModal(ModalType.PROFILECARD);
+  };
+
   if (isLoading) {
     return (
       <>
@@ -71,7 +76,7 @@ const ProfileCardModal = () => {
           <IntraNameStyled>{profileData.intraName}</IntraNameStyled>
           <CountryStyled>
             {useCountryEmoji(profileData.country as Country)}{" "}
-            {profileData.country}
+            {profileData.campus}
           </CountryStyled>
           <StatementStyled>{profileData.statement}</StatementStyled>
           <CardInfoStyled>
@@ -91,7 +96,7 @@ const ProfileCardModal = () => {
           <ButtonContainerStyled>
             {userInfo?.memberId !== currentMemberId ? (
               <>
-                <ButtonStyled>프로필</ButtonStyled>
+                <ButtonStyled onClick={toProfile}>프로필</ButtonStyled>
                 <FollowTypeButton
                   memberId={currentMemberId as number}
                   status={profileData.followType}

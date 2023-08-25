@@ -202,7 +202,7 @@ const BoardWrapperStyled = styled.div`
   margin-top: 3%;
   margin-bottom: 5%;
   border-radius: 25px;
-  padding-bottom: 10%;
+  padding-bottom: 7%;
   box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
 `;
 
@@ -219,16 +219,16 @@ const BoardProfileStyled = styled.div`
   display: flex;
   align-items: center;
   margin-left: 4%;
-  width: 40%;
+
   img {
     cursor: pointer;
-    width: 20%;
+    width: 10%;
     aspect-ratio: 1 / 1;
     border-radius: 100%;
   }
   div {
     cursor: pointer;
-    margin-left: 5%;
+    margin-left: 2%;
     font-size: 1.3rem;
     color: var(--white);
   }
@@ -247,7 +247,8 @@ const BoardOptionButtonStyled = styled.div`
 `;
 
 const BoardBodyStyled = styled.div`
-  height: 98.2%;
+  height: 97.2%;
+  width: 100%;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
   background-color: var(--white);
@@ -314,7 +315,7 @@ const ScrapButtonStyled = styled.div`
 const BoardContentContainerStyled = styled.div`
   display: flex;
   flex-direction: column;
-  height: 14%;
+  height: 11%;
   margin-top: 1.5%;
   margin-left: 5%;
   margin-right: 5%;
@@ -343,7 +344,7 @@ const DivTwo = styled.div`
 const DivThree = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 2%;
+  margin-top: 3%;
   font-size: 100%;
   div:nth-child(1) {
     margin-right: 1%;
@@ -359,7 +360,7 @@ const DivThree = styled.div`
 const NoCommentStyled = styled.div`
   font-weight: 400;
   color: var(--lightgrey);
-  margin-top: 2%;
+  margin-top: 3%;
 `;
 
 export default BoardTemplate;

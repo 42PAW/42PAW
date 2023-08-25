@@ -5,17 +5,37 @@ import AnimalButtonContainer from "@/components/AnimalButtonContainer";
 import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
+import { axiosUpdateAnimalCategory } from "@/api/axios/axios.custom";
+import useToaster from "@/hooks/useToaster";
+import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 
 const AnimalFilterSection = () => {
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
-  const [animalCategory, setAnimalCategory] = useState<AnimalSpecies[]>([]);
+  const [animalCategory, setAnimalCategory] = useState<AnimalSpecies[] | null>(
+    null
+  );
+  const { popToast } = useToaster();
+  const { closeRightSection } = useRightSectionHandler();
 
   useEffect(() => {
     if (userInfo) setAnimalCategory(userInfo.animalCategories);
+    if (!userInfo)
+      setAnimalCategory([
+        AnimalSpecies.DOG,
+        AnimalSpecies.AMPHIBIAN,
+        AnimalSpecies.BIRD,
+        AnimalSpecies.CAT,
+        AnimalSpecies.FISH,
+        AnimalSpecies.INSECT,
+        AnimalSpecies.REPTILE,
+        AnimalSpecies.SMALLANIMAL,
+      ]);
   }, []);
 
   const handleOnClick = () => {
-    console.log(animalCategory);
+    axiosUpdateAnimalCategory(animalCategory as AnimalSpecies[]);
+    closeRightSection();
+    popToast("동물 카테고리가 변경되었습니다.", "P");
   };
 
   return (
@@ -24,11 +44,13 @@ const AnimalFilterSection = () => {
         <img src="/src/assets/categoryW.png" />
         필터
       </CategoryIconContainerStyled>
-      <AnimalButtonContainer
-        columns={2}
-        array={animalCategory}
-        setter={setAnimalCategory}
-      />
+      {animalCategory && (
+        <AnimalButtonContainer
+          columns={2}
+          array={animalCategory}
+          setter={setAnimalCategory}
+        />
+      )}
       <SubmitButtonStyled onClick={handleOnClick}>확인</SubmitButtonStyled>
     </WrapperStyled>
   );

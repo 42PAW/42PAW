@@ -1,12 +1,13 @@
 import styled from "styled-components";
-import OptionButton from "../../OptionButton";
-import { useState } from "react";
-import useToaster from "@/hooks/useToaster";
+import { useSetRecoilState } from "recoil";
+// import OptionButton from "../../OptionButton";
 import FollowTypeButton from "@/components/FollowTypeButton";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { MemberSearchResponseDTO } from "@/types/dto/member.dto.ts";
 import useModal from "@/hooks/useModal";
 import { ModalType } from "@/types/enum/modal.enum";
+import BoardOption from "@/components/BoardOption";
+import { currentMemberIdState } from "@/recoil/atom";
 
 const SearchItem = (user: MemberSearchResponseDTO) => {
   const {
@@ -20,22 +21,11 @@ const SearchItem = (user: MemberSearchResponseDTO) => {
   } = user;
 
   const { openModal } = useModal();
-  const { popToast } = useToaster();
-  const [relation, setRelation] = useState(user.relationship);
+  const setCurrentMemberId = useSetRecoilState(currentMemberIdState);
 
   const handleOpenProfile = () => {
+    setCurrentMemberId(memberId);
     openModal(ModalType.PROFILECARD);
-  };
-
-  const handleStateChange = () => {
-    if (relation === "FOLLOWING") {
-      setRelation("NONE");
-      popToast(`${user.memberName}의 팔로우를 취소했습니다`, "P");
-    } else if (relation === "NONE") setRelation("FOLLOWING");
-    else {
-      setRelation("NONE");
-      popToast(`${user.memberName}의 차단을 해제했습니다`, "P");
-    }
   };
 
   return (
@@ -51,8 +41,11 @@ const SearchItem = (user: MemberSearchResponseDTO) => {
           </MemberNameStyled>
           <IntraNameStyled>{user.intraName}</IntraNameStyled>
         </NameContainerStyled>
-        <FollowTypeButton status={user.relationship} isLoading={false} />
-        <OptionButton memberId={user.memberId} memberName={user.memberName} />
+        <SearchItemRightSideStyled>
+          <FollowTypeButton status={user.relationship} isLoading={false} />
+          <BufferStyled />
+          <BoardOption memberId={memberId} memberName={memberName} />
+        </SearchItemRightSideStyled>
       </SearchItemRightStyled>
     </SearchItemStyled>
   );
@@ -74,7 +67,11 @@ const UserImageContainerStyled = styled.div`
   align-items: center;
   justify-content: center;
   img {
+    cursor: pointer;
     width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    border: 1px solid var(--transparent);
   }
 `;
 
@@ -92,7 +89,7 @@ const NameContainerStyled = styled.div`
   width: 60%;
   font-weight: bold;
   padding-left: 10px;
-  font-color: var(--white);
+  color: var(--white);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -105,10 +102,21 @@ const NameContainerStyled = styled.div`
 
 const MemberNameStyled = styled.div`
   font-size: 14px;
+  font-color: var(--white);
 `;
 
 const IntraNameStyled = styled.div`
   font-size: 10px;
+`;
+
+const SearchItemRightSideStyled = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+`;
+
+const BufferStyled = styled.div`
+  width: 10px;
 `;
 
 // const StateButtonStyled = styled.button`

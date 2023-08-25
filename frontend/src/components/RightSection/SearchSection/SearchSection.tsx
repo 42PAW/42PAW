@@ -66,6 +66,7 @@ const SearchSection = () => {
   ) => {
     if (event.key == "Enter") {
       handleInputState();
+
       setSearchInput(searchInput);
     }
   };
@@ -132,7 +133,7 @@ const SearchBarStyled = styled.div`
   width: 85%;
   border-radius: 30px;
   background: var(--transparent);
-  animation: ${({ $isInput }) => ($isInput ? shakeAnimation : "none")} 0.5s;
+  animation: ${($isInput) => ($isInput ? shakeAnimation : "none")} 0.5s;
   // 검색 입력창
   input {
     display: flex;

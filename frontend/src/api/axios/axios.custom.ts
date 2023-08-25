@@ -409,7 +409,6 @@ export const axiosGetSearchResults = async (
       const response = await instance.get(axiosGetSearchResultsURL, {
         params: { name: name, size: size, page: page },
       });
-      console.log(response.data.result);
       return response.data.result;
     }
     const response = await axios.get(axiosGetSearchResultsURL, {

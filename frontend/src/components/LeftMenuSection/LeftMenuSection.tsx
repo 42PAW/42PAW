@@ -10,16 +10,14 @@ export interface LeftMenuProps {
   handleLogin: () => void;
   handleLogout: () => void;
   userInfo: UserInfoDTO | null;
-  language: any;
+  language?: any;
 }
 
 const LeftMenuSection = () => {
   const [isDesktopScreen, setIsDesktopScreen] = useState(
     window.matchMedia("(min-width: 1024px)").matches
   );
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoDTO | null>(
-    userInfoState
-  );
+  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [language] = useRecoilState<any>(languageState);
 
   useEffect(() => {
@@ -37,8 +35,8 @@ const LeftMenuSection = () => {
   };
 
   const handleLogout = () => {
-    setUserInfo(null);
     removeCookie("access_token");
+    window.location.replace("/");
   };
 
   return isDesktopScreen ? (
@@ -53,7 +51,6 @@ const LeftMenuSection = () => {
       handleLogin={handleLogin}
       handleLogout={handleLogout}
       userInfo={userInfo}
-      language={language}
     />
   );
 };

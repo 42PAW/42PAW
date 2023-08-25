@@ -10,8 +10,7 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
   userInfo,
   language,
 }) => {
-  const { moveToMain, moveToMyProfile, moveToUpload, moveToDashboard } =
-    useNavigateCustom();
+  const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
   const { openSearchSection } = useRightSectionHandler();
   return (
     <>
@@ -27,9 +26,6 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
             </li>
             <li onClick={openSearchSection}>
               <img alt="Search" src="/src/assets/search.png" />
-            </li>
-            <li onClick={moveToDashboard}>
-              <img alt="DashBoard" src="/src/assets/dashboard.png" />
             </li>
           </MenuListStyled>
           {userInfo ? (
@@ -85,7 +81,7 @@ const LeftMenuStyled = styled.div`
 
 const LogoImageStyled = styled.img`
   cursor: pointer;
-  width: 60px;
+  width: 40px;
   margin-top: 30%;
 `;
 

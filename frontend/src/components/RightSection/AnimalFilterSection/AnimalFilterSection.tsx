@@ -19,6 +19,17 @@ const AnimalFilterSection = () => {
 
   useEffect(() => {
     if (userInfo) setAnimalCategory(userInfo.animalCategories);
+    if (!userInfo)
+      setAnimalCategory([
+        AnimalSpecies.DOG,
+        AnimalSpecies.AMPHIBIAN,
+        AnimalSpecies.BIRD,
+        AnimalSpecies.CAT,
+        AnimalSpecies.FISH,
+        AnimalSpecies.INSECT,
+        AnimalSpecies.REPTILE,
+        AnimalSpecies.SMALLANIMAL,
+      ]);
   }, []);
 
   const handleOnClick = () => {

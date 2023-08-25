@@ -4,16 +4,17 @@ import useNavigateCustom from "@/hooks/useNavigateCustom";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import SettingButton from "@/components/SettingButton";
 import { LeftMenuProps } from "./LeftMenuSection";
+import { getCookie } from "@/api/cookie/cookies";
+
+let token = getCookie("access_token");
 
 const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   handleLogin,
   handleLogout,
   userInfo,
-  language,
 }) => {
   const [isBannerVisible, setIsBannerVisible] = useState(true);
-  const { moveToMain, moveToMyProfile, moveToUpload, moveToDashboard } =
-    useNavigateCustom();
+  const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
   const { openSearchSection } = useRightSectionHandler();
   const touchStartY = useRef<number | null>(null);
 
@@ -60,6 +61,11 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
     touchStartY.current = null;
   };
 
+  const handleLoginButton = () => {
+    token ? handleLogout() : handleLogin();
+    token = getCookie("access_token");
+  };
+
   return (
     <>
       {!isProfilePage && (
@@ -84,30 +90,22 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
         </BannerStyled>
       )}
       <MenuStyled>
-        <LogoImageStyled src="/src/assets/paw.png" onClick={moveToMain} />
         <nav>
           <MenuListStyled>
             <li onClick={moveToMain}>
               <img alt="Main" src="/src/assets/home.png" />
             </li>
-            <li onClick={moveToUpload}>
-              <img alt="MyProfile" src="/src/assets/upload.png" />
-            </li>
             <li onClick={openSearchSection}>
               <img alt="Search" src="/src/assets/search.png" />
             </li>
-            <li onClick={moveToDashboard}>
-              <img alt="DashBoard" src="/src/assets/dashboard.png" />
+            <li onClick={moveToUpload}>
+              <img alt="MyProfile" src="/src/assets/upload.png" />
+            </li>
+            <li onClick={handleLoginButton}>
+              <img alt="Login" src="/src/assets/logout.png" />
             </li>
           </MenuListStyled>
         </nav>
-        {userInfo ? (
-          <LoginButtonStyled onClick={handleLogout}>
-            {language.logout}
-          </LoginButtonStyled>
-        ) : (
-          <LoginButtonStyled onClick={handleLogin}>로그인</LoginButtonStyled>
-        )}
       </MenuStyled>
     </>
   );
@@ -147,7 +145,8 @@ const BannerLogoStyled = styled.div`
   color: var(--white);
   font-size: 1.8rem;
   img {
-    width: 40px;
+    cursor: pointer;
+    width: 30px;
     margin-bottom: 5px;
   }
 `;
@@ -185,17 +184,12 @@ const MenuStyled = styled.div`
   }
 `;
 
-const LogoImageStyled = styled.img`
-  cursor: pointer;
-  width: 0px;
-  margin-top: 30%;
-`;
-
 const MenuListStyled = styled.ul`
+  width: 100vw;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -207,20 +201,6 @@ const MenuListStyled = styled.ul`
   img:hover {
     background-color: var(--transparent);
     border-radius: 30%;
-  }
-`;
-
-const LoginButtonStyled = styled.div`
-  cursor: pointer;
-  text-align: center;
-  min-width: 45px;
-  margin: 0;
-  margin-right: 2%;
-  font-size: 1rem;
-  &:hover {
-    background-color: var(--white);
-    color: var(--purple);
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
   }
 `;
 

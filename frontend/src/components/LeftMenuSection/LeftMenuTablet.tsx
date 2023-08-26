@@ -72,27 +72,25 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
 
   return (
     <>
-      {!isProfilePage && (
-        <BannerStyled $isBannerVisible={isBannerVisible}>
-          {userInfo ? (
-            <ProfileImageStyled
-              src={userInfo.profileImageUrl}
-              onClick={handleOpenMyProfile}
-            />
-          ) : (
-            <ProfileImageStyled
-              src="/src/assets/userW.png"
-              onClick={handleLogin}
-            />
-          )}
-          <BannerLogoStyled>
-            <img src="/src/assets/paw.png" />
-          </BannerLogoStyled>
-          <SettingButtonContainerStyled>
-            <SettingButton />
-          </SettingButtonContainerStyled>
-        </BannerStyled>
-      )}
+      <BannerStyled $isBannerVisible={isBannerVisible}>
+        {userInfo ? (
+          <ProfileImageStyled
+            src={userInfo.profileImageUrl}
+            onClick={handleOpenMyProfile}
+          />
+        ) : (
+          <ProfileImageStyled
+            src="/src/assets/userW.png"
+            onClick={handleLogin}
+          />
+        )}
+        <BannerLogoStyled>
+          <img src="/src/assets/paw.png" />
+        </BannerLogoStyled>
+        <SettingButtonContainerStyled>
+          <SettingButton />
+        </SettingButtonContainerStyled>
+      </BannerStyled>
       <MenuStyled>
         <LogoImageStyled src="/src/assets/paw.png" onClick={moveToMain} />
         <nav>

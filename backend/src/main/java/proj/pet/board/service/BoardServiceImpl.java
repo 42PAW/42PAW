@@ -102,12 +102,16 @@ public class BoardServiceImpl implements BoardService {
 	 */
 	@Override
 	public void deleteBoard(Long memberId, Long boardId) {
+		Member member = memberRepository.findById(memberId)
+				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		Board board = boardRepository.findById(boardId)
 				.orElseThrow(NOT_FOUND_BOARD::asServiceException);
 		if (board.getDeletedAt() != null) {
 			throw ALREADY_DELETED_BOARD.asServiceException();
 		}
-		if (!board.isOwnedBy(memberId)) {
+		System.out.println("board = " + board.getDeletedAt());
+		System.out.println("member = " + member);
+		if (!board.isOwnedBy(member)) {
 			throw UNAUTHENTICATED.asServiceException();
 		}
 		if (!board.getComments().isEmpty()) {

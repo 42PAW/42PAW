@@ -45,8 +45,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
-import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
+import static proj.pet.exception.ExceptionStatus.*;
 
 public class BoardServiceImplTest extends UnitTest {
 
@@ -193,6 +192,52 @@ public class BoardServiceImplTest extends UnitTest {
 			then(board).should().delete();
 		}
 
+		@DisplayName("게시글이 존재하지 않으면 삭제할 수 없다.")
+		@Test
+		void 실패_게시글_존재하지_않음() {
+			//given
+			given(boardRepository.findById(IGNORE_ID)).willReturn(Optional.empty());
+
+			//when, then
+			assertThatThrownBy(() -> boardService.deleteBoard(normalMember.getId(), IGNORE_ID))
+					.asInstanceOf(type(ServiceException.class))
+					.extracting(ServiceException::getStatus)
+					.extracting(ExceptionStatusDto::getStatusCode)
+					.isEqualTo(NOT_FOUND_BOARD.getStatusCode());
+		}
+
+		@DisplayName("지우려는 사용자가 존재하지 않으면 삭제할 수 없다.")
+		@Test
+		void 실패_사용자_존재하지_않음() {
+			//given
+			given(memberRepository.findById(IGNORE_ID)).willReturn(Optional.empty());
+
+			//when, then
+			assertThatThrownBy(() -> boardService.deleteBoard(IGNORE_ID, boardId))
+					.asInstanceOf(type(ServiceException.class))
+					.extracting(ServiceException::getStatus)
+					.extracting(ExceptionStatusDto::getStatusCode)
+					.isEqualTo(NOT_FOUND_MEMBER.getStatusCode());
+		}
+
+		@DisplayName("이미 삭제된 게시글이라면 삭제할 수 없다.")
+		@Test
+		void 실패_이미_삭제된_게시글() {
+			//given
+			Board deletedBoard = TestBoard.builder()
+					.deletedAt(now)
+					.build().asMockEntity(boardId);
+			given(memberRepository.findById(author.getId())).willReturn(Optional.of(author));
+			given(boardRepository.findById(boardId)).willReturn(Optional.of(deletedBoard));
+
+			//when, then
+			assertThatThrownBy(() -> boardService.deleteBoard(author.getId(), boardId))
+					.asInstanceOf(type(ServiceException.class))
+					.extracting(ServiceException::getStatus)
+					.extracting(ExceptionStatusDto::getStatusCode)
+					.isEqualTo(ALREADY_DELETED_BOARD.getStatusCode());
+		}
+
 		@DisplayName("본인의 게시글이 아니라면, 삭제할 수 없다.")
 		@Test
 		void 실패_본인_게시글_아님() {
@@ -202,6 +247,7 @@ public class BoardServiceImplTest extends UnitTest {
 					.deletedAt(null)
 					.build().asMockEntity(boardId);
 			given(boardRepository.findById(boardId)).willReturn(Optional.of(authorsBoard));
+			given(memberRepository.findById(normalMember.getId())).willReturn(Optional.of(normalMember));
 
 			//when, then
 			assertThatThrownBy(() -> boardService.deleteBoard(normalMember.getId(), authorsBoard.getId()))

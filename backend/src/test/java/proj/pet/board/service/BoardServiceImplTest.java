@@ -260,6 +260,7 @@ public class BoardServiceImplTest extends UnitTest {
 					.extracting(ExceptionStatusDto::getStatusCode)
 					.isEqualTo(UNAUTHENTICATED.getStatusCode());
 		}
-
 	}
+
+
 }

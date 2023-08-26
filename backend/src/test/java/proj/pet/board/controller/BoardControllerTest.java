@@ -1,16 +1,16 @@
 package proj.pet.board.controller;
 
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import proj.pet.board.domain.Board;
 import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.category.domain.AnimalCategory;
+import proj.pet.follow.domain.Follow;
 import proj.pet.member.domain.Member;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.reaction.domain.Reaction;
@@ -27,8 +27,10 @@ import proj.pet.testutil.testdouble.reaction.TestReaction;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,20 +43,23 @@ class BoardControllerTest extends E2ETest {
 	private PersistHelper persistHelper;
 
 	/*---------------------------TEST-DOUBLE---------------------------*/
-	private List<AnimalCategory> categories;
+	private List<AnimalCategory> animalCategories;
 	private Member author;
 	private Member loginUser;
 
 	@BeforeEach
 	void setup() {
 		persistHelper = PersistHelper.start(em);
-		categories = persistHelper.persistAndReturn(TestAnimalCategory.getAllSpeciesAsCategories());
+		animalCategories = persistHelper.persistAndReturn(TestAnimalCategory.getAllSpeciesAsCategories());
 		author = TestMember.asDefaultEntity();
 		loginUser = TestMember.builder()
 				.oauthName("loginUser")
 				.build().asEntity();
 	}
 
+	private String randomString() {
+		return UUID.randomUUID().toString();
+	}
 
 	/**
 	 * req : {@link UserSessionDto}, int page, int size
@@ -90,8 +95,8 @@ class BoardControllerTest extends E2ETest {
 					.and().persist(
 							TestBoardCategoryFilter.ofMany(
 									board1,
-									categories.get(0),
-									categories.get(1)))
+									animalCategories.get(0),
+									animalCategories.get(1)))
 					.and().persist(
 							Reaction.of(board1, loginUser, ReactionType.LIKE, now),
 							Scrap.of(loginUser, board2, now))
@@ -211,6 +216,145 @@ class BoardControllerTest extends E2ETest {
 					.andExpect(jsonPath("result.[0].content").value(TestBoard.DEFAULT_CONTENT))
 					.andExpect(jsonPath("result.[0].memberName").value(TestMember.DEFAULT_NICKNAME));
 		}
+	}
 
+	@Nested
+	@DisplayName("GET /v1/boards/members/{memberId}")
+	class GetMemberBoards {
+		private final String PATH = "/v1/boards/members/";
+		private final LocalDateTime now = LocalDateTime.now();
+		private final Member loginUser = TestMember.builder()
+				.oauthName(randomString())
+				.build().asEntity();
+		private final Member specifiedMember = TestMember.builder()
+				.oauthName(randomString())
+				.build().asEntity();
+		private final Member randomMember1 = TestMember.builder()
+				.oauthName(randomString())
+				.build().asEntity();
+		private final Member randomMember2 = TestMember.builder()
+				.oauthName(randomString())
+				.build().asEntity();
+
+		@Test
+		@DisplayName("특정 멤버의 게시글 목록을 조회할 수 있다.")
+		void getMemberBoards() throws Exception {
+			persistHelper.persist(loginUser, randomMember1, randomMember2, specifiedMember)
+					.and().persist(
+							TestBoard.builder()
+									.member(randomMember1)
+									.build().asEntity(),
+							TestBoard.builder()
+									.member(randomMember2)
+									.build().asEntity(),
+							TestBoard.builder()
+									.member(specifiedMember)
+									.content("안녕하세요")
+									.build().asEntity(),
+							TestBoard.builder()
+									.member(specifiedMember)
+									.content("반갑습니다")
+									.build().asEntity())
+					.flushAndClear();
+
+			String token = stubToken(loginUser, now, 28);
+			MockHttpServletRequestBuilder req = get(PATH + specifiedMember.getId())
+					.header(HttpHeaders.AUTHORIZATION, BEARER + token)
+					.param("page", "0")
+					.param("size", "10");
+
+			mockMvc.perform(req)
+					.andDo(print())
+					.andExpect(status().isOk())
+					.andExpect(jsonPath("totalLength").value(2))
+					.andExpect(jsonPath("result.[*].content").value(
+							Matchers.contains("안녕하세요", "반갑습니다")));
+		}
+	}
+
+	@Nested
+	@DisplayName("GET /v1/boards/followings")
+	class GetFollowingsBoards {
+
+		private final String PATH = "/v1/boards/followings";
+		private final LocalDateTime now = LocalDateTime.now();
+		private final Member loginUser = TestMember.builder()
+				.oauthName(randomString())
+				.build().asEntity();
+		private final Member followingMember1 = TestMember.builder()
+				.oauthName(randomString())
+				.build().asEntity();
+		private final Member followingMember2 = TestMember.builder()
+				.oauthName(randomString())
+				.build().asEntity();
+		private final Member randomMember2 = TestMember.builder()
+				.oauthName(randomString())
+				.build().asEntity();
+
+		@Test
+		@DisplayName("팔로잉한 멤버의 게시글 목록을 조회할 수 있다.")
+		void getFollowingBoards() throws Exception {
+			persistHelper.persist(loginUser, followingMember1, followingMember2, randomMember2)
+					.and().persist(
+							Follow.of(loginUser, followingMember1, now),
+							Follow.of(loginUser, followingMember2, now))
+					.and().persist(
+							TestBoard.builder()
+									.member(followingMember1)
+									.build().asEntity(),
+							TestBoard.builder()
+									.member(followingMember2)
+									.build().asEntity(),
+							TestBoard.builder()
+									.member(randomMember2)
+									.build().asEntity())
+					.flushAndClear();
+
+			String token = stubToken(loginUser, now, 28);
+			MockHttpServletRequestBuilder req = get(PATH)
+					.header(HttpHeaders.AUTHORIZATION, BEARER + token)
+					.param("page", "0")
+					.param("size", "10");
+
+			mockMvc.perform(req)
+					.andDo(print())
+					.andExpect(status().isOk())
+					.andExpect(jsonPath("totalLength").value(2))
+					.andExpect(jsonPath("result.[*].memberName").value(
+							Matchers.contains(followingMember1.getNickname(), followingMember2.getNickname())));
+		}
+	}
+
+	@Nested
+	@Disabled("multi part file 사용하는 방법 모르겠어서 일단 패스")
+	@DisplayName("POST /v1/boards")
+	class CreateBoards {
+		@Test
+		@DisplayName("로그인한 사용자는 이미지를 업로드하고, 게시글을 생성할 수 있다.")
+		void createBoards() throws Exception {
+			persistHelper.persist(author, loginUser)
+					.and().persist(animalCategories.get(0), animalCategories.get(1))
+					.flushAndClear();
+			MockMultipartFile multipartFile1 = new MockMultipartFile("mediaDataList", "filename-1.jpg", "image/jpeg", "image1".getBytes());
+			MockMultipartFile multipartFile2 = new MockMultipartFile("mediaDataList", "filename-2.jpg", "image/jpeg", "image2".getBytes());
+			MockMultipartFile multipartFile3 = new MockMultipartFile("mediaDataList", "filename-3.jpg", "image/jpeg", "image3".getBytes());
+
+			String token = stubToken(loginUser, LocalDateTime.now(), 28);
+			MockHttpServletRequestBuilder req = post("/v1/boards")
+					.header(HttpHeaders.AUTHORIZATION, BEARER + token)
+					.contentType(MediaType.MULTIPART_FORM_DATA)
+					.requestAttr("mediaDataList", List.of(multipartFile1, multipartFile2, multipartFile3))
+					.requestAttr("content", "content")
+					.requestAttr("categoryList", List.of(animalCategories.get(0).getSpecies().name(), animalCategories.get(1).getSpecies().name()));
+
+			mockMvc.perform(req)
+					.andDo(print())
+					.andExpect(status().isOk())
+					.andExpect(jsonPath("result.content").value("content"))
+					.andExpect(jsonPath("result.categories.[*].species").value(
+							Matchers.contains(animalCategories.get(0).getSpecies().name(), animalCategories.get(1).getSpecies().name())))
+					.andExpect(jsonPath("result.images").value(
+							Matchers.contains(DEFAULT_MEDIA_URL + 0, DEFAULT_MEDIA_URL + 1, DEFAULT_MEDIA_URL + 2)));
+		}
 	}
 }

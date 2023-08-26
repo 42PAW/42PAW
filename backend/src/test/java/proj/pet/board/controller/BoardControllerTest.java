@@ -82,7 +82,7 @@ class BoardControllerTest extends E2ETest {
 					.build().asEntity();
 			persistHelper.persist(board1, board2)
 					.and().persist(
-							TestBoardMedia.createEntitiesOf(
+							TestBoardMedia.ofMany(
 									board1,
 									DEFAULT_MEDIA_URL + 0,
 									DEFAULT_MEDIA_URL + 1,

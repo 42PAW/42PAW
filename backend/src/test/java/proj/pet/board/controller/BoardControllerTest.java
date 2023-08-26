@@ -29,8 +29,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -355,6 +355,31 @@ class BoardControllerTest extends E2ETest {
 							Matchers.contains(animalCategories.get(0).getSpecies().name(), animalCategories.get(1).getSpecies().name())))
 					.andExpect(jsonPath("result.images").value(
 							Matchers.contains(DEFAULT_MEDIA_URL + 0, DEFAULT_MEDIA_URL + 1, DEFAULT_MEDIA_URL + 2)));
+		}
+	}
+
+	@Nested
+	@DisplayName("DELETE /v1/boards/{boardId}")
+	class DeleteBoard {
+		@Test
+		@DisplayName("로그인한 사용자는 자신의 게시글을 삭제할 수 있다.")
+		void deleteBoard() throws Exception {
+			//given
+			Board board = persistHelper.persist(author)
+					.and().persistAndReturn(TestBoard.asDefaultEntity(author));
+
+			String token = stubToken(author, LocalDateTime.now(), 28);
+			MockHttpServletRequestBuilder req = delete("/v1/boards/" + board.getId())
+					.header(HttpHeaders.AUTHORIZATION, BEARER + token);
+
+			//when
+			mockMvc.perform(req)
+					.andDo(print())
+					.andExpect(status().isOk())
+					.andDo(e -> {
+						Board deletedBoard = em.find(Board.class, board.getId());
+						assertThat(deletedBoard.getDeletedAt()).isNotNull();
+					});
 		}
 	}
 }

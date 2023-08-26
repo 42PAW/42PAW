@@ -46,6 +46,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
+import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
 
 public class BoardServiceImplTest extends UnitTest {
 
@@ -190,6 +191,24 @@ public class BoardServiceImplTest extends UnitTest {
 			then(boardCategoryFilterRepository).should().deleteAll(board.getCategoryFilters());
 			then(boardMediaRepository).should().deleteAll(board.getMediaList());
 			then(board).should().delete();
+		}
+
+		@DisplayName("본인의 게시글이 아니라면, 삭제할 수 없다.")
+		@Test
+		void 실패_본인_게시글_아님() {
+			//given
+			Board authorsBoard = TestBoard.builder()
+					.member(author)
+					.deletedAt(null)
+					.build().asMockEntity(boardId);
+			given(boardRepository.findById(boardId)).willReturn(Optional.of(authorsBoard));
+
+			//when, then
+			assertThatThrownBy(() -> boardService.deleteBoard(normalMember.getId(), authorsBoard.getId()))
+					.asInstanceOf(type(ServiceException.class))
+					.extracting(ServiceException::getStatus)
+					.extracting(ExceptionStatusDto::getStatusCode)
+					.isEqualTo(UNAUTHENTICATED.getStatusCode());
 		}
 
 	}

@@ -17,6 +17,7 @@ import proj.pet.utils.domain.Validatable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -108,6 +109,11 @@ public class Board extends IdentityDomain implements Validatable {
 
 	public boolean isOwnedBy(Member member) {
 		return this.member.equals(member);
+	}
+
+	public boolean isOwnedBy(Long memberId) {
+		return Objects.requireNonNull(this.getMember().getId())
+				.equals(memberId);
 	}
 
 	public List<Species> getCategoriesAsSpecies() {

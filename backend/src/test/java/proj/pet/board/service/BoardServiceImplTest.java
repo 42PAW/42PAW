@@ -169,33 +169,36 @@ public class BoardServiceImplTest extends UnitTest {
 		@DisplayName("본인의 게시글이라면 댓글, 정적 리소스를 삭제하고, 게시글을 지울 수 있다.")
 		void 성공_본인의_게시글() throws Exception {
 			//given
-			Board board = TestBoard.builder()
+			Board authorsBoard = TestBoard.builder()
 					.member(author)
 					.deletedAt(null)
 					.build().asMockEntity(boardId);
 			commentsOfBoard.put(anonymous, "blah blah 1");
 			commentsOfBoard.put(anonymous, "blah blah 2");
-			List<Comment> stubbedComments = TestComment.ofMany(board, commentsOfBoard);
-			given(boardRepository.findById(boardId)).willReturn(Optional.of(board));
-			given(board.getComments()).willReturn(stubbedComments);
-			given(board.getCategoryFilters()).willReturn(stubbedBoardCategoryFilters);
-			given(board.getMediaList()).willReturn(stubbedBoardMedias);
+			List<Comment> stubbedComments = TestComment.ofMany(authorsBoard, commentsOfBoard);
+			given(memberRepository.findById(author.getId())).willReturn(Optional.of(author));
+			given(boardRepository.findById(boardId)).willReturn(Optional.of(authorsBoard));
+			given(authorsBoard.getComments()).willReturn(stubbedComments);
+			given(authorsBoard.getCategoryFilters()).willReturn(stubbedBoardCategoryFilters);
+			given(authorsBoard.getMediaList()).willReturn(stubbedBoardMedias);
+			given(authorsBoard.isOwnedBy(author)).willReturn(true);
 
 			//when
-			boardService.deleteBoard(author.getId(), board.getId());
+			boardService.deleteBoard(author.getId(), authorsBoard.getId());
 
 			//then
 			then(boardRepository).should().findById(boardId);
-			then(commentRepository).should().deleteAll(board.getComments());
-			then(boardCategoryFilterRepository).should().deleteAll(board.getCategoryFilters());
-			then(boardMediaRepository).should().deleteAll(board.getMediaList());
-			then(board).should().delete();
+			then(commentRepository).should().deleteAll(authorsBoard.getComments());
+			then(boardCategoryFilterRepository).should().deleteAll(authorsBoard.getCategoryFilters());
+			then(boardMediaRepository).should().deleteAll(authorsBoard.getMediaList());
+			then(authorsBoard).should().delete();
 		}
 
 		@DisplayName("게시글이 존재하지 않으면 삭제할 수 없다.")
 		@Test
 		void 실패_게시글_존재하지_않음() {
 			//given
+			given(memberRepository.findById(normalMember.getId())).willReturn(Optional.of(normalMember));
 			given(boardRepository.findById(IGNORE_ID)).willReturn(Optional.empty());
 
 			//when, then
@@ -248,6 +251,7 @@ public class BoardServiceImplTest extends UnitTest {
 					.build().asMockEntity(boardId);
 			given(boardRepository.findById(boardId)).willReturn(Optional.of(authorsBoard));
 			given(memberRepository.findById(normalMember.getId())).willReturn(Optional.of(normalMember));
+			given(authorsBoard.isOwnedBy(normalMember)).willReturn(false);
 
 			//when, then
 			assertThatThrownBy(() -> boardService.deleteBoard(normalMember.getId(), authorsBoard.getId()))

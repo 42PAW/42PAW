@@ -109,8 +109,6 @@ public class BoardServiceImpl implements BoardService {
 		if (board.getDeletedAt() != null) {
 			throw ALREADY_DELETED_BOARD.asServiceException();
 		}
-		System.out.println("board = " + board.getDeletedAt());
-		System.out.println("member = " + member);
 		if (!board.isOwnedBy(member)) {
 			throw UNAUTHENTICATED.asServiceException();
 		}

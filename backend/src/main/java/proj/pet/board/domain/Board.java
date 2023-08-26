@@ -107,7 +107,7 @@ public class Board extends IdentityDomain implements Validatable {
 	}
 
 	public boolean isOwnedBy(Member member) {
-		return this.member.equals(member);
+		return this.getMember().equals(member);
 	}
 
 	public List<Species> getCategoriesAsSpecies() {

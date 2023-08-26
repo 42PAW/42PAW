@@ -5,6 +5,9 @@ import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import SettingButton from "@/components/SettingButton";
 import { LeftMenuProps } from "./LeftMenuSection";
 
+import { useSetRecoilState } from "recoil";
+import { currentMemberIdState } from "@/recoil/atom";
+
 const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   handleLogin,
   handleLogout,
@@ -16,9 +19,11 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
     useNavigateCustom();
   const { openSearchSection } = useRightSectionHandler();
   const touchStartY = useRef<number | null>(null);
-
   const isProfilePage: boolean =
     location.pathname === "/my-profile" || location.pathname === "/profile";
+  const setCurrentMemberId = useSetRecoilState<number | null>(
+    currentMemberIdState
+  );
 
   useEffect(() => {
     window.addEventListener("wheel", handleWheel);
@@ -60,6 +65,11 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
     touchStartY.current = null;
   };
 
+  const handleOpenMyProfile = () => {
+    setCurrentMemberId(userInfo!.memberId);
+    moveToMyProfile();
+  };
+
   return (
     <>
       {!isProfilePage && (
@@ -67,7 +77,7 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
           {userInfo ? (
             <ProfileImageStyled
               src={userInfo.profileImageUrl}
-              onClick={moveToMyProfile}
+              onClick={handleOpenMyProfile}
             />
           ) : (
             <ProfileImageStyled

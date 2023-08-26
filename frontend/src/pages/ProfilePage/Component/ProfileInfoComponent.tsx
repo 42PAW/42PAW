@@ -2,35 +2,33 @@ import { useState } from "react";
 import useModal from "../../../hooks/useModal";
 import { ModalType } from "../../../types/enum/modal.enum";
 import styled from "styled-components";
-import BoardOption from "@/components/BoardOption";
+import ProfileOption from "@/components/ProfileOption";
 import { ProfileInfoDTO } from "@/types/dto/member.dto";
+import { currentMemberIdState } from "@/recoil/atom";
+import { useRecoilState } from "recoil";
 
-/* tmp */
-// const profileInfo = {
-//   memberName: "아롱오래비",
-//   intraName: "mingkang",
-//   nicknameUpdatedAt: "2023-01-23",
-//   profileImageUrl: "/src/assets/profileImage.jpg",
-//   country: "KOREA",
-//   statement: "아롱이의 오빠입니다. 잘 부탁 합니다.",
-//   followingCount: 23,
-//   followerCount: 42,
-//   boardCount: 47,
-// };
+// const CountInfo = ({ label, value }: { label: string; value: number }) => (
+//   <li>
+//     <div>{label}</div>
+//     <span>{value}</span>
+//   </li>
+// );
 
-const CountInfo = ({ label, value }: { label: string; value: number }) => (
-  <li>
-    <div>{label}</div>
-    <span>{value}</span>
-  </li>
-);
-
-const CountInfoItems = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
+const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   return (
     <CountInfoStyled>
-      <CountInfo label="게시물" value={userInfo.boardCount} />
-      <CountInfo label="팔로워" value={userInfo.followerCount} />
-      <CountInfo label="팔로잉" value={userInfo.followingCount} />
+      <li>
+        <div>게시물</div>
+        <span>{userInfo.boardCount}</span>
+      </li>
+      <li>
+        <div>팔로워</div>
+        <span>{userInfo.followerCount}</span>
+      </li>
+      <li>
+        <div>팔로잉</div>
+        <span>{userInfo.followingCount}</span>
+      </li>
     </CountInfoStyled>
   );
 };
@@ -53,6 +51,8 @@ const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
   //   const handleOpenProfile = () => {
   //     openModal(ModalType.PROFILEEDIT); // PROFILECARD -> 바꿔야 돼 다시
   //   };
+  const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
+
   if (!userInfo) return <div>No user information available.</div>;
   return (
     <ProfileHeaderStyled>
@@ -64,10 +64,13 @@ const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
       <div className="content-wrapper">
         <UserInfoItems userInfo={userInfo} />
         <CaptionSectionStyled>{userInfo.statement}</CaptionSectionStyled>
-        <CountInfoItems userInfo={userInfo} />
+        <CountInfo userInfo={userInfo} />
       </div>
       <BoardOptionButtonStyled>
-        <BoardOption boardId={0} memberName={""} />
+        <ProfileOption
+          memberId={currentMemberId}
+          memberName={userInfo.memberName}
+        />
         {/* ProfileOption 컴포넌트
         만들 것*/}
       </BoardOptionButtonStyled>

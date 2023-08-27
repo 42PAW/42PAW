@@ -95,6 +95,9 @@ const MainAreaStyled = styled.main<{
   display: flex;
   position: relative;
   flex-direction: column;
+  @media (min-width: 1024px) {
+    margin-left: 105px;
+  }
   align-items: center;
   height: 100%;
   min-height: 800px;

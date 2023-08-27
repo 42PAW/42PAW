@@ -140,12 +140,8 @@ const ProfileHeaderStyled = styled.div`
   //   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   font-size: 1.6rem;
 
-  @media (min-width: 1023px) {
-    height: 386px;
-  }
-
-  background-image: url("/src/assets/profileFrame.png"); /* SVG 파일 경로 */
-  background-size: contain;
+  background-image: url("/src/assets/intersect.png");
+  background-size: 100% 320px;
   background-repeat: no-repeat;
   background-position-y: bottom;
 
@@ -154,7 +150,7 @@ const ProfileHeaderStyled = styled.div`
     flex-direction: column;
     text-align: center;
     width: 100%;
-    height: 100%;
+    flex: 1;
     justify-content: space-between;
     align-items: center;
   }
@@ -162,9 +158,9 @@ const ProfileHeaderStyled = styled.div`
   .profileImage {
     width: 160px;
     aspect-ratio: 1 / 1;
-
+    background-color: var(--grey); /* 이미지가 없을 때 배경 색상 */
     filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.25));
-    border-radius: 100%;
+    border-radius: 50%;
   }
 
   .meatballsMenuIcon {

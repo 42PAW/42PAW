@@ -6,6 +6,8 @@ import ProfileOption from "@/components/ProfileOption";
 import { ProfileInfoDTO } from "@/types/dto/member.dto";
 import { currentMemberIdState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
+import { useCountryEmoji } from "@/hooks/useCountryEmoji";
+import { Country } from "@/types/enum/country.enum";
 
 // const CountInfo = ({ label, value }: { label: string; value: number }) => (
 //   <li>
@@ -34,11 +36,15 @@ const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
 };
 
 const UserInfoItems = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
+  const countryEmoji = useCountryEmoji(userInfo.country as Country);
+
   return (
     <UserInfoStyled>
       <div className="memberName">{userInfo.memberName}</div>
       <div className="intraName">{userInfo.intraName}</div>
-      <div className="country">🇰🇷 {userInfo.country}</div>
+      <div className="country">
+        {countryEmoji} {userInfo.country}
+      </div>
     </UserInfoStyled>
   );
 };

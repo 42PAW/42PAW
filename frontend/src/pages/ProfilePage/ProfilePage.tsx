@@ -41,6 +41,7 @@ const ProfilePage = () => {
     <ProfileTemplate
       userInfo={profileQuery.data || null}
       boards={boardsQuery.data || null}
+      isMyProfile={false}
     />
   );
 };

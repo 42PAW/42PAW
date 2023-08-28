@@ -45,6 +45,7 @@ const MyProfilePage = () => {
       boards={boardsQuery.data || null}
       tabState={boardCategory}
       onTabChange={handleTabState}
+      isMyProfile={true}
     />
   );
 };

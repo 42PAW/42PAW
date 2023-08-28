@@ -9,12 +9,14 @@ import { ProfileInfoDTO } from "@/types/dto/member.dto";
 import { Board } from "@/types/enum/board.category.enum";
 // import { BoardsInfoDTO } from "@/types/dto/board.dto";
 import { IBoardInfo } from "@/types/interface/board.interface";
+import FollowTypeButton from "../../FollowTypeButton";
 
 interface ProfileTemplateProps {
   userInfo: ProfileInfoDTO | null; // userInfo를 props로 받음
   boards: IBoardInfo[] | null;
   tabState?: Board;
   onTabChange?: (newTabState: Board) => void;
+  isMyProfile?: boolean;
 }
 
 const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
@@ -22,11 +24,16 @@ const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
   boards,
   tabState,
   onTabChange,
+  isMyProfile,
 }) => {
   return (
     <ProfileWrapperStyled>
       <ProfileInfoComponent userInfo={userInfo} />
-      {/* <TempStyled></TempStyled> */}
+      {/* {!isMyProfile && (                <FollowTypeButton
+                  memberId={userInfo. as number}
+                  status={profileData.followType}
+                  isProfile={true}
+                />)} */}
       <PhotoZoneComponent
         boards={boards}
         tabState={tabState}
@@ -35,35 +42,6 @@ const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
     </ProfileWrapperStyled>
   );
 };
-
-const TempStyled = styled.div`
-  width: 0;
-  height: 0;
-  border-left: 50px solid transparent;
-  border-right: 50px solid transparent;
-  border-bottom: 100px solid #ff5722; /* 도형의 색상을 변경할 수 있습니다 */
-  position: absolute;
-
-  &:before {
-    content: "";
-    width: 60px;
-    height: 60px;
-    background-color: #ff5722; /* 도형의 색상과 동일하게 설정 */
-    position: absolute;
-    bottom: -60px;
-    left: -5px;
-  }
-
-  &:after {
-    content: "";
-    width: 20px;
-    height: 20px;
-    background-color: #ff5722; /* 도형의 색상과 동일하게 설정 */
-    position: absolute;
-    bottom: -30px;
-    left: 30px;
-  }
-`;
 
 const ProfileWrapperStyled = styled.div`
   //   margin-bottom: 3%;

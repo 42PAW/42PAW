@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import { IBoardInfo } from "@/types/interface/board.interface";
@@ -26,11 +26,9 @@ const BoardTemplate = (board: IBoardInfo) => {
     boardId,
     memberId,
     memberName,
-    intraName,
     profileImageUrl,
     country,
     images,
-    categories,
     reactionCount,
     commentCount,
     scrapped,
@@ -106,8 +104,8 @@ const BoardTemplate = (board: IBoardInfo) => {
   const handleReaction = (action: string) => {
     if (action === "do") setReactionCountRender(reactionCountRender + 1);
     if (action === "undo") setReactionCountRender(reactionCountRender - 1);
-    setIsReactedRender(!isReactedRender);
-    debounce("reaction", callReactionApi, 500);
+    setIsReactedRender((prev) => !prev);
+    debounce("reaction", callReactionApi, 300);
   };
 
   const handleClickReaction = () => {
@@ -115,8 +113,8 @@ const BoardTemplate = (board: IBoardInfo) => {
   };
 
   const handleClickScrap = () => {
-    setIsScrappedRender(!isScrappedRender);
-    debounce("scrap", callScrapApi, 500);
+    setIsScrappedRender((prev) => !prev);
+    debounce("scrap", callScrapApi, 300);
   };
 
   return (
@@ -171,22 +169,22 @@ const BoardTemplate = (board: IBoardInfo) => {
             </ScrapButtonStyled>
           </ButtonZoneStyled>
           <BoardContentContainerStyled>
-            <DivOne>
+            <ReactionCommentCountStyled>
               <div>
                 {reactionCountRender} {language.like}, {commentCount}{" "}
                 {language.comment}
               </div>
               <span>{parsedDate}</span>
-            </DivOne>
-            <DivTwo>{content}</DivTwo>
+            </ReactionCommentCountStyled>
+            <ContentStyled>{content}</ContentStyled>
             {previewComment ? (
-              <DivThree>
+              <PreviewCommentStyled>
                 <div>{previewCommentUser}</div>
                 <div>{parsedPreviewComment}</div>
                 <div onClick={() => handleCommentClick(boardId)}>
                   {language.moreComments}
                 </div>
-              </DivThree>
+              </PreviewCommentStyled>
             ) : (
               <NoCommentStyled>댓글이 없습니다.</NoCommentStyled>
             )}
@@ -323,7 +321,7 @@ const BoardContentContainerStyled = styled.div`
   font-size: 13px;
 `;
 
-const DivOne = styled.div`
+const ReactionCommentCountStyled = styled.div`
   display: flex;
   justify-content: space-between;
   font-size: 100%;
@@ -334,14 +332,14 @@ const DivOne = styled.div`
   }
 `;
 
-const DivTwo = styled.div`
+const ContentStyled = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 2%;
   font-size: 100%;
 `;
 
-const DivThree = styled.div`
+const PreviewCommentStyled = styled.div`
   display: flex;
   flex-direction: row;
   margin-top: 3%;

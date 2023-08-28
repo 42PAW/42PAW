@@ -4,6 +4,9 @@ import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import SettingButton from "@/components/SettingButton";
 import { LeftMenuProps } from "./LeftMenuSection";
 
+import { useSetRecoilState } from "recoil";
+import { currentMemberIdState } from "@/recoil/atom";
+
 const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
   handleLogin,
   handleLogout,
@@ -13,6 +16,14 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
 }) => {
   const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
   const { openSearchSection } = useRightSectionHandler();
+  const setCurrentMemberId = useSetRecoilState<number | null>(
+    currentMemberIdState
+  );
+  const handleOpenMyProfile = () => {
+    setCurrentMemberId(userInfo!.memberId);
+    moveToMyProfile();
+  };
+
   return (
     <>
       <LeftMenuStyled>
@@ -32,7 +43,7 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
           {userInfo ? (
             <ProfileImageStyled
               src={userInfo.profileImageUrl}
-              onClick={moveToMyProfile}
+              onClick={handleOpenMyProfile}
             />
           ) : (
             <ProfileImageStyled

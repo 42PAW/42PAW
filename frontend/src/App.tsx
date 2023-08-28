@@ -27,7 +27,7 @@ function App() {
             <Route path="upload" element={<UploadPage />} />
             <Route path="notice" element={<NoticePage />} />
             <Route path="my-profile" element={<MyProfilePage />} />
-            <Route path="profile" element={<ProfilePage />} />
+            <Route path="profile/:memberId" element={<ProfilePage />} />
             <Route path="dashboard" element={<DashboardPage />} />
           </Route>
           <Route path="/sign-up" element={<SignUpPage />} />

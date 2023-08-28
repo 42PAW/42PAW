@@ -4,20 +4,21 @@ import useFetch from "@/hooks/useFetch";
 import { useQuery } from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import { Board } from "@/types/enum/board.category.enum";
-import { currentMemberIdState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 import { boardCategoryState } from "@/recoil/atom";
 import { IBoardInfo } from "@/types/interface/board.interface";
+import { useParams } from "react-router-dom";
 
 const ProfilePage = () => {
-  const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
-  const { fetchProfile } = useFetch();
+  const { memberId } = useParams<{ memberId: string }>();
+  console.log(memberId);
+  const { fetchProfile, fetchBoards } = useFetch(Number(memberId));
   const profileQuery = useQuery({
-    queryKey: ["profile", currentMemberId],
+    queryKey: ["profile", Number(memberId)],
     queryFn: fetchProfile,
     refetchOnMount: "always",
   });
-  const { fetchBoards } = useFetch();
+  // const { fetchBoards } = useFetch();
   const [boardCategory, setBoardCategory] =
     useRecoilState<Board>(boardCategoryState);
 

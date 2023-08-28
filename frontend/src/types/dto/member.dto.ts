@@ -1,6 +1,7 @@
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 import { followType } from "../enum/followType.enum";
 import { ReportReason } from "../enum/report.enum";
+import { Country } from "@/types/enum/country.enum";
 
 export interface SignUpInfoDTO {
   memberName: string;
@@ -45,7 +46,7 @@ export interface MemberSearchResponseDTO {
   memberName: string;
   intraName: string;
   profileImageUrl: string;
-  country: string;
+  country: Country;
   statement: string;
-  relationship: string;
+  relationship: followType;
 }

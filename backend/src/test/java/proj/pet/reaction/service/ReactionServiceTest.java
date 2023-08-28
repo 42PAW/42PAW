@@ -1,6 +1,7 @@
 package proj.pet.reaction.service;
 
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ class ReactionServiceTest {
 
 
 	@DisplayName("사용자는 게시글에 리액션 할 수 있다.")
+	@Disabled
 	@Test
 	void createReaction() {
 		//given

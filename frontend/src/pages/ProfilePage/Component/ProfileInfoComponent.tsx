@@ -43,7 +43,7 @@ const UserInfoItems = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
       <div className="memberName">{userInfo.memberName}</div>
       <div className="intraName">{userInfo.intraName}</div>
       <div className="country">
-        {countryEmoji} {userInfo.country}
+        {countryEmoji} {userInfo.campus}
       </div>
     </UserInfoStyled>
   );
@@ -89,15 +89,19 @@ const UserInfoStyled = styled.div`
   font-weight: 600;
 
   .memberName {
-    font-size: 2rem;
+    font-size: 1.6rem;
   }
   .intraName {
-    color: var(--lightgrey2);
-    font-size: 1.4rem;
+    color: var(--transparent2);
+    font-size: 1.3rem;
+    transition: all 0.5s ease;
+    &:hover {
+      color: var(--white);
+    }
   }
   .country {
-    color: var(--lightgrey2);
-    font-size: 1.2rem;
+    color: var(--white);
+    font-size: 1rem;
   }
 `;
 
@@ -114,12 +118,12 @@ const CountInfoStyled = styled.ul`
     flex-direction: column;
     width: calc(100% / 3);
     &:not(:last-child) {
-      border-right: 1.2px solid var(--grey2); /* 원하는 선의 색상 설정 */
+      border-right: 1.2px solid var(--transparent); /* 원하는 선의 색상 설정 */
     }
   }
 
   span {
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     font-weight: 600;
   }
 `;
@@ -179,6 +183,7 @@ const ProfileHeaderStyled = styled.div`
 
 const CaptionSectionStyled = styled.div`
   font-weight: 500;
+  font-size: 1.3rem;
 `;
 
 export default ProfileInfoComponent;

@@ -6,11 +6,15 @@ import { currentOpenModalState } from "@/recoil/atom";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
 import { Language } from "@/types/enum/language.enum";
 import { languageState } from "@/recoil/atom";
-import Translator from "@/languages/Translator";
 import useModal from "@/hooks/useModal";
 import useToaster from "@/hooks/useToaster";
 import { axiosChangeLanguage } from "@/api/axios/axios.custom";
 import { getCookie } from "@/api/cookie/cookies";
+import {
+  languages,
+  renderLanguage,
+  languageTranslator,
+} from "./languageModalUtils";
 
 const token = getCookie("access_token");
 
@@ -21,51 +25,16 @@ const LanguageModal = () => {
   const [language, setLanguage] = useRecoilState<any>(languageState);
   const { closeModal } = useModal();
   const { popToast } = useToaster();
-  const languages: Language[] = [
-    Language.KOREAN,
-    Language.ENGLISH,
-    Language.JAPANESE,
-    Language.SPANISH,
-    Language.FRENCH,
-    Language.GERMAN,
-    Language.ITALIAN,
-    Language.PORTUGUESE,
-  ];
 
-  const renderLanguage = (renderLanguage: Language) => {
-    if (renderLanguage === Language.KOREAN) return "🇰🇷 한국어";
-    if (renderLanguage === Language.ENGLISH) return "🇬🇧 English";
-    if (renderLanguage === Language.JAPANESE) return "🇯🇵 日本語";
-    if (renderLanguage === Language.SPANISH) return "🇪🇸 español";
-    if (renderLanguage === Language.FRENCH) return "🇫🇷 français";
-    if (renderLanguage === Language.GERMAN) return "🇩🇪 Deutsch";
-    if (renderLanguage === Language.ITALIAN) return "🇮🇹 italiano";
-    if (renderLanguage === Language.PORTUGUESE) return "🇵🇹 Português";
-  };
+  const updateLanguageSetting = (currentLanguage: Language) => {
+    const translatedLanguage = languageTranslator[currentLanguage];
 
-  const handleLanguageSetting = (currentLanguage: Language) => {
-    let translatedLanguage = null;
-
-    if (currentLanguage === Language.KOREAN) {
-      translatedLanguage = Translator.ko;
-    } else if (currentLanguage === Language.ENGLISH) {
-      translatedLanguage = Translator.en;
-    } else if (currentLanguage === Language.JAPANESE) {
-      translatedLanguage = Translator.jp;
-    } else if (currentLanguage === Language.SPANISH) {
-      translatedLanguage = Translator.spa;
-    } else if (currentLanguage === Language.FRENCH) {
-      translatedLanguage = Translator.fr;
-    } else if (currentLanguage === Language.GERMAN) {
-      translatedLanguage = Translator.ger;
-    } else if (currentLanguage === Language.ITALIAN) {
-      translatedLanguage = Translator.it;
-    } else if (currentLanguage === Language.PORTUGUESE) {
-      translatedLanguage = Translator.pt;
-    }
     if (translatedLanguage) {
       setLanguage(translatedLanguage);
+      //로그인 상태 -> 실제 서버 api 요청 후 유저 언어 설정 변경
       if (token) axiosChangeLanguage(currentLanguage);
+      // 로그아웃 상태 -> 로컬 스토리지에 비로그인 상태 언어 설정 업데이트
+      if (!token) localStorage.setItem("language", currentLanguage);
       popToast(translatedLanguage.languageChangedToast, "P");
     }
     closeModal(ModalType.LANGUAGE);
@@ -83,9 +52,9 @@ const LanguageModal = () => {
           {languages.map((language) => (
             <LanguageItemStyled
               key={language}
-              onClick={() => handleLanguageSetting(language)}
+              onClick={() => updateLanguageSetting(language)}
             >
-              {renderLanguage(language)}
+              {renderLanguage[language]}
             </LanguageItemStyled>
           ))}
         </LanguageItemContainerStyled>
@@ -136,7 +105,6 @@ const LanguageItemStyled = styled.button`
   border: none;
   font-size: 1.2rem;
   background-color: var(--white);
-
   &:hover {
     background-color: var(--lightpurple);
     transition: background-color 0.5s ease;

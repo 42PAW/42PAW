@@ -1,11 +1,16 @@
 import ImageUploader from "@/pages/ImageUploader";
+import styled from "styled-components";
 
 const UploadPage = () => {
   return (
-    <div>
+    <WrapperStyled>
       <ImageUploader></ImageUploader>
-    </div>
+    </WrapperStyled>
   );
 };
+
+const WrapperStyled = styled.div`
+  height: 100%;
+`;
 
 export default UploadPage;

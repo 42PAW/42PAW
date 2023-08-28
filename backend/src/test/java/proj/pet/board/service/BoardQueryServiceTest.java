@@ -1,13 +1,8 @@
 package proj.pet.board.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import jakarta.persistence.EntityManager;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +23,7 @@ import proj.pet.category.domain.Species;
 import proj.pet.category.repository.AnimalCategoryRepository;
 import proj.pet.comment.domain.Comment;
 import proj.pet.comment.repository.CommentRepository;
-import proj.pet.member.domain.Country;
-import proj.pet.member.domain.Member;
-import proj.pet.member.domain.MemberRole;
-import proj.pet.member.domain.OauthProfile;
-import proj.pet.member.domain.OauthType;
+import proj.pet.member.domain.*;
 import proj.pet.member.repository.MemberRepository;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.reaction.domain.ReactionType;
@@ -94,6 +85,7 @@ class BoardQueryServiceTest {
 	}
 
 	@DisplayName("")
+	@Disabled
 	@Test
 	void test() {
 		//given

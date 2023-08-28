@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'proj'
-version = '0.0.1-SNAPSHOT'
+version = '1.0'
 sourceCompatibility = '17'
 
 configurations {
@@ -67,6 +67,32 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'com.h2database:h2'
+}
+
+ext {
+    configDirectory = file("$rootDir/backend_config")
+}
+
+tasks.register('copyMainConfig', Copy) {
+    from "${configDirectory}/main/resources"
+    into 'src/main/resources'
+}
+
+tasks.register('copyTestConfig', Copy) {
+    from "${configDirectory}/test/resources"
+    into 'src/test/resources'
+}
+
+tasks.named('processResources') {
+    dependsOn 'copyMainConfig'
+}
+
+tasks.named('processTestResources') {
+    dependsOn 'copyTestConfig'
+}
+
+jar {
+    enabled = false
 }
 
 test {

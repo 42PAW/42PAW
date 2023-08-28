@@ -11,7 +11,6 @@ import { useParams } from "react-router-dom";
 
 const ProfilePage = () => {
   const { memberId } = useParams<{ memberId: string }>();
-  console.log(memberId);
   const { fetchProfile, fetchBoards } = useFetch(Number(memberId));
   const profileQuery = useQuery({
     queryKey: ["profile", Number(memberId)],
@@ -42,7 +41,7 @@ const ProfilePage = () => {
     <ProfileTemplate
       userInfo={profileQuery.data || null}
       boards={boardsQuery.data || null}
-      isMyProfile={false}
+      memberId={Number(memberId)}
     />
   );
 };

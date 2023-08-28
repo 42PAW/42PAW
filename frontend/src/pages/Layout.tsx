@@ -30,8 +30,9 @@ const Layout = () => {
   //메인 화면일 때만 게시글 정렬 버튼 보여주기
   const isMainPage: boolean = location.pathname === "/";
   const isSignUpPage: boolean = location.pathname === "/sign-up";
-  const isProfilePage: boolean =
-    location.pathname === "/my-profile" || location.pathname === "/profile";
+  const isProfilePage: boolean = /^\/(my-)?profile(\/\d+)?$/.test(
+    location.pathname
+  );
 
   const getMyInfo = async () => {
     try {

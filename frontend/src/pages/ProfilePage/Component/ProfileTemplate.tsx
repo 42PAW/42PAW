@@ -9,14 +9,14 @@ import { ProfileInfoDTO } from "@/types/dto/member.dto";
 import { Board } from "@/types/enum/board.category.enum";
 // import { BoardsInfoDTO } from "@/types/dto/board.dto";
 import { IBoardInfo } from "@/types/interface/board.interface";
-import FollowTypeButton from "../../FollowTypeButton";
+import FollowTypeButton from "@/components/FollowTypeButton";
 
 interface ProfileTemplateProps {
   userInfo: ProfileInfoDTO | null; // userInfo를 props로 받음
   boards: IBoardInfo[] | null;
   tabState?: Board;
   onTabChange?: (newTabState: Board) => void;
-  isMyProfile?: boolean;
+  memberId?: number;
 }
 
 const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
@@ -24,16 +24,20 @@ const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
   boards,
   tabState,
   onTabChange,
-  isMyProfile,
+  memberId,
 }) => {
   return (
     <ProfileWrapperStyled>
       <ProfileInfoComponent userInfo={userInfo} />
-      {/* {!isMyProfile && (                <FollowTypeButton
-                  memberId={userInfo. as number}
-                  status={profileData.followType}
-                  isProfile={true}
-                />)} */}
+      {memberId !== 0 && memberId && userInfo && (
+        <FollowButtonStyled>
+          <FollowTypeButton
+            memberId={memberId}
+            status={userInfo.followType}
+            isProfile={true}
+          />
+        </FollowButtonStyled>
+      )}
       <PhotoZoneComponent
         boards={boards}
         tabState={tabState}
@@ -43,17 +47,21 @@ const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
   );
 };
 
+const FollowButtonStyled = styled.div`
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 10px;
+`;
+
 const ProfileWrapperStyled = styled.div`
-  //   margin-bottom: 3%;
   height: 100vh;
   width: calc(100% - 40px);
   margin: 0 auto;
-  // @media (min-width: 1024px) {
-  //   transform: translateX(-50px);
-  // }
   min-width: 450px; /* 최소 폭 지정 */
   max-width: 552px; /* 최대 폭 지정 */
-  //   box-shadow: var(--default-shadow);
+  // align-items: center;
   display: flex; /* Add flex display */
   flex-direction: column; /* Set flex direction to column */
   overflow-y: scroll;

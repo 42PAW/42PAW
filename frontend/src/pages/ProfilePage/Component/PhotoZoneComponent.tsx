@@ -19,7 +19,6 @@ const PhotoZoneComponent: React.FC<PhotoZoneComponentProps> = ({
   onTabChange,
 }) => {
   const { moveToMain } = useNavigateCustom();
-
   return (
     <ProfileBodyStyled>
       {tabState && (
@@ -54,8 +53,9 @@ const PhotoZoneComponent: React.FC<PhotoZoneComponentProps> = ({
 const ProfileBodyStyled = styled.div`
   flex: 1;
   //   overflow: hidden;
+  width: 100%;
   margin-top: 30px;
-  border-radius: 20px 20px 0px 0px;
+  border-radius: 10px 10px 0px 0px;
   //   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   background: linear-gradient(75deg, #999bc6 50%, #d3c3ce 150%);
 `;

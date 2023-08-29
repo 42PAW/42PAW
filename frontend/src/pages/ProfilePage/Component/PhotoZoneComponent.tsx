@@ -1,9 +1,6 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
 import { IBoardInfo } from "@/types/interface/board.interface";
-// import { BoardsInfoDTO } from "@/types/dto/board.dto";
 import PostList from "./PostList";
-import { useNavigate } from "react-router-dom";
 import useNavigateCustom from "@/hooks/useNavigateCustom";
 import { Board } from "@/types/enum/board.category.enum";
 
@@ -76,6 +73,13 @@ const PhotoCategoryToggleStyled = styled.div`
     border: none;
     width: 50%;
     position: relative;
+    transition: all 0.3s ease;
+    &:nth-child(1) {
+      border-top-left-radius: 10px;
+    }
+    &:nth-child(2) {
+      border-top-right-radius: 10px;
+    }
   }
   // button:not(:last-child)::before {
   //   content: "";

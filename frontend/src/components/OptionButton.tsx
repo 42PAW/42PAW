@@ -65,7 +65,6 @@ const MenuStyled = styled.div<{ $isToggled: boolean }>`
   text-align: center;
   margin-top: 25px;
   min-width: 45px;
-
   border-radius: 10px;
   color: var(--grey);
   background: var(--white);

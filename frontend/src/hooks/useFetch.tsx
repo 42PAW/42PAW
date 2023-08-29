@@ -24,33 +24,34 @@ const useFetch = () => {
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
   const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
 
-  const fetchBoards = async () => {
+  const fetchBoards = async (page?: number) => {
     try {
+      if (!page) page = 0;
       if (boardCategory === Board.DEFAULT) {
-        const response = await axiosGetBoards(30, 0);
+        const response = await axiosGetBoards(20, page);
         return response.result;
       }
       if (boardCategory === Board.TRENDING) {
-        const response = await axiosGetTrendingBoards(30, 0);
+        const response = await axiosGetTrendingBoards(20, page);
         return response.result;
       }
       if (boardCategory === Board.FOLLOWING) {
-        const response = await axiosGetFollowingBoards(30, 0);
+        const response = await axiosGetFollowingBoards(20, page);
         return response.result;
       }
       if (boardCategory === Board.MINE) {
-        const response = await axiosGetMyBoards(30, 0);
+        const response = await axiosGetMyBoards(1000, page);
         return response.result;
       }
       if (boardCategory === Board.OTHER) {
         if (!currentMemberId) {
           return;
         }
-        const response = await axiosGetOtherBoards(currentMemberId, 20, 0);
+        const response = await axiosGetOtherBoards(currentMemberId, 20, page);
         return response.result;
       }
       if (boardCategory === Board.SCRAPPED) {
-        const response = await axiosGetScrappedBoards(20, 0);
+        const response = await axiosGetScrappedBoards(20, page);
         return response.result;
       }
     } catch (error) {
@@ -79,7 +80,6 @@ const useFetch = () => {
       if (!currentMemberId) return;
       if (!userInfo || userInfo.memberId !== currentMemberId) {
         const response = await axiosGetProfile(currentMemberId);
-        console.log(response);
         return response;
       }
       const response = await axiosGetMyProfile();

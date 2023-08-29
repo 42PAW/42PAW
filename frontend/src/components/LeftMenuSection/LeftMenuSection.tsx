@@ -9,6 +9,7 @@ import useNavigateCustom from "@/hooks/useNavigateCustom";
 import { boardCategoryState } from "@/recoil/atom";
 import { Board } from "@/types/enum/board.category.enum";
 import { useQueryClient } from "@tanstack/react-query";
+import LoadingAnimation from "../loading/LoadingAnimation";
 
 export interface LeftMenuProps {
   handleLogin: () => void;
@@ -28,7 +29,7 @@ const LeftMenuSection = () => {
     useRecoilState<Board>(boardCategoryState);
   const queryClient = useQueryClient();
   const { moveToMain } = useNavigateCustom();
-
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   useEffect(() => {
     const handleResize = () => {
       setIsDesktopScreen(window.matchMedia("(min-width: 1024px)").matches);
@@ -41,6 +42,7 @@ const LeftMenuSection = () => {
 
   const handleLogin = () => {
     window.location.replace(`${import.meta.env.VITE_AUTH_LOGIN}`);
+    setIsLoggingIn(true);
   };
 
   const handleLogout = () => {
@@ -59,21 +61,26 @@ const LeftMenuSection = () => {
     queryClient.invalidateQueries(["boards", boardCategory]);
   };
 
-  return isDesktopScreen ? (
-    <LeftMenuDesktop
-      handleLogin={handleLogin}
-      handleLogout={handleLogout}
-      handleClickLogo={handleClickLogo}
-      userInfo={userInfo}
-      language={language}
-    />
-  ) : (
-    <LeftMenuTablet
-      handleLogin={handleLogin}
-      handleLogout={handleLogout}
-      handleClickLogo={handleClickLogo}
-      userInfo={userInfo}
-    />
+  return (
+    <>
+      {isLoggingIn && <LoadingAnimation />}
+      {isDesktopScreen ? (
+        <LeftMenuDesktop
+          handleLogin={handleLogin}
+          handleLogout={handleLogout}
+          handleClickLogo={handleClickLogo}
+          userInfo={userInfo}
+          language={language}
+        />
+      ) : (
+        <LeftMenuTablet
+          handleLogin={handleLogin}
+          handleLogout={handleLogout}
+          handleClickLogo={handleClickLogo}
+          userInfo={userInfo}
+        />
+      )}
+    </>
   );
 };
 

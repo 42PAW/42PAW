@@ -12,4 +12,5 @@ export interface ICurrentModalStateInfo {
   profileCardModal: boolean;
   profileEditModal: boolean;
   languageModal: boolean;
+  loginModal: boolean;
 }

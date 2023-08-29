@@ -5,6 +5,7 @@
 export interface IBanUserInfo {
   memberId: number | null;
   userName: string;
+  callback?: () => void;
 }
 
 /**

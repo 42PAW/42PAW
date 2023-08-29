@@ -81,23 +81,35 @@ const BoardTemplate = (board: IBoardInfo) => {
     openModal(ModalType.PROFILECARD);
   };
 
-  const callReactionApi = () => {
-    if (!isReactedRender && !lastReaction) {
-      axiosReactComment(boardId, "LIKE");
+  const callReactionApi = async () => {
+    try {
+      let response;
+      if (!isReactedRender && !lastReaction)
+        response = await axiosReactComment(boardId, "LIKE");
+      else if (isReactedRender && lastReaction)
+        response = await axiosUndoReactComment(boardId);
+
       setLastReaction(!lastReaction);
-    } else if (isReactedRender && lastReaction) {
-      axiosUndoReactComment(boardId);
-      setLastReaction(!lastReaction);
+    } catch (error) {
+      //401 발생 -> 기존 isReactedRender 롤백
+      setReactionCountRender(reactionCount);
+      setIsReactedRender((prev) => !prev);
     }
   };
 
-  const callScrapApi = () => {
-    if (!isScrappedRender && !lastScrap) {
-      axiosScrap(boardId);
-      setLastScrap(!lastScrap);
-    } else if (isScrappedRender && lastScrap) {
-      axiosUndoScrap(boardId);
-      setLastScrap(!lastScrap);
+  const callScrapApi = async () => {
+    try {
+      let response;
+      if (!isScrappedRender && !lastScrap) {
+        response = await axiosScrap(boardId);
+        setLastScrap(!lastScrap);
+      } else if (isScrappedRender && lastScrap) {
+        response = await axiosUndoScrap(boardId);
+        setLastScrap(!lastScrap);
+      }
+    } catch (error) {
+      //401 발생 -> 기존 isReactedRender 롤백
+      setIsScrappedRender((prev) => !prev);
     }
   };
 

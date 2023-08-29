@@ -3,6 +3,9 @@ import styled from "styled-components";
 import useModal from "@/hooks/useModal";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { ModalType } from "@/types/enum/modal.enum";
+import { getCookie } from "@/api/cookie/cookies";
+
+const token = getCookie("access_token");
 
 const SettingButton = () => {
   const [isToggled, setIsToggled] = useState<boolean>(false);
@@ -18,6 +21,14 @@ const SettingButton = () => {
     }
   };
 
+  const handleOpenAnimalFilterSection = () => {
+    if (!token) {
+      openModal(ModalType.LOGIN);
+      return;
+    }
+    openAnimalFilterSection();
+  };
+
   return (
     <WrapperStyled onMouseLeave={() => handleToggle("ON")}>
       <ToggleStyled onClick={() => handleToggle("OFF")}>
@@ -31,7 +42,7 @@ const SettingButton = () => {
             </MenuItemStyled>
           </MenuItemWrapperStyled>
           <MenuItemWrapperStyled>
-            <MenuItemStyled onClick={openAnimalFilterSection}>
+            <MenuItemStyled onClick={handleOpenAnimalFilterSection}>
               <img src="/src/assets/categoryW.png" />
             </MenuItemStyled>
           </MenuItemWrapperStyled>

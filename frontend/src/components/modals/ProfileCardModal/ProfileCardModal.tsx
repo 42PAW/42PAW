@@ -16,8 +16,10 @@ import useModal from "@/hooks/useModal";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
 import FollowTypeButton from "../../FollowTypeButton";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ProfileCardModal = () => {
+  const queryClient = useQueryClient();
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
@@ -26,7 +28,7 @@ const ProfileCardModal = () => {
   const { fetchProfile } = useFetch();
   const { moveToMyProfile, moveToProfile } = useNavigateCustom();
   const { closeModal } = useModal();
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["profile", currentMemberId],
     queryFn: fetchProfile,
     keepPreviousData: true,
@@ -67,6 +69,12 @@ const ProfileCardModal = () => {
             <BoardOption
               memberId={currentMemberId as number}
               memberName={profileData.memberName}
+              callback={() => {
+                queryClient.invalidateQueries([
+                  "profile",
+                  currentMemberId as number,
+                ]);
+              }}
             />
           )}
         </OptionButtonContainerStyled>
@@ -100,7 +108,12 @@ const ProfileCardModal = () => {
                 <FollowTypeButton
                   memberId={currentMemberId as number}
                   status={profileData.followType}
-                  isProfile={true}
+                  callback={() => {
+                    queryClient.invalidateQueries([
+                      "profile",
+                      currentMemberId as number,
+                    ]);
+                  }}
                 />
               </>
             ) : (

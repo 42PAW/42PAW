@@ -13,8 +13,8 @@ const LoadingCircleAnimation = () => {
 const LoadingCircleAnimationStyled = styled.div`
   position: absolute;
   top: 50%;
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
 
   &:before {
     content: "";

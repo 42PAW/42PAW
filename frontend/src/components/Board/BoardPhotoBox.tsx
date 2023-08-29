@@ -15,7 +15,7 @@ const BoardPhotoBox = ({
 }) => {
   return (
     <WrapperStyled>
-      <PhotoZoneStyled onDoubleClick={handleClickReaction}>
+      <PhotoZoneStyled>
         <Swiper
           modules={[Navigation, Pagination, A11y]}
           slidesPerView={1}
@@ -26,7 +26,11 @@ const BoardPhotoBox = ({
         >
           {boardImages.map((boardImage, index) => (
             <SwiperSlide key={index}>
-              <img src={boardImage} alt={`Image ${index}`} />
+              <img
+                src={boardImage}
+                alt={`Image ${index}`}
+                onDoubleClick={handleClickReaction}
+              />
             </SwiperSlide>
           ))}
         </Swiper>

@@ -2,11 +2,11 @@ import styled, { keyframes } from "styled-components";
 import { followType } from "@/types/enum/followType.enum";
 
 interface Props {
-  status: followType;
+  status?: followType;
 }
 
 const LoadingDotsAnimation = ({ status }: Props) => {
-  return <LoadingSpinner $status={status} />;
+  return <LoadingSpinner $status={status ?? followType.NONE} />;
 };
 
 const spinAnimation = keyframes`

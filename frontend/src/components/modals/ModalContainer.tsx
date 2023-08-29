@@ -7,6 +7,7 @@ import ProfileCardModal from "@/components/modals/ProfileCardModal/ProfileCardMo
 import ProfileEditModal from "@/components/modals/ProfileEditModal/ProfileEditModal";
 import DeleteModal from "@/components/modals/DeleteModal/DeleteModal";
 import LanguageModal from "@/components/modals/LanguageModal/LanguageModal";
+import LoginModal from "./LoginModal/LoginModal";
 import instance from "@/api/axios/axios.instance";
 import { STATUS_401_UNAUTHORIZED } from "@/types/constants/StatusCode";
 import useModal from "@/hooks/useModal";
@@ -24,7 +25,7 @@ const ModalContainer = () => {
     },
     (error) => {
       if (error.response?.status === STATUS_401_UNAUTHORIZED) {
-        openModal(ModalType.LANGUAGE);
+        openModal(ModalType.LOGIN);
       }
       return Promise.reject(error);
     }
@@ -38,6 +39,7 @@ const ModalContainer = () => {
       {currentOpenModal.deleteModal && <DeleteModal />}
       {currentOpenModal.profileEditModal && <ProfileEditModal />}
       {currentOpenModal.languageModal && <LanguageModal />}
+      {currentOpenModal.loginModal && <LoginModal />}
     </>
   );
 };

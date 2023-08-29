@@ -26,9 +26,12 @@ public class PersistHelper {
 		return this;
 	}
 
-	public <E extends IdDomain<?>> PersistHelper persist(Collection<E> entities) {
-		for (IdDomain<?> entity : entities) {
-			this.em.persist(entity);
+
+	@SafeVarargs public final <E extends IdDomain<?>> PersistHelper persist(Collection<E>... entities) {
+		for (Collection<E> entity : entities) {
+			for (IdDomain<?> idDomain : entity) {
+				this.em.persist(idDomain);
+			}
 		}
 		return this;
 	}

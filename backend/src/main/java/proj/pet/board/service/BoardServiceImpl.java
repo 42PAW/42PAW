@@ -24,8 +24,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_BOARD;
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
+import static proj.pet.exception.ExceptionStatus.*;
 
 /**
  * Board의 CUD 비즈니스 로직을 담당하는 서비스 구현체
@@ -46,6 +45,7 @@ public class BoardServiceImpl implements BoardService {
 	// TODO: 책임 분산이 필요할지도? + mediaData의 ContentType이 not null임을 검증해야 함.
 	// v1.5 이벤트로 미디어 업로드 책임 분리
 
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -55,33 +55,42 @@ public class BoardServiceImpl implements BoardService {
 	public Board createBoard(
 			Long memberId,
 			List<Species> speciesList,
-			List<MultipartFile> mediaDtoList,
+			List<MultipartFile> mediaDataList,
 			String content,
 			LocalDateTime now
 	) {
 		Member member = memberRepository.findById(memberId)
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
-		Board board = boardRepository.save(Board.of(member, VisibleScope.PUBLIC, content, now));
+		Board board = boardRepository.save(
+				Board.of(member, VisibleScope.PUBLIC, content, now));
 
-		List<AnimalCategory> animalCategories = animalCategoryRepository.findBySpeciesIn(
-				speciesList);
-		List<BoardCategoryFilter> categoryFilters = animalCategories.stream()
-				.map(category -> BoardCategoryFilter.of(board, category))
-				.toList();
+		List<AnimalCategory> animalCategories = animalCategoryRepository.findBySpeciesIn(speciesList);
+		List<BoardCategoryFilter> categoryFilters = convertToBoardCategoryFilters(animalCategories, board);
 		categoryFilters = boardCategoryFilterRepository.saveAll(categoryFilters);
 		board.addCategoryFilters(categoryFilters);
 
+		List<BoardMedia> mediaList = convertToBoardMedia(mediaDataList, board);
+		mediaList = boardMediaRepository.saveAll(mediaList);
+		board.addMediaList(mediaList);
+
+		return boardRepository.save(board);
+	}
+
+	private List<BoardCategoryFilter> convertToBoardCategoryFilters(List<AnimalCategory> animalCategories, Board board) {
+		return animalCategories.stream()
+				.map(category -> BoardCategoryFilter.of(board, category))
+				.toList();
+	}
+
+	private List<BoardMedia> convertToBoardMedia(List<MultipartFile> mediaDataList, Board board) {
 		AtomicInteger index = new AtomicInteger(0);
-		List<BoardMedia> mediaList = mediaDtoList.stream()
+		List<BoardMedia> mediaList = mediaDataList.stream()
 				.map(data -> {
 					String mediaUrl = boardMediaManager.uploadMedia(data, UUID.randomUUID().toString());
 					return BoardMedia.of(board, mediaUrl, index.getAndIncrement(),
 							MediaType.from(data));
 				}).collect(Collectors.toList());
-		mediaList = boardMediaRepository.saveAll(mediaList);
-		board.addMediaList(mediaList);
-
-		return boardRepository.save(board);
+		return mediaList;
 	}
 
 	/**
@@ -93,15 +102,16 @@ public class BoardServiceImpl implements BoardService {
 	 */
 	@Override
 	public void deleteBoard(Long memberId, Long boardId) {
+		Member member = memberRepository.findById(memberId)
+				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		Board board = boardRepository.findById(boardId)
-				.orElseThrow(() -> new ServiceException(NOT_FOUND_BOARD));
+				.orElseThrow(NOT_FOUND_BOARD::asServiceException);
 		if (board.getDeletedAt() != null) {
-			throw new ServiceException(NOT_FOUND_BOARD);
+			throw ALREADY_DELETED_BOARD.asServiceException();
 		}
-		//TODO: 찾아온 board에서 boradId != memberId이면 ServiceException ?? -> 로직 확인 필요
-//		if (!board.isId(memberId)) {
-//			throw new ServiceException(UNAUTHENTICATED);
-//		}
+		if (!board.isOwnedBy(member)) {
+			throw UNAUTHENTICATED.asServiceException();
+		}
 		if (!board.getComments().isEmpty()) {
 			commentRepository.deleteAll(board.getComments());
 		}

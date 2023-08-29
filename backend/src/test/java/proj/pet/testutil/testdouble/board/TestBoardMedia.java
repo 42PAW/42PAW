@@ -31,7 +31,7 @@ public class TestBoardMedia implements TestEntity<BoardMedia, Long> {
 	@Builder.Default
 	private MediaType mediaType = DEFAULT_MEDIA_TYPE;
 
-	public static List<BoardMedia> createEntitiesOf(Board board, String... url) {
+	public static List<BoardMedia> ofMany(Board board, String... url) {
 		AtomicInteger index = new AtomicInteger(0);
 		return Arrays.stream(url).map(
 				mediaUrl -> TestBoardMedia.builder()

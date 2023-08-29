@@ -56,6 +56,8 @@ public class TestBoard implements TestEntity<Board, Long> {
 		lenient().when(board.getVisibleScope()).thenReturn(this.visibleScope);
 		lenient().when(board.getContent()).thenReturn(this.content);
 		lenient().when(board.getCreatedAt()).thenReturn(this.createdAt);
+		lenient().when(board.getUpdatedAt()).thenReturn(this.updatedAt);
+		lenient().when(board.getDeletedAt()).thenReturn(this.deletedAt);
 		return board;
 	}
 }

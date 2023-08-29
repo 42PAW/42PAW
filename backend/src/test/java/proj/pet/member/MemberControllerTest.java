@@ -22,6 +22,7 @@ import proj.pet.testutil.testdouble.member.TestMember;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.apache.http.HttpHeaders.AUTHORIZATION;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,22 +60,23 @@ public class MemberControllerTest extends E2ETest {
 		private final String url = "/v1/members";
 
 		@BeforeEach
-		void mockMemberImageManager() {
+		void setup() {
 			given(memberImageManager.uploadMemberProfileImage(any())).willReturn(randomString());
+			em.createNativeQuery("ALTER TABLE member ALTER COLUMN id RESTART WITH 1").executeUpdate();
 		}
 
 		@Test
 		@DisplayName("42 OAuth 사용자는 회원 가입을 할 수 있다.")
 		void createMember() throws Exception {
 			Member noneRegisteredMember = TestMember.builder()
-					.oauthName("sanan")
-					.oauthId("sadfasdf")
+					.oauthId("131541")
 					.oauthType(OauthType.FORTY_TWO)
-					.nickname("sanan")
+					.oauthName("sanan")
 					.memberRole(MemberRole.NOT_REGISTERED)
 					.build().asMockEntity(1L);
 
 			String token = stubToken(noneRegisteredMember, now, 1);
+			System.out.println("token = " + token);
 
 			MockMultipartFile imageFile = new MockMultipartFile("imageData", "test.jpg", "image/jpeg", "test".getBytes());
 			MockHttpServletRequestBuilder req = multipart(url)
@@ -85,10 +87,11 @@ public class MemberControllerTest extends E2ETest {
 					.param("categoryFilters", animalCategories.get(0).getCategoryName())
 					.header(AUTHORIZATION, BEARER + token);
 
+			AtomicReference<String> tokenReference = new AtomicReference<>();
 			mockMvc.perform(req)
 					.andDo(print())
 					.andExpect(status().isOk())
-					.andDo(e -> {
+					.andDo(result -> {
 						Member member = em.find(Member.class, noneRegisteredMember.getId());
 						assertThat(member.getMemberRole()).isEqualTo(MemberRole.USER);
 						assertThat(member.getOauthProfile().getId()).isEqualTo(noneRegisteredMember.getOauthProfile().getId());

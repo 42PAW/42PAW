@@ -4,7 +4,7 @@ import ModalLayout from "@/components/modals/ModalLayout";
 import { ModalType } from "@/types/enum/modal.enum";
 import { currentOpenModalState } from "@/recoil/atom";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
-import BoardOption from "@/components/BoardOption";
+import BoardOption from "@/components/OptionButton/BoardOption";
 import { useQuery } from "@tanstack/react-query";
 import useFetch from "@/hooks/useFetch";
 import { userInfoState } from "@/recoil/atom";

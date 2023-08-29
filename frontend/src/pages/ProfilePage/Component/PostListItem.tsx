@@ -11,13 +11,17 @@ const PostListItem: React.FC<PostListItemProps> = ({ post, onClick }) => {
 };
 
 const ThumbnailStyled = styled.img`
+  cursor: pointer;
   pointer-events: auto;
-  width: calc(33.3%);
+  width: 100%;
   aspect-ratio: 1;
   object-fit: contain;
   object-position: center;
-  // background-color: var(--purple);
   border-radius: 1%;
+  transition: all 0.3s ease;
+  &:hover {
+    filter: brightness(0.8);
+  }
 `;
 
 export default PostListItem;

@@ -3,9 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { isRightSectionOpenedState } from "@/recoil/atom";
-import LeftMenuSection from "@/components/LeftMenuSection/LeftMenuSection";
 import RightSection from "@/components/RightSection/RightSection";
-import BoardSortToggle from "@/components/BoardSortToggle";
 import ModalContainer from "@/components/modals/ModalContainer";
 import Toaster from "@/components/toast/Toaster";
 import { getCookie } from "@/api/cookie/cookies";
@@ -14,6 +12,12 @@ import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
 import useTranslator from "@/hooks/useTranslator";
 import { Language } from "@/types/enum/language.enum";
+import { Suspense, lazy } from "react";
+
+const LeftMenuSection = lazy(
+  () => import("@/components/LeftMenuSection/LeftMenuSection")
+);
+const BoardSortToggle = lazy(() => import("@/components/BoardSortToggle"));
 
 const Layout = () => {
   const location = useLocation();
@@ -55,13 +59,15 @@ const Layout = () => {
     <Outlet />
   ) : (
     <WrapperStyled>
-      <LeftMenuSection />
+      <Suspense>
+        <LeftMenuSection />
+      </Suspense>
       <MainAreaWrapperStyled>
         <MainAreaStyled
           $isRightSectionOpened={isRightSectionOpened}
           $isProfilePage={isProfilePage}
         >
-          {isMainPage && <BoardSortToggle />}
+          <Suspense>{isMainPage && <BoardSortToggle />}</Suspense>
           <Outlet />
         </MainAreaStyled>
         <RightSection />

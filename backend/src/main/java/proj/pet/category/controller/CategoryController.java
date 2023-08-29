@@ -2,6 +2,8 @@ package proj.pet.category.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import proj.pet.auth.domain.AuthGuard;
+import proj.pet.auth.domain.AuthLevel;
 import proj.pet.category.dto.CategoryResponseDto;
 import proj.pet.category.dto.CategoryUpdateRequestDto;
 import proj.pet.category.service.CategoryFacadeService;
@@ -21,6 +23,7 @@ public class CategoryController {
 	}
 
 	@PatchMapping("/members/me")
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void updateMyCategories(
 			@UserSession UserSessionDto userSessionDto,
 			@RequestBody CategoryUpdateRequestDto categoryUpdateRequestDto
@@ -29,6 +32,7 @@ public class CategoryController {
 	}
 
 	@PatchMapping("/boards/{boardId}")
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void updateBoardCategories(
 			@UserSession UserSessionDto userSessionDto,
 			@PathVariable Long boardId,

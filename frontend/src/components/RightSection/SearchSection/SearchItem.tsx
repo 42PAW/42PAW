@@ -6,7 +6,7 @@ import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { MemberSearchResponseDTO } from "@/types/dto/member.dto.ts";
 import useModal from "@/hooks/useModal";
 import { ModalType } from "@/types/enum/modal.enum";
-import BoardOption from "@/components/BoardOption";
+import BoardOption from "@/components/OptionButton/BoardOption";
 import { currentMemberIdState } from "@/recoil/atom";
 import { callbackStoreState } from "@/recoil/atom";
 

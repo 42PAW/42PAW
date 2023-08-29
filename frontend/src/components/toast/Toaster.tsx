@@ -3,17 +3,16 @@ import styled, { keyframes } from "styled-components";
 import { toastMessagesState } from "@/recoil/atom";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { IToastInfo } from "@/types/interface/toast.interface";
+import useDebounce from "@/hooks/useDebounce";
 
 const Toast: React.FC = () => {
   const [toastMessages, setToastMessages] =
     useRecoilState<IToastInfo[]>(toastMessagesState);
+  const { debounce } = useDebounce();
   const resetToastMessage = useResetRecoilState(toastMessagesState);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      closeAllToasts();
-    }, 2500);
-    return () => clearTimeout(timer);
+    debounce("toaster", closeAllToasts, 1300);
   }, [toastMessages]);
 
   const closeAllToasts = () => {

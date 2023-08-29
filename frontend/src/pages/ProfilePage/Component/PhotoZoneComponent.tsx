@@ -58,11 +58,12 @@ const ProfileBodyStyled = styled.div`
 `;
 
 const PhotoCategoryToggleStyled = styled.div`
+  z-index: 1;
   display: flex;
   justify-content: space-evenly;
   height: 50px;
   position: sticky;
-  top: -10px;
+  top: 0px;
   background: linear-gradient(100deg, #999bc6 50%, #d3c3ce 150%);
   border-radius: 10px 10px 0px 0px;
   button {
@@ -96,19 +97,13 @@ const PhotoCategoryToggleStyled = styled.div`
   }
   img {
     margin-top: 5px;
-    width: 25px;
+    width: 20px;
   }
 `;
 
 const PhotoZoneWrapperStyled = styled.div<{ $hasTab: boolean }>`
-  display: flex;
-  flex-wrap: wrap;
   max-height: calc(100% - 50px);
   margin-top: ${({ $hasTab }) => ($hasTab ? "0" : "25px")};
-  img {
-    width: calc(33.3%);
-    border-radius: 1%;
-  }
   border: 1px;
 `;
 

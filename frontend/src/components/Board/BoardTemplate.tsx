@@ -4,7 +4,7 @@ import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import BoardPhotoBox from "@/components/Board/BoardPhotoBox";
-import BoardOption from "@/components/BoardOption";
+import BoardOption from "@/components/OptionButton/BoardOption";
 import useModal from "@/hooks/useModal";
 import { ModalType } from "@/types/enum/modal.enum";
 import { languageState } from "@/recoil/atom";

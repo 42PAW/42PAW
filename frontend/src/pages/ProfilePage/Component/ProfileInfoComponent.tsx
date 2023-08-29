@@ -2,7 +2,7 @@ import { useState } from "react";
 import useModal from "../../../hooks/useModal";
 import { ModalType } from "../../../types/enum/modal.enum";
 import styled from "styled-components";
-import ProfileOption from "@/components/ProfileOption";
+import ProfileOption from "@/components/OptionButton/ProfileOption";
 import { ProfileInfoDTO } from "@/types/dto/member.dto";
 import { currentMemberIdState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";

@@ -47,13 +47,13 @@ import static proj.pet.testutil.testdouble.board.TestBoardMedia.DEFAULT_MEDIA_UR
 class BoardControllerTest extends E2ETest {
 	/*------------------------------UTIL------------------------------*/
 	private final static String BEARER = "Bearer ";
+	private PersistHelper persistHelper;
+
+	/*---------------------------TEST-DOUBLE---------------------------*/
 	@MockBean
 	private AmazonS3 amazonS3;
 	@MockBean
 	private BoardMediaManager boardMediaManager;
-	private PersistHelper persistHelper;
-
-	/*---------------------------TEST-DOUBLE---------------------------*/
 	private List<AnimalCategory> animalCategories;
 	private Member author;
 	private Member loginUser;

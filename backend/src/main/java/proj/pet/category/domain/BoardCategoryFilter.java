@@ -3,6 +3,7 @@ package proj.pet.category.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import proj.pet.board.domain.Board;
 import proj.pet.utils.domain.ConsumptionCompositeKey;
 import proj.pet.utils.domain.IdDomain;
@@ -16,15 +17,18 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "BOARD_CATEGORY_FILTER")
 @Getter
+@ToString
 public class BoardCategoryFilter extends IdDomain<ConsumptionCompositeKey> implements Validatable {
 
 	@EmbeddedId
 	private ConsumptionCompositeKey id;
 
+	@ToString.Exclude
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "CONSUMER_ID", nullable = false, insertable = false, updatable = false)
 	private Board board;
 
+	@ToString.Exclude
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "PROVIDER_ID", nullable = false, insertable = false, updatable = false)
 	private AnimalCategory animalCategory;

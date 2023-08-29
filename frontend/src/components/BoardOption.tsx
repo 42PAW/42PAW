@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import styled from "styled-components";
 import { ModalType } from "@/types/enum/modal.enum";
@@ -15,16 +15,18 @@ import { reportUserInfoState } from "@/recoil/atom";
 import { ReportDTO } from "@/types/dto/member.dto";
 
 /**
- * @boardId (optional) 신고, 차단, 삭제할 게시물의 id
- * @commendId (optional) 신고, 차단, 삭제할 댓글의 id
- * @memberId 신고, 차단, 삭제할 댓글 혹은 게시물의 유저 id
- * @memberName 차단 모달에 띄위게 될 차단 유저명
+ * @param {number} boardId - 신고, 차단, 삭제할 게시물의 id (optional)
+ * @param {number} commentId - 신고, 차단, 삭제할 댓글의 id (optional)
+ * @param {number} memberId - 신고, 차단, 삭제할 댓글 혹은 게시물의 유저 id
+ * @param {string} membername - 차단 모달에 띄우게 될 차단 유저명
+ * @param {Function} callback - 상태 업데이트 후 실행시킬 콜백 함수(ex.리렌더링) (optional)
  */
 interface IOptionButtonProps {
   boardId?: number;
   commentId?: number;
   memberId: number;
   memberName: string;
+  callback?: () => void;
 }
 
 /**게시글 및 댓글 오른쪽 상단 ... 버튼. 타인 게시물 댓글에서는 신고 차단, 내 게시물에서는 삭제가 나타남*/
@@ -33,6 +35,7 @@ const BoardOption: React.FC<IOptionButtonProps> = ({
   commentId,
   memberId,
   memberName,
+  callback,
 }) => {
   const [language] = useRecoilState<any>(languageState);
   const setBanUserInfo = useSetRecoilState<IBanUserInfo>(banUserInfoState);
@@ -42,7 +45,11 @@ const BoardOption: React.FC<IOptionButtonProps> = ({
   const setDeleteInfo = useSetRecoilState<IDeleteInfo>(deleteInfoState);
   const { openModal } = useModal();
 
-  const banUser = { memberId: memberId, userName: memberName };
+  const banUser = {
+    memberId: memberId,
+    userName: memberName,
+    callback: callback,
+  };
 
   const handleBan = () => {
     setBanUserInfo(banUser);

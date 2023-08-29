@@ -22,14 +22,14 @@ const MyProfilePage = () => {
   const handleTabState = (newTabState: Board) => {
     setBoardCategory(newTabState);
   };
-
+  console.log(boardCategory);
   useEffect(() => {
     setBoardCategory(Board.MINE);
   }, []);
 
   const boardsQuery = useQuery<IBoardInfo[]>({
-    queryKey: ["boards", boardCategory],
-    queryFn: fetchBoards,
+    queryKey: ["profileBoards", boardCategory], // 여기서 boardCategory를 그냥 Board.MINE하는게?
+    queryFn: () => fetchBoards(0),
     keepPreviousData: true,
   });
 

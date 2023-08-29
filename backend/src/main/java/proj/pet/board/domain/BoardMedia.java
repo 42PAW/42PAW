@@ -3,6 +3,7 @@ package proj.pet.board.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import proj.pet.utils.domain.IdentityDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
@@ -13,8 +14,10 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "BOARD_MEDIA")
 @Getter
 @NoArgsConstructor(access = PROTECTED)
+@ToString
 public class BoardMedia extends IdentityDomain implements Validatable {
 
+	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "BOARD_ID", nullable = false, updatable = false)
 	private Board board;

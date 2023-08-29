@@ -26,8 +26,8 @@ const ProfilePage = () => {
   }, []); // 빈 배열을 넣어 마운트 시 한 번만 실행되도록 함
 
   const boardsQuery = useQuery<IBoardInfo[]>({
-    queryKey: ["boards", boardCategory], // 여기서 boardCategory를 그냥 Board.MINE하는게?
-    queryFn: fetchBoards,
+    queryKey: ["profileBoards", boardCategory], // 여기서 boardCategory를 그냥 Board.MINE하는게?
+    queryFn: () => fetchBoards(0),
     keepPreviousData: true,
   });
 

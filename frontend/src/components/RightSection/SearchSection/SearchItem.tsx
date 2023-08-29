@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 // import OptionButton from "../../OptionButton";
 import FollowTypeButton from "@/components/FollowTypeButton";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
@@ -8,23 +8,35 @@ import useModal from "@/hooks/useModal";
 import { ModalType } from "@/types/enum/modal.enum";
 import BoardOption from "@/components/BoardOption";
 import { currentMemberIdState } from "@/recoil/atom";
+import { callbackStoreState } from "@/recoil/atom";
 
-const SearchItem = (user: MemberSearchResponseDTO) => {
+interface SearchItemProps extends MemberSearchResponseDTO {
+  updateFollowType: () => void;
+  isMine: boolean;
+}
+
+const SearchItem = (props: SearchItemProps) => {
   const {
     memberId,
     memberName,
     intraName,
     profileImageUrl,
     country,
-    statement,
     relationship,
-  } = user;
+    updateFollowType,
+    isMine,
+  } = props;
 
   const { openModal } = useModal();
-  const setCurrentMemberId = useSetRecoilState(currentMemberIdState);
+  const setCurrentMemberId = useSetRecoilState<number | null>(
+    currentMemberIdState
+  );
+  const [callbackStore, setCallbackStore] =
+    useRecoilState<Function[]>(callbackStoreState);
 
   const handleOpenProfile = () => {
     setCurrentMemberId(memberId);
+    setCallbackStore([...callbackStore, updateFollowType]);
     openModal(ModalType.PROFILECARD);
   };
 
@@ -36,26 +48,36 @@ const SearchItem = (user: MemberSearchResponseDTO) => {
       <SearchItemRightStyled>
         <NameContainerStyled onClick={handleOpenProfile}>
           <MemberNameStyled>
-            {user.memberName}
-            {useCountryEmoji(user.country)}
+            {memberName} {useCountryEmoji(country)}
           </MemberNameStyled>
-          <IntraNameStyled>{user.intraName}</IntraNameStyled>
+          <IntraNameStyled>{intraName}</IntraNameStyled>
         </NameContainerStyled>
-        <SearchItemRightSideStyled>
-          <FollowTypeButton status={user.relationship} isLoading={false} />
-          <BufferStyled />
-          <BoardOption memberId={memberId} memberName={memberName} />
-        </SearchItemRightSideStyled>
+        {!isMine && (
+          <SearchItemRightSideStyled>
+            <FollowTypeButton
+              memberId={memberId}
+              status={relationship}
+              callback={updateFollowType}
+            />
+            <BufferStyled />
+            <BoardOption
+              memberId={memberId}
+              memberName={memberName}
+              callback={updateFollowType}
+            />
+          </SearchItemRightSideStyled>
+        )}
       </SearchItemRightStyled>
     </SearchItemStyled>
   );
 };
 
 const SearchItemStyled = styled.div`
+  height: 52px;
   display: flex;
-  padding: 10px;
-  width: 85%;
-  margin-bottom: 20px;
+  align-items: center;
+  width: 90%;
+  margin-bottom: 10px;
   margin-left: 10px;
   margin-right: 10px;
   border-radius: 30px;
@@ -66,10 +88,12 @@ const UserImageContainerStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  margin-left: 11px;
   img {
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
     border-radius: 100%;
     border: 1px solid var(--transparent);
   }
@@ -87,26 +111,27 @@ const SearchItemRightStyled = styled.div`
 const NameContainerStyled = styled.div`
   display: flex;
   width: 60%;
-  font-weight: bold;
-  padding-left: 10px;
-  color: var(--white);
+  font-weight: 500;
+  padding-left: 2px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  span {
-    margin-top: 5px;
-    font-weight: 300;
-    font-size: 11px;
-  }
 `;
 
 const MemberNameStyled = styled.div`
-  font-size: 14px;
-  font-color: var(--white);
+  cursor: pointer;
+  font-size: 1.3rem;
+  color: var(--white);
 `;
 
 const IntraNameStyled = styled.div`
-  font-size: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--transparent2);
+  transition: all 0.3s ease;
+  &:hover {
+    color: var(--white);
+  }
 `;
 
 const SearchItemRightSideStyled = styled.div`
@@ -118,24 +143,5 @@ const SearchItemRightSideStyled = styled.div`
 const BufferStyled = styled.div`
   width: 10px;
 `;
-
-// const StateButtonStyled = styled.button`
-//   width: 22%;
-//   border-radius: 8px;
-//   text-align: center;
-//   border: 1px solid var(--white);
-//   background: rgba(183, 184, 215, 0.00);
-//   cursor: pointer;
-//   background-color: ${props => {
-//     if (props.rel === "FOLLOWING")
-//         return "var(--transparent)";
-//     else if (props.rel === "NONE")
-//         return "var(--lightpurple)";
-//     else if (props.rel === "BLOCKED")
-//         return "var(--purple)";
-//   }};
-//   color: var(--white);
-//   transition: background-color ease-in-out;
-// `;
 
 export default SearchItem;

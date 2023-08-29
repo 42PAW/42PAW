@@ -4,7 +4,6 @@ import { IBoardInfo } from "@/types/interface/board.interface";
 
 const PostList = (props: any) => {
   const { posts, onClickItem } = props;
-
   return (
     <>
       {posts.map((post: IBoardInfo) => {

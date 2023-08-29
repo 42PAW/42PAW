@@ -1,45 +1,57 @@
 import { useState } from "react";
 import { axiosFollow, axiosUnfollow } from "@/api/axios/axios.custom";
-import { useQueryClient } from "@tanstack/react-query";
 import { axiosUndoBlockUser } from "@/api/axios/axios.custom";
 import { styled } from "styled-components";
 import { followType } from "@/types/enum/followType.enum";
 import LoadingDotsAnimation from "@/components/loading/LoadingDotsAnimation";
 import useDebounce from "@/hooks/useDebounce";
+import { callbackStoreState } from "@/recoil/atom";
+import { useRecoilState } from "recoil";
 
 interface FollowTypeButtonsProps {
   memberId: number;
   status: followType;
-  isProfile?: boolean;
+  callback?: () => void;
 }
 
 /**
  * @param {number} memberId - 팔로우 상태를 변경할 대상 유저 id
  * @param {followType} status - 해당 유저에 대한 팔로우 상태
- * @param {boolean} isProfile - 부모 컴포넌트가 프로필인지 (optional)
+ * @param {Function} callback - 상태 업데이트 후 실행시킬 콜백 함수(ex.리렌더링) (optional)
  */
 const FollowTypeButton = ({
   memberId,
   status,
-  isProfile,
+  callback,
 }: FollowTypeButtonsProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const queryClient = useQueryClient();
+  const [callbackStore] = useRecoilState<Function[]>(callbackStoreState);
   const { debounce } = useDebounce();
 
   const handleClickFollowType = async () => {
-    if (status === followType.NONE) await axiosFollow(memberId as number);
-    if (status === followType.FOLLOWING)
-      await axiosUnfollow(memberId as number);
-    if (status === followType.BLOCK)
-      await axiosUndoBlockUser(memberId as number);
-    if (isProfile) queryClient.invalidateQueries(["profile", memberId]);
-    setIsLoading(false);
+    let response;
+    try {
+      if (status === followType.NONE)
+        response = await axiosFollow(memberId as number);
+      if (status === followType.FOLLOWING)
+        response = await axiosUnfollow(memberId as number);
+      if (status === followType.BLOCK)
+        response = await axiosUndoBlockUser(memberId as number);
+
+      if (callback) callback();
+      if (callbackStore.length !== 0) {
+        callbackStore.forEach((callback) => callback());
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+    }
   };
 
   const handleClickFollowTypeButton = () => {
     setIsLoading(true);
-    debounce("follow", handleClickFollowType, 500);
+    debounce("follow", handleClickFollowType, 300);
   };
 
   if (status === followType.NONE)
@@ -98,6 +110,7 @@ const FollowingButtonStyled = styled.button`
   background-color: var(--white);
   color: var(--pink);
   transition: opacity 0.2s ease;
+  font-size: 1.3rem;
   &:hover {
     opacity: 0.8;
   }
@@ -114,6 +127,7 @@ const BannedButtonStyled = styled.button`
   background-color: #fc5656;
   color: var(--white);
   transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 1.3rem;
   &:hover {
     opacity: 0.8;
   }

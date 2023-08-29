@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import { Board } from "@/types/enum/board.category.enum";
 import { currentMemberIdState } from "@/recoil/atom";
-import { useSetRecoilState, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { boardCategoryState } from "@/recoil/atom";
 import { IBoardInfo } from "@/types/interface/board.interface";
 

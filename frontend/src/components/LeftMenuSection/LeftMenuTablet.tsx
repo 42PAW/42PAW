@@ -8,6 +8,9 @@ import { getCookie } from "@/api/cookie/cookies";
 
 let token = getCookie("access_token");
 
+import { useSetRecoilState } from "recoil";
+import { currentMemberIdState } from "@/recoil/atom";
+
 const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   handleLogin,
   handleLogout,
@@ -18,9 +21,11 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
   const { openSearchSection } = useRightSectionHandler();
   const touchStartY = useRef<number | null>(null);
-
   const isProfilePage: boolean =
     location.pathname === "/my-profile" || location.pathname === "/profile";
+  const setCurrentMemberId = useSetRecoilState<number | null>(
+    currentMemberIdState
+  );
 
   useEffect(() => {
     window.addEventListener("wheel", handleWheel);
@@ -62,6 +67,10 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
     touchStartY.current = null;
   };
 
+  const handleOpenMyProfile = () => {
+    setCurrentMemberId(userInfo!.memberId);
+    moveToMyProfile();
+  };
   const handleLoginButton = () => {
     token ? handleLogout() : handleLogin();
     token = getCookie("access_token");
@@ -69,27 +78,25 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
 
   return (
     <>
-      {!isProfilePage && (
-        <BannerStyled $isBannerVisible={isBannerVisible}>
-          {userInfo ? (
-            <ProfileImageStyled
-              src={userInfo.profileImageUrl}
-              onClick={moveToMyProfile}
-            />
-          ) : (
-            <ProfileImageStyled
-              src="/src/assets/userW.png"
-              onClick={handleLogin}
-            />
-          )}
-          <BannerLogoStyled>
-            <img src="/src/assets/paw.png" onClick={handleClickLogo} />
-          </BannerLogoStyled>
-          <SettingButtonContainerStyled>
-            <SettingButton />
-          </SettingButtonContainerStyled>
-        </BannerStyled>
-      )}
+      <BannerStyled $isBannerVisible={isBannerVisible}>
+        {userInfo ? (
+          <ProfileImageStyled
+            src={userInfo.profileImageUrl}
+            onClick={handleOpenMyProfile}
+          />
+        ) : (
+          <ProfileImageStyled
+            src="/src/assets/userW.png"
+            onClick={handleLogin}
+          />
+        )}
+        <BannerLogoStyled>
+          <img src="/src/assets/paw.png" />
+        </BannerLogoStyled>
+        <SettingButtonContainerStyled>
+          <SettingButton />
+        </SettingButtonContainerStyled>
+      </BannerStyled>
       <MenuStyled>
         <nav>
           <MenuListStyled>

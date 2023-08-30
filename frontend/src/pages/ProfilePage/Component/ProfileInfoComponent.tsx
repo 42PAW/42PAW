@@ -8,6 +8,7 @@ import { currentMemberIdState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
+import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 
 // const CountInfo = ({ label, value }: { label: string; value: number }) => (
 //   <li>
@@ -17,23 +18,44 @@ import { Country } from "@/types/enum/country.enum";
 // );
 
 const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
+  const { openFollowerSection } = useRightSectionHandler();
+  const handleFollowerClick = () => {
+    openFollowerSection();
+  };
+
+  const handleFollowingClick = () => {
+    // 팔로잉을 클릭했을 때 수행할 작업
+    console.log("팔로잉을 클릭했습니다.");
+    // 원하는 작업을 여기에 추가하세요
+  };
+
   return (
     <CountInfoStyled>
       <li>
         <div>게시물</div>
         <span>{userInfo.boardCount}</span>
       </li>
-      <li>
+      <li onClick={handleFollowerClick}>
         <div>팔로워</div>
         <span>{userInfo.followerCount}</span>
       </li>
-      <li>
+      <li onClick={handleFollowingClick}>
         <div>팔로잉</div>
         <span>{userInfo.followingCount}</span>
       </li>
     </CountInfoStyled>
   );
 };
+
+const CountInfoCover = styled.div`
+  position: absolute;
+  top: 0;
+  left: 33.33%; /* 팔로워 영역의 시작 위치 */
+  width: 33.33%; /* 팔로워 영역의 너비 */
+  height: 100%;
+  cursor: pointer;
+  z-index: 1;
+`;
 
 const UserInfoItems = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   const countryEmoji = useCountryEmoji(userInfo.country as Country);

@@ -44,20 +44,12 @@ const useNavigateCustom = () => {
     navigator("/upload");
   };
 
-  const moveToDashboard = () => {
-    // 라우트 전환 시, Board를 default로 전환해 주지 않으면 이전 카테고리 게시글이 남아있는 현상을 방지
-    setBoard(Board.DEFAULT);
-    setIsRightSectionOpened(false);
-    navigator("/dashboard");
-  };
-
   return {
     moveToMain,
     moveToNotice,
     moveToProfile,
     moveToMyProfile,
     moveToUpload,
-    moveToDashboard,
   };
 };
 

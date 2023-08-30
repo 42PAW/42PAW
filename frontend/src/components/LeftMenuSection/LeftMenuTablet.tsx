@@ -172,7 +172,6 @@ const MenuStyled = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  overflow: isBannerVisible;
   width: 100vw;
   background-color: #c5c6dcfa;
   margin-top: -48px;

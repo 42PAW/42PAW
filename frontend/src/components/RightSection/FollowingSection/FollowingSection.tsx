@@ -1,4 +1,4 @@
-import { styled, keyframes } from "styled-components";
+import { styled } from "styled-components";
 import { FollowerDTO, UserInfoDTO } from "@/types/dto/member.dto.ts";
 import SearchItem from "@/components/RightSection/SearchSection/SearchItem";
 import { userInfoState } from "@/recoil/atom";
@@ -8,31 +8,31 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import { useParams } from "react-router-dom";
 
-const FollowerSection = () => {
+const FollowingSection = () => {
   const { memberId } = useParams<{ memberId: string }>();
-  const { fetchFollowerList } = useFetch(Number(memberId));
-  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
-  const followerQuery = useQuery({
-    queryKey: ["followerList", memberId || userInfo?.memberId],
-    queryFn: fetchFollowerList, // debounce 추가할거면 추가하기
+  const { fetchFollowingList } = useFetch(Number(memberId));
+  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState); // isMine 체크, 나중에 다른 방법 없나 확인해보기
+  const followingQuery = useQuery({
+    queryKey: ["followingList", memberId || userInfo?.memberId],
+    queryFn: fetchFollowingList, // debounce 추가할거면 추가하기
     refetchOnMount: "always",
   });
 
-  if (followerQuery.isLoading) {
+  if (followingQuery.isLoading) {
     return <LoadingAnimation />;
   }
 
   const handleUpdateFollowType = async () => {
     // 팔로우 상태 변경 후 최신 데이터를 가져옴
-    await fetchFollowerList();
-    followerQuery.refetch(); // 쿼리를 수동으로 다시 호출하여 데이터를 업데이트함
+    await fetchFollowingList();
+    followingQuery.refetch(); // 쿼리를 수동으로 다시 호출하여 데이터를 업데이트함
   };
 
   return (
     <WrapperStyled>
       <FollowerItemWrapperStyled>
-        {followerQuery.data && followerQuery.data.length > 0 ? (
-          followerQuery.data.map((user: FollowerDTO) => (
+        {followingQuery.data && followingQuery.data.length > 0 ? (
+          followingQuery.data.map((user: FollowerDTO) => (
             <SearchItem
               key={user.memberId}
               memberId={user.memberId}
@@ -47,7 +47,7 @@ const FollowerSection = () => {
             />
           ))
         ) : (
-          <NoSearchMessageStyled>팔로워가 없습니다.</NoSearchMessageStyled>
+          <NoSearchMessageStyled>팔로우를 해보세요.</NoSearchMessageStyled>
         )}
       </FollowerItemWrapperStyled>
     </WrapperStyled>
@@ -61,15 +61,6 @@ const WrapperStyled = styled.div`
   width: 100%;
   flex: 1;
   overflow: hidden;
-`;
-
-const shakeAnimation = keyframes`
-	0% { transform: translateX(0); }
-	20% { transform: translateX(-3px); }
-	40% { transform: translateX(3px); }
-	60% { transform: translateX(-3px); }
-	80% { transform: translateX(3px); }
-	100% { transform: translateX(0); }
 `;
 
 const FollowerItemWrapperStyled = styled.div`
@@ -89,4 +80,4 @@ const NoSearchMessageStyled = styled.div`
   opacity: 0.7;
 `;
 
-export default FollowerSection;
+export default FollowingSection;

@@ -452,6 +452,94 @@ export const axiosGetSearchResults = async (
   }
 };
 
+const axiosGetMyFollowerListURL = "/v1/follows/me/followers";
+export const axiosGetMyFollowerList = async (
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    const response = await instance.get(axiosGetMyFollowerListURL, {
+      params: { size: size, page: page },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetFollowerListURL = "/v1/follows/members/";
+export const axiosGetFollowerList = async (
+  memberId: number,
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    let response;
+    if (token) {
+      response = await instance.get(
+        axiosGetFollowerListURL + memberId.toString() + "/followers",
+        {
+          params: { size: size, page: page },
+        }
+      );
+    } else {
+      response = await axios.get(
+        axiosGetFollowerListURL + memberId.toString() + "/followers",
+        {
+          params: { size: size, page: page },
+        }
+      );
+    }
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetMyFollowingListURL = "/v1/follows/me/followings";
+export const axiosGetMyFollowingList = async (
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    const response = await instance.get(axiosGetMyFollowingListURL, {
+      params: { size: size, page: page },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetFollowingListURL = "/v1/follows/members/";
+export const axiosGetFollowingList = async (
+  memberId: number,
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    let response;
+    if (token) {
+      response = await instance.get(
+        axiosGetFollowingListURL + memberId.toString() + "/followings",
+        {
+          params: { size: size, page: page },
+        }
+      );
+    } else {
+      response = await axios.get(
+        axiosGetFollowingListURL + memberId.toString() + "/followings",
+        {
+          params: { size: size, page: page },
+        }
+      );
+    }
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const axiosUpdateAnimalCategoryURL = "/v1/categories/members/me";
 export const axiosUpdateAnimalCategory = async (
   categories: AnimalSpecies[]

@@ -18,14 +18,16 @@ import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 // );
 
 const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
-  const { openFollowerSection } = useRightSectionHandler();
+  const { openFollowerSection, openFollowingSection } =
+    useRightSectionHandler();
   const handleFollowerClick = () => {
     openFollowerSection();
   };
 
   const handleFollowingClick = () => {
     // 팔로잉을 클릭했을 때 수행할 작업
-    console.log("팔로잉을 클릭했습니다.");
+    openFollowingSection();
+    // console.log("팔로잉을 클릭했습니다.");
     // 원하는 작업을 여기에 추가하세요
   };
 
@@ -128,6 +130,32 @@ const UserInfoStyled = styled.div`
 `;
 
 /* 게시물, 팔로워, 팔로잉 수 */
+// const CountInfoStyled = styled.ul`
+//   display: flex;
+//   width: 100%;
+//   padding: 0;
+//   margin: 0 0 30px 0;
+
+//   li {
+//     font-size: 1.2rem;
+//     display: flex;
+//     flex-direction: column;
+//     width: calc(100% / 3);
+//     &:not(:last-child) {
+//       border-right: 1.2px solid var(--transparent); /* 원하는 선의 색상 설정 */
+//     }
+//     cursor: pointer;
+//     &:first-child {
+//       cursor: default;
+//     }
+//   }
+
+//   span {
+//     font-size: 1.2rem;
+//     font-weight: 600;
+//   }
+// `;
+
 const CountInfoStyled = styled.ul`
   display: flex;
   width: 100%;
@@ -139,8 +167,25 @@ const CountInfoStyled = styled.ul`
     display: flex;
     flex-direction: column;
     width: calc(100% / 3);
+    align-items: center; /* 가운데 정렬을 위한 스타일 추가 */
+    cursor: pointer;
+
     &:not(:last-child) {
       border-right: 1.2px solid var(--transparent); /* 원하는 선의 색상 설정 */
+    }
+
+    &:hover:not(:first-child) {
+      color: var(--button-grey-hover); /* 마우스 오버 시 글자 색 어둡게 설정 */
+    }
+
+    &:first-child {
+      cursor: default;
+    }
+
+    div,
+    span {
+      cursor: inherit; /* 부모 요소인 li의 커서 스타일 상속 */
+      transition: color 0.2s; /* 색 변화에 애니메이션 적용 */
     }
   }
 

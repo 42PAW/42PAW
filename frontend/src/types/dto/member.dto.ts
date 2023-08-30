@@ -50,3 +50,13 @@ export interface MemberSearchResponseDTO {
   statement: string;
   relationship: followType;
 }
+
+export interface FollowerDTO {
+  memberId: number;
+  memberName: string;
+  intraName: string;
+  profileImageUrl: string;
+  country: Country;
+  statement: string;
+  relationship: followType;
+}

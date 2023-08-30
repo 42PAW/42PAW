@@ -6,6 +6,8 @@ import { followType } from "@/types/enum/followType.enum";
 import LoadingDotsAnimation from "@/components/loading/LoadingDotsAnimation";
 import useDebounce from "@/hooks/useDebounce";
 import { callbackStoreState } from "@/recoil/atom";
+import { useQueryClient } from "@tanstack/react-query";
+import { useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 
 interface FollowTypeButtonsProps {
@@ -27,7 +29,12 @@ const FollowTypeButton = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [callbackStore] = useRecoilState<Function[]>(callbackStoreState);
   const { debounce } = useDebounce();
+  const queryClient = useQueryClient();
+  const location = useLocation();
 
+  const isProfilePage: boolean = /^\/(my-)?profile(\/\d+)?$/.test(
+    location.pathname
+  );
   const handleClickFollowType = async () => {
     let response;
     try {
@@ -38,9 +45,22 @@ const FollowTypeButton = ({
       if (status === followType.BLOCK)
         response = await axiosUndoBlockUser(memberId as number);
 
-      if (callback) callback();
+      if (callback) {
+        console.log("callback");
+
+        callback();
+      }
       if (callbackStore.length !== 0) {
+        console.log("callbackStore");
         callbackStore.forEach((callback) => callback());
+      }
+      if (isProfilePage) {
+        if (location.pathname === "/my-profile") {
+          queryClient.invalidateQueries(["myProfile"]);
+        } else {
+          console.log("profile");
+          queryClient.invalidateQueries(["profile", memberId]);
+        }
       }
 
       setIsLoading(false);

@@ -1,100 +1,46 @@
 import { styled, keyframes } from "styled-components";
-import { useEffect, useState } from "react";
-import {
-  MemberSearchResponseDTO,
-  UserInfoDTO,
-} from "@/types/dto/member.dto.ts";
+import { FollowerDTO, UserInfoDTO } from "@/types/dto/member.dto.ts";
 import SearchItem from "@/components/RightSection/SearchSection/SearchItem";
-import { axiosGetSearchResults } from "@/api/axios/axios.custom";
-import useDebounce from "@/hooks/useDebounce";
-import useToaster from "@/hooks/useToaster";
-import LoadingDotsAnimation from "@/components/loading/LoadingDotsAnimation";
 import { userInfoState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
+import useFetch from "@/hooks/useFetch";
+import { useQuery } from "@tanstack/react-query";
+import LoadingAnimation from "@/components/loading/LoadingAnimation";
+import { useParams } from "react-router-dom";
 
 const FollowerSection = () => {
+  const { memberId } = useParams<{ memberId: string }>();
+  const { fetchFollowerList } = useFetch(Number(memberId));
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
-  const [isInput, setIsInput] = useState(false);
-  const [searchInput, setSearchInput] = useState<string>("");
-  const { debounce } = useDebounce();
-  const { popToast } = useToaster();
-  const [followerList, setfollowerList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const followerQuery = useQuery({
+    queryKey: ["followerList", memberId || userInfo?.memberId],
+    queryFn: fetchFollowerList, // debounce 추가할거면 추가하기
+    refetchOnMount: "always",
+  });
 
-  // useEffect(() => {
-  //   const myInput = document.getElementById("search-input") as HTMLInputElement;
-
-  //   const inputChangeHandler = () => {
-  //     setSearchInput(myInput.value);
-  //     updateSearchResult();
-  //   };
-
-  //   if (myInput) {
-  //     myInput.addEventListener("input", inputChangeHandler);
-  //   }
-
-  //   return () => {
-  //     if (myInput) {
-  //       myInput.removeEventListener("input", inputChangeHandler);
-  //     }
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   debounce("search", updateSearchResult, 500);
-  // }, [searchInput]);
-
-  const updateFollwerList = async () => {
-    const result = await axiosGetSearchResults("no", 100, 0);
-    setfollowerList(result);
-    setIsLoading(false);
-  };
-
-  updateFollwerList();
-
-  // const handleInputChange = async (
-  //   event: React.ChangeEvent<HTMLInputElement>
-  // ) => {
-  //   setSearchInput(event.currentTarget.value);
-  // };
-
-  // const handleInputState = () => {
-  //   if (isInput) return;
-  //   if (searchInput == "") {
-  //     popToast("검색 내용을 입력해주세요.", "N");
-  //     setIsInput(true);
-  //     debounce("noSearchInput", () => setIsInput(false), 1000);
-  //   }
-  // };
-
-  // const handleKeyDown = async (
-  //   event: React.KeyboardEvent<HTMLInputElement>
-  // ) => {
-  //   if (event.key == "Enter") {
-  //     handleInputState();
-  //     setSearchInput(searchInput);
-  //   }
-  // };
+  if (followerQuery.isLoading) {
+    return <LoadingAnimation />;
+  }
 
   return (
     <WrapperStyled>
-      <SearchItemWrapperStyled>
-        {followerList.map((user: MemberSearchResponseDTO) => (
-          <SearchItem
-            key={user.memberId}
-            memberId={user.memberId}
-            memberName={user.memberName}
-            intraName={user.intraName}
-            profileImageUrl={user.profileImageUrl}
-            country={user.country}
-            statement={user.statement}
-            relationship={user.relationship}
-            updateFollowType={updateFollwerList}
-            isMine={userInfo?.memberId === user.memberId}
-          />
-        ))}
-      </SearchItemWrapperStyled>
+      <FollowerItemWrapperStyled>
+        {followerQuery.data &&
+          followerQuery.data.map((user: FollowerDTO) => (
+            <SearchItem
+              key={user.memberId}
+              memberId={user.memberId}
+              memberName={user.memberName}
+              intraName={user.intraName}
+              profileImageUrl={user.profileImageUrl}
+              country={user.country}
+              statement={user.statement}
+              relationship={user.relationship}
+              updateFollowType={fetchFollowerList}
+              isMine={userInfo?.memberId === user.memberId}
+            />
+          ))}
+      </FollowerItemWrapperStyled>
     </WrapperStyled>
   );
 };
@@ -117,47 +63,7 @@ const shakeAnimation = keyframes`
 	100% { transform: translateX(0); }
 `;
 
-const SearchBarStyled = styled.div<{ $isInput: boolean }>`
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 10px;
-  margin-top: 15px;
-  width: 85%;
-  border-radius: 30px;
-  background: var(--transparent);
-  animation: ${({ $isInput }) => ($isInput ? shakeAnimation : "none")} 0.5s;
-  input {
-    width: 90%;
-    display: flex;
-    border: none;
-    background: none;
-    outline: none;
-    padding-left: 10px;
-    caret-color: var(--white);
-    color: var(--white);
-
-    font-size: 1.3rem;
-    &::placeholder {
-      color: var(--transparent2);
-    }
-  }
-  // 검색 버튼
-  button {
-    display: flex;
-    justify-content: flex-end;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    padding: 0;
-    padding-right: 5px;
-    img {
-      width: 15px;
-      height: 15px;
-    }
-  }
-`;
-
-const SearchItemWrapperStyled = styled.div`
+const FollowerItemWrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

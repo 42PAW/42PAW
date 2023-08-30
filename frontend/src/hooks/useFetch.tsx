@@ -18,6 +18,8 @@ import {
   axiosGetBoardComments,
   axiosGetMyProfile,
   axiosGetProfile,
+  axiosGetMyFollowerList,
+  axiosGetFollowerList,
 } from "@/api/axios/axios.custom";
 
 const useFetch = (memberId?: number | null) => {
@@ -91,6 +93,7 @@ const useFetch = (memberId?: number | null) => {
   };
 
   const fetchMyProfile = async () => {
+    // TODO: fetchProfile과 합치기
     try {
       const response = await axiosGetMyProfile();
       return response;
@@ -99,7 +102,27 @@ const useFetch = (memberId?: number | null) => {
     }
   };
 
-  return { fetchBoards, fetchComments, fetchProfile, fetchMyProfile };
+  const fetchFollowerList = async () => {
+    try {
+      console.log("fetchFollowerList", memberId);
+      if (!memberId) {
+        const response = await axiosGetMyFollowerList(1000, 0);
+        return response.result;
+      }
+      const response = await axiosGetFollowerList(memberId, 1000, 0);
+      return response.result;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return {
+    fetchBoards,
+    fetchComments,
+    fetchProfile,
+    fetchMyProfile,
+    fetchFollowerList,
+  };
 };
 
 export default useFetch;

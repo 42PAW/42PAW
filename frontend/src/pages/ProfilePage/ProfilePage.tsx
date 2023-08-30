@@ -10,7 +10,7 @@ import { IBoardInfo } from "@/types/interface/board.interface";
 import { useParams } from "react-router-dom";
 
 const ProfilePage = () => {
-  const { memberId } = useParams<{ memberId: string }>();
+  const { memberId } = useParams<{ memberId: string }>(); // 내 memberId랑 같다면 myProfilePage로 이동 처리해야돼
   const { fetchProfile, fetchBoards } = useFetch(Number(memberId));
   const profileQuery = useQuery({
     queryKey: ["profile", Number(memberId)],

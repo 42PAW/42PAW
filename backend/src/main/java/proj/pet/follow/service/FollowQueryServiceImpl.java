@@ -82,7 +82,6 @@ public class FollowQueryServiceImpl implements FollowQueryService {
 	 */
 	@Override
 	public FollowPaginationDto getFollowers(Long loginUserId, Long memberId, PageRequest pageable) {
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@loginUserId = " + loginUserId + ", memberId = " + memberId + ", pageable = " + pageable);
 		Page<Follow> followers =
 				followRepository.findAllByFromWithMember(memberId, pageable);
 		List<MemberPreviewResponseDto> responseDtoList = followers.stream().map(follow ->

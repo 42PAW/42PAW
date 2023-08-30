@@ -57,14 +57,12 @@ export const axiosCreateBoard = async ({
     mediaDataList.forEach((file) => {
       formData.append(`mediaDataList`, file);
     });
-    formData.append(
-      "categoryList",
-      new Blob([JSON.stringify(categoryList)], { type: "application/json" })
-    );
+    categoryList.forEach((category) => {
+      formData.append(`categoryList`, category);
+    });
     formData.append(
       "content",
-      new Blob([content], { type: "application/json" })
-    );
+      content);
     const response = await instance.post(axiosCreateBoardURL, formData, {
       headers: {
         "Content-Type": "multipart/form-data",

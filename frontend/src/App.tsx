@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "@/pages/Layout";
 import MainPage from "@/pages/MainPage";
@@ -7,11 +8,20 @@ import MyProfilePage from "@/pages/ProfilePage/MyProfilePage";
 import UploadPage from "@/pages/UploadPage";
 import SignUpPage from "@/pages/SignUpPage/SignUpPage";
 import NotFoundPage from "@/pages/NotFoundPage";
-import DashboardPage from "@/pages/DashboardPage";
+import LoadingPage from "./pages/LoadingPage";
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  }, []);
+
   return (
     <BrowserRouter>
+      {loading && <LoadingPage />}
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<MainPage />} />
@@ -19,7 +29,6 @@ function App() {
           <Route path="notice" element={<NoticePage />} />
           <Route path="my-profile" element={<MyProfilePage />} />
           <Route path="profile/:memberId" element={<ProfilePage />} />
-          <Route path="dashboard" element={<DashboardPage />} />
         </Route>
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/error" element={<NotFoundPage />} />

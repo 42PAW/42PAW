@@ -37,9 +37,6 @@ public class FollowQueryServiceImpl implements FollowQueryService {
 	 */
 	@Override
 	public FollowType getFollowType(Long loginUserId, Long memberId) {
-//		if (loginUserId.equals(0L)) {
-//			return NONE;
-//		}
 		boolean isFollowing = followRepository.existsByFromIdAndToId(loginUserId, memberId);
 		if (isFollowing) {
 			return FOLLOWING;

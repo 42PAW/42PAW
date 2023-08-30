@@ -5,6 +5,7 @@
  * @follower 팔로워 목록 세션
  * @following 팔로잉 목록 세션
  * @animalFilter 동물 필터 섹션
+ * @bannedMember 밴 유저 섹션
  */
 export interface IRightSectionContentInfo {
   search: boolean;
@@ -12,4 +13,5 @@ export interface IRightSectionContentInfo {
   follower: boolean;
   following: boolean;
   animalFilter: boolean;
+  bannedMember: boolean;
 }

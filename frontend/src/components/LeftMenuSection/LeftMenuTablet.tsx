@@ -79,38 +79,43 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   return (
     <>
       <BannerStyled $isBannerVisible={isBannerVisible}>
-        {userInfo ? (
-          <ProfileImageStyled
-            src={userInfo.profileImageUrl}
-            onClick={handleOpenMyProfile}
-          />
-        ) : (
-          <ProfileImageStyled
-            src="/src/assets/userW.png"
-            onClick={handleLogin}
-          />
-        )}
-        <BannerLogoStyled>
+        <BannerLogoStyled onClick={handleClickLogo}>
           <img src="/src/assets/paw.png" />
         </BannerLogoStyled>
         <SettingButtonContainerStyled>
-          <SettingButton />
+          <SettingButton>
+            <img
+              alt="Login"
+              src="/src/assets/logout.png"
+              onClick={handleLoginButton}
+            />
+          </SettingButton>
         </SettingButtonContainerStyled>
       </BannerStyled>
       <MenuStyled>
         <nav>
           <MenuListStyled>
             <li onClick={moveToMain}>
-              <img alt="Main" src="/src/assets/home.png" />
+              <ListImageStyled alt="Main" src="/src/assets/home.png" />
             </li>
             <li onClick={openSearchSection}>
-              <img alt="Search" src="/src/assets/search.png" />
+              <ListImageStyled alt="Search" src="/src/assets/search.png" />
             </li>
             <li onClick={moveToUpload}>
-              <img alt="MyProfile" src="/src/assets/upload.png" />
+              <ListImageStyled alt="MyProfile" src="/src/assets/upload.png" />
             </li>
-            <li onClick={handleLoginButton}>
-              <img alt="Login" src="/src/assets/logout.png" />
+            <li>
+              {userInfo ? (
+                <ProfileImageStyled
+                  src={userInfo.profileImageUrl || "/src/assets/userW.png"}
+                  onClick={handleOpenMyProfile}
+                />
+              ) : (
+                <ProfileImageStyled
+                  src="/src/assets/userW.png"
+                  onClick={handleLogin}
+                />
+              )}
             </li>
           </MenuListStyled>
         </nav>
@@ -123,7 +128,7 @@ const BannerStyled = styled.div<{ $isBannerVisible: boolean }>`
   z-index: 2;
   position: sticky;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: 100vw;
   height: 45px;
@@ -134,16 +139,6 @@ const BannerStyled = styled.div<{ $isBannerVisible: boolean }>`
   transform: translateY(${(props) => (props.$isBannerVisible ? "0" : "-100%")});
   transition: transform 0.1s ease-in-out, margin-top 0.2s ease;
   line-height: 15px;
-`;
-
-const ProfileImageStyled = styled.img`
-  margin-left: 10px;
-  width: 35px;
-  height: 35px;
-  border-radius: 100%;
-  &:hover {
-    opacity: 0.8;
-  }
 `;
 
 const BannerLogoStyled = styled.div`
@@ -160,6 +155,8 @@ const BannerLogoStyled = styled.div`
 `;
 
 const SettingButtonContainerStyled = styled.div`
+  position: absolute;
+  right: 0;
   margin-top: 8px;
   margin-right: 5px;
 `;
@@ -172,7 +169,6 @@ const MenuStyled = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  overflow: isBannerVisible;
   width: 100vw;
   background-color: #c5c6dcfa;
   margin-top: -48px;
@@ -201,15 +197,19 @@ const MenuListStyled = styled.ul`
   list-style-type: none;
   padding: 0;
   margin: 0;
-  img {
-    cursor: pointer;
-    padding: 10px 10px;
-    width: 20px;
-  }
-  img:hover {
-    background-color: var(--transparent);
-    border-radius: 30%;
-  }
+`;
+
+const ListImageStyled = styled.img`
+  cursor: pointer;
+  width: 20px;
+`;
+
+const ProfileImageStyled = styled.img`
+  cursor: pointer;
+  width: 25px;
+  aspect-ratio: 1 / 1;
+  border-radius: 100%;
+  padding: 0;
 `;
 
 export default LeftMenuTablet;

@@ -15,7 +15,7 @@ interface SearchItemProps extends MemberSearchResponseDTO {
   isMine: boolean;
 }
 
-const SearchItem = (props: SearchItemProps) => {
+const FollowerItem = (props: SearchItemProps) => {
   const {
     memberId,
     memberName,
@@ -43,10 +43,7 @@ const SearchItem = (props: SearchItemProps) => {
   return (
     <SearchItemStyled>
       <UserImageContainerStyled>
-        <img
-          src={profileImageUrl || "/src/assets/userW.png"}
-          onClick={handleOpenProfile}
-        />
+        <img src={profileImageUrl} onClick={handleOpenProfile} />
       </UserImageContainerStyled>
       <SearchItemRightStyled>
         <NameContainerStyled onClick={handleOpenProfile}>
@@ -147,4 +144,4 @@ const BufferStyled = styled.div`
   width: 10px;
 `;
 
-export default SearchItem;
+export default FollowerItem;

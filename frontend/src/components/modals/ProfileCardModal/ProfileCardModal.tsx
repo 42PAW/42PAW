@@ -25,7 +25,7 @@ const ProfileCardModal = () => {
   );
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
-  const { fetchProfile } = useFetch();
+  const { fetchProfile } = useFetch(currentMemberId);
   const { moveToMyProfile, moveToProfile } = useNavigateCustom();
   const { closeModal } = useModal();
   const { data, isLoading } = useQuery({
@@ -42,7 +42,7 @@ const ProfileCardModal = () => {
   };
 
   const toProfile = () => {
-    moveToProfile();
+    moveToProfile(currentMemberId as number);
     closeModal(ModalType.PROFILECARD);
   };
 
@@ -78,7 +78,9 @@ const ProfileCardModal = () => {
             />
           )}
         </OptionButtonContainerStyled>
-        <ProfileImageStyled src={profileData.profileImageUrl} />
+        <ProfileImageStyled
+          src={profileData.profileImageUrl || "/src/assets/user.png"}
+        />
         <MainAreaStyled>
           <NickNameStyled>{profileData.memberName}</NickNameStyled>
           <IntraNameStyled>{profileData.intraName}</IntraNameStyled>
@@ -140,6 +142,7 @@ const WrapperStyled = styled.div`
   border-radius: 15px;
   color: var(--white);
   @media (max-width: 1023px) {
+    background-color: var(--transparent);
     width: 280px;
     height: 470px;
   }

@@ -12,12 +12,8 @@ import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
 import useTranslator from "@/hooks/useTranslator";
 import { Language } from "@/types/enum/language.enum";
-import { Suspense, lazy } from "react";
-
-const LeftMenuSection = lazy(
-  () => import("@/components/LeftMenuSection/LeftMenuSection")
-);
-const BoardSortToggle = lazy(() => import("@/components/BoardSortToggle"));
+import LeftMenuSection from "@/components/LeftMenuSection/LeftMenuSection";
+import BoardSortToggle from "@/components/BoardSortToggle";
 
 const Layout = () => {
   const location = useLocation();
@@ -34,8 +30,9 @@ const Layout = () => {
   //메인 화면일 때만 게시글 정렬 버튼 보여주기
   const isMainPage: boolean = location.pathname === "/";
   const isSignUpPage: boolean = location.pathname === "/sign-up";
-  const isProfilePage: boolean =
-    location.pathname === "/my-profile" || location.pathname === "/profile";
+  const isProfilePage: boolean = /^\/(my-)?profile(\/\d+)?$/.test(
+    location.pathname
+  );
 
   const getMyInfo = async () => {
     try {
@@ -58,15 +55,13 @@ const Layout = () => {
     <Outlet />
   ) : (
     <WrapperStyled>
-      <Suspense>
-        <LeftMenuSection />
-      </Suspense>
+      <LeftMenuSection />
       <MainAreaWrapperStyled>
         <MainAreaStyled
           $isRightSectionOpened={isRightSectionOpened}
           $isProfilePage={isProfilePage}
         >
-          <Suspense>{isMainPage && <BoardSortToggle />}</Suspense>
+          {isMainPage && <BoardSortToggle />}
           <Outlet />
         </MainAreaStyled>
         <RightSection />
@@ -108,10 +103,7 @@ const MainAreaStyled = styled.main<{
   align-items: center;
   height: 100%;
   min-height: 800px;
-  width: ${(props) =>
-    props.$isProfilePage
-      ? `calc(100% - ${props.$isRightSectionOpened ? "570px" : "0px"})`
-      : "500px"};
+  width: ${(props) => (props.$isProfilePage ? `600px` : "500px")};
 `;
 
 export default Layout;

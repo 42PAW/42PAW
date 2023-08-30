@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lexend&display=swap");
 
 :root {
   --black: #000000;
@@ -43,8 +44,8 @@ body {
   background: linear-gradient(
     210deg,
     #878abea0 30%,
-    #d1c1cd 68.34%,
-    #e6dade 76.75%
+    #d1c1cd 78.34%,
+    #e6dade 86.75%
   );
   background-repeat: no-repeat;
 }

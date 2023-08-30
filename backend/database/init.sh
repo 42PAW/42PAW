@@ -14,6 +14,7 @@ else
 	echo "Create root user..."
 	echo -e "${GREEN} GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY '$MARIADB_PASSWORD'; FLUSH PRIVILEGES; ${RESET}"
 	echo "GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY '$MARIADB_PASSWORD'; FLUSH PRIVILEGES;" | mysql -u$MARIADB_USER -p$MARIADB_PASSWORD
+	echo "GRANT ALL ON paw TO 'root'@'localhost' IDENTIFIED BY '$MARIADB_PASSWORD'; FLUSH PRIVILEGES;" | mysql -u$MARIADB_USER -p$MARIADB_PASSWORD
 
 	# Create database and grant all on $MARIADB_USER
 	echo "Create database and grant all on $MARIADB_USER"

@@ -45,13 +45,22 @@ const FollowTypeButton = ({
       if (status === followType.BLOCK)
         response = await axiosUndoBlockUser(memberId as number);
 
-      if (callback) callback();
+      if (callback) {
+        console.log("callback");
+
+        callback();
+      }
       if (callbackStore.length !== 0) {
+        console.log("callbackStore");
         callbackStore.forEach((callback) => callback());
       }
       if (isProfilePage) {
-        // console.log("my-profile");
-        queryClient.invalidateQueries(["myProfile"]);
+        if (location.pathname === "/my-profile") {
+          queryClient.invalidateQueries(["myProfile"]);
+        } else {
+          console.log("profile");
+          queryClient.invalidateQueries(["profile", memberId]);
+        }
       }
 
       setIsLoading(false);

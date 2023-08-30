@@ -104,8 +104,8 @@ const useFetch = (memberId?: number | null) => {
 
   const fetchFollowerList = async () => {
     try {
-      console.log("fetchFollowerList", memberId);
       if (!memberId) {
+        console.log("fetchFollowerList", memberId);
         const response = await axiosGetMyFollowerList(1000, 0);
         return response.result;
       }

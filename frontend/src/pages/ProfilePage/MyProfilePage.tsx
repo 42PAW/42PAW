@@ -7,11 +7,8 @@ import { Board } from "@/types/enum/board.category.enum";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import { boardCategoryState } from "@/recoil/atom";
 import { IBoardInfo } from "@/types/interface/board.interface";
-import { useParams } from "react-router-dom";
 
 const MyProfilePage = () => {
-  const { memberId } = useParams<{ memberId: string }>();
-  console.log("memberId : ", memberId);
   const { fetchMyProfile } = useFetch();
   const profileQuery = useQuery({
     queryKey: ["myProfile"],

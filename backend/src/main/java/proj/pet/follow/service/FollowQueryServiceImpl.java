@@ -37,9 +37,9 @@ public class FollowQueryServiceImpl implements FollowQueryService {
 	 */
 	@Override
 	public FollowType getFollowType(Long loginUserId, Long memberId) {
-		if (loginUserId.equals(0L)) {
-			return NONE;
-		}
+//		if (loginUserId.equals(0L)) {
+//			return NONE;
+//		}
 		boolean isFollowing = followRepository.existsByFromIdAndToId(loginUserId, memberId);
 		if (isFollowing) {
 			return FOLLOWING;
@@ -64,10 +64,10 @@ public class FollowQueryServiceImpl implements FollowQueryService {
 	public FollowPaginationDto getFollowings(Long loginUserId, Long memberId,
 	                                         PageRequest pageable) {
 		Page<Follow> followings =
-				followRepository.findAllByToWithMember(memberId, pageable);
+				followRepository.findAllFrom(memberId, pageable);
 		List<MemberPreviewResponseDto> responseDtoList = followings.stream().map(follow ->
 				memberMapper.toMemberPreviewResponseDto(
-						follow.getTo(), getFollowType(loginUserId, memberId))).toList();
+						follow.getTo(), getFollowType(loginUserId, follow.getTo().getId()))).toList();
 		return followMapper.toFollowResponseDto(responseDtoList, followings.getTotalElements());
 	}
 
@@ -83,10 +83,10 @@ public class FollowQueryServiceImpl implements FollowQueryService {
 	@Override
 	public FollowPaginationDto getFollowers(Long loginUserId, Long memberId, PageRequest pageable) {
 		Page<Follow> followers =
-				followRepository.findAllByFromWithMember(memberId, pageable);
+				followRepository.findAllTo(memberId, pageable);
 		List<MemberPreviewResponseDto> responseDtoList = followers.stream().map(follow ->
 				memberMapper.toMemberPreviewResponseDto(
-						follow.getFrom(), getFollowType(loginUserId, memberId))).toList();
+						follow.getFrom(), getFollowType(loginUserId, follow.getFrom().getId()))).toList();
 		return followMapper.toFollowResponseDto(responseDtoList, followers.getTotalElements());
 	}
 }

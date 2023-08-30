@@ -41,7 +41,7 @@ public interface FollowRepository extends JpaRepository<Follow, MemberCompositeK
 			"FROM Follow f " +
 			"LEFT JOIN FETCH f.to " +
 			"WHERE f.from.id = :memberId")
-	Page<Follow> findAllByFromWithMember(@Param("memberId") Long memberId, Pageable pageable);
+	Page<Follow> findAllFrom(@Param("memberId") Long memberId, Pageable pageable);
 
 	/**
 	 * 팔로우 받는 사람의 id를 받아 팔로우를 찾는다.
@@ -56,7 +56,7 @@ public interface FollowRepository extends JpaRepository<Follow, MemberCompositeK
 			"FROM Follow f " +
 			"LEFT JOIN FETCH f.from " +
 			"WHERE f.to.id = :memberId")
-	Page<Follow> findAllByToWithMember(@Param("memberId") Long memberId, Pageable pageable);
+	Page<Follow> findAllTo(@Param("memberId") Long memberId, Pageable pageable);
 
 	/**
 	 * id를 받아 해당 멤버가 몇 명을 팔로우 하고 있는지를 반환한다.

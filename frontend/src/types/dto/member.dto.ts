@@ -22,7 +22,7 @@ export interface UserInfoDTO {
   memberId: number;
   memberName: string;
   intraName: string;
-  profileImageUrl: string;
+  profileImageUrl: string | null;
   language: string;
   animalCategories: AnimalSpecies[];
 }

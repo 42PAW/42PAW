@@ -43,7 +43,10 @@ const SearchItem = (props: SearchItemProps) => {
   return (
     <SearchItemStyled>
       <UserImageContainerStyled>
-        <img src={profileImageUrl} onClick={handleOpenProfile} />
+        <img
+          src={profileImageUrl || "/src/assets/userW.png"}
+          onClick={handleOpenProfile}
+        />
       </UserImageContainerStyled>
       <SearchItemRightStyled>
         <NameContainerStyled onClick={handleOpenProfile}>

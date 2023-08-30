@@ -19,7 +19,7 @@ export const axiosSignUp = async ({
   try {
     const formData = new FormData();
     formData.append("memberName", memberName);
-    formData.append("imageData", imageData ? imageData : "null");
+    if (imageData) formData.append("imageData", imageData);
     formData.append("statement", statement);
     categoryFilters.map((categoryFilter) => {
       formData.append("categoryFilters", categoryFilter);
@@ -60,9 +60,7 @@ export const axiosCreateBoard = async ({
     categoryList.forEach((category) => {
       formData.append(`categoryList`, category);
     });
-    formData.append(
-      "content",
-      content);
+    formData.append("content", content);
     const response = await instance.post(axiosCreateBoardURL, formData, {
       headers: {
         "Content-Type": "multipart/form-data",

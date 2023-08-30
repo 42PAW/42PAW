@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 import styled from "styled-components";
 import useModal from "@/hooks/useModal";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
@@ -7,7 +7,11 @@ import { getCookie } from "@/api/cookie/cookies";
 
 const token = getCookie("access_token");
 
-const SettingButton = () => {
+interface props {
+  children?: ReactNode;
+}
+
+const SettingButton: React.FC<props> = ({ children }) => {
   const [isToggled, setIsToggled] = useState<boolean>(false);
   const { openModal } = useModal();
   const { openAnimalFilterSection } = useRightSectionHandler();
@@ -32,10 +36,15 @@ const SettingButton = () => {
   return (
     <WrapperStyled onMouseLeave={() => handleToggle("ON")}>
       <ToggleStyled onClick={() => handleToggle("OFF")}>
-        <img src="/src/assets/setting.png" />
+        <img src="/src/assets/burger.png" />
       </ToggleStyled>
       <MenuStyled $isToggled={isToggled}>
         <MenuList onClick={() => handleToggle("OFF")}>
+          {children && (
+            <MenuItemWrapperStyled>
+              <MenuItemStyled>{children}</MenuItemStyled>
+            </MenuItemWrapperStyled>
+          )}
           <MenuItemWrapperStyled>
             <MenuItemStyled onClick={() => openModal(ModalType.LANGUAGE)}>
               <img src="/src/assets/globalW.png" />
@@ -81,9 +90,6 @@ const ToggleStyled = styled.button`
     width: 90%;
     opacity: 1;
   }
-  img:hover {
-    opacity: 0.7;
-  }
 `;
 
 const MenuStyled = styled.div<{ $isToggled: boolean }>`
@@ -91,13 +97,12 @@ const MenuStyled = styled.div<{ $isToggled: boolean }>`
   display: flex;
   justify-content: space-around;
   text-align: center;
-  margin-left: ${({ $isToggled }) => ($isToggled ? "-60px" : "-30px")};
   min-width: 50px;
   border-radius: 5px;
   color: var(--grey);
+  right: 38px;
   opacity: ${({ $isToggled }) => ($isToggled ? 1 : 0)};
   visibility: ${({ $isToggled }) => ($isToggled ? "visible" : "hidden")};
-
   transition: all 0.3s;
   z-index: 1;
 `;

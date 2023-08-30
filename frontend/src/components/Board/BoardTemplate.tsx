@@ -134,7 +134,7 @@ const BoardTemplate = (board: IBoardInfo) => {
       <BoardWrapperStyled>
         <BoardHeaderStyled>
           <BoardProfileStyled onClick={handleOpenProfile}>
-            <img src={profileImageUrl} />
+            <img src={profileImageUrl || "/src/assets/userW.png"} />
             <div>
               {memberName} {countryEmoji}
             </div>

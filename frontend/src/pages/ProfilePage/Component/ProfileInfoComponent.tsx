@@ -87,7 +87,7 @@ const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
       <img
         className="profileImage"
         alt="Profile image"
-        src={userInfo.profileImageUrl}
+        src={userInfo.profileImageUrl || "/src/assets/userW.png"}
       />
       <div className="content-wrapper">
         <UserInfoItems userInfo={userInfo} />
@@ -190,7 +190,7 @@ const ProfileHeaderStyled = styled.div`
   .profileImage {
     width: 160px;
     aspect-ratio: 1 / 1;
-    background-color: var(--grey); /* 이미지가 없을 때 배경 색상 */
+    background-color: var(--transparent); /* 이미지가 없을 때 배경 색상 */
     filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.25));
     border-radius: 50%;
   }

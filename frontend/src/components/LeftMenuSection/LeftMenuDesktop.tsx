@@ -23,7 +23,6 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
     setCurrentMemberId(userInfo!.memberId);
     moveToMyProfile();
   };
-
   return (
     <>
       <LeftMenuStyled>
@@ -42,7 +41,7 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
           </MenuListStyled>
           {userInfo ? (
             <ProfileImageStyled
-              src={userInfo.profileImageUrl}
+              src={userInfo.profileImageUrl || "/src/assets/userW.png"}
               onClick={handleOpenMyProfile}
             />
           ) : (

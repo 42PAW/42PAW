@@ -2,7 +2,6 @@ package proj.pet.member.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -12,15 +11,9 @@ import proj.pet.auth.service.OauthService;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.board.service.BoardQueryService;
 import proj.pet.member.domain.Member;
-import proj.pet.member.dto.MemberCreateRequestDto;
-import proj.pet.member.dto.MemberLanguageChangeRequestDto;
-import proj.pet.member.dto.MemberMyInfoResponseDto;
-import proj.pet.member.dto.MemberNicknameValidateResponseDto;
-import proj.pet.member.dto.MemberProfileChangeRequestDto;
-import proj.pet.member.dto.MemberProfileChangeResponseDto;
-import proj.pet.member.dto.MemberProfileResponseDto;
-import proj.pet.member.dto.MemberSearchPaginationDto;
-import proj.pet.member.dto.UserSessionDto;
+import proj.pet.member.dto.*;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -42,9 +35,9 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 	 */
 	@Override
 	public void createMember(UserSessionDto userSessionDto,
-			HttpServletRequest req,
-			HttpServletResponse res,
-			MemberCreateRequestDto memberCreateRequestDto) {
+	                         HttpServletRequest req,
+	                         HttpServletResponse res,
+	                         MemberCreateRequestDto memberCreateRequestDto) {
 		JwtPayload payload = oauthService.extractPayloadFromServerToken(req);
 		Member member = memberService.createMember(
 				payload,
@@ -56,6 +49,7 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 		memberService.uploadMemberProfileImage(member.getId(),
 				memberCreateRequestDto.getImageData());
 		oauthService.refreshRoleOfServerToken(req, res, LocalDateTime.now());
+		System.out.println("member = " + member.getId());
 	}
 
 	/**
@@ -100,7 +94,7 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 	 */
 	@Override
 	public MemberProfileResponseDto getMemberProfile(UserSessionDto userSessionDto,
-			Long memberId) {
+	                                                 Long memberId) {
 		return memberQueryService.getMemberProfile(userSessionDto.getMemberId(), memberId);
 	}
 
@@ -140,7 +134,7 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 	 */
 	@Override
 	public BoardsPaginationDto getMemberBoards(UserSessionDto userSessionDto, Long memberId,
-			PageRequest pageable) {
+	                                           PageRequest pageable) {
 		return boardQueryService.getMemberBoards(userSessionDto.getMemberId(), memberId, pageable);
 	}
 
@@ -154,7 +148,7 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 	 */
 	@Override
 	public MemberSearchPaginationDto searchMemberByName(UserSessionDto userSessionDto,
-			String partialName, PageRequest pageable) {
+	                                                    String partialName, PageRequest pageable) {
 		return memberQueryService.searchMemberByName(userSessionDto.getMemberId(), partialName,
 				pageable);
 	}
@@ -167,7 +161,7 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 	 */
 	@Override
 	public void changeLanguage(UserSessionDto userSession,
-			MemberLanguageChangeRequestDto memberLanguageChangeRequestDto) {
+	                           MemberLanguageChangeRequestDto memberLanguageChangeRequestDto) {
 		memberService.changeLanguage(userSession.getMemberId(),
 				memberLanguageChangeRequestDto.getLanguage());
 	}

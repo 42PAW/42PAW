@@ -110,20 +110,22 @@ const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
 
 const UserInfoStyled = styled.div`
   margin-top: 10px;
-  font-weight: 600;
+  font-weight: 500;
 
   .memberName {
-    font-size: 1.6rem;
+    font-weight: 600;
+    font-size: 1.4rem;
   }
   .intraName {
     color: var(--transparent2);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     transition: all 0.5s ease;
     &:hover {
       color: var(--white);
     }
   }
   .country {
+    margin-top: 5px;
     color: var(--white);
     font-size: 1rem;
   }

@@ -85,7 +85,7 @@ const SearchSection = () => {
       <SearchBarStyled $isInput={isInput}>
         <input
           type="text"
-          placeholder="닉네임 / 인트라 아이디를 입력해주세요.."
+          placeholder="아이디를 입력해주세요.."
           value={searchInput}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}

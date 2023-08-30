@@ -96,8 +96,7 @@ const PhotoCategoryToggleStyled = styled.div`
     background-color: #fdfdfd39;
   }
   img {
-    margin-top: 5px;
-    width: 20px;
+    width: 16px;
   }
 `;
 

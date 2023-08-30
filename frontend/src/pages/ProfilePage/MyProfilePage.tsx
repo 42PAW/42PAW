@@ -7,9 +7,11 @@ import { Board } from "@/types/enum/board.category.enum";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import { boardCategoryState } from "@/recoil/atom";
 import { IBoardInfo } from "@/types/interface/board.interface";
+import { useNavigate } from "react-router-dom";
 
 const MyProfilePage = () => {
   const { fetchProfile } = useFetch();
+  const navigator = useNavigate();
   const profileQuery = useQuery({
     queryKey: ["myProfile"],
     queryFn: fetchProfile,
@@ -34,10 +36,13 @@ const MyProfilePage = () => {
   });
 
   const isLoading = profileQuery.isLoading || boardsQuery.isLoading;
+  const isError = profileQuery.isError || boardsQuery.isError;
 
   if (isLoading) {
     return <LoadingAnimation />;
   }
+
+  if (isError) navigator("/");
 
   return (
     <ProfileTemplate

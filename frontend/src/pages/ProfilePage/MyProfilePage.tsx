@@ -9,10 +9,10 @@ import { boardCategoryState } from "@/recoil/atom";
 import { IBoardInfo } from "@/types/interface/board.interface";
 
 const MyProfilePage = () => {
-  const { fetchMyProfile } = useFetch();
+  const { fetchProfile } = useFetch();
   const profileQuery = useQuery({
     queryKey: ["myProfile"],
-    queryFn: fetchMyProfile,
+    queryFn: fetchProfile,
     refetchOnMount: "always",
   });
   const { fetchBoards } = useFetch();

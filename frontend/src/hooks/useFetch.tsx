@@ -20,6 +20,8 @@ import {
   axiosGetProfile,
   axiosGetMyFollowerList,
   axiosGetFollowerList,
+  axiosGetMyFollowingList,
+  axiosGetFollowingList,
 } from "@/api/axios/axios.custom";
 
 const useFetch = (memberId?: number | null) => {
@@ -79,28 +81,26 @@ const useFetch = (memberId?: number | null) => {
 
   const fetchProfile = async () => {
     try {
-      if (!memberId) return;
-      if (!userInfo || userInfo.memberId !== memberId) {
-        const response = await axiosGetProfile(memberId);
-        // console.log(response);
+      if (!memberId || (userInfo && userInfo.memberId === memberId)) {
+        const response = await axiosGetMyProfile();
         return response;
       }
-      const response = await axiosGetMyProfile();
+      const response = await axiosGetProfile(memberId);
       return response;
     } catch (error) {
       throw error;
     }
   };
 
-  const fetchMyProfile = async () => {
-    // TODO: fetchProfile과 합치기
-    try {
-      const response = await axiosGetMyProfile();
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
+  // const fetchMyProfile = async () => {
+  //   // TODO: fetchProfile과 합치기
+  //   try {
+  //     const response = await axiosGetMyProfile();
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // };
 
   const fetchFollowerList = async () => {
     try {
@@ -116,12 +116,26 @@ const useFetch = (memberId?: number | null) => {
     }
   };
 
+  const fetchFollowingList = async () => {
+    try {
+      if (!memberId) {
+        console.log("fetchFollowingList", memberId);
+        const response = await axiosGetMyFollowingList(1000, 0);
+        return response.result;
+      }
+      const response = await axiosGetFollowingList(memberId, 1000, 0);
+      return response.result;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return {
     fetchBoards,
     fetchComments,
     fetchProfile,
-    fetchMyProfile,
     fetchFollowerList,
+    fetchFollowingList,
   };
 };
 

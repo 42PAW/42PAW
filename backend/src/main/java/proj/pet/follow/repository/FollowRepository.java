@@ -9,8 +9,6 @@ import org.springframework.stereotype.Repository;
 import proj.pet.follow.domain.Follow;
 import proj.pet.utils.domain.MemberCompositeKey;
 
-import java.util.Optional;
-
 @Repository
 public interface FollowRepository extends JpaRepository<Follow, MemberCompositeKey> {
 
@@ -42,7 +40,7 @@ public interface FollowRepository extends JpaRepository<Follow, MemberCompositeK
 	@Query("SELECT f " +
 			"FROM Follow f " +
 			"LEFT JOIN FETCH f.to " +
-			"WHERE f.from = :memberId")
+			"WHERE f.from.id = :memberId")
 	Page<Follow> findAllByFromWithMember(@Param("memberId") Long memberId, Pageable pageable);
 
 	/**
@@ -57,7 +55,7 @@ public interface FollowRepository extends JpaRepository<Follow, MemberCompositeK
 	@Query("SELECT f " +
 			"FROM Follow f " +
 			"LEFT JOIN FETCH f.from " +
-			"WHERE f.to = :memberId")
+			"WHERE f.to.id = :memberId")
 	Page<Follow> findAllByToWithMember(@Param("memberId") Long memberId, Pageable pageable);
 
 	/**

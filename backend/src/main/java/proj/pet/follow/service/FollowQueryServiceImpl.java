@@ -1,10 +1,5 @@
 package proj.pet.follow.service;
 
-import static proj.pet.follow.domain.FollowType.BLOCK;
-import static proj.pet.follow.domain.FollowType.FOLLOWING;
-import static proj.pet.follow.domain.FollowType.NONE;
-
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +13,10 @@ import proj.pet.follow.repository.FollowRepository;
 import proj.pet.mapper.FollowMapper;
 import proj.pet.mapper.MemberMapper;
 import proj.pet.member.dto.MemberPreviewResponseDto;
+
+import java.util.List;
+
+import static proj.pet.follow.domain.FollowType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -63,7 +62,7 @@ public class FollowQueryServiceImpl implements FollowQueryService {
 	 */
 	@Override
 	public FollowPaginationDto getFollowings(Long loginUserId, Long memberId,
-			PageRequest pageable) {
+	                                         PageRequest pageable) {
 		Page<Follow> followings =
 				followRepository.findAllByToWithMember(memberId, pageable);
 		List<MemberPreviewResponseDto> responseDtoList = followings.stream().map(follow ->
@@ -83,6 +82,7 @@ public class FollowQueryServiceImpl implements FollowQueryService {
 	 */
 	@Override
 	public FollowPaginationDto getFollowers(Long loginUserId, Long memberId, PageRequest pageable) {
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@loginUserId = " + loginUserId + ", memberId = " + memberId + ", pageable = " + pageable);
 		Page<Follow> followers =
 				followRepository.findAllByFromWithMember(memberId, pageable);
 		List<MemberPreviewResponseDto> responseDtoList = followers.stream().map(follow ->

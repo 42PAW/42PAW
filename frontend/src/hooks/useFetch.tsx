@@ -20,7 +20,7 @@ import {
   axiosGetProfile,
 } from "@/api/axios/axios.custom";
 
-const useFetch = () => {
+const useFetch = (memberId?: number | null) => {
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
   const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
 
@@ -44,10 +44,10 @@ const useFetch = () => {
         return response.result;
       }
       if (boardCategory === Board.OTHER) {
-        if (!currentMemberId) {
+        if (!memberId) {
           return;
         }
-        const response = await axiosGetOtherBoards(currentMemberId, 20, page);
+        const response = await axiosGetOtherBoards(memberId, 20, page);
         return response.result;
       }
       if (boardCategory === Board.SCRAPPED) {
@@ -77,9 +77,10 @@ const useFetch = () => {
 
   const fetchProfile = async () => {
     try {
-      if (!currentMemberId) return;
-      if (!userInfo || userInfo.memberId !== currentMemberId) {
-        const response = await axiosGetProfile(currentMemberId);
+      if (!memberId) return;
+      if (!userInfo || userInfo.memberId !== memberId) {
+        const response = await axiosGetProfile(memberId);
+        // console.log(response);
         return response;
       }
       const response = await axiosGetMyProfile();

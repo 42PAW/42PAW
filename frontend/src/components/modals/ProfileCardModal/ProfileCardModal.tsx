@@ -25,7 +25,7 @@ const ProfileCardModal = () => {
   );
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
-  const { fetchProfile } = useFetch();
+  const { fetchProfile } = useFetch(currentMemberId);
   const { moveToMyProfile, moveToProfile } = useNavigateCustom();
   const { closeModal } = useModal();
   const { data, isLoading } = useQuery({
@@ -42,7 +42,7 @@ const ProfileCardModal = () => {
   };
 
   const toProfile = () => {
-    moveToProfile();
+    moveToProfile(currentMemberId as number);
     closeModal(ModalType.PROFILECARD);
   };
 

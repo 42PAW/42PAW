@@ -59,6 +59,7 @@ export const rightSectionContentState = atom<IRightSectionContentInfo>({
     follower: false,
     following: false,
     animalFilter: false,
+    bannedMember: false,
   },
 });
 

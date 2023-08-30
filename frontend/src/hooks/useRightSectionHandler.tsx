@@ -21,6 +21,7 @@ const useRightSectionHandler = () => {
       follower: false,
       following: false,
       animalFilter: false,
+      bannedMember: false,
     });
     setIsRightSectionOpened(true);
   };
@@ -31,6 +32,7 @@ const useRightSectionHandler = () => {
       follower: false,
       following: false,
       animalFilter: true,
+      bannedMember: false,
     });
     setIsRightSectionOpened(true);
   };
@@ -41,6 +43,40 @@ const useRightSectionHandler = () => {
       follower: false,
       following: false,
       animalFilter: false,
+      bannedMember: false,
+    });
+    setIsRightSectionOpened(true);
+  };
+  const openFollowerSection = () => {
+    setRightSectionContent({
+      search: false,
+      comment: false,
+      follower: true,
+      following: false,
+      animalFilter: false,
+      bannedMember: false,
+    });
+    setIsRightSectionOpened(true);
+  };
+  const openFollowingSection = () => {
+    setRightSectionContent({
+      search: false,
+      comment: false,
+      follower: false,
+      following: true,
+      animalFilter: false,
+      bannedMember: false,
+    });
+    setIsRightSectionOpened(true);
+  };
+  const openBannedMemberSection = () => {
+    setRightSectionContent({
+      search: false,
+      comment: false,
+      follower: false,
+      following: false,
+      animalFilter: false,
+      bannedMember: true,
     });
     setIsRightSectionOpened(true);
   };
@@ -52,6 +88,9 @@ const useRightSectionHandler = () => {
     openSearchSection,
     openAnimalFilterSection,
     openCommentSection,
+    openFollowerSection,
+    openFollowingSection,
+    openBannedMemberSection,
     closeRightSection,
   };
 };

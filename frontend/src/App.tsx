@@ -9,6 +9,8 @@ import UploadPage from "@/pages/UploadPage";
 import SignUpPage from "@/pages/SignUpPage/SignUpPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import LoadingPage from "./pages/LoadingPage";
+import MyProfileBoardsPage from "./pages/MyProfileBoardsPage";
+import ProfileBoardsPage from "./pages/ProfileBoardsPage";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -16,7 +18,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 300);
   }, []);
 
   return (
@@ -28,7 +30,13 @@ function App() {
           <Route path="upload" element={<UploadPage />} />
           <Route path="notice" element={<NoticePage />} />
           <Route path="my-profile" element={<MyProfilePage />} />
+          <Route path="my-profile/boards" element={<MyProfileBoardsPage />} />
+          <Route path="my-profile/scrapped" element={<MyProfileBoardsPage />} />
           <Route path="profile/:memberId" element={<ProfilePage />} />
+          <Route
+            path="profile/boards/:memberId"
+            element={<ProfileBoardsPage />}
+          />
         </Route>
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/error" element={<NotFoundPage />} />

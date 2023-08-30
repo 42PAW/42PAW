@@ -24,7 +24,7 @@ const MyProfilePage = () => {
   const handleTabState = (newTabState: Board) => {
     setBoardCategory(newTabState);
   };
-  console.log(boardCategory);
+
   useEffect(() => {
     setBoardCategory(Board.MINE);
   }, []);

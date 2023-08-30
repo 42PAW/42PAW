@@ -47,15 +47,15 @@ const useFetch = (memberId?: number | null) => {
         const response = await axiosGetMyBoards(1000, page);
         return response.result;
       }
+      if (boardCategory === Board.SCRAPPED) {
+        const response = await axiosGetScrappedBoards(1000, page);
+        return response.result;
+      }
       if (boardCategory === Board.OTHER) {
         if (!memberId) {
           return;
         }
-        const response = await axiosGetOtherBoards(memberId, 20, page);
-        return response.result;
-      }
-      if (boardCategory === Board.SCRAPPED) {
-        const response = await axiosGetScrappedBoards(20, page);
+        const response = await axiosGetOtherBoards(memberId, 1000, page);
         return response.result;
       }
     } catch (error) {

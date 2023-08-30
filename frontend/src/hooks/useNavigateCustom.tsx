@@ -44,12 +44,30 @@ const useNavigateCustom = () => {
     navigator("/upload");
   };
 
+  const moveToMyProfileBoards = () => {
+    setIsRightSectionOpened(false);
+    navigator("/my-profile/boards");
+  };
+
+  const moveToMyProfileScrapped = () => {
+    setIsRightSectionOpened(false);
+    navigator("/my-profile/scrapped");
+  };
+
+  const moveToProfileBoards = (memberId: number) => {
+    setIsRightSectionOpened(false);
+    navigator("/profile/boards/" + memberId.toString());
+  };
+
   return {
     moveToMain,
     moveToNotice,
     moveToProfile,
     moveToMyProfile,
     moveToUpload,
+    moveToMyProfileBoards,
+    moveToMyProfileScrapped,
+    moveToProfileBoards,
   };
 };
 

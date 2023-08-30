@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 import styled from "styled-components";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useSetRecoilState, useRecoilState } from "recoil";
@@ -21,7 +21,11 @@ import { useSpring, animated } from "@react-spring/web";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
 
-const BoardTemplate = (board: IBoardInfo) => {
+interface BoardTemplateProps extends IBoardInfo {
+  scrollIntoView?: boolean;
+}
+
+const BoardTemplate = (board: BoardTemplateProps) => {
   const {
     boardId,
     memberId,
@@ -37,8 +41,10 @@ const BoardTemplate = (board: IBoardInfo) => {
     previewCommentUser,
     previewComment,
     createdAt,
+    scrollIntoView,
   } = board;
 
+  const boardRef = useRef<HTMLDivElement | null>(null);
   const [isReactedRender, setIsReactedRender] = useState<boolean>(reacted);
   const [isScrappedRender, setIsScrappedRender] = useState<boolean>(scrapped);
   const [lastReaction, setLastReaction] = useState<boolean>(reacted);
@@ -70,6 +76,14 @@ const BoardTemplate = (board: IBoardInfo) => {
     previewComment && previewComment.length > 15
       ? previewComment.substring(0, 15) + ".."
       : previewComment;
+
+  useLayoutEffect(() => {
+    if (scrollIntoView && boardRef.current) {
+      boardRef.current.scrollIntoView({
+        block: "start",
+      });
+    }
+  }, [scrollIntoView]);
 
   const handleCommentClick = (boardId: number) => {
     openCommentSection();
@@ -131,7 +145,7 @@ const BoardTemplate = (board: IBoardInfo) => {
 
   return (
     <>
-      <BoardWrapperStyled>
+      <BoardWrapperStyled ref={boardRef}>
         <BoardHeaderStyled>
           <BoardProfileStyled onClick={handleOpenProfile}>
             <img src={profileImageUrl || "/src/assets/userW.png"} />
@@ -209,6 +223,7 @@ const BoardTemplate = (board: IBoardInfo) => {
 
 const BoardWrapperStyled = styled.div`
   width: 93%;
+  max-width: 465px;
   margin-top: 3%;
   margin-bottom: 5%;
   border-radius: 25px;
@@ -371,6 +386,9 @@ const NoCommentStyled = styled.div`
   font-weight: 400;
   color: var(--lightgrey);
   margin-top: 3%;
+  @media (min-width: 1024px) {
+    margin-bottom: 5px;
+  }
 `;
 
 export default BoardTemplate;

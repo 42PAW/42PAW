@@ -1,16 +1,30 @@
 import styled from "styled-components";
 import { IBoardInfo } from "@/types/interface/board.interface";
+import { currentProfileBoardIdState } from "@/recoil/atom";
+import { useSetRecoilState } from "recoil";
 
 interface PostListItemProps {
   post: IBoardInfo;
-  onClick: () => void;
+  showBoardsInScroll: () => void;
 }
 
-const PostListItem: React.FC<PostListItemProps> = ({ post, onClick }) => {
+const PostListItem: React.FC<PostListItemProps> = ({
+  post,
+  showBoardsInScroll,
+}) => {
+  const setCurrentProfileBoardId = useSetRecoilState(
+    currentProfileBoardIdState
+  );
+
+  const moveToProfileBoards = () => {
+    setCurrentProfileBoardId(post.boardId);
+    showBoardsInScroll();
+  };
+
   return (
     <WrapperStyled>
       <ThumbnailStyled src={post.images[0]} />
-      <ThumbnailInfoStyled onClick={onClick}>
+      <ThumbnailInfoStyled onClick={moveToProfileBoards}>
         <div>
           <img src="/src/assets/thumbnailLike.png" />
           <div>{post.reactionCount}</div>

@@ -8,6 +8,7 @@ import { IToastInfo } from "@/types/interface/toast.interface";
 import Translator from "@/languages/Translator";
 import { UserInfoDTO, ReportDTO } from "@/types/dto/member.dto";
 import { IDeleteInfo } from "@/types/interface/option.interface";
+import { IBoardInfo } from "@/types/interface/board.interface";
 
 export const userInfoState = atom<UserInfoDTO | null>({
   key: "userInfo",
@@ -137,4 +138,9 @@ export const languageState = atom<any>({
 export const callbackStoreState = atom<Function[]>({
   key: "callbackStore",
   default: [],
+});
+
+export const currentProfileBoardIdState = atom<number | null>({
+  key: "currentProfileBoardId",
+  default: null,
 });

@@ -1,9 +1,29 @@
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import PostListItem from "./PostListItem";
 import { IBoardInfo } from "@/types/interface/board.interface";
+import { userInfoState } from "@/recoil/atom";
+import { UserInfoDTO } from "@/types/dto/member.dto";
+import useNavigateCustom from "@/hooks/useNavigateCustom";
+import { boardCategoryState } from "@/recoil/atom";
+import { Board } from "@/types/enum/board.category.enum";
 
-const PostList = (props: any) => {
-  const { posts, onClickItem } = props;
+const PostList: React.FC<{ posts: IBoardInfo[] }> = ({ posts }) => {
+  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
+  const [boardCategory] = useRecoilState<Board>(boardCategoryState);
+  const {
+    moveToMyProfileBoards,
+    moveToMyProfileScrapped,
+    moveToProfileBoards,
+  } = useNavigateCustom();
+
+  const showBoardsInScroll = () => {
+    if (boardCategory === Board.SCRAPPED) moveToMyProfileScrapped();
+    else if (userInfo && userInfo.memberId === posts[0].memberId)
+      moveToMyProfileBoards();
+    else moveToProfileBoards(posts[0].memberId);
+  };
+
   return (
     <WrapperStyled>
       {posts.map((post: IBoardInfo) => {
@@ -11,9 +31,7 @@ const PostList = (props: any) => {
           <PostListItem
             key={post.boardId}
             post={post}
-            onClick={() => {
-              onClickItem();
-            }}
+            showBoardsInScroll={showBoardsInScroll}
           />
         );
       })}

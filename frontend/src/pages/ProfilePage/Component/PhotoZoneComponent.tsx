@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import PostList from "./PostList";
-import useNavigateCustom from "@/hooks/useNavigateCustom";
 import { Board } from "@/types/enum/board.category.enum";
 
 interface PhotoZoneComponentProps {
@@ -15,7 +14,6 @@ const PhotoZoneComponent: React.FC<PhotoZoneComponentProps> = ({
   tabState,
   onTabChange,
 }) => {
-  const { moveToMain } = useNavigateCustom();
   return (
     <ProfileBodyStyled>
       {tabState && (
@@ -41,7 +39,7 @@ const PhotoZoneComponent: React.FC<PhotoZoneComponentProps> = ({
         </PhotoCategoryToggleStyled>
       )}
       <PhotoZoneWrapperStyled $hasTab={!!tabState}>
-        <PostList posts={boards} onClickItem={moveToMain} />
+        <PostList posts={boards} />
       </PhotoZoneWrapperStyled>
     </ProfileBodyStyled>
   );

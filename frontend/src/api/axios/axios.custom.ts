@@ -84,9 +84,12 @@ export const axiosGetBoards = async (
       });
       return response.data;
     }
-    const response = await axios.get(axiosGetBoardsURL, {
-      params: { size: size, page: page },
-    });
+    const response = await axios.get(
+      `${import.meta.env.VITE_BE_SERVER}` + axiosGetBoardsURL,
+      {
+        params: { size: size, page: page },
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -534,6 +537,21 @@ export const axiosGetFollowingList = async (
         }
       );
     }
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetBanListURL = "/v1/blocks/me";
+export const axiosGetBanList = async (
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    const response = await instance.get(axiosGetBanListURL, {
+      params: { size: size, page: page },
+    });
     return response.data;
   } catch (error) {
     throw error;

@@ -15,7 +15,6 @@ const ProfilePage = () => {
   const profileQuery = useQuery({
     queryKey: ["profile", Number(memberId)],
     queryFn: fetchProfile,
-    refetchOnMount: "always",
   });
   // const { fetchBoards } = useFetch();
   const [boardCategory, setBoardCategory] =
@@ -27,7 +26,9 @@ const ProfilePage = () => {
 
   const boardsQuery = useQuery<IBoardInfo[]>({
     queryKey: ["profileBoards", boardCategory], // 여기서 boardCategory를 그냥 Board.MINE하는게?
-    queryFn: () => fetchBoards(0),
+    queryFn: () => {
+      return fetchBoards(0);
+    }, // page는 0으로 고정(일단?)
   });
 
   const isLoading = profileQuery.isLoading || boardsQuery.isLoading;

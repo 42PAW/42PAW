@@ -60,3 +60,14 @@ export interface FollowerDTO {
   statement: string;
   relationship: followType;
 }
+
+export interface MemberPreviewResponseDto {
+  // 나중에 위의 두개 합칠 수 있을듯
+  memberId: number;
+  memberName: string;
+  intraName: string;
+  profileImageUrl: string;
+  country: Country;
+  statement: string;
+  relationship: followType;
+}

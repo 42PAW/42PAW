@@ -1,31 +1,22 @@
 import styled from "styled-components";
 import ProfileOption from "@/components/OptionButton/ProfileOption";
 import { ProfileInfoDTO } from "@/types/dto/member.dto";
-import { currentMemberIdState } from "@/recoil/atom";
-import { useRecoilState } from "recoil";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
-
-// const CountInfo = ({ label, value }: { label: string; value: number }) => (
-//   <li>
-//     <div>{label}</div>
-//     <span>{value}</span>
-//   </li>
-// );
+import { useQueryClient } from "@tanstack/react-query";
+import intersect from "@/assets/intersect.png";
 
 const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   const { openFollowerSection, openFollowingSection } =
     useRightSectionHandler();
+
   const handleFollowerClick = () => {
     openFollowerSection();
   };
 
   const handleFollowingClick = () => {
-    // 팔로잉을 클릭했을 때 수행할 작업
     openFollowingSection();
-    // console.log("팔로잉을 클릭했습니다.");
-    // 원하는 작업을 여기에 추가하세요
   };
 
   return (
@@ -60,15 +51,11 @@ const UserInfoItems = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   );
 };
 
-const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
-  userInfo,
-}) => {
-  //   const { openModal } = useModal();
-
-  //   const handleOpenProfile = () => {
-  //     openModal(ModalType.PROFILEEDIT); // PROFILECARD -> 바꿔야 돼 다시
-  //   };
-  const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
+const ProfileInfoComponent: React.FC<{
+  userInfo: ProfileInfoDTO | null;
+  memberId: number;
+}> = ({ userInfo, memberId }) => {
+  const queryClient = useQueryClient();
 
   if (!userInfo) return <div>No user information available.</div>;
   return (
@@ -85,11 +72,12 @@ const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
       </div>
       <BoardOptionButtonStyled>
         <ProfileOption
-          memberId={currentMemberId}
+          memberId={memberId}
           memberName={userInfo.memberName}
+          callback={() => {
+            queryClient.invalidateQueries(["profile", memberId]);
+          }}
         />
-        {/* ProfileOption 컴포넌트
-        만들 것*/}
       </BoardOptionButtonStyled>
     </ProfileHeaderStyled>
   );
@@ -117,33 +105,6 @@ const UserInfoStyled = styled.div`
     font-size: 1rem;
   }
 `;
-
-/* 게시물, 팔로워, 팔로잉 수 */
-// const CountInfoStyled = styled.ul`
-//   display: flex;
-//   width: 100%;
-//   padding: 0;
-//   margin: 0 0 30px 0;
-
-//   li {
-//     font-size: 1.2rem;
-//     display: flex;
-//     flex-direction: column;
-//     width: calc(100% / 3);
-//     &:not(:last-child) {
-//       border-right: 1.2px solid var(--transparent); /* 원하는 선의 색상 설정 */
-//     }
-//     cursor: pointer;
-//     &:first-child {
-//       cursor: default;
-//     }
-//   }
-
-//   span {
-//     font-size: 1.2rem;
-//     font-weight: 600;
-//   }
-// `;
 
 const CountInfoStyled = styled.ul`
   display: flex;
@@ -203,10 +164,9 @@ const ProfileHeaderStyled = styled.div`
   color: var(--white);
   width: 100%;
   min-height: 386px;
-  //   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   font-size: 1.6rem;
 
-  background-image: url("/assets/intersect.png");
+  background-image: url("${intersect}");
   background-size: 100% 320px;
   background-repeat: no-repeat;
   background-position-y: bottom;

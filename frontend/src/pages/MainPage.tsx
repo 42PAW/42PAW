@@ -8,35 +8,32 @@ import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import useFetch from "@/hooks/useFetch";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation";
 import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTemplate";
 
 const MainPage = () => {
-  const [loading, setLoading] = useState(true);
   const [boardCategory, setBoardCategory] =
     useRecoilState<Board>(boardCategoryState);
   const { fetchBoards } = useFetch();
   const navigator = useNavigate();
   const [ref, inView] = useInView();
-  const { data, fetchNextPage, hasNextPage, isError } = useInfiniteQuery(
-    ["boards", boardCategory],
-    ({ pageParam = 0 }) => fetchBoards(pageParam),
-    {
-      getNextPageParam: (lastPage, allPages) => {
-        if (!lastPage || lastPage.length === 0) return undefined;
-        return allPages.length;
-      },
-      keepPreviousData: true,
-    }
-  );
+  const { data, fetchNextPage, hasNextPage, isError, isLoading } =
+    useInfiniteQuery(
+      ["boards", boardCategory],
+      ({ pageParam = 0 }) => fetchBoards(pageParam),
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          if (!lastPage || lastPage.length === 0) return undefined;
+          return allPages.length;
+        },
+        keepPreviousData: true,
+      }
+    );
 
   useEffect(() => {
     setBoardCategory(Board.DEFAULT);
-    setTimeout(() => {
-      setLoading(false);
-    }, 300);
   }, []);
 
   useEffect(() => {
@@ -45,7 +42,7 @@ const MainPage = () => {
     }
   }, [inView, hasNextPage]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <WrapperStyled $boardExists={true}>
         <LoadingAnimation />

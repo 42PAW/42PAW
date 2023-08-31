@@ -22,8 +22,8 @@ const PhotoZoneComponent: React.FC<PhotoZoneComponentProps> = ({
             <img
               src={
                 tabState === Board.MINE
-                  ? "/src/assets/feedWB.png"
-                  : "/src/assets/feedW.png"
+                  ? "/assets/feedWB.png"
+                  : "/assets/feedW.png"
               }
             />
           </button>
@@ -31,8 +31,8 @@ const PhotoZoneComponent: React.FC<PhotoZoneComponentProps> = ({
             <img
               src={
                 tabState === Board.SCRAPPED
-                  ? "/src/assets/scrapWB.png"
-                  : "/src/assets/scrapW.png"
+                  ? "/assets/scrapWB.png"
+                  : "/assets/scrapW.png"
               }
             />
           </button>

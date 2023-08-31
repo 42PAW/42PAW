@@ -33,7 +33,7 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
     <CommentItemStyled>
       <UserImageContainerStyled>
         <img
-          src={profileImageUrl || "/src/assets/userW.png"}
+          src={profileImageUrl || "/assets/userW.png"}
           onClick={handleOpenProfile}
         />
       </UserImageContainerStyled>

@@ -215,7 +215,7 @@ const DeleteButtonStyled = styled.button`
 `;
 
 const SmallUploadButtonWrapperStyled = styled.div`
-  background-image: url("/src/assets/upload.png");
+  background-image: url("/assets/upload.png");
   background-size: cover;
   border-radius: 10px;
   pointer: cursor;

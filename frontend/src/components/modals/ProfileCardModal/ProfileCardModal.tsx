@@ -62,7 +62,7 @@ const ProfileCardModal = () => {
     >
       <WrapperStyled>
         <LogoStyled>
-          <img src="/src/assets/paw.png" />
+          <img src="/assets/paw.png" />
         </LogoStyled>
         <OptionButtonContainerStyled>
           {currentMemberId !== userInfo?.memberId && (
@@ -80,7 +80,7 @@ const ProfileCardModal = () => {
           )}
         </OptionButtonContainerStyled>
         <ProfileImageStyled
-          src={profileData.profileImageUrl || "/src/assets/user.png"}
+          src={profileData.profileImageUrl || "/assets/user.png"}
         />
         <MainAreaStyled>
           <NickNameStyled>{profileData.memberName}</NickNameStyled>

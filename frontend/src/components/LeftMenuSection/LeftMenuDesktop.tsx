@@ -26,29 +26,26 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
   return (
     <>
       <LeftMenuStyled>
-        <LogoImageStyled src="/src/assets/paw.png" onClick={handleClickLogo} />
+        <LogoImageStyled src="/assets/paw.png" onClick={handleClickLogo} />
         <nav>
           <MenuListStyled>
             <li onClick={moveToMain}>
-              <img alt="Main" src="/src/assets/home.png" />
+              <img alt="Main" src="/assets/home.png" />
             </li>
             <li onClick={moveToUpload}>
-              <img alt="Upload" src="/src/assets/upload.png" />
+              <img alt="Upload" src="/assets/upload.png" />
             </li>
             <li onClick={openSearchSection}>
-              <img alt="Search" src="/src/assets/search.png" />
+              <img alt="Search" src="/assets/search.png" />
             </li>
           </MenuListStyled>
           {userInfo ? (
             <ProfileImageStyled
-              src={userInfo.profileImageUrl || "/src/assets/userW.png"}
+              src={userInfo.profileImageUrl || "/assets/userW.png"}
               onClick={handleOpenMyProfile}
             />
           ) : (
-            <ProfileImageStyled
-              src="/src/assets/userW.png"
-              onClick={handleLogin}
-            />
+            <ProfileImageStyled src="/assets/userW.png" onClick={handleLogin} />
           )}
         </nav>
         {userInfo ? (

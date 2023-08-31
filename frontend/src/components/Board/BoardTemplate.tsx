@@ -150,7 +150,7 @@ const BoardTemplate = (board: BoardTemplateProps) => {
         <BoardWrapperStyled ref={boardRef}>
           <BoardHeaderStyled>
             <BoardProfileStyled onClick={handleOpenProfile}>
-              <img src={profileImageUrl || "/src/assets/userW.png"} />
+              <img src={profileImageUrl || "/assets/userW.png"} />
               <div>
                 {memberName} {countryEmoji}
               </div>
@@ -173,26 +173,24 @@ const BoardTemplate = (board: BoardTemplateProps) => {
                 <ReactionStyled onClick={handleClickReaction}>
                   <HeartIcon
                     style={ReactionAnimation}
-                    src="/src/assets/likeR.png"
+                    src="/assets/likeR.png"
                   />
                   <img
                     src={
-                      isReactedRender
-                        ? "/src/assets/likeR.png"
-                        : "/src/assets/like.png"
+                      isReactedRender ? "/assets/likeR.png" : "/assets/like.png"
                     }
                   />
                 </ReactionStyled>
                 <img
-                  src="/src/assets/comment.png"
+                  src="/assets/comment.png"
                   onClick={() => handleCommentClick(boardId)}
                 />
               </ReactionCommentContainerStyled>
               <ScrapButtonStyled onClick={handleClickScrap}>
                 {isScrappedRender ? (
-                  <img src="/src/assets/scrapB.png" />
+                  <img src="/assets/scrapB.png" />
                 ) : (
-                  <img src="/src/assets/scrap.png" />
+                  <img src="/assets/scrap.png" />
                 )}
               </ScrapButtonStyled>
             </ButtonZoneStyled>

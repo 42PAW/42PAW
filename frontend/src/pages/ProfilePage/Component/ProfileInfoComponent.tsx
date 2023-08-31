@@ -7,6 +7,7 @@ import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useQueryClient } from "@tanstack/react-query";
+import intersect from "@/assets/intersect.png";
 
 const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   const { openFollowerSection, openFollowingSection } =
@@ -107,33 +108,6 @@ const UserInfoStyled = styled.div`
   }
 `;
 
-/* 게시물, 팔로워, 팔로잉 수 */
-// const CountInfoStyled = styled.ul`
-//   display: flex;
-//   width: 100%;
-//   padding: 0;
-//   margin: 0 0 30px 0;
-
-//   li {
-//     font-size: 1.2rem;
-//     display: flex;
-//     flex-direction: column;
-//     width: calc(100% / 3);
-//     &:not(:last-child) {
-//       border-right: 1.2px solid var(--transparent); /* 원하는 선의 색상 설정 */
-//     }
-//     cursor: pointer;
-//     &:first-child {
-//       cursor: default;
-//     }
-//   }
-
-//   span {
-//     font-size: 1.2rem;
-//     font-weight: 600;
-//   }
-// `;
-
 const CountInfoStyled = styled.ul`
   display: flex;
   width: 100%;
@@ -192,10 +166,9 @@ const ProfileHeaderStyled = styled.div`
   color: var(--white);
   width: 100%;
   min-height: 386px;
-  //   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   font-size: 1.6rem;
 
-  background-image: url("/assets/intersect.png");
+  background-image: url("${intersect}");
   background-size: 100% 320px;
   background-repeat: no-repeat;
   background-position-y: bottom;

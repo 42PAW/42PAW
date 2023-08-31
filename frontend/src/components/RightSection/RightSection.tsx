@@ -9,6 +9,7 @@ import SearchSection from "@/components/RightSection/SearchSection/SearchSection
 import AnimalFilterSection from "@/components/RightSection/AnimalFilterSection/AnimalFilterSection";
 import FollowerSection from "@/components/RightSection/FollowerSection/FollowerSection";
 import FollowingSection from "@/components/RightSection/FollowingSection/FollowingSection";
+import BannedMemberSection from "@/components/RightSection/BannedMemberSection/BannedMemberSection";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { IRightSectionContentInfo } from "@/types/interface/right.section.interface";
 
@@ -35,6 +36,7 @@ const RightSection = () => {
           {rightSectionContent.animalFilter && <AnimalFilterSection />}
           {rightSectionContent.follower && <FollowerSection />}
           {rightSectionContent.following && <FollowingSection />}
+          {rightSectionContent.bannedMember && <BannedMemberSection />}
         </RightSectionBodyStyled>
       </RightSectionStyled>
       {isRightSectionOpened && <OverlayStyled onClick={closeRightSection} />}

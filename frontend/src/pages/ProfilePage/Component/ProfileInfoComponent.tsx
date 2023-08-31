@@ -6,26 +6,18 @@ import { useRecoilState } from "recoil";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
-
-// const CountInfo = ({ label, value }: { label: string; value: number }) => (
-//   <li>
-//     <div>{label}</div>
-//     <span>{value}</span>
-//   </li>
-// );
+import { useQueryClient } from "@tanstack/react-query";
 
 const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   const { openFollowerSection, openFollowingSection } =
     useRightSectionHandler();
+
   const handleFollowerClick = () => {
     openFollowerSection();
   };
 
   const handleFollowingClick = () => {
-    // 팔로잉을 클릭했을 때 수행할 작업
     openFollowingSection();
-    // console.log("팔로잉을 클릭했습니다.");
-    // 원하는 작업을 여기에 추가하세요
   };
 
   return (
@@ -60,15 +52,11 @@ const UserInfoItems = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   );
 };
 
-const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
-  userInfo,
-}) => {
-  //   const { openModal } = useModal();
-
-  //   const handleOpenProfile = () => {
-  //     openModal(ModalType.PROFILEEDIT); // PROFILECARD -> 바꿔야 돼 다시
-  //   };
-  const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
+const ProfileInfoComponent: React.FC<{
+  userInfo: ProfileInfoDTO | null;
+  memberId: number;
+}> = ({ userInfo, memberId }) => {
+  const queryClient = useQueryClient();
 
   if (!userInfo) return <div>No user information available.</div>;
   return (
@@ -85,11 +73,12 @@ const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
       </div>
       <BoardOptionButtonStyled>
         <ProfileOption
-          memberId={currentMemberId}
+          memberId={memberId}
           memberName={userInfo.memberName}
+          callback={() => {
+            queryClient.invalidateQueries(["profile", memberId]);
+          }}
         />
-        {/* ProfileOption 컴포넌트
-        만들 것*/}
       </BoardOptionButtonStyled>
     </ProfileHeaderStyled>
   );

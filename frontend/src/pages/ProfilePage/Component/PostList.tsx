@@ -8,7 +8,7 @@ import useNavigateCustom from "@/hooks/useNavigateCustom";
 import { boardCategoryState } from "@/recoil/atom";
 import { Board } from "@/types/enum/board.category.enum";
 
-const PostList: React.FC<{ posts: IBoardInfo[] }> = ({ posts }) => {
+const PostList: React.FC<{ posts: IBoardInfo[] | null }> = ({ posts }) => {
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
   const {
@@ -19,22 +19,23 @@ const PostList: React.FC<{ posts: IBoardInfo[] }> = ({ posts }) => {
 
   const showBoardsInScroll = () => {
     if (boardCategory === Board.SCRAPPED) moveToMyProfileScrapped();
-    else if (userInfo && userInfo.memberId === posts[0].memberId)
+    else if (userInfo && userInfo.memberId === posts![0].memberId)
       moveToMyProfileBoards();
-    else moveToProfileBoards(posts[0].memberId);
+    else moveToProfileBoards(posts![0].memberId);
   };
 
   return (
     <WrapperStyled>
-      {posts.map((post: IBoardInfo) => {
-        return (
-          <PostListItem
-            key={post.boardId}
-            post={post}
-            showBoardsInScroll={showBoardsInScroll}
-          />
-        );
-      })}
+      {posts &&
+        posts.map((post: IBoardInfo) => {
+          return (
+            <PostListItem
+              key={post.boardId}
+              post={post}
+              showBoardsInScroll={showBoardsInScroll}
+            />
+          );
+        })}
     </WrapperStyled>
   );
 };

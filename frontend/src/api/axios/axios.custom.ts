@@ -543,6 +543,21 @@ export const axiosGetFollowingList = async (
   }
 };
 
+const axiosGetBanListURL = "/v1/blocks/me";
+export const axiosGetBanList = async (
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    const response = await instance.get(axiosGetBanListURL, {
+      params: { size: size, page: page },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const axiosUpdateAnimalCategoryURL = "/v1/categories/members/me";
 export const axiosUpdateAnimalCategory = async (
   categories: AnimalSpecies[]

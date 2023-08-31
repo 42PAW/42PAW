@@ -3,16 +3,16 @@ import ProfileInfoComponent from "@/pages/ProfilePage/Component/ProfileInfoCompo
 import PhotoZoneComponent from "@/pages/ProfilePage/Component/PhotoZoneComponent";
 import { ProfileInfoDTO } from "@/types/dto/member.dto";
 import { Board } from "@/types/enum/board.category.enum";
-// import { BoardsInfoDTO } from "@/types/dto/board.dto";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import FollowTypeButton from "@/components/FollowTypeButton";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ProfileTemplateProps {
   userInfo: ProfileInfoDTO | null; // userInfo를 props로 받음
   boards: IBoardInfo[] | null;
   tabState?: Board;
   onTabChange?: (newTabState: Board) => void;
-  memberId?: number;
+  memberId: number;
 }
 
 const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
@@ -22,12 +22,20 @@ const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
   onTabChange,
   memberId,
 }) => {
+  const queryClient = useQueryClient();
   return (
     <ProfileWrapperStyled>
-      <ProfileInfoComponent userInfo={userInfo} />
+      <ProfileInfoComponent userInfo={userInfo} memberId={memberId} />
       {memberId !== 0 && memberId && userInfo && (
         <FollowButtonStyled>
-          <FollowTypeButton memberId={memberId} status={userInfo.followType} />
+          <FollowTypeButton
+            memberId={memberId}
+            status={userInfo.followType}
+            callback={() => {
+              queryClient.invalidateQueries(["profile", memberId]);
+            }}
+            size="large"
+          />
         </FollowButtonStyled>
       )}
       <PhotoZoneComponent

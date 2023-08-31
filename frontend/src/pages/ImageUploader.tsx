@@ -36,7 +36,7 @@ const ImageUploader = () => {
   };
 
   // delete the image: update uploadFiles
-  const handleDeleteClick = (indexToDelete) => {
+  const handleDeleteClick = (indexToDelete: number) => {
     const updatedFiles = uploadFiles.filter(
       (_, index) => index !== indexToDelete
     );
@@ -44,10 +44,9 @@ const ImageUploader = () => {
   };
 
   // handle image change: convert to webp & update uploadFiles
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = (e: any) => {
     const selectedFiles = Array.from(e.target.files);
-    if (selectedFiles.some((file) => file.size > 5000000)) {
+    if (selectedFiles.some((file: any) => file.size > 5000000)) {
       popToast("5MB 이하의 이미지만 업로드 가능합니다.", "N");
       return;
     }
@@ -56,18 +55,18 @@ const ImageUploader = () => {
       return;
     }
     setFilecnt(filecnt + selectedFiles.length);
-    setUploadFiles([...uploadFiles, ...selectedFiles]);
-    convertToWebp(selectedFiles);
+    setUploadFiles([...(uploadFiles as Blob), ...selectedFiles]);
+    convertToWebp(selectedFiles as Blob[]);
   };
 
   // caption change
-  const captionChange = (e) => {
+  const captionChange = (e: any) => {
     setCaption(e.target.value);
   };
 
   // convert any image file to webp
   const convertToWebp = (files: any) => {
-    files.forEach((file: any) => {
+    files.forEach(() => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
 
@@ -75,10 +74,10 @@ const ImageUploader = () => {
       img.onload = () => {
         canvas.width = img.width;
         canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
+        ctx?.drawImage(img, 0, 0);
 
         canvas.toBlob((webpBlob) => {
-          const webpFile = new File([webpBlob], "image.webp", {
+          const webpFile = new File([webpBlob as BlobPart], "image.webp", {
             type: "image/webp",
           });
           setUploadFiles([...uploadFiles, webpFile]);
@@ -118,7 +117,7 @@ const ImageUploader = () => {
             key={index}
             onClick={() => handlePreviewClick(index)}
             onMouseEnter={() => handlePreviewHover(index)}
-            onMouseLeave={() => handlePreviewHover(null)}
+            onMouseLeave={() => handlePreviewHover(0)} //원래 null
           >
             <img src={URL.createObjectURL(file)} alt={"Preview ${index + 1}"} />
             {hoveringIndex === index && (

@@ -21,8 +21,6 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
   const { openSearchSection } = useRightSectionHandler();
   const touchStartY = useRef<number | null>(null);
-  const isProfilePage: boolean =
-    location.pathname === "/my-profile" || location.pathname === "/profile";
   const setCurrentMemberId = useSetRecoilState<number | null>(
     currentMemberIdState
   );
@@ -84,11 +82,7 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
         </BannerLogoStyled>
         <SettingButtonContainerStyled>
           <SettingButton>
-            <img
-              alt="Login"
-              src="/src/assets/logout.png"
-              onClick={handleLoginButton}
-            />
+            <img src="/src/assets/logout.png" onClick={handleLoginButton} />
           </SettingButton>
         </SettingButtonContainerStyled>
       </BannerStyled>

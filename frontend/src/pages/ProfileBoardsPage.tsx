@@ -108,11 +108,6 @@ const WrapperStyled = styled.div<{ $boardExists?: boolean }>`
   height: 100vh;
 `;
 
-const divStyled = styled.div`
-  width: 100%;
-  height: 100vh;
-`;
-
 const BoardsEndStyled = styled.div`
   display: flex;
   align-items: center;
@@ -127,20 +122,6 @@ const FetchObserverStyled = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
-`;
-
-const NoBoardsStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: var(--white);
-  font-size: 1.3rem;
-  opacity: 0.7;
-  img {
-    width: 50px;
-    margin-bottom: 5px;
-  }
 `;
 
 export default ProfileBoardsPage;

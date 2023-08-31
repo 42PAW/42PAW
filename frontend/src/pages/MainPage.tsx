@@ -20,18 +20,17 @@ const MainPage = () => {
   const { fetchBoards } = useFetch();
   const navigator = useNavigate();
   const [ref, inView] = useInView();
-  const { data, fetchNextPage, hasNextPage, isError, isLoading } =
-    useInfiniteQuery(
-      ["boards", boardCategory],
-      ({ pageParam = 0 }) => fetchBoards(pageParam),
-      {
-        getNextPageParam: (lastPage, allPages) => {
-          if (!lastPage || lastPage.length === 0) return undefined;
-          return allPages.length;
-        },
-        keepPreviousData: true,
-      }
-    );
+  const { data, fetchNextPage, hasNextPage, isError } = useInfiniteQuery(
+    ["boards", boardCategory],
+    ({ pageParam = 0 }) => fetchBoards(pageParam),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        if (!lastPage || lastPage.length === 0) return undefined;
+        return allPages.length;
+      },
+      keepPreviousData: true,
+    }
+  );
 
   useEffect(() => {
     setBoardCategory(Board.DEFAULT);

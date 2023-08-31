@@ -1,6 +1,3 @@
-import { useState } from "react";
-import useModal from "../../../hooks/useModal";
-import { ModalType } from "../../../types/enum/modal.enum";
 import styled from "styled-components";
 import ProfileOption from "@/components/OptionButton/ProfileOption";
 import { ProfileInfoDTO } from "@/types/dto/member.dto";
@@ -48,16 +45,6 @@ const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
     </CountInfoStyled>
   );
 };
-
-const CountInfoCover = styled.div`
-  position: absolute;
-  top: 0;
-  left: 33.33%; /* 팔로워 영역의 시작 위치 */
-  width: 33.33%; /* 팔로워 영역의 너비 */
-  height: 100%;
-  cursor: pointer;
-  z-index: 1;
-`;
 
 const UserInfoItems = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   const countryEmoji = useCountryEmoji(userInfo.country as Country);

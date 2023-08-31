@@ -1,10 +1,10 @@
 import ProfileTemplate from "@/pages/ProfilePage/Component/ProfileTemplate";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import useFetch from "@/hooks/useFetch";
 import { useQuery } from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import { Board } from "@/types/enum/board.category.enum";
-import { useSetRecoilState, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { boardCategoryState } from "@/recoil/atom";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import { useNavigate } from "react-router-dom";

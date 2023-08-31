@@ -1,4 +1,4 @@
-import { styled, keyframes } from "styled-components";
+import { styled } from "styled-components";
 import { FollowerDTO, UserInfoDTO } from "@/types/dto/member.dto.ts";
 import SearchItem from "@/components/RightSection/SearchSection/SearchItem";
 import { userInfoState } from "@/recoil/atom";
@@ -61,15 +61,6 @@ const WrapperStyled = styled.div`
   width: 100%;
   flex: 1;
   overflow: hidden;
-`;
-
-const shakeAnimation = keyframes`
-	0% { transform: translateX(0); }
-	20% { transform: translateX(-3px); }
-	40% { transform: translateX(3px); }
-	60% { transform: translateX(-3px); }
-	80% { transform: translateX(3px); }
-	100% { transform: translateX(0); }
 `;
 
 const FollowerItemWrapperStyled = styled.div`

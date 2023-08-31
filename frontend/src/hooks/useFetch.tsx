@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { useRecoilState } from "recoil";
 import {
   boardCategoryState,
   currentBoardIdState,
-  currentMemberIdState,
   userInfoState,
 } from "@/recoil/atom";
 import { Board } from "@/types/enum/board.category.enum";
@@ -26,7 +24,6 @@ import {
 
 const useFetch = (memberId?: number | null) => {
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
-  const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
 
   const fetchBoards = async (page?: number) => {
     try {

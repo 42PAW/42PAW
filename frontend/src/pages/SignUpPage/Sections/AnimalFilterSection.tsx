@@ -38,7 +38,12 @@ const AnimalFilterSection: React.FC<SectionProps> = ({
         만나고 싶은 동물 친구들을 <br /> 선택해 주세요
       </h1>
       <ButtonZoneStyled>
-        <AnimalButtonContainer columns={2} setter={setCategoryList} />
+        <AnimalButtonContainer
+          columns={2}
+          buttonRow={50}
+          buttonFontSize={150}
+          setter={setCategoryList}
+        />
       </ButtonZoneStyled>
       <NextButtonStyled onClick={handleOnClick}>
         <img src="/src/assets/arrowW.png" />

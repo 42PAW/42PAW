@@ -8,7 +8,6 @@ import { IToastInfo } from "@/types/interface/toast.interface";
 import Translator from "@/languages/Translator";
 import { UserInfoDTO, ReportDTO } from "@/types/dto/member.dto";
 import { IDeleteInfo } from "@/types/interface/option.interface";
-import { IBoardInfo } from "@/types/interface/board.interface";
 
 export const userInfoState = atom<UserInfoDTO | null>({
   key: "userInfo",
@@ -106,6 +105,7 @@ export const banUserInfoState = atom<IBanUserInfo>({
   default: {
     memberId: null,
     userName: "",
+    followType: null,
   },
 });
 

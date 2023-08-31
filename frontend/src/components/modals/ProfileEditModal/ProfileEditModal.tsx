@@ -5,7 +5,6 @@ import { currentOpenModalState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 import useModal from "../../../hooks/useModal";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
-import PropTypes from "prop-types";
 
 const profileInfo = {
   memberName: "오덕애비",

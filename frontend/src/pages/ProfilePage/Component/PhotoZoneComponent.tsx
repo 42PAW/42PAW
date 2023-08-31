@@ -39,7 +39,7 @@ const PhotoZoneComponent: React.FC<PhotoZoneComponentProps> = ({
         </PhotoCategoryToggleStyled>
       )}
       <PhotoZoneWrapperStyled $hasTab={!!tabState}>
-        <PostList posts={boards} />
+        <PostList posts={boards as IBoardInfo[]} />
       </PhotoZoneWrapperStyled>
     </ProfileBodyStyled>
   );

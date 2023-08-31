@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import styled from "styled-components";
 import { ModalType } from "@/types/enum/modal.enum";
@@ -9,8 +9,6 @@ import { languageState } from "@/recoil/atom";
 import OptionButton from "./OptionButton";
 import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
-import { deleteInfoState } from "@/recoil/atom";
-import { IDeleteInfo } from "@/types/interface/option.interface";
 import { reportUserInfoState } from "@/recoil/atom";
 import { ReportDTO } from "@/types/dto/member.dto";
 
@@ -40,7 +38,11 @@ const ProfileOption: React.FC<IOptionButtonProps> = ({
   //   const setDeleteInfo = useSetRecoilState<IDeleteInfo>(deleteInfoState);
   const { openModal } = useModal();
 
-  const banUser = { memberId: memberId, userName: memberName };
+  const banUser = {
+    memberId: memberId,
+    userName: memberName,
+    followType: null,
+  };
 
   const handleBan = () => {
     setBanUserInfo(banUser);

@@ -101,12 +101,10 @@ const BoardTemplate = (board: BoardTemplateProps) => {
 
   const callReactionApi = async () => {
     try {
-      let response;
       if (!isReactedRender && !lastReaction)
-        response = await axiosReactComment(boardId, "LIKE");
+        await axiosReactComment(boardId, "LIKE");
       else if (isReactedRender && lastReaction)
-        response = await axiosUndoReactComment(boardId);
-
+        await axiosUndoReactComment(boardId);
       setLastReaction(!lastReaction);
     } catch (error) {
       //401 발생 -> 기존 isReactedRender 롤백
@@ -117,12 +115,11 @@ const BoardTemplate = (board: BoardTemplateProps) => {
 
   const callScrapApi = async () => {
     try {
-      let response;
       if (!isScrappedRender && !lastScrap) {
-        response = await axiosScrap(boardId);
+        await axiosScrap(boardId);
         setLastScrap(!lastScrap);
       } else if (isScrappedRender && lastScrap) {
-        response = await axiosUndoScrap(boardId);
+        await axiosUndoScrap(boardId);
         setLastScrap(!lastScrap);
       }
     } catch (error) {

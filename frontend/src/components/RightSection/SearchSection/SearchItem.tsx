@@ -66,6 +66,7 @@ const SearchItem = (props: SearchItemProps) => {
             <BoardOption
               memberId={memberId}
               memberName={memberName}
+              followStatus={relationship}
               callback={updateFollowType}
             />
           </SearchItemRightSideStyled>

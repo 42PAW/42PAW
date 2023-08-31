@@ -37,6 +37,7 @@ const OptionButton: React.FC<IOptionButtonProps> = ({ children }) => {
 };
 
 const WrapperStyled = styled.div`
+  padding-top: 5px;
   position: relative;
   display: flex;
   flex-direction: column;

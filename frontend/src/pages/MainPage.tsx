@@ -4,22 +4,23 @@ import styled from "styled-components";
 import BoardTemplate from "@/components/Board/BoardTemplate";
 import { boardCategoryState } from "@/recoil/atom";
 import { Board } from "@/types/enum/board.category.enum";
-import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTemplate";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import useFetch from "@/hooks/useFetch";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation";
+import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTemplate";
 
 const MainPage = () => {
+  const [loading, setLoading] = useState(true);
   const [boardCategory, setBoardCategory] =
     useRecoilState<Board>(boardCategoryState);
   const { fetchBoards } = useFetch();
   const navigator = useNavigate();
   const [ref, inView] = useInView();
-  const { data, fetchNextPage, hasNextPage, isLoading, isError } =
+  const { data, fetchNextPage, hasNextPage, isError, isLoading } =
     useInfiniteQuery(
       ["boards", boardCategory],
       ({ pageParam = 0 }) => fetchBoards(pageParam),
@@ -34,6 +35,9 @@ const MainPage = () => {
 
   useEffect(() => {
     setBoardCategory(Board.DEFAULT);
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
   }, []);
 
   useEffect(() => {
@@ -42,11 +46,11 @@ const MainPage = () => {
     }
   }, [inView, hasNextPage]);
 
-  if (isLoading) {
+  if (loading) {
     return (
       <WrapperStyled $boardExists={true}>
-        <SkeletonBoardTemplate />
         <LoadingAnimation />
+        <SkeletonBoardTemplate />
       </WrapperStyled>
     );
   }

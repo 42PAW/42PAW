@@ -13,6 +13,7 @@ import { deleteInfoState } from "@/recoil/atom";
 import { IDeleteInfo } from "@/types/interface/option.interface";
 import { reportUserInfoState } from "@/recoil/atom";
 import { ReportDTO } from "@/types/dto/member.dto";
+import { followType } from "@/types/enum/followType.enum";
 
 /**
  * @param {number} boardId - 신고, 차단, 삭제할 게시물의 id (optional)
@@ -26,6 +27,7 @@ interface IOptionButtonProps {
   commentId?: number;
   memberId: number;
   memberName: string;
+  followStatus?: followType;
   callback?: () => void;
 }
 
@@ -35,6 +37,7 @@ const BoardOption: React.FC<IOptionButtonProps> = ({
   commentId,
   memberId,
   memberName,
+  followStatus,
   callback,
 }) => {
   const [language] = useRecoilState<any>(languageState);
@@ -48,6 +51,7 @@ const BoardOption: React.FC<IOptionButtonProps> = ({
   const banUser = {
     memberId: memberId,
     userName: memberName,
+    followType: followStatus ?? null,
     callback: callback,
   };
 

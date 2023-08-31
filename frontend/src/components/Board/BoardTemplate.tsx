@@ -3,7 +3,7 @@ import styled from "styled-components";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import { IBoardInfo } from "@/types/interface/board.interface";
-import BoardPhotoBox from "@/components/Board/BoardPhotoBox";
+// import BoardPhotoBox from "@/components/Board/BoardPhotoBox";
 import BoardOption from "@/components/OptionButton/BoardOption";
 import useModal from "@/hooks/useModal";
 import { ModalType } from "@/types/enum/modal.enum";
@@ -20,6 +20,10 @@ import useParseDate from "@/hooks/useParseDate";
 import { useSpring, animated } from "@react-spring/web";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
+import { Suspense, lazy } from "react";
+import SkeletonBoardTemplate from "../skeletonView/SkeletonBoardTemplate";
+
+const BoardPhotoBox = lazy(() => import("@/components/Board/BoardPhotoBox"));
 
 interface BoardTemplateProps extends IBoardInfo {
   scrollIntoView?: boolean;
@@ -80,7 +84,7 @@ const BoardTemplate = (board: BoardTemplateProps) => {
   useLayoutEffect(() => {
     if (scrollIntoView && boardRef.current) {
       boardRef.current.scrollIntoView({
-        block: "start",
+        block: "center",
       });
     }
   }, [scrollIntoView]);
@@ -145,78 +149,80 @@ const BoardTemplate = (board: BoardTemplateProps) => {
 
   return (
     <>
-      <BoardWrapperStyled ref={boardRef}>
-        <BoardHeaderStyled>
-          <BoardProfileStyled onClick={handleOpenProfile}>
-            <img src={profileImageUrl || "/src/assets/userW.png"} />
-            <div>
-              {memberName} {countryEmoji}
-            </div>
-          </BoardProfileStyled>
-          <BoardOptionButtonStyled>
-            <BoardOption
-              memberId={memberId}
-              boardId={boardId}
-              memberName={memberName}
-            />
-          </BoardOptionButtonStyled>
-        </BoardHeaderStyled>
-        <BoardBodyStyled>
-          <BoardPhotoBox
-            boardImages={images}
-            handleClickReaction={handleClickReaction}
-          />
-          <ButtonZoneStyled>
-            <ReactionCommentContainerStyled>
-              <ReactionStyled onClick={handleClickReaction}>
-                <HeartIcon
-                  style={ReactionAnimation}
-                  src="/src/assets/likeR.png"
-                />
-                <img
-                  src={
-                    isReactedRender
-                      ? "/src/assets/likeR.png"
-                      : "/src/assets/like.png"
-                  }
-                />
-              </ReactionStyled>
-              <img
-                src="/src/assets/comment.png"
-                onClick={() => handleCommentClick(boardId)}
-              />
-            </ReactionCommentContainerStyled>
-            <ScrapButtonStyled onClick={handleClickScrap}>
-              {isScrappedRender ? (
-                <img src="/src/assets/scrapB.png" />
-              ) : (
-                <img src="/src/assets/scrap.png" />
-              )}
-            </ScrapButtonStyled>
-          </ButtonZoneStyled>
-          <BoardContentContainerStyled>
-            <ReactionCommentCountStyled>
+      <Suspense fallback={<SkeletonBoardTemplate />}>
+        <BoardWrapperStyled ref={boardRef}>
+          <BoardHeaderStyled>
+            <BoardProfileStyled onClick={handleOpenProfile}>
+              <img src={profileImageUrl || "/src/assets/userW.png"} />
               <div>
-                {reactionCountRender} {language.like}, {commentCount}{" "}
-                {language.comment}
+                {memberName} {countryEmoji}
               </div>
-              <span>{parsedDate}</span>
-            </ReactionCommentCountStyled>
-            <ContentStyled>{content}</ContentStyled>
-            {previewComment ? (
-              <PreviewCommentStyled>
-                <div>{previewCommentUser}</div>
-                <div>{parsedPreviewComment}</div>
-                <div onClick={() => handleCommentClick(boardId)}>
-                  {language.moreComments}
+            </BoardProfileStyled>
+            <BoardOptionButtonStyled>
+              <BoardOption
+                memberId={memberId}
+                boardId={boardId}
+                memberName={memberName}
+              />
+            </BoardOptionButtonStyled>
+          </BoardHeaderStyled>
+          <BoardBodyStyled>
+            <BoardPhotoBox
+              boardImages={images}
+              handleClickReaction={handleClickReaction}
+            />
+            <ButtonZoneStyled>
+              <ReactionCommentContainerStyled>
+                <ReactionStyled onClick={handleClickReaction}>
+                  <HeartIcon
+                    style={ReactionAnimation}
+                    src="/src/assets/likeR.png"
+                  />
+                  <img
+                    src={
+                      isReactedRender
+                        ? "/src/assets/likeR.png"
+                        : "/src/assets/like.png"
+                    }
+                  />
+                </ReactionStyled>
+                <img
+                  src="/src/assets/comment.png"
+                  onClick={() => handleCommentClick(boardId)}
+                />
+              </ReactionCommentContainerStyled>
+              <ScrapButtonStyled onClick={handleClickScrap}>
+                {isScrappedRender ? (
+                  <img src="/src/assets/scrapB.png" />
+                ) : (
+                  <img src="/src/assets/scrap.png" />
+                )}
+              </ScrapButtonStyled>
+            </ButtonZoneStyled>
+            <BoardContentContainerStyled>
+              <ReactionCommentCountStyled>
+                <div>
+                  {reactionCountRender} {language.like}, {commentCount}{" "}
+                  {language.comment}
                 </div>
-              </PreviewCommentStyled>
-            ) : (
-              <NoCommentStyled>댓글이 없습니다.</NoCommentStyled>
-            )}
-          </BoardContentContainerStyled>
-        </BoardBodyStyled>
-      </BoardWrapperStyled>
+                <span>{parsedDate}</span>
+              </ReactionCommentCountStyled>
+              <ContentStyled>{content}</ContentStyled>
+              {previewComment ? (
+                <PreviewCommentStyled>
+                  <div>{previewCommentUser}</div>
+                  <div>{parsedPreviewComment}</div>
+                  <div onClick={() => handleCommentClick(boardId)}>
+                    {language.moreComments}
+                  </div>
+                </PreviewCommentStyled>
+              ) : (
+                <NoCommentStyled>댓글이 없습니다.</NoCommentStyled>
+              )}
+            </BoardContentContainerStyled>
+          </BoardBodyStyled>
+        </BoardWrapperStyled>
+      </Suspense>
     </>
   );
 };

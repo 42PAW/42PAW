@@ -69,6 +69,7 @@ const ProfileCardModal = () => {
             <BoardOption
               memberId={currentMemberId as number}
               memberName={profileData.memberName}
+              followStatus={profileData.followType}
               callback={() => {
                 queryClient.invalidateQueries([
                   "profile",

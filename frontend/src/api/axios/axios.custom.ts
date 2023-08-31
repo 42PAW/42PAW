@@ -84,9 +84,12 @@ export const axiosGetBoards = async (
       });
       return response.data;
     }
-    const response = await axios.get(axiosGetBoardsURL, {
-      params: { size: size, page: page },
-    });
+    const response = await axios.get(
+      `${import.meta.env.VITE_BE_SERVER}` + axiosGetBoardsURL,
+      {
+        params: { size: size, page: page },
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;

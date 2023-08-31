@@ -8,7 +8,7 @@ import {
 // axios.defaults.withCredentials = true;
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_BE_HOST,
+  baseURL: import.meta.env.VITE_BE_SERVER,
   withCredentials: true,
 });
 

@@ -79,6 +79,7 @@ const FollowTypeButton = ({
   return (
     <ButtonStyled
       $status={status}
+      $size={size}
       disabled={isLoading}
       onClick={handleClickFollowTypeButton}
     >
@@ -92,34 +93,39 @@ const FollowTypeButton = ({
 };
 
 const buttonTextByStatus = {
-  [followType.NONE]: "팔로우",
+  [followType.NONE]: " 팔로우",
   [followType.FOLLOWING]: "팔로잉",
   [followType.BLOCK]: "차단됨",
 };
 
-const ButtonStyled = styled.button<{ $status: followType }>`
+const ButtonStyled = styled.button<{ $status: followType; $size: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 33px;
-  width: 90px;
-  border-radius: 10px;
+  height: ${({ $size }) => ($size === "large" ? "40px" : "33px")};
+  width: ${({ $size }) => ($size === "large" ? "200px" : "90px")};
+  border-radius: ${({ $size }) => ($size === "large" ? "20px" : "10px")};
+  font-size: ${({ $size }) => $size === "large" && "1.6rem"};
+  font-weight: ${({ $size }) => $size === "large" && "bold"};
+  margin-top: ${({ $size }) => $size === "large" && "-20px"};
   border: 1px solid
     ${({ $status }) =>
       $status === followType.BLOCK ? "#fc5656" : "var(--white)"};
-  background-color: ${({ $status }) =>
+  background-color: ${({ $status, $size }) =>
     $status === followType.BLOCK
       ? "#fc5656"
       : $status === followType.FOLLOWING
       ? "var(--white)"
+      : $size === "large"
+      ? "#9497ca"
       : "transparent"};
   color: ${({ $status }) =>
     $status === followType.FOLLOWING ? "var(--pink)" : "var(--white)"};
   transition: all 0.2s ease;
   cursor: pointer;
-  &:hover {
-    opacity: 0.8;
-  }
+  // &:hover {
+  //   opacity: 0.8;
+  // }
 `;
 
 export default FollowTypeButton;

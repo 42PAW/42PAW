@@ -16,7 +16,7 @@ interface ProfileTemplateProps {
   boards: IBoardInfo[] | null;
   tabState?: Board;
   onTabChange?: (newTabState: Board) => void;
-  memberId?: number;
+  memberId: number;
 }
 
 const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
@@ -29,7 +29,7 @@ const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
   const queryClient = useQueryClient();
   return (
     <ProfileWrapperStyled>
-      <ProfileInfoComponent userInfo={userInfo} />
+      <ProfileInfoComponent userInfo={userInfo} memberId={memberId} />
       {memberId !== 0 && memberId && userInfo && (
         <FollowButtonStyled>
           <FollowTypeButton

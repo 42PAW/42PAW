@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import useModal from "../../../hooks/useModal";
 import { ModalType } from "../../../types/enum/modal.enum";
 import styled from "styled-components";
@@ -9,6 +9,7 @@ import { useRecoilState } from "recoil";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
+import { useQueryClient } from "@tanstack/react-query";
 
 // const CountInfo = ({ label, value }: { label: string; value: number }) => (
 //   <li>
@@ -73,15 +74,17 @@ const UserInfoItems = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   );
 };
 
-const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
-  userInfo,
-}) => {
+const ProfileInfoComponent: React.FC<{
+  userInfo: ProfileInfoDTO | null;
+  memberId: number;
+}> = ({ userInfo, memberId }) => {
   //   const { openModal } = useModal();
 
   //   const handleOpenProfile = () => {
   //     openModal(ModalType.PROFILEEDIT); // PROFILECARD -> 바꿔야 돼 다시
   //   };
-  const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
+  // const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
+  const queryClient = useQueryClient();
 
   if (!userInfo) return <div>No user information available.</div>;
   return (
@@ -98,8 +101,11 @@ const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
       </div>
       <BoardOptionButtonStyled>
         <ProfileOption
-          memberId={currentMemberId}
+          memberId={memberId}
           memberName={userInfo.memberName}
+          callback={() => {
+            queryClient.invalidateQueries(["profile", memberId]);
+          }}
         />
         {/* ProfileOption 컴포넌트
         만들 것*/}

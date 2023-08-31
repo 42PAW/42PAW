@@ -25,22 +25,27 @@ interface IOptionButtonProps {
   // commentId?: number;
   memberId: number | null;
   memberName: string;
+  callback?: () => void;
 }
 
 /**게시글 및 댓글 오른쪽 상단 ... 버튼. 타인 게시물 댓글에서는 신고 차단, 내 게시물에서는 삭제가 나타남*/
 const ProfileOption: React.FC<IOptionButtonProps> = ({
   memberId,
   memberName,
+  callback,
 }) => {
   const [language] = useRecoilState<any>(languageState);
   const setBanUserInfo = useSetRecoilState<IBanUserInfo>(banUserInfoState);
   const [reportUserInfo, setReportUserInfo] =
     useRecoilState<ReportDTO>(reportUserInfoState);
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
-  //   const setDeleteInfo = useSetRecoilState<IDeleteInfo>(deleteInfoState);
   const { openModal } = useModal();
 
-  const banUser = { memberId: memberId, userName: memberName };
+  const banUser = {
+    memberId: memberId,
+    userName: memberName,
+    callback: callback,
+  };
 
   const handleBan = () => {
     setBanUserInfo(banUser);
@@ -56,11 +61,6 @@ const ProfileOption: React.FC<IOptionButtonProps> = ({
     });
     openModal(ModalType.REPORT);
   };
-
-  //   const handleDelete = () => {
-  //     setDeleteInfo({ boardId: boardId ?? null, commentId: commentId ?? null });
-  //     openModal(ModalType.DELETE);
-  //   };
 
   return (
     <OptionButton>

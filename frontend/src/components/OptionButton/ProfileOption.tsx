@@ -66,7 +66,7 @@ const ProfileOption: React.FC<IProfileOptionButtonProps> = ({
 
   return (
     <OptionButton>
-      {userInfo?.memberId !== memberId ? (
+      {memberId !== 0 ? (
         <>
           <MenuItemWrapperStyled>
             <MenuItemStyled onClick={handleBan}>{language.ban}</MenuItemStyled>
@@ -81,7 +81,7 @@ const ProfileOption: React.FC<IProfileOptionButtonProps> = ({
         <>
           <MenuItemWrapperStyled>
             <MenuItemStyled onClick={handleBanListClick}>
-              "차단 목록"
+              차단목록
             </MenuItemStyled>
           </MenuItemWrapperStyled>
           <MenuItemWrapperStyled>

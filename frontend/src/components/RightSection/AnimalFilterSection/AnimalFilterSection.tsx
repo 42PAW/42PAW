@@ -36,6 +36,8 @@ const AnimalFilterSection = () => {
       {animalCategory && (
         <AnimalButtonContainer
           columns={2}
+          buttonRow={50}
+          buttonFontSize={145}
           array={animalCategory}
           setter={setAnimalCategory}
         />

@@ -18,13 +18,22 @@ const AnimalFilterSection = () => {
   const { closeRightSection } = useRightSectionHandler();
 
   useEffect(() => {
-    if (userInfo) setAnimalCategory(userInfo.animalCategories);
+    //로그인 상태에서 유저 정보 카테고리 불러오기
+    if (userInfo) {
+      setAnimalCategory(userInfo.animalCategories);
+      return;
+    }
+    const allAnimalSpecies = Object.values(AnimalSpecies);
+    setAnimalCategory(allAnimalSpecies);
   }, []);
 
-  const handleOnClick = () => {
-    axiosUpdateAnimalCategory(animalCategory as AnimalSpecies[]);
+  const updateAnimalCategory = () => {
+    // 로그인 상태 -> api에 실제 데이터 변경 요청
+    if (userInfo) {
+      axiosUpdateAnimalCategory(animalCategory as AnimalSpecies[]);
+      popToast("동물 카테고리가 변경되었습니다.", "P");
+    }
     closeRightSection();
-    popToast("동물 카테고리가 변경되었습니다.", "P");
   };
 
   return (
@@ -42,7 +51,9 @@ const AnimalFilterSection = () => {
           setter={setAnimalCategory}
         />
       )}
-      <SubmitButtonStyled onClick={handleOnClick}>확인</SubmitButtonStyled>
+      <SubmitButtonStyled onClick={updateAnimalCategory}>
+        확인
+      </SubmitButtonStyled>
     </WrapperStyled>
   );
 };

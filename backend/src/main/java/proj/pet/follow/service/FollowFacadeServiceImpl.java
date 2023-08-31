@@ -27,12 +27,12 @@ public class FollowFacadeServiceImpl implements FollowFacadeService {
 	@Override
 	public FollowPaginationDto getMyFollowings(UserSessionDto userSessionDto, int page, int size) {
 		PageRequest pageable = PageRequest.of(page, size);
-		return followQueryService.getFollowings(0L, userSessionDto.getMemberId(), pageable);
+		return followQueryService.getFollowings(userSessionDto.getMemberId(), userSessionDto.getMemberId(), pageable);
 	}
 
 	@Override
 	public FollowPaginationDto getFollowings(UserSessionDto userSessionDto, Long memberId, int page,
-			int size) {
+	                                         int size) {
 		PageRequest pageable = PageRequest.of(page, size);
 		return followQueryService.getFollowings(userSessionDto.getMemberId(), memberId, pageable);
 	}
@@ -40,12 +40,12 @@ public class FollowFacadeServiceImpl implements FollowFacadeService {
 	@Override
 	public FollowPaginationDto getMyFollowers(UserSessionDto userSessionDto, int page, int size) {
 		PageRequest pageable = PageRequest.of(page, size);
-		return followQueryService.getFollowers(0L, userSessionDto.getMemberId(), pageable);
+		return followQueryService.getFollowers(userSessionDto.getMemberId(), userSessionDto.getMemberId(), pageable);
 	}
 
 	@Override
 	public FollowPaginationDto getFollowers(UserSessionDto userSessionDto, Long memberId, int page,
-			int size) {
+	                                        int size) {
 		PageRequest pageable = PageRequest.of(page, size);
 		return followQueryService.getFollowers(userSessionDto.getMemberId(), memberId, pageable);
 	}

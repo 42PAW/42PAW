@@ -115,6 +115,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 		return queryFactory.selectFrom(board)
 				.where(predicate)
 				.orderBy(orderSpecifier)
+				.orderBy(board.createdAt.desc())
 				.join(board.member).fetchJoin()
 //				.join(board.comments).fetchJoin()
 //				.join(board.reactions)

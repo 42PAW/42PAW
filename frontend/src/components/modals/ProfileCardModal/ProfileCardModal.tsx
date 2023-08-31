@@ -4,7 +4,7 @@ import ModalLayout from "@/components/modals/ModalLayout";
 import { ModalType } from "@/types/enum/modal.enum";
 import { currentOpenModalState } from "@/recoil/atom";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
-import BoardOption from "@/components/BoardOption";
+import BoardOption from "@/components/OptionButton/BoardOption";
 import { useQuery } from "@tanstack/react-query";
 import useFetch from "@/hooks/useFetch";
 import { userInfoState } from "@/recoil/atom";
@@ -16,17 +16,19 @@ import useModal from "@/hooks/useModal";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
 import FollowTypeButton from "../../FollowTypeButton";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ProfileCardModal = () => {
+  const queryClient = useQueryClient();
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
-  const { fetchProfile } = useFetch();
+  const { fetchProfile } = useFetch(currentMemberId);
   const { moveToMyProfile, moveToProfile } = useNavigateCustom();
   const { closeModal } = useModal();
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["profile", currentMemberId],
     queryFn: fetchProfile,
     keepPreviousData: true,
@@ -40,7 +42,7 @@ const ProfileCardModal = () => {
   };
 
   const toProfile = () => {
-    moveToProfile();
+    moveToProfile(currentMemberId as number);
     closeModal(ModalType.PROFILECARD);
   };
 
@@ -67,10 +69,19 @@ const ProfileCardModal = () => {
             <BoardOption
               memberId={currentMemberId as number}
               memberName={profileData.memberName}
+              followStatus={profileData.followType}
+              callback={() => {
+                queryClient.invalidateQueries([
+                  "profile",
+                  currentMemberId as number,
+                ]);
+              }}
             />
           )}
         </OptionButtonContainerStyled>
-        <ProfileImageStyled src={profileData.profileImageUrl} />
+        <ProfileImageStyled
+          src={profileData.profileImageUrl || "/src/assets/user.png"}
+        />
         <MainAreaStyled>
           <NickNameStyled>{profileData.memberName}</NickNameStyled>
           <IntraNameStyled>{profileData.intraName}</IntraNameStyled>
@@ -100,7 +111,12 @@ const ProfileCardModal = () => {
                 <FollowTypeButton
                   memberId={currentMemberId as number}
                   status={profileData.followType}
-                  isProfile={true}
+                  callback={() => {
+                    queryClient.invalidateQueries([
+                      "profile",
+                      currentMemberId as number,
+                    ]);
+                  }}
                 />
               </>
             ) : (
@@ -127,6 +143,7 @@ const WrapperStyled = styled.div`
   border-radius: 15px;
   color: var(--white);
   @media (max-width: 1023px) {
+    background-color: var(--transparent);
     width: 280px;
     height: 470px;
   }

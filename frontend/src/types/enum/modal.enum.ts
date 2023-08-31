@@ -5,4 +5,5 @@ export enum ModalType {
   PROFILECARD = "profileCardModal",
   PROFILEEDIT = "profileEditModal",
   LANGUAGE = "languageModal",
+  LOGIN = "loginModal",
 }

@@ -1,37 +1,38 @@
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { isRightSectionOpenedState } from "@/recoil/atom";
-import LeftMenuSection from "@/components/LeftMenuSection/LeftMenuSection";
 import RightSection from "@/components/RightSection/RightSection";
-import BoardSortToggle from "@/components/BoardSortToggle";
 import ModalContainer from "@/components/modals/ModalContainer";
 import Toaster from "@/components/toast/Toaster";
 import { getCookie } from "@/api/cookie/cookies";
 import { axiosMyInfo } from "@/api/axios/axios.custom";
 import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
-import { languageState } from "@/recoil/atom";
 import useTranslator from "@/hooks/useTranslator";
+import { Language } from "@/types/enum/language.enum";
+import LeftMenuSection from "@/components/LeftMenuSection/LeftMenuSection";
+import BoardSortToggle from "@/components/BoardSortToggle";
 
 const Layout = () => {
   const location = useLocation();
   const token = getCookie("access_token");
+  const localLanguage = localStorage.getItem("language");
   const [userInfo, setUserInfo] = useRecoilState<UserInfoDTO | null>(
     userInfoState
   );
-  const setLanugage = useSetRecoilState(languageState);
   const [isRightSectionOpened] = useRecoilState<boolean>(
     isRightSectionOpenedState
   );
   const { translator } = useTranslator();
 
-  /**메인 화면일 때만 게시글 정렬 버튼 보여주기*/
+  //메인 화면일 때만 게시글 정렬 버튼 보여주기
   const isMainPage: boolean = location.pathname === "/";
   const isSignUpPage: boolean = location.pathname === "/sign-up";
-  const isProfilePage: boolean =
-    location.pathname === "/my-profile" || location.pathname === "/profile";
+  const isProfilePage: boolean = /^\/(my-)?profile(\/\d+)?$/.test(
+    location.pathname
+  );
 
   const getMyInfo = async () => {
     try {
@@ -44,9 +45,10 @@ const Layout = () => {
   };
 
   useEffect(() => {
-    if (token && !userInfo) {
-      getMyInfo();
-    }
+    //로그인 성공 시 유저 정보 받아오기
+    if (token && !userInfo) getMyInfo();
+    //비로그인 상태에서 로컬 스토리지 키값을 통해 언어 설정
+    if (!token && localLanguage) translator(localLanguage as Language);
   }, []);
 
   return isSignUpPage ? (
@@ -95,13 +97,13 @@ const MainAreaStyled = styled.main<{
   display: flex;
   position: relative;
   flex-direction: column;
+  @media (min-width: 1024px) {
+    margin-left: 105px;
+  }
   align-items: center;
   height: 100%;
   min-height: 800px;
-  width: ${(props) =>
-    props.$isProfilePage
-      ? `calc(100% - ${props.$isRightSectionOpened ? "570px" : "0px"})`
-      : "500px"};
+  width: ${(props) => (props.$isProfilePage ? `600px` : "500px")};
 `;
 
 export default Layout;

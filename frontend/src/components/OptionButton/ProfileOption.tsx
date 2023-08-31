@@ -21,16 +21,14 @@ import { ReportDTO } from "@/types/dto/member.dto";
  * @memberName 차단 모달에 띄위게 될 차단 유저명
  */
 interface IOptionButtonProps {
-  boardId?: number;
-  commentId?: number;
-  memberId: number;
+  // boardId?: number;
+  // commentId?: number;
+  memberId: number | null;
   memberName: string;
 }
 
 /**게시글 및 댓글 오른쪽 상단 ... 버튼. 타인 게시물 댓글에서는 신고 차단, 내 게시물에서는 삭제가 나타남*/
-const BoardOption: React.FC<IOptionButtonProps> = ({
-  boardId,
-  commentId,
+const ProfileOption: React.FC<IOptionButtonProps> = ({
   memberId,
   memberName,
 }) => {
@@ -39,7 +37,7 @@ const BoardOption: React.FC<IOptionButtonProps> = ({
   const [reportUserInfo, setReportUserInfo] =
     useRecoilState<ReportDTO>(reportUserInfoState);
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
-  const setDeleteInfo = useSetRecoilState<IDeleteInfo>(deleteInfoState);
+  //   const setDeleteInfo = useSetRecoilState<IDeleteInfo>(deleteInfoState);
   const { openModal } = useModal();
 
   const banUser = { memberId: memberId, userName: memberName };
@@ -53,16 +51,16 @@ const BoardOption: React.FC<IOptionButtonProps> = ({
     setReportUserInfo({
       ...reportUserInfo,
       reportedMemberId: memberId,
-      boardId: boardId ?? null,
-      commentId: commentId ?? null,
+      boardId: null,
+      commentId: null,
     });
     openModal(ModalType.REPORT);
   };
 
-  const handleDelete = () => {
-    setDeleteInfo({ boardId: boardId ?? null, commentId: commentId ?? null });
-    openModal(ModalType.DELETE);
-  };
+  //   const handleDelete = () => {
+  //     setDeleteInfo({ boardId: boardId ?? null, commentId: commentId ?? null });
+  //     openModal(ModalType.DELETE);
+  //   };
 
   return (
     <OptionButton>
@@ -78,11 +76,18 @@ const BoardOption: React.FC<IOptionButtonProps> = ({
           </MenuItemWrapperStyled>
         </>
       ) : (
-        <MenuItemWrapperStyled>
-          <MenuItemStyled onClick={handleDelete}>
-            {language.delete}
-          </MenuItemStyled>
-        </MenuItemWrapperStyled>
+        <>
+          <MenuItemWrapperStyled>
+            <MenuItemStyled onClick={() => console.log(1)}>
+              {language.delete}
+            </MenuItemStyled>
+          </MenuItemWrapperStyled>
+          <MenuItemWrapperStyled>
+            <MenuItemStyled onClick={() => console.log(2)}>
+              {language.report}
+            </MenuItemStyled>
+          </MenuItemWrapperStyled>
+        </>
       )}
     </OptionButton>
   );
@@ -109,4 +114,4 @@ const MenuItemStyled = styled.div`
   }
 `;
 
-export default BoardOption;
+export default ProfileOption;

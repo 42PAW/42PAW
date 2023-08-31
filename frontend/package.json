@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-spring/web": "^9.7.3",
     "@tanstack/react-query": "^4.32.6",
+    "@tanstack/react-query-devtools": "^4.33.0",
     "axios": "^1.4.0",
     "canvas-confetti": "^1.6.0",
     "cors": "^2.8.5",
@@ -19,10 +20,12 @@
     "react": "^18.2.0",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-intersection-observer": "^9.5.2",
     "react-router-dom": "^6.13.0",
     "recoil": "^0.7.7",
-    "styled-components": "^6.0.1"
+    "styled-components": "^6.0.1",
+    "swiper": "^10.2.0"
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.6.0",

@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lexend&display=swap");
 
 :root {
   --black: #000000;
@@ -33,7 +34,7 @@ body {
   margin: 0;
   height: 100%;
   /* min-width: 갤럭시 폴드 기준 */
-  min-width: 280px;
+  min-width: 262px;
   overflow: hidden;
   font-size: 10px;
   font-weight: 500;
@@ -43,8 +44,8 @@ body {
   background: linear-gradient(
     210deg,
     #878abea0 30%,
-    #d1c1cd 68.34%,
-    #e6dade 76.75%
+    #d1c1cd 78.34%,
+    #e6dade 86.75%
   );
   background-repeat: no-repeat;
 }
@@ -60,4 +61,15 @@ button {
 div,
 h1 {
   cursor: default;
+}
+
+.swiper-pagination-bullet-active {
+  color: white;
+  background: var(--white, var(--transparent2));
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-size: 3rem;
+  color: var(--white);
 }

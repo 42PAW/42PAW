@@ -26,16 +26,15 @@ const useNavigateCustom = () => {
 
   const moveToMyProfile = () => {
     // 라우트 전환 시, Board를 default로 전환해 주지 않으면 이전 카테고리 게시글이 남아있는 현상을 방지
-    setBoard(Board.DEFAULT);
     setIsRightSectionOpened(false);
     navigator("/my-profile");
   };
 
-  const moveToProfile = () => {
+  const moveToProfile = (memberId: number) => {
     // 라우트 전환 시, Board를 default로 전환해 주지 않으면 이전 카테고리 게시글이 남아있는 현상을 방지
     setBoard(Board.DEFAULT);
     setIsRightSectionOpened(false);
-    navigator("/profile");
+    navigator("/profile/" + memberId.toString());
   };
 
   const moveToUpload = () => {
@@ -45,11 +44,19 @@ const useNavigateCustom = () => {
     navigator("/upload");
   };
 
-  const moveToDashboard = () => {
-    // 라우트 전환 시, Board를 default로 전환해 주지 않으면 이전 카테고리 게시글이 남아있는 현상을 방지
-    setBoard(Board.DEFAULT);
+  const moveToMyProfileBoards = () => {
     setIsRightSectionOpened(false);
-    navigator("/dashboard");
+    navigator("/my-profile/boards");
+  };
+
+  const moveToMyProfileScrapped = () => {
+    setIsRightSectionOpened(false);
+    navigator("/my-profile/scrapped");
+  };
+
+  const moveToProfileBoards = (memberId: number) => {
+    setIsRightSectionOpened(false);
+    navigator("/profile/" + memberId.toString() + "/boards");
   };
 
   return {
@@ -58,7 +65,9 @@ const useNavigateCustom = () => {
     moveToProfile,
     moveToMyProfile,
     moveToUpload,
-    moveToDashboard,
+    moveToMyProfileBoards,
+    moveToMyProfileScrapped,
+    moveToProfileBoards,
   };
 };
 

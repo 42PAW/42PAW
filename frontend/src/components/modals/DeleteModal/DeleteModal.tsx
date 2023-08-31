@@ -54,19 +54,22 @@ const DeleteModal = () => {
               ? comments[comments.length - 1]
               : null;
 
-          const updatedBoards = prevData.map((board: IBoardInfo) => {
-            if (board.boardId === currentBoardId) {
-              return {
-                ...board,
-                commentCount: board.commentCount - 1,
-                previewCommentUser:
-                  (lastComment && lastComment.memberName) ?? null,
-                previewComment: (lastComment && lastComment.comment) ?? null,
-              };
-            }
-            return board;
-          });
-          return updatedBoards;
+          const updatedBoards = prevData.pages.map((page: IBoardInfo[]) =>
+            page.map((board: IBoardInfo) => {
+              if (board.boardId === currentBoardId) {
+                return {
+                  ...board,
+                  commentCount: board.commentCount - 1,
+                  previewCommentUser:
+                    (lastComment && lastComment.memberName) ?? null,
+                  previewComment: (lastComment && lastComment.comment) ?? null,
+                };
+              }
+              return board;
+            })
+          );
+
+          return { ...prevData, pages: updatedBoards };
         }
       );
     },
@@ -76,12 +79,15 @@ const DeleteModal = () => {
     onSuccess: async () => {
       await queryClient.setQueryData(
         ["boards", boardCategory],
-        (prevData: IBoardInfo[] | any) => {
+        (prevData: { pages: IBoardInfo[][] } | any) => {
           if (!prevData) return prevData;
-          const updatedBoards: IBoardInfo[] = prevData.filter(
-            (board: IBoardInfo) => board.boardId !== deleteInfo.boardId
+          const updatedBoards = prevData.pages.map((page: IBoardInfo[]) =>
+            page.filter(
+              (board: IBoardInfo) => board.boardId !== deleteInfo.boardId
+            )
           );
-          return updatedBoards;
+
+          return { ...prevData, pages: updatedBoards };
         }
       );
     },

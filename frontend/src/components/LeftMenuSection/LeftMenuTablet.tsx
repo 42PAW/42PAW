@@ -4,21 +4,28 @@ import useNavigateCustom from "@/hooks/useNavigateCustom";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import SettingButton from "@/components/SettingButton";
 import { LeftMenuProps } from "./LeftMenuSection";
+import { getCookie } from "@/api/cookie/cookies";
+
+let token = getCookie("access_token");
+
+import { useSetRecoilState } from "recoil";
+import { currentMemberIdState } from "@/recoil/atom";
 
 const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   handleLogin,
   handleLogout,
+  handleClickLogo,
   userInfo,
-  language,
 }) => {
   const [isBannerVisible, setIsBannerVisible] = useState(true);
-  const { moveToMain, moveToMyProfile, moveToUpload, moveToDashboard } =
-    useNavigateCustom();
+  const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
   const { openSearchSection } = useRightSectionHandler();
   const touchStartY = useRef<number | null>(null);
-
   const isProfilePage: boolean =
     location.pathname === "/my-profile" || location.pathname === "/profile";
+  const setCurrentMemberId = useSetRecoilState<number | null>(
+    currentMemberIdState
+  );
 
   useEffect(() => {
     window.addEventListener("wheel", handleWheel);
@@ -60,54 +67,58 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
     touchStartY.current = null;
   };
 
+  const handleOpenMyProfile = () => {
+    setCurrentMemberId(userInfo!.memberId);
+    moveToMyProfile();
+  };
+  const handleLoginButton = () => {
+    token ? handleLogout() : handleLogin();
+    token = getCookie("access_token");
+  };
+
   return (
     <>
-      {!isProfilePage && (
-        <BannerStyled $isBannerVisible={isBannerVisible}>
-          {userInfo ? (
-            <ProfileImageStyled
-              src={userInfo.profileImageUrl}
-              onClick={moveToMyProfile}
+      <BannerStyled $isBannerVisible={isBannerVisible}>
+        <BannerLogoStyled onClick={handleClickLogo}>
+          <img src="/src/assets/paw.png" />
+        </BannerLogoStyled>
+        <SettingButtonContainerStyled>
+          <SettingButton>
+            <img
+              alt="Login"
+              src="/src/assets/logout.png"
+              onClick={handleLoginButton}
             />
-          ) : (
-            <ProfileImageStyled
-              src="/src/assets/userW.png"
-              onClick={handleLogin}
-            />
-          )}
-          <BannerLogoStyled>
-            <img src="/src/assets/paw.png" />
-          </BannerLogoStyled>
-          <SettingButtonContainerStyled>
-            <SettingButton />
-          </SettingButtonContainerStyled>
-        </BannerStyled>
-      )}
+          </SettingButton>
+        </SettingButtonContainerStyled>
+      </BannerStyled>
       <MenuStyled>
-        <LogoImageStyled src="/src/assets/paw.png" onClick={moveToMain} />
         <nav>
           <MenuListStyled>
             <li onClick={moveToMain}>
-              <img alt="Main" src="/src/assets/home.png" />
-            </li>
-            <li onClick={moveToUpload}>
-              <img alt="MyProfile" src="/src/assets/upload.png" />
+              <ListImageStyled alt="Main" src="/src/assets/home.png" />
             </li>
             <li onClick={openSearchSection}>
-              <img alt="Search" src="/src/assets/search.png" />
+              <ListImageStyled alt="Search" src="/src/assets/search.png" />
             </li>
-            <li onClick={moveToDashboard}>
-              <img alt="DashBoard" src="/src/assets/dashboard.png" />
+            <li onClick={moveToUpload}>
+              <ListImageStyled alt="MyProfile" src="/src/assets/upload.png" />
+            </li>
+            <li>
+              {userInfo ? (
+                <ProfileImageStyled
+                  src={userInfo.profileImageUrl || "/src/assets/userW.png"}
+                  onClick={handleOpenMyProfile}
+                />
+              ) : (
+                <ProfileImageStyled
+                  src="/src/assets/userW.png"
+                  onClick={handleLogin}
+                />
+              )}
             </li>
           </MenuListStyled>
         </nav>
-        {userInfo ? (
-          <LoginButtonStyled onClick={handleLogout}>
-            {language.logout}
-          </LoginButtonStyled>
-        ) : (
-          <LoginButtonStyled onClick={handleLogin}>로그인</LoginButtonStyled>
-        )}
       </MenuStyled>
     </>
   );
@@ -117,7 +128,7 @@ const BannerStyled = styled.div<{ $isBannerVisible: boolean }>`
   z-index: 2;
   position: sticky;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: 100vw;
   height: 45px;
@@ -130,16 +141,6 @@ const BannerStyled = styled.div<{ $isBannerVisible: boolean }>`
   line-height: 15px;
 `;
 
-const ProfileImageStyled = styled.img`
-  margin-left: 10px;
-  width: 35px;
-  height: 35px;
-  border-radius: 100%;
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
 const BannerLogoStyled = styled.div`
   text-align: center;
   font-family: "Monoton";
@@ -147,12 +148,15 @@ const BannerLogoStyled = styled.div`
   color: var(--white);
   font-size: 1.8rem;
   img {
-    width: 40px;
+    cursor: pointer;
+    width: 45px;
     margin-bottom: 5px;
   }
 `;
 
 const SettingButtonContainerStyled = styled.div`
+  position: absolute;
+  right: 0;
   margin-top: 8px;
   margin-right: 5px;
 `;
@@ -165,7 +169,6 @@ const MenuStyled = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  overflow: isBannerVisible;
   width: 100vw;
   background-color: #c5c6dcfa;
   margin-top: -48px;
@@ -185,43 +188,28 @@ const MenuStyled = styled.div`
   }
 `;
 
-const LogoImageStyled = styled.img`
-  cursor: pointer;
-  width: 0px;
-  margin-top: 30%;
-`;
-
 const MenuListStyled = styled.ul`
+  width: 100vw;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   list-style-type: none;
   padding: 0;
   margin: 0;
-  img {
-    cursor: pointer;
-    padding: 10px 10px;
-    width: 20px;
-  }
-  img:hover {
-    background-color: var(--transparent);
-    border-radius: 30%;
-  }
 `;
 
-const LoginButtonStyled = styled.div`
+const ListImageStyled = styled.img`
   cursor: pointer;
-  text-align: center;
-  min-width: 45px;
-  margin: 0;
-  margin-right: 2%;
-  font-size: 1rem;
-  &:hover {
-    background-color: var(--white);
-    color: var(--purple);
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-  }
+  width: 20px;
+`;
+
+const ProfileImageStyled = styled.img`
+  cursor: pointer;
+  width: 25px;
+  aspect-ratio: 1 / 1;
+  border-radius: 100%;
+  padding: 0;
 `;
 
 export default LeftMenuTablet;

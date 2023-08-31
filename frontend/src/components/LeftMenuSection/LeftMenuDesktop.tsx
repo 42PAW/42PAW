@@ -4,19 +4,29 @@ import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import SettingButton from "@/components/SettingButton";
 import { LeftMenuProps } from "./LeftMenuSection";
 
+import { useSetRecoilState } from "recoil";
+import { currentMemberIdState } from "@/recoil/atom";
+
 const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
   handleLogin,
   handleLogout,
+  handleClickLogo,
   userInfo,
   language,
 }) => {
-  const { moveToMain, moveToMyProfile, moveToUpload, moveToDashboard } =
-    useNavigateCustom();
+  const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
   const { openSearchSection } = useRightSectionHandler();
+  const setCurrentMemberId = useSetRecoilState<number | null>(
+    currentMemberIdState
+  );
+  const handleOpenMyProfile = () => {
+    setCurrentMemberId(userInfo!.memberId);
+    moveToMyProfile();
+  };
   return (
     <>
       <LeftMenuStyled>
-        <LogoImageStyled src="/src/assets/paw.png" onClick={moveToMain} />
+        <LogoImageStyled src="/src/assets/paw.png" onClick={handleClickLogo} />
         <nav>
           <MenuListStyled>
             <li onClick={moveToMain}>
@@ -28,14 +38,11 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
             <li onClick={openSearchSection}>
               <img alt="Search" src="/src/assets/search.png" />
             </li>
-            <li onClick={moveToDashboard}>
-              <img alt="DashBoard" src="/src/assets/dashboard.png" />
-            </li>
           </MenuListStyled>
           {userInfo ? (
             <ProfileImageStyled
-              src={userInfo.profileImageUrl}
-              onClick={moveToMyProfile}
+              src={userInfo.profileImageUrl || "/src/assets/userW.png"}
+              onClick={handleOpenMyProfile}
             />
           ) : (
             <ProfileImageStyled
@@ -86,7 +93,7 @@ const LeftMenuStyled = styled.div`
 const LogoImageStyled = styled.img`
   cursor: pointer;
   width: 60px;
-  margin-top: 30%;
+  margin-top: 15%;
 `;
 
 const MenuListStyled = styled.ul`

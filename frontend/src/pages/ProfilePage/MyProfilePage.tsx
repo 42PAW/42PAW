@@ -7,12 +7,14 @@ import { Board } from "@/types/enum/board.category.enum";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import { boardCategoryState } from "@/recoil/atom";
 import { IBoardInfo } from "@/types/interface/board.interface";
+import { useNavigate } from "react-router-dom";
 
 const MyProfilePage = () => {
-  const { fetchMyProfile } = useFetch();
+  const { fetchProfile } = useFetch();
+  const navigator = useNavigate();
   const profileQuery = useQuery({
     queryKey: ["myProfile"],
-    queryFn: fetchMyProfile,
+    queryFn: fetchProfile,
     refetchOnMount: "always",
   });
   const { fetchBoards } = useFetch();
@@ -28,16 +30,19 @@ const MyProfilePage = () => {
   }, []);
 
   const boardsQuery = useQuery<IBoardInfo[]>({
-    queryKey: ["boards", boardCategory], // 여기서 boardCategory를 그냥 Board.MINE하는게?
-    queryFn: fetchBoards,
+    queryKey: ["profileBoards", boardCategory], // 여기서 boardCategory를 그냥 Board.MINE하는게?
+    queryFn: () => fetchBoards(0),
     keepPreviousData: true,
   });
 
   const isLoading = profileQuery.isLoading || boardsQuery.isLoading;
+  const isError = profileQuery.isError || boardsQuery.isError;
 
   if (isLoading) {
     return <LoadingAnimation />;
   }
+
+  if (isError) navigator("/");
 
   return (
     <ProfileTemplate
@@ -45,6 +50,7 @@ const MyProfilePage = () => {
       boards={boardsQuery.data || null}
       tabState={boardCategory}
       onTabChange={handleTabState}
+      memberId={0}
     />
   );
 };

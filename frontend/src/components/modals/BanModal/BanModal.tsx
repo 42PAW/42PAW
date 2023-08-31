@@ -9,23 +9,32 @@ import { IBanUserInfo } from "@/types/interface/user.interface";
 import useModal from "@/hooks/useModal";
 import useToaster from "@/hooks/useToaster";
 import { axiosBlockUser } from "@/api/axios/axios.custom";
-import { useQueryClient } from "@tanstack/react-query";
-import { currentMemberIdState } from "@/recoil/atom";
+import { callbackStoreState } from "@/recoil/atom";
+import { followType } from "@/types/enum/followType.enum";
 
 const BanModal: React.FC = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
-  const [currentMemberId] = useRecoilState(currentMemberIdState);
   const [banUserInfo] = useRecoilState<IBanUserInfo>(banUserInfoState);
-  const queryClient = useQueryClient();
+  const [callbackStore] = useRecoilState<Function[]>(callbackStoreState);
   const { closeModal } = useModal();
   const { popToast } = useToaster();
 
   const handleOnClick = async () => {
+    console.log(banUserInfo);
+    await closeModal(ModalType.BAN);
+    //이미 차단된 유저 차단 시도 시
+    if (banUserInfo.followType === followType.BLOCK) {
+      popToast("이미 차단된 유저입니다.", "N");
+      return;
+    }
     await axiosBlockUser(banUserInfo.memberId as number);
-    queryClient.invalidateQueries(["profile", currentMemberId]);
-    closeModal(ModalType.BAN);
+    if (banUserInfo.callback) banUserInfo.callback();
+    //검색창에서 프로필 카드 모달을 띄웠을 시 차단할 경우 프로필 카드 모달과 검색창 아이템의 팔로우 타입 버튼 모두 렌더링 해주기 위함
+    if (callbackStore.length !== 0) {
+      callbackStore.forEach((callback) => callback());
+    }
     popToast(`${banUserInfo.userName} 님이 차단됐습니다.`, "N");
   };
 

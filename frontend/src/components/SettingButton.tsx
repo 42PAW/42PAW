@@ -1,10 +1,17 @@
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 import styled from "styled-components";
 import useModal from "@/hooks/useModal";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { ModalType } from "@/types/enum/modal.enum";
+import { getCookie } from "@/api/cookie/cookies";
 
-const SettingButton = () => {
+const token = getCookie("access_token");
+
+interface props {
+  children?: ReactNode;
+}
+
+const SettingButton: React.FC<props> = ({ children }) => {
   const [isToggled, setIsToggled] = useState<boolean>(false);
   const { openModal } = useModal();
   const { openAnimalFilterSection } = useRightSectionHandler();
@@ -18,20 +25,33 @@ const SettingButton = () => {
     }
   };
 
+  const handleOpenAnimalFilterSection = () => {
+    if (!token) {
+      openModal(ModalType.LOGIN);
+      return;
+    }
+    openAnimalFilterSection();
+  };
+
   return (
     <WrapperStyled onMouseLeave={() => handleToggle("ON")}>
       <ToggleStyled onClick={() => handleToggle("OFF")}>
-        <img src="/src/assets/setting.png" />
+        <img src="/src/assets/burger.png" />
       </ToggleStyled>
       <MenuStyled $isToggled={isToggled}>
         <MenuList onClick={() => handleToggle("OFF")}>
+          {children && (
+            <MenuItemWrapperStyled>
+              <MenuItemStyled>{children}</MenuItemStyled>
+            </MenuItemWrapperStyled>
+          )}
           <MenuItemWrapperStyled>
             <MenuItemStyled onClick={() => openModal(ModalType.LANGUAGE)}>
               <img src="/src/assets/globalW.png" />
             </MenuItemStyled>
           </MenuItemWrapperStyled>
           <MenuItemWrapperStyled>
-            <MenuItemStyled onClick={openAnimalFilterSection}>
+            <MenuItemStyled onClick={handleOpenAnimalFilterSection}>
               <img src="/src/assets/categoryW.png" />
             </MenuItemStyled>
           </MenuItemWrapperStyled>
@@ -46,8 +66,8 @@ const WrapperStyled = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
   background-color: transparent;
   border: none;
   img {
@@ -70,9 +90,6 @@ const ToggleStyled = styled.button`
     width: 90%;
     opacity: 1;
   }
-  img:hover {
-    opacity: 0.7;
-  }
 `;
 
 const MenuStyled = styled.div<{ $isToggled: boolean }>`
@@ -80,13 +97,12 @@ const MenuStyled = styled.div<{ $isToggled: boolean }>`
   display: flex;
   justify-content: space-around;
   text-align: center;
-  margin-left: ${({ $isToggled }) => ($isToggled ? "-60px" : "-30px")};
   min-width: 50px;
   border-radius: 5px;
   color: var(--grey);
+  right: 38px;
   opacity: ${({ $isToggled }) => ($isToggled ? 1 : 0)};
   visibility: ${({ $isToggled }) => ($isToggled ? "visible" : "hidden")};
-
   transition: all 0.3s;
   z-index: 1;
 `;

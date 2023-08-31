@@ -23,12 +23,7 @@ const CommentSection = () => {
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
   const [comment, setComment] = useState<string>("");
   const queryClient = useQueryClient();
-  const {
-    data: comments,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { data: comments, isLoading } = useQuery({
     queryKey: ["comments", currentBoardId],
     queryFn: fetchComments,
   });
@@ -42,7 +37,11 @@ const CommentSection = () => {
       setComment("");
       return;
     }
-    await axiosCreateComment(currentBoardId, comment);
+    try {
+      await axiosCreateComment(currentBoardId, comment);
+    } catch (error) {
+      setComment("");
+    }
   };
 
   const commentMutation = useMutation(uploadComment, {
@@ -58,20 +57,23 @@ const CommentSection = () => {
         (prevData: IBoardInfo[] | any) => {
           if (!prevData) return prevData;
           if (!newComments) return prevData;
-          const updatedBoards = prevData.map((board: IBoardInfo) => {
-            if (board.boardId === currentBoardId) {
-              return {
-                ...board,
-                previewCommentUser:
-                  newComments[newComments?.length - 1].memberName,
-                previewComment: newComments[newComments?.length - 1].comment,
-                commentCount: newComments?.length,
-              };
-            }
-            return board;
-          });
 
-          return updatedBoards;
+          const updatedBoards = prevData.pages.map((page: IBoardInfo[]) =>
+            page.map((board: IBoardInfo) => {
+              if (board.boardId === currentBoardId && newComments) {
+                return {
+                  ...board,
+                  previewCommentUser:
+                    newComments[newComments.length - 1].memberName,
+                  previewComment: newComments[newComments.length - 1].comment,
+                  commentCount: newComments.length,
+                };
+              }
+              return board;
+            })
+          );
+
+          return { ...prevData, pages: updatedBoards };
         }
       );
       setComment("");

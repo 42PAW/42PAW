@@ -78,8 +78,12 @@ public class MemberServiceImpl implements MemberService {
 	public void uploadMemberProfileImage(Long memberId, MultipartFile profileImageData) {
 		Member member = memberRepository.findById(memberId)
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
-		String profileImageUrl = memberImageManager.uploadMemberProfileImage(profileImageData);
-		member.changeProfileImageUrl(profileImageUrl);
+		if (profileImageData == null || profileImageData.isEmpty()) {
+			member.changeProfileImageUrl(null);
+		} else {
+			String profileImageUrl = memberImageManager.uploadMemberProfileImage(profileImageData);
+			member.changeProfileImageUrl(profileImageUrl);
+		}
 	}
 
 	/**

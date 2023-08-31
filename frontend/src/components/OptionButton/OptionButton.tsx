@@ -37,6 +37,7 @@ const OptionButton: React.FC<IOptionButtonProps> = ({ children }) => {
 };
 
 const WrapperStyled = styled.div`
+  padding-top: 5px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -65,7 +66,6 @@ const MenuStyled = styled.div<{ $isToggled: boolean }>`
   text-align: center;
   margin-top: 25px;
   min-width: 45px;
-
   border-radius: 10px;
   color: var(--grey);
   background: var(--white);

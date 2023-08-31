@@ -1,14 +1,7 @@
 package proj.pet.follow.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import proj.pet.auth.domain.AuthGuard;
 import proj.pet.auth.domain.AuthLevel;
 import proj.pet.follow.dto.FollowPaginationDto;
@@ -71,6 +64,7 @@ public class FollowController {
 			@RequestParam("page") int page,
 			@RequestParam("size") int size
 	) {
+		System.out.println("result = " + followFacadeService.getMyFollowings(userSessionDto, page, size));
 		return followFacadeService.getMyFollowings(userSessionDto, page, size);
 	}
 
@@ -83,6 +77,7 @@ public class FollowController {
 	 * @return FollowPaginationDto 다른 사람의 팔로우하는 멤버들 페이징 정보
 	 */
 	@GetMapping("/members/{memberId}/followings")
+	@AuthGuard(level = AuthLevel.ANYONE)
 	public FollowPaginationDto getFollowings(
 			@UserSession UserSessionDto userSessionDto,
 			@PathVariable("memberId") Long memberId,
@@ -119,6 +114,7 @@ public class FollowController {
 	 * @return FollowPaginationDto 다른 사람을 팔로우하는 멤버들 페이징 정보
 	 */
 	@GetMapping("/members/{memberId}/followers")
+	@AuthGuard(level = AuthLevel.ANYONE)
 	public FollowPaginationDto getFollowers(
 			@UserSession UserSessionDto userSessionDto,
 			@PathVariable("memberId") Long memberId,

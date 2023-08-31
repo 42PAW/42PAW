@@ -1,3 +1,5 @@
+import { followType } from "@/types/enum/followType.enum";
+
 /**
  * @memberId 차단할 유저 id
  * @userName 차단할 유저 닉네임
@@ -5,6 +7,8 @@
 export interface IBanUserInfo {
   memberId: number | null;
   userName: string;
+  followType: followType | null;
+  callback?: () => void;
 }
 
 /**

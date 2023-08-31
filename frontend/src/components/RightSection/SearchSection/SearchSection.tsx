@@ -1,25 +1,32 @@
 import { styled, keyframes } from "styled-components";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { searchInputState } from "@/recoil/atom";
-import { MemberSearchResponseDTO } from "@/types/dto/member.dto.ts";
+import {
+  MemberSearchResponseDTO,
+  UserInfoDTO,
+} from "@/types/dto/member.dto.ts";
 import SearchItem from "@/components/RightSection/SearchSection/SearchItem";
 import { axiosGetSearchResults } from "@/api/axios/axios.custom";
 import useDebounce from "@/hooks/useDebounce";
+import useToaster from "@/hooks/useToaster";
+import LoadingDotsAnimation from "@/components/loading/LoadingDotsAnimation";
+import { userInfoState } from "@/recoil/atom";
+import { useRecoilState } from "recoil";
 
 const SearchSection = () => {
+  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [isInput, setIsInput] = useState(false);
-  const [searchInput, setSearchInput] =
-    useRecoilState<string>(searchInputState);
+  const [searchInput, setSearchInput] = useState<string>("");
   const { debounce } = useDebounce();
+  const { popToast } = useToaster();
   const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const myInput = document.getElementById("search-input") as HTMLInputElement;
 
     const inputChangeHandler = () => {
       setSearchInput(myInput.value);
-      submitSearch();
+      updateSearchResult();
     };
 
     if (myInput) {
@@ -34,16 +41,19 @@ const SearchSection = () => {
   }, []);
 
   useEffect(() => {
-    debounce("search", submitSearch, 500);
+    setIsLoading(true);
+    debounce("search", updateSearchResult, 500);
   }, [searchInput]);
 
-  const submitSearch = async () => {
+  const updateSearchResult = async () => {
     if (searchInput == "") {
+      setIsLoading(false);
       setSearchResults([]);
       return;
     }
     const result = await axiosGetSearchResults(searchInput, 100, 0);
     setSearchResults(result);
+    setIsLoading(false);
   };
 
   const handleInputChange = async (
@@ -53,11 +63,11 @@ const SearchSection = () => {
   };
 
   const handleInputState = () => {
+    if (isInput) return;
     if (searchInput == "") {
+      popToast("검색 내용을 입력해주세요.", "N");
       setIsInput(true);
-      setTimeout(() => {
-        setIsInput(false);
-      }, 1000);
+      debounce("noSearchInput", () => setIsInput(false), 1000);
     }
   };
 
@@ -66,7 +76,6 @@ const SearchSection = () => {
   ) => {
     if (event.key == "Enter") {
       handleInputState();
-
       setSearchInput(searchInput);
     }
   };
@@ -76,12 +85,12 @@ const SearchSection = () => {
       <SearchBarStyled $isInput={isInput}>
         <input
           type="text"
-          placeholder="검색어를 입력해주세요..."
+          placeholder="아이디를 입력해주세요.."
           value={searchInput}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
         />
-        <button onClick={() => submitSearch()}>
+        <button onClick={() => updateSearchResult()}>
           <img src="/src/assets/search.png" />
         </button>
       </SearchBarStyled>
@@ -97,10 +106,20 @@ const SearchSection = () => {
               country={user.country}
               statement={user.statement}
               relationship={user.relationship}
+              updateFollowType={updateSearchResult}
+              isMine={userInfo?.memberId === user.memberId}
             />
           ))
         ) : (
-          <NoSearchMessageStyled>검색 결과가 없습니다</NoSearchMessageStyled>
+          <NoSearchMessageStyled>
+            {isLoading ? (
+              <div>
+                <LoadingDotsAnimation />
+              </div>
+            ) : (
+              <div>검색 결과가 없습니다</div>
+            )}
+          </NoSearchMessageStyled>
         )}
       </SearchItemWrapperStyled>
     </WrapperStyled>
@@ -125,17 +144,17 @@ const shakeAnimation = keyframes`
 	100% { transform: translateX(0); }
 `;
 
-const SearchBarStyled = styled.div`
+const SearchBarStyled = styled.div<{ $isInput: boolean }>`
   display: flex;
   justify-content: space-between;
-  padding: 13px;
-  margin-top: 20px;
+  padding: 10px 10px;
+  margin-top: 15px;
   width: 85%;
   border-radius: 30px;
   background: var(--transparent);
-  animation: ${($isInput) => ($isInput ? shakeAnimation : "none")} 0.5s;
-  // 검색 입력창
+  animation: ${({ $isInput }) => ($isInput ? shakeAnimation : "none")} 0.5s;
   input {
+    width: 90%;
     display: flex;
     border: none;
     background: none;
@@ -143,9 +162,10 @@ const SearchBarStyled = styled.div`
     padding-left: 10px;
     caret-color: var(--white);
     color: var(--white);
-    font-size: 1.6rem;
+
+    font-size: 1.3rem;
     &::placeholder {
-      color: var(--white);
+      color: var(--transparent2);
     }
   }
   // 검색 버튼
@@ -155,11 +175,11 @@ const SearchBarStyled = styled.div`
     border: none;
     background: transparent;
     cursor: pointer;
-    width: 22px;
-    height: 22px;
+    padding: 0;
+    padding-right: 5px;
     img {
-      width: 22px;
-      height: 22px;
+      width: 15px;
+      height: 15px;
     }
   }
 `;
@@ -170,14 +190,13 @@ const SearchItemWrapperStyled = styled.div`
   align-items: center;
   margin-top: 20px;
   width: 100%;
-  overflow-y: auto;
 `;
 
 const NoSearchMessageStyled = styled.div`
   display: flex;
   justify-content: center;
   padding: 10px;
-  font-size: 16px;
+  font-size: 1.3rem;
   color: var(--white);
   opacity: 0.7;
 `;

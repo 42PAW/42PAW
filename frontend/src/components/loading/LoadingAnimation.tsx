@@ -16,7 +16,7 @@ const LoadingAnimationStyled = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 100vw;
+  width: 110vw;
   height: 4px;
   background: linear-gradient(
     124deg,

@@ -2,45 +2,73 @@ import { useState } from "react";
 import useModal from "../../../hooks/useModal";
 import { ModalType } from "../../../types/enum/modal.enum";
 import styled from "styled-components";
-import BoardOption from "@/components/BoardOption";
+import ProfileOption from "@/components/OptionButton/ProfileOption";
 import { ProfileInfoDTO } from "@/types/dto/member.dto";
+import { currentMemberIdState } from "@/recoil/atom";
+import { useRecoilState } from "recoil";
+import { useCountryEmoji } from "@/hooks/useCountryEmoji";
+import { Country } from "@/types/enum/country.enum";
+import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 
-/* tmp */
-// const profileInfo = {
-//   memberName: "아롱오래비",
-//   intraName: "mingkang",
-//   nicknameUpdatedAt: "2023-01-23",
-//   profileImageUrl: "/src/assets/profileImage.jpg",
-//   country: "KOREA",
-//   statement: "아롱이의 오빠입니다. 잘 부탁 합니다.",
-//   followingCount: 23,
-//   followerCount: 42,
-//   boardCount: 47,
-// };
+// const CountInfo = ({ label, value }: { label: string; value: number }) => (
+//   <li>
+//     <div>{label}</div>
+//     <span>{value}</span>
+//   </li>
+// );
 
-const CountInfo = ({ label, value }: { label: string; value: number }) => (
-  <li>
-    <div>{label}</div>
-    <span>{value}</span>
-  </li>
-);
+const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
+  const { openFollowerSection, openFollowingSection } =
+    useRightSectionHandler();
+  const handleFollowerClick = () => {
+    openFollowerSection();
+  };
 
-const CountInfoItems = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
+  const handleFollowingClick = () => {
+    // 팔로잉을 클릭했을 때 수행할 작업
+    openFollowingSection();
+    // console.log("팔로잉을 클릭했습니다.");
+    // 원하는 작업을 여기에 추가하세요
+  };
+
   return (
     <CountInfoStyled>
-      <CountInfo label="게시물" value={userInfo.boardCount} />
-      <CountInfo label="팔로워" value={userInfo.followerCount} />
-      <CountInfo label="팔로잉" value={userInfo.followingCount} />
+      <li>
+        <div>게시물</div>
+        <span>{userInfo.boardCount}</span>
+      </li>
+      <li onClick={handleFollowerClick}>
+        <div>팔로워</div>
+        <span>{userInfo.followerCount}</span>
+      </li>
+      <li onClick={handleFollowingClick}>
+        <div>팔로잉</div>
+        <span>{userInfo.followingCount}</span>
+      </li>
     </CountInfoStyled>
   );
 };
 
+const CountInfoCover = styled.div`
+  position: absolute;
+  top: 0;
+  left: 33.33%; /* 팔로워 영역의 시작 위치 */
+  width: 33.33%; /* 팔로워 영역의 너비 */
+  height: 100%;
+  cursor: pointer;
+  z-index: 1;
+`;
+
 const UserInfoItems = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
+  const countryEmoji = useCountryEmoji(userInfo.country as Country);
+
   return (
     <UserInfoStyled>
       <div className="memberName">{userInfo.memberName}</div>
       <div className="intraName">{userInfo.intraName}</div>
-      <div className="country">🇰🇷 {userInfo.country}</div>
+      <div className="country">
+        {countryEmoji} {userInfo.campus}
+      </div>
     </UserInfoStyled>
   );
 };
@@ -53,21 +81,26 @@ const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
   //   const handleOpenProfile = () => {
   //     openModal(ModalType.PROFILEEDIT); // PROFILECARD -> 바꿔야 돼 다시
   //   };
+  const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
+
   if (!userInfo) return <div>No user information available.</div>;
   return (
     <ProfileHeaderStyled>
       <img
         className="profileImage"
         alt="Profile image"
-        src={userInfo.profileImageUrl}
+        src={userInfo.profileImageUrl || "/src/assets/userW.png"}
       />
       <div className="content-wrapper">
         <UserInfoItems userInfo={userInfo} />
         <CaptionSectionStyled>{userInfo.statement}</CaptionSectionStyled>
-        <CountInfoItems userInfo={userInfo} />
+        <CountInfo userInfo={userInfo} />
       </div>
       <BoardOptionButtonStyled>
-        <BoardOption boardId={0} memberName={""} />
+        <ProfileOption
+          memberId={currentMemberId}
+          memberName={userInfo.memberName}
+        />
         {/* ProfileOption 컴포넌트
         만들 것*/}
       </BoardOptionButtonStyled>
@@ -77,22 +110,54 @@ const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
 
 const UserInfoStyled = styled.div`
   margin-top: 10px;
-  font-weight: 600;
+  font-weight: 500;
 
   .memberName {
-    font-size: 2rem;
-  }
-  .intraName {
-    color: var(--lightgrey2);
+    font-weight: 600;
     font-size: 1.4rem;
   }
-  .country {
-    color: var(--lightgrey2);
+  .intraName {
+    color: var(--transparent2);
     font-size: 1.2rem;
+    transition: all 0.5s ease;
+    &:hover {
+      color: var(--white);
+    }
+  }
+  .country {
+    margin-top: 5px;
+    color: var(--white);
+    font-size: 1rem;
   }
 `;
 
 /* 게시물, 팔로워, 팔로잉 수 */
+// const CountInfoStyled = styled.ul`
+//   display: flex;
+//   width: 100%;
+//   padding: 0;
+//   margin: 0 0 30px 0;
+
+//   li {
+//     font-size: 1.2rem;
+//     display: flex;
+//     flex-direction: column;
+//     width: calc(100% / 3);
+//     &:not(:last-child) {
+//       border-right: 1.2px solid var(--transparent); /* 원하는 선의 색상 설정 */
+//     }
+//     cursor: pointer;
+//     &:first-child {
+//       cursor: default;
+//     }
+//   }
+
+//   span {
+//     font-size: 1.2rem;
+//     font-weight: 600;
+//   }
+// `;
+
 const CountInfoStyled = styled.ul`
   display: flex;
   width: 100%;
@@ -104,13 +169,30 @@ const CountInfoStyled = styled.ul`
     display: flex;
     flex-direction: column;
     width: calc(100% / 3);
+    align-items: center; /* 가운데 정렬을 위한 스타일 추가 */
+    cursor: pointer;
+
     &:not(:last-child) {
-      border-right: 1.2px solid var(--grey2); /* 원하는 선의 색상 설정 */
+      border-right: 1.2px solid var(--transparent); /* 원하는 선의 색상 설정 */
+    }
+
+    &:hover:not(:first-child) {
+      color: var(--button-grey-hover); /* 마우스 오버 시 글자 색 어둡게 설정 */
+    }
+
+    &:first-child {
+      cursor: default;
+    }
+
+    div,
+    span {
+      cursor: inherit; /* 부모 요소인 li의 커서 스타일 상속 */
+      transition: color 0.2s; /* 색 변화에 애니메이션 적용 */
     }
   }
 
   span {
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     font-weight: 600;
   }
 `;
@@ -137,12 +219,8 @@ const ProfileHeaderStyled = styled.div`
   //   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   font-size: 1.6rem;
 
-  @media (min-width: 1023px) {
-    height: 386px;
-  }
-
-  background-image: url("/src/assets/profileFrame.png"); /* SVG 파일 경로 */
-  background-size: contain;
+  background-image: url("/src/assets/intersect.png");
+  background-size: 100% 320px;
   background-repeat: no-repeat;
   background-position-y: bottom;
 
@@ -151,7 +229,7 @@ const ProfileHeaderStyled = styled.div`
     flex-direction: column;
     text-align: center;
     width: 100%;
-    height: 100%;
+    flex: 1;
     justify-content: space-between;
     align-items: center;
   }
@@ -159,9 +237,9 @@ const ProfileHeaderStyled = styled.div`
   .profileImage {
     width: 160px;
     aspect-ratio: 1 / 1;
-
+    background-color: var(--transparent); /* 이미지가 없을 때 배경 색상 */
     filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.25));
-    border-radius: 100%;
+    border-radius: 50%;
   }
 
   .meatballsMenuIcon {
@@ -174,6 +252,7 @@ const ProfileHeaderStyled = styled.div`
 
 const CaptionSectionStyled = styled.div`
   font-weight: 500;
+  font-size: 1.3rem;
 `;
 
 export default ProfileInfoComponent;

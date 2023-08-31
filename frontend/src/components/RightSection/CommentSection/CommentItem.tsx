@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
-import BoardOption from "@/components/BoardOption";
+import BoardOption from "@/components/OptionButton/BoardOption";
 import useParseDate from "@/hooks/useParseDate";
 import { useSetRecoilState } from "recoil";
 import { currentMemberIdState } from "@/recoil/atom";
@@ -32,7 +32,10 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
   return (
     <CommentItemStyled>
       <UserImageContainerStyled>
-        <img src={profileImageUrl} onClick={handleOpenProfile} />
+        <img
+          src={profileImageUrl || "/src/assets/userW.png"}
+          onClick={handleOpenProfile}
+        />
       </UserImageContainerStyled>
       <CommentItemRightStyled>
         <NicknameToggleContainerStyled>

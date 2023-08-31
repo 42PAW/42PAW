@@ -7,6 +7,8 @@ import { useRecoilState } from "recoil";
 import CommentSection from "@/components/RightSection/CommentSection/CommentSection";
 import SearchSection from "@/components/RightSection/SearchSection/SearchSection";
 import AnimalFilterSection from "@/components/RightSection/AnimalFilterSection/AnimalFilterSection";
+import FollowerSection from "@/components/RightSection/FollowerSection/FollowerSection";
+import FollowingSection from "@/components/RightSection/FollowingSection/FollowingSection";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { IRightSectionContentInfo } from "@/types/interface/right.section.interface";
 
@@ -23,7 +25,6 @@ const RightSection = () => {
     <>
       <RightSectionStyled $isRightSectionOpened={isRightSectionOpened}>
         <CloseButtonContainerStyled>
-          {/* {rightSectionContent.search && <SearchBar /> } */}
           <CloseButtonStyled onClick={closeRightSection}>
             <img src="/src/assets/exitW.png" />
           </CloseButtonStyled>
@@ -32,6 +33,8 @@ const RightSection = () => {
           {rightSectionContent.comment && <CommentSection />}
           {rightSectionContent.search && <SearchSection />}
           {rightSectionContent.animalFilter && <AnimalFilterSection />}
+          {rightSectionContent.follower && <FollowerSection />}
+          {rightSectionContent.following && <FollowingSection />}
         </RightSectionBodyStyled>
       </RightSectionStyled>
       {isRightSectionOpened && <OverlayStyled onClick={closeRightSection} />}
@@ -84,7 +87,7 @@ const RightSectionStyled = styled.div<{
   transition: opacity 0.5s ease-in-out, margin-right 0.5s ease-in-out;
   @media (max-width: 1023px) {
     z-index: 4;
-    height: ${(props) => (props.$isRightSectionOpened ? "85%" : "0%")};
+    height: ${(props) => (props.$isRightSectionOpened ? "92%" : "0%")};
     background-color: #dbdcfec3;
     position: absolute;
     width: 100%;
@@ -120,6 +123,10 @@ const CloseButtonStyled = styled.button`
   }
   img:hover {
     opacity: 0.7;
+  }
+  @media (max-width: 1023px) {
+    width: 40px;
+    margin-right: 7px;
   }
 `;
 

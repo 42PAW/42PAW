@@ -70,6 +70,7 @@ const ReportModal: React.FC = () => {
       popToast("신고 사유를 선택해주세요.", "N");
       return;
     }
+    await closeModal(ModalType.REPORT);
     await axiosReport(
       reportUserInfo.reportedMemberId as number,
       content,
@@ -78,7 +79,6 @@ const ReportModal: React.FC = () => {
       reportUserInfo.commentId
     );
     popToast("신고가 접수됐습니다.", "P");
-    closeModal(ModalType.REPORT);
     resetReportUserInfo();
   };
 

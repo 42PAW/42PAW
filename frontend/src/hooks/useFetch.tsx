@@ -18,39 +18,44 @@ import {
   axiosGetBoardComments,
   axiosGetMyProfile,
   axiosGetProfile,
+  axiosGetMyFollowerList,
+  axiosGetFollowerList,
+  axiosGetMyFollowingList,
+  axiosGetFollowingList,
 } from "@/api/axios/axios.custom";
 
-const useFetch = () => {
+const useFetch = (memberId?: number | null) => {
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
   const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
 
-  const fetchBoards = async () => {
+  const fetchBoards = async (page?: number) => {
     try {
+      if (!page) page = 0;
       if (boardCategory === Board.DEFAULT) {
-        const response = await axiosGetBoards(30, 0);
+        const response = await axiosGetBoards(20, page);
         return response.result;
       }
       if (boardCategory === Board.TRENDING) {
-        const response = await axiosGetTrendingBoards(30, 0);
+        const response = await axiosGetTrendingBoards(20, page);
         return response.result;
       }
       if (boardCategory === Board.FOLLOWING) {
-        const response = await axiosGetFollowingBoards(30, 0);
+        const response = await axiosGetFollowingBoards(20, page);
         return response.result;
       }
       if (boardCategory === Board.MINE) {
-        const response = await axiosGetMyBoards(30, 0);
-        return response.result;
-      }
-      if (boardCategory === Board.OTHER) {
-        if (!currentMemberId) {
-          return;
-        }
-        const response = await axiosGetOtherBoards(currentMemberId, 20, 0);
+        const response = await axiosGetMyBoards(1000, page);
         return response.result;
       }
       if (boardCategory === Board.SCRAPPED) {
-        const response = await axiosGetScrappedBoards(20, 0);
+        const response = await axiosGetScrappedBoards(1000, page);
+        return response.result;
+      }
+      if (boardCategory === Board.OTHER) {
+        if (!memberId) {
+          return;
+        }
+        const response = await axiosGetOtherBoards(memberId, 1000, page);
         return response.result;
       }
     } catch (error) {
@@ -76,29 +81,62 @@ const useFetch = () => {
 
   const fetchProfile = async () => {
     try {
-      if (!currentMemberId) return;
-      if (!userInfo || userInfo.memberId !== currentMemberId) {
-        const response = await axiosGetProfile(currentMemberId);
-        console.log(response);
+      if (!memberId || (userInfo && userInfo.memberId === memberId)) {
+        const response = await axiosGetMyProfile();
         return response;
       }
-      const response = await axiosGetMyProfile();
+      const response = await axiosGetProfile(memberId);
       return response;
     } catch (error) {
       throw error;
     }
   };
 
-  const fetchMyProfile = async () => {
+  // const fetchMyProfile = async () => {
+  //   // TODO: fetchProfile과 합치기
+  //   try {
+  //     const response = await axiosGetMyProfile();
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // };
+
+  const fetchFollowerList = async () => {
     try {
-      const response = await axiosGetMyProfile();
-      return response;
+      if (!memberId) {
+        console.log("fetchFollowerList", memberId);
+        const response = await axiosGetMyFollowerList(1000, 0);
+        return response.result;
+      }
+      const response = await axiosGetFollowerList(memberId, 1000, 0);
+      return response.result;
     } catch (error) {
       throw error;
     }
   };
 
-  return { fetchBoards, fetchComments, fetchProfile, fetchMyProfile };
+  const fetchFollowingList = async () => {
+    try {
+      if (!memberId) {
+        console.log("fetchFollowingList", memberId);
+        const response = await axiosGetMyFollowingList(1000, 0);
+        return response.result;
+      }
+      const response = await axiosGetFollowingList(memberId, 1000, 0);
+      return response.result;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return {
+    fetchBoards,
+    fetchComments,
+    fetchProfile,
+    fetchFollowerList,
+    fetchFollowingList,
+  };
 };
 
 export default useFetch;

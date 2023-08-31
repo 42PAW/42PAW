@@ -1,43 +1,52 @@
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import PostListItem from "./PostListItem";
 import { IBoardInfo } from "@/types/interface/board.interface";
+import { userInfoState } from "@/recoil/atom";
+import { UserInfoDTO } from "@/types/dto/member.dto";
+import useNavigateCustom from "@/hooks/useNavigateCustom";
+import { boardCategoryState } from "@/recoil/atom";
+import { Board } from "@/types/enum/board.category.enum";
 
-const PostList = (props: any) => {
-  const { posts, onClickItem } = props;
+const PostList: React.FC<{ posts: IBoardInfo[] }> = ({ posts }) => {
+  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
+  const [boardCategory] = useRecoilState<Board>(boardCategoryState);
+  const {
+    moveToMyProfileBoards,
+    moveToMyProfileScrapped,
+    moveToProfileBoards,
+  } = useNavigateCustom();
+
+  const showBoardsInScroll = () => {
+    if (boardCategory === Board.SCRAPPED) moveToMyProfileScrapped();
+    else if (userInfo && userInfo.memberId === posts[0].memberId)
+      moveToMyProfileBoards();
+    else moveToProfileBoards(posts[0].memberId);
+  };
 
   return (
-    <>
+    <WrapperStyled>
       {posts.map((post: IBoardInfo) => {
         return (
           <PostListItem
             key={post.boardId}
             post={post}
-            onClick={() => {
-              onClickItem();
-            }}
+            showBoardsInScroll={showBoardsInScroll}
           />
         );
       })}
-    </>
+    </WrapperStyled>
   );
 };
 
 const WrapperStyled = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   max-height: calc(100% - 50px);
-  //   img {
-  //     width: calc(33.3%);
-  //     border-radius: 1%;
-  //   }
-  //   border: 1px;
-  // &::before {
-  //   content: ""; /* 가상 요소 내용 없음 */
-  //   position: absolute; /* 절대 위치 설정 */
-  //   top: 0;
-  //   left: 0;
-  //   width: 100%;
-  // }
+  grid-template-columns: repeat(3, 1fr);
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  gap: 2px;
 `;
 
 export default PostList;

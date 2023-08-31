@@ -68,6 +68,7 @@ public class TestMember implements TestEntity<Member, Long> {
 		Member member = mock(Member.class);
 		lenient().when(member.getId()).thenReturn(id);
 		lenient().when(member.getOauthProfile()).thenReturn(OauthProfile.of(this.oauthType, this.oauthId, this.oauthName));
+		lenient().when(member.getProfileImageUrl()).thenReturn(this.profileImageUrl);
 		lenient().when(member.getCountry()).thenReturn(this.country);
 		lenient().when(member.getCampus()).thenReturn(this.campus);
 		lenient().when(member.getNickname()).thenReturn(this.nickname);

@@ -19,7 +19,7 @@ export const axiosSignUp = async ({
   try {
     const formData = new FormData();
     formData.append("memberName", memberName);
-    formData.append("imageData", imageData ? imageData : "null");
+    if (imageData) formData.append("imageData", imageData);
     formData.append("statement", statement);
     categoryFilters.map((categoryFilter) => {
       formData.append("categoryFilters", categoryFilter);
@@ -57,14 +57,10 @@ export const axiosCreateBoard = async ({
     mediaDataList.forEach((file) => {
       formData.append(`mediaDataList`, file);
     });
-    formData.append(
-      "categoryList",
-      new Blob([JSON.stringify(categoryList)], { type: "application/json" })
-    );
-    formData.append(
-      "content",
-      new Blob([content], { type: "application/json" })
-    );
+    categoryList.forEach((category) => {
+      formData.append(`categoryList`, category);
+    });
+    formData.append("content", content);
     const response = await instance.post(axiosCreateBoardURL, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -451,6 +447,94 @@ export const axiosGetSearchResults = async (
       params: { name: name, size: size, page: page },
     });
     return response.data.result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetMyFollowerListURL = "/v1/follows/me/followers";
+export const axiosGetMyFollowerList = async (
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    const response = await instance.get(axiosGetMyFollowerListURL, {
+      params: { size: size, page: page },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetFollowerListURL = "/v1/follows/members/";
+export const axiosGetFollowerList = async (
+  memberId: number,
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    let response;
+    if (token) {
+      response = await instance.get(
+        axiosGetFollowerListURL + memberId.toString() + "/followers",
+        {
+          params: { size: size, page: page },
+        }
+      );
+    } else {
+      response = await axios.get(
+        axiosGetFollowerListURL + memberId.toString() + "/followers",
+        {
+          params: { size: size, page: page },
+        }
+      );
+    }
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetMyFollowingListURL = "/v1/follows/me/followings";
+export const axiosGetMyFollowingList = async (
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    const response = await instance.get(axiosGetMyFollowingListURL, {
+      params: { size: size, page: page },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetFollowingListURL = "/v1/follows/members/";
+export const axiosGetFollowingList = async (
+  memberId: number,
+  size: number,
+  page: number
+): Promise<any> => {
+  try {
+    let response;
+    if (token) {
+      response = await instance.get(
+        axiosGetFollowingListURL + memberId.toString() + "/followings",
+        {
+          params: { size: size, page: page },
+        }
+      );
+    } else {
+      response = await axios.get(
+        axiosGetFollowingListURL + memberId.toString() + "/followings",
+        {
+          params: { size: size, page: page },
+        }
+      );
+    }
+    return response.data;
   } catch (error) {
     throw error;
   }

@@ -20,6 +20,7 @@ public enum ExceptionStatus {
 	NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "멤버가 존재하지 않습니다."),
 	ALREADY_EXIST_MEMBER(HttpStatus.CONFLICT, "이미 존재하는 멤버입니다."),
 	ALREADY_BLOCKED_MEMBER(HttpStatus.CONFLICT, "이미 차단된 멤버입니다."),
+	ALREADY_DELETED_BOARD(HttpStatus.CONFLICT, "이미 삭제된 게시물입니다."),
 	UNAUTHENTICATED(HttpStatus.FORBIDDEN, "권한이 없는 요청입니다."),
 	NOT_FOUND_BOARD(HttpStatus.NOT_FOUND, "존재하지 않는 게시물입니다."),
 	NOT_FOUND_REACTION(HttpStatus.NOT_FOUND, "존재하지 않는 반응입니다."),

@@ -6,8 +6,9 @@ import { Board } from "@/types/enum/board.category.enum";
 import { IBanUserInfo } from "@/types/interface/user.interface";
 import { IToastInfo } from "@/types/interface/toast.interface";
 import Translator from "@/languages/Translator";
-import { UserInfoDTO, ReportUserDTO } from "@/types/dto/member.dto";
+import { UserInfoDTO, ReportDTO } from "@/types/dto/member.dto";
 import { IDeleteInfo } from "@/types/interface/option.interface";
+import { IBoardInfo } from "@/types/interface/board.interface";
 
 export const userInfoState = atom<UserInfoDTO | null>({
   key: "userInfo",
@@ -59,6 +60,7 @@ export const rightSectionContentState = atom<IRightSectionContentInfo>({
     follower: false,
     following: false,
     animalFilter: false,
+    bannedMember: false,
   },
 });
 
@@ -89,6 +91,7 @@ export const currentOpenModalState = atom<ICurrentModalStateInfo>({
     profileCardModal: false,
     profileEditModal: false,
     languageModal: false,
+    loginModal: false,
   },
 });
 
@@ -106,7 +109,7 @@ export const banUserInfoState = atom<IBanUserInfo>({
   },
 });
 
-export const reportUserInfoState = atom<ReportUserDTO>({
+export const reportUserInfoState = atom<ReportDTO>({
   key: "reportUserInfo",
   default: {
     reportedMemberId: null,
@@ -130,7 +133,14 @@ export const languageState = atom<any>({
   default: Translator.en,
 });
 
-export const searchInputState = atom<string | null>({
-  key: "searchInput",
-  default: "",
+//검색창에서 프로필 카드 모달을 띄웠을 시 차단할 경우 프로필 카드 모달과 검색창 아이템의 팔로우 타입 버튼 모두 렌더링 해주기 위함
+//정보 업데이트 후 새롭게 fetch하기 위한 콜백 함수들을 배열로 저장 후 foreach로 일괄 실행
+export const callbackStoreState = atom<Function[]>({
+  key: "callbackStore",
+  default: [],
+});
+
+export const currentProfileBoardIdState = atom<number | null>({
+  key: "currentProfileBoardId",
+  default: null,
 });

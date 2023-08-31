@@ -19,17 +19,17 @@ import useRightSectionHandler from "@/hooks/useRightSectionHandler";
  * @memberId 신고, 차단, 삭제할 댓글 혹은 게시물의 유저 id
  * @memberName 차단 모달에 띄위게 될 차단 유저명
  */
-interface IOptionButtonProps {
-  // boardId?: number;
-  // commentId?: number;
+interface IProfileOptionButtonProps {
   memberId: number | null;
   memberName: string;
+  callback?: () => void;
 }
 
 /**게시글 및 댓글 오른쪽 상단 ... 버튼. 타인 게시물 댓글에서는 신고 차단, 내 게시물에서는 삭제가 나타남*/
-const ProfileOption: React.FC<IOptionButtonProps> = ({
+const ProfileOption: React.FC<IProfileOptionButtonProps> = ({
   memberId,
   memberName,
+  callback,
 }) => {
   const [language] = useRecoilState<any>(languageState);
   const setBanUserInfo = useSetRecoilState<IBanUserInfo>(banUserInfoState);
@@ -38,7 +38,12 @@ const ProfileOption: React.FC<IOptionButtonProps> = ({
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const { openModal } = useModal();
   const { openBannedMemberSection } = useRightSectionHandler();
-  const banUser = { memberId: memberId, userName: memberName };
+
+  const banUser = {
+    memberId: memberId,
+    userName: memberName,
+    callback: callback,
+  };
 
   const handleBan = () => {
     setBanUserInfo(banUser);

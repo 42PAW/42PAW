@@ -34,7 +34,7 @@ function App() {
           <Route path="my-profile/scrapped" element={<MyProfileBoardsPage />} />
           <Route path="profile/:memberId" element={<ProfilePage />} />
           <Route
-            path="profile/boards/:memberId"
+            path="profile/:memberId/boards"
             element={<ProfileBoardsPage />}
           />
         </Route>

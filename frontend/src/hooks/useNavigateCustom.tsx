@@ -56,7 +56,7 @@ const useNavigateCustom = () => {
 
   const moveToProfileBoards = (memberId: number) => {
     setIsRightSectionOpened(false);
-    navigator("/profile/boards/" + memberId.toString());
+    navigator("/profile/" + memberId.toString() + "/boards");
   };
 
   return {

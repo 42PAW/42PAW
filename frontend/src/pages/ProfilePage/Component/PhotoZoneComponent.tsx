@@ -47,11 +47,9 @@ const PhotoZoneComponent: React.FC<PhotoZoneComponentProps> = ({
 
 const ProfileBodyStyled = styled.div`
   flex: 1;
-  //   overflow: hidden;
   width: 100%;
   margin-top: 30px;
   border-radius: 10px 10px 0px 0px;
-  //   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   background: linear-gradient(75deg, #999bc6 50%, #d3c3ce 150%);
 `;
 
@@ -80,16 +78,7 @@ const PhotoCategoryToggleStyled = styled.div`
       border-top-right-radius: 10px;
     }
   }
-  // button:not(:last-child)::before {
-  //   content: "";
-  //   position: absolute;
-  //   right: 0;
-  //   top: 50%;
-  //   transform: translateY(-50%);
-  //   width: 1.5px;
-  //   height: 30px;
-  //   background-color: #ffffff;
-  // }
+
   button:hover {
     background-color: #fdfdfd39;
   }

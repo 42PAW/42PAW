@@ -7,9 +7,9 @@ import ProfileInfoComponent from "@/pages/ProfilePage/Component/ProfileInfoCompo
 import PhotoZoneComponent from "@/pages/ProfilePage/Component/PhotoZoneComponent";
 import { ProfileInfoDTO } from "@/types/dto/member.dto";
 import { Board } from "@/types/enum/board.category.enum";
-// import { BoardsInfoDTO } from "@/types/dto/board.dto";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import FollowTypeButton from "@/components/FollowTypeButton";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ProfileTemplateProps {
   userInfo: ProfileInfoDTO | null; // userInfo를 props로 받음
@@ -26,6 +26,7 @@ const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
   onTabChange,
   memberId,
 }) => {
+  const queryClient = useQueryClient();
   return (
     <ProfileWrapperStyled>
       <ProfileInfoComponent userInfo={userInfo} />
@@ -34,7 +35,10 @@ const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
           <FollowTypeButton
             memberId={memberId}
             status={userInfo.followType}
-            isProfile={true}
+            callback={() => {
+              queryClient.invalidateQueries(["profile", memberId]);
+            }}
+            size="large"
           />
         </FollowButtonStyled>
       )}

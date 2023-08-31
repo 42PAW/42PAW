@@ -28,7 +28,6 @@ const ProfilePage = () => {
   const boardsQuery = useQuery<IBoardInfo[]>({
     queryKey: ["profileBoards", boardCategory], // 여기서 boardCategory를 그냥 Board.MINE하는게?
     queryFn: () => fetchBoards(0),
-    keepPreviousData: true,
   });
 
   const isLoading = profileQuery.isLoading || boardsQuery.isLoading;

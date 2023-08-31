@@ -27,10 +27,9 @@ const ProfileBoardsPage = () => {
       ({ pageParam = 0 }) => fetchBoards(pageParam),
       {
         getNextPageParam: (lastPage, allPages) => {
-          if (lastPage.length === 0) return undefined;
+          if (!lastPage || lastPage.length === 0) return undefined;
           return allPages.length;
         },
-        keepPreviousData: true,
       }
     );
   const [currentProfileBoardId] = useRecoilState(currentProfileBoardIdState);

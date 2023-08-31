@@ -46,7 +46,7 @@ const AnimalFilterSection: React.FC<SectionProps> = ({
         />
       </ButtonZoneStyled>
       <NextButtonStyled onClick={handleOnClick}>
-        <img src="/src/assets/arrowW.png" />
+        <img src="/assets/arrowW.png" />
       </NextButtonStyled>
     </WrapperStyled>
   );

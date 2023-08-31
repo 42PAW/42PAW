@@ -35,7 +35,7 @@ const ProfileEditModal = () => {
               alert("click!");
             }}
           >
-            <img src="/src/assets/edit_icon.png" />
+            <img src="/assets/edit_icon.png" />
           </button>
         </NameStyled>
         <ProfileImageStyled src={profileInfo.profileImage} />

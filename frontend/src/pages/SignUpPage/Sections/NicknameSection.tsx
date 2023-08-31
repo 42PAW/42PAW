@@ -61,7 +61,7 @@ const NicknameSection: React.FC<SectionProps> = ({
           onKeyDown={handleKeyDown}
         ></input>
         <button onClick={submitNickname}>
-          <img src="/src/assets/arrowW.png" />
+          <img src="/assets/arrowW.png" />
         </button>
       </InputContainer>
     </WrapperStyled>

@@ -76,7 +76,7 @@ const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
       <img
         className="profileImage"
         alt="Profile image"
-        src={userInfo.profileImageUrl || "/src/assets/userW.png"}
+        src={userInfo.profileImageUrl || "/assets/userW.png"}
       />
       <div className="content-wrapper">
         <UserInfoItems userInfo={userInfo} />
@@ -206,7 +206,7 @@ const ProfileHeaderStyled = styled.div`
   //   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   font-size: 1.6rem;
 
-  background-image: url("/src/assets/intersect.png");
+  background-image: url("/assets/intersect.png");
   background-size: 100% 320px;
   background-repeat: no-repeat;
   background-position-y: bottom;

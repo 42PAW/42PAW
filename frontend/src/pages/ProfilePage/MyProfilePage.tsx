@@ -15,7 +15,6 @@ const MyProfilePage = () => {
   const profileQuery = useQuery({
     queryKey: ["myProfile"],
     queryFn: fetchProfile,
-    refetchOnMount: "always",
   });
   const { fetchBoards } = useFetch();
   const [boardCategory, setBoardCategory] =

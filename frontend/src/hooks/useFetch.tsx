@@ -53,7 +53,7 @@ const useFetch = (memberId?: number | null) => {
       }
       if (boardCategory === Board.OTHER) {
         if (!memberId) {
-          return;
+          return [];
         }
         const response = await axiosGetOtherBoards(memberId, 1000, page);
         return response.result;

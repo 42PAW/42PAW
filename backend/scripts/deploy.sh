@@ -4,4 +4,4 @@ PROJECT_NAME=pet
 SPRING_BOOT_PROCESS_ID= $(lsof | grep '.jar' | awk '{print $2}' | head -n 1)
 
 kill $SPRING_BOOT_PROCESS_ID
-java -jar -Dspring.profiles.active=prod ./deploy/pet-*.jar &
+java -jar -Dspring.profiles.active=prod $USER_HOME/deploy/$PROJECT_NAME-*.jar &

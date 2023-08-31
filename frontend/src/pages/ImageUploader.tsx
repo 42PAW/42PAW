@@ -16,9 +16,9 @@ const ImageUploader = () => {
   // check if the user is trying to put more than 5 images
   const [filecnt, setFilecnt] = useState<number>(0);
   // if u click small preview, it will be selected & shown in main preview box
-  const [selectedPreviewIndex, setSelectedPreviewIndex] = useState(null);
+  // const [selectedPreviewIndex, setSelectedPreviewIndex] = useState<number>(0);
   // if u hover small preview, it will be shown in main preview box -> it's for deleting or editing image
-  const [hoveringIndex, setHoveringIndex] = useState(null);
+  const [hoveringIndex, setHoveringIndex] = useState<number | null>(null);
   // utils
   const { parseDate } = useParseDate();
   const { popToast } = useToaster();
@@ -27,9 +27,9 @@ const ImageUploader = () => {
   const showUploadButton = uploadFilesCount < 5;
 
   // handle preview click: select the image & show it in main preview box
-  const handlePreviewClick = (index: number) => {
-    setSelectedPreviewIndex(index);
-  };
+  // const handlePreviewClick = (index: number) => {
+  //   setSelectedPreviewIndex(index);
+  // };
 
   const handlePreviewHover = (index: number) => {
     setHoveringIndex(index);
@@ -45,7 +45,9 @@ const ImageUploader = () => {
 
   // handle image change: convert to webp & update uploadFiles
   const handleImageChange = (e: any) => {
-    const selectedFiles = Array.from(e.target.files);
+    if (!uploadFiles) return;
+    const selectedFiles: Blob[] = Array.from(e.target.files);
+    if (!selectedFiles || !uploadFiles) return;
     if (selectedFiles.some((file: any) => file.size > 5000000)) {
       popToast("5MB 이하의 이미지만 업로드 가능합니다.", "N");
       return;
@@ -55,7 +57,7 @@ const ImageUploader = () => {
       return;
     }
     setFilecnt(filecnt + selectedFiles.length);
-    setUploadFiles([...(uploadFiles as Blob), ...selectedFiles]);
+    setUploadFiles([...uploadFiles, ...selectedFiles]);
     convertToWebp(selectedFiles as Blob[]);
   };
 
@@ -115,7 +117,7 @@ const ImageUploader = () => {
         {uploadFiles.map((file: Blob, index: number) => (
           <SmallPreviewUnitStyled
             key={index}
-            onClick={() => handlePreviewClick(index)}
+            // onClick={() => handlePreviewClick(index)}
             onMouseEnter={() => handlePreviewHover(index)}
             onMouseLeave={() => handlePreviewHover(0)} //원래 null
           >

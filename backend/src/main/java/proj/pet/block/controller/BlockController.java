@@ -48,6 +48,7 @@ public class BlockController {
 			@RequestParam("page") int page,
 			@RequestParam("size") int size
 	) {
+		System.out.println(userSessionDto + "\n$$$\n" + page + "\n$$$\n" + size);
 		return blockFacadeService.getMyBlockList(userSessionDto, page, size);
 	}
 }

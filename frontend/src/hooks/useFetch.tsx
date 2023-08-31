@@ -92,20 +92,9 @@ const useFetch = (memberId?: number | null) => {
     }
   };
 
-  // const fetchMyProfile = async () => {
-  //   // TODO: fetchProfile과 합치기
-  //   try {
-  //     const response = await axiosGetMyProfile();
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // };
-
   const fetchFollowerList = async () => {
     try {
       if (!memberId) {
-        console.log("fetchFollowerList", memberId);
         const response = await axiosGetMyFollowerList(1000, 0);
         return response.result;
       }
@@ -119,7 +108,6 @@ const useFetch = (memberId?: number | null) => {
   const fetchFollowingList = async () => {
     try {
       if (!memberId) {
-        console.log("fetchFollowingList", memberId);
         const response = await axiosGetMyFollowingList(1000, 0);
         return response.result;
       }
@@ -129,6 +117,10 @@ const useFetch = (memberId?: number | null) => {
       throw error;
     }
   };
+
+  //   const fetchBanList = async () => {
+  //     try {
+  //       const response = await axiosGetBanList(1000, 0);
 
   return {
     fetchBoards,

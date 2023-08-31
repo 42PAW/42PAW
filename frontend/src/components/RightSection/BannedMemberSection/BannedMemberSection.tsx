@@ -1,39 +1,41 @@
-import { styled, keyframes } from "styled-components";
+import { styled } from "styled-components";
 import { FollowerDTO, UserInfoDTO } from "@/types/dto/member.dto.ts";
 import SearchItem from "@/components/RightSection/SearchSection/SearchItem";
 import { userInfoState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
-import useFetch from "@/hooks/useFetch";
 import { useQuery } from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
-import { useParams } from "react-router-dom";
+import { axiosGetBanList } from "@/api/axios/axios.custom";
+import { MemberPreviewResponseDto } from "@/types/dto/member.dto.ts";
 
-const FollowerSection = () => {
-  const { memberId } = useParams<{ memberId: string }>();
-  const { fetchFollowerList } = useFetch(Number(memberId));
+const BannedMemberSection = () => {
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
-  const followerQuery = useQuery({
-    queryKey: ["followerList", memberId || userInfo?.memberId],
-    queryFn: fetchFollowerList, // debounce 추가할거면 추가하기
+  const BanListQuery = useQuery<MemberPreviewResponseDto[]>({
+    queryKey: ["BanList"],
+    queryFn: async () => {
+      const response = await axiosGetBanList(1000, 0);
+      return response.then(
+        (res: { result: MemberPreviewResponseDto[] }) => res.result
+      );
+    }, // debounce 추가할거면 추가하기
     refetchOnMount: "always",
   });
 
-  if (followerQuery.isLoading) {
+  if (BanListQuery.isLoading) {
     return <LoadingAnimation />;
   }
 
   const handleUpdateFollowType = async () => {
     // 팔로우 상태 변경 후 최신 데이터를 가져옴
-    console.log("팔로우 상태 변경 후 최신 데이터를 가져옴");
-    await fetchFollowerList();
-    followerQuery.refetch(); // 쿼리를 수동으로 다시 호출하여 데이터를 업데이트함
+    await axiosGetBanList(1000, 0);
+    BanListQuery.refetch(); // 쿼리를 수동으로 다시 호출하여 데이터를 업데이트함
   };
 
   return (
     <WrapperStyled>
-      <FollowerItemWrapperStyled>
-        {followerQuery.data && followerQuery.data.length > 0 ? (
-          followerQuery.data.map((user: FollowerDTO) => (
+      <BanListWrapperStyled>
+        {BanListQuery.data && BanListQuery.data.length > 0 ? (
+          BanListQuery.data.map((user: FollowerDTO) => (
             <SearchItem
               key={user.memberId}
               memberId={user.memberId}
@@ -48,9 +50,9 @@ const FollowerSection = () => {
             />
           ))
         ) : (
-          <NoSearchMessageStyled>팔로워가 없습니다.</NoSearchMessageStyled>
+          <NoSearchMessageStyled>차단한 계정이 없습니다.</NoSearchMessageStyled>
         )}
-      </FollowerItemWrapperStyled>
+      </BanListWrapperStyled>
     </WrapperStyled>
   );
 };
@@ -64,16 +66,7 @@ const WrapperStyled = styled.div`
   overflow: hidden;
 `;
 
-const shakeAnimation = keyframes`
-	0% { transform: translateX(0); }
-	20% { transform: translateX(-3px); }
-	40% { transform: translateX(3px); }
-	60% { transform: translateX(-3px); }
-	80% { transform: translateX(3px); }
-	100% { transform: translateX(0); }
-`;
-
-const FollowerItemWrapperStyled = styled.div`
+const BanListWrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -90,4 +83,4 @@ const NoSearchMessageStyled = styled.div`
   opacity: 0.7;
 `;
 
-export default FollowerSection;
+export default BannedMemberSection;

@@ -46,19 +46,15 @@ const FollowTypeButton = ({
         response = await axiosUndoBlockUser(memberId as number);
 
       if (callback) {
-        console.log("callback");
-
         callback();
       }
       if (callbackStore.length !== 0) {
-        console.log("callbackStore");
         callbackStore.forEach((callback) => callback());
       }
       if (isProfilePage) {
         if (location.pathname === "/my-profile") {
           queryClient.invalidateQueries(["myProfile"]);
         } else {
-          console.log("profile");
           queryClient.invalidateQueries(["profile", memberId]);
         }
       }

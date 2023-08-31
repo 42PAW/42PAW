@@ -9,10 +9,9 @@ import { languageState } from "@/recoil/atom";
 import OptionButton from "./OptionButton";
 import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
-import { deleteInfoState } from "@/recoil/atom";
-import { IDeleteInfo } from "@/types/interface/option.interface";
 import { reportUserInfoState } from "@/recoil/atom";
 import { ReportDTO } from "@/types/dto/member.dto";
+import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 
 /**
  * @boardId (optional) 신고, 차단, 삭제할 게시물의 id
@@ -37,9 +36,8 @@ const ProfileOption: React.FC<IOptionButtonProps> = ({
   const [reportUserInfo, setReportUserInfo] =
     useRecoilState<ReportDTO>(reportUserInfoState);
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
-  //   const setDeleteInfo = useSetRecoilState<IDeleteInfo>(deleteInfoState);
   const { openModal } = useModal();
-
+  const { openBannedMemberSection } = useRightSectionHandler();
   const banUser = { memberId: memberId, userName: memberName };
 
   const handleBan = () => {
@@ -57,10 +55,9 @@ const ProfileOption: React.FC<IOptionButtonProps> = ({
     openModal(ModalType.REPORT);
   };
 
-  //   const handleDelete = () => {
-  //     setDeleteInfo({ boardId: boardId ?? null, commentId: commentId ?? null });
-  //     openModal(ModalType.DELETE);
-  //   };
+  const handleBanListClick = () => {
+    openBannedMemberSection();
+  };
 
   return (
     <OptionButton>
@@ -78,8 +75,8 @@ const ProfileOption: React.FC<IOptionButtonProps> = ({
       ) : (
         <>
           <MenuItemWrapperStyled>
-            <MenuItemStyled onClick={() => console.log(1)}>
-              {language.delete}
+            <MenuItemStyled onClick={handleBanListClick}>
+              "차단 목록"
             </MenuItemStyled>
           </MenuItemWrapperStyled>
           <MenuItemWrapperStyled>

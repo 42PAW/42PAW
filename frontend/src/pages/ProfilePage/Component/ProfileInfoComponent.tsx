@@ -76,11 +76,6 @@ const UserInfoItems = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
 const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
   userInfo,
 }) => {
-  //   const { openModal } = useModal();
-
-  //   const handleOpenProfile = () => {
-  //     openModal(ModalType.PROFILEEDIT); // PROFILECARD -> 바꿔야 돼 다시
-  //   };
   const [currentMemberId] = useRecoilState<number | null>(currentMemberIdState);
 
   if (!userInfo) return <div>No user information available.</div>;
@@ -101,8 +96,6 @@ const ProfileInfoComponent: React.FC<{ userInfo: ProfileInfoDTO | null }> = ({
           memberId={currentMemberId}
           memberName={userInfo.memberName}
         />
-        {/* ProfileOption 컴포넌트
-        만들 것*/}
       </BoardOptionButtonStyled>
     </ProfileHeaderStyled>
   );

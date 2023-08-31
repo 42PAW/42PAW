@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import ProfileOption from "@/components/OptionButton/ProfileOption";
 import { ProfileInfoDTO } from "@/types/dto/member.dto";
-import { currentMemberIdState } from "@/recoil/atom";
-import { useRecoilState } from "recoil";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";

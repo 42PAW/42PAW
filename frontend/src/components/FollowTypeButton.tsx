@@ -92,7 +92,10 @@ const buttonTextByStatus = {
   [followType.BLOCK]: "차단됨",
 };
 
-const ButtonStyled = styled.button<{ $status: followType; $size: string }>`
+const ButtonStyled = styled.button<{
+  $status: followType;
+  $size: string | undefined;
+}>`
   display: flex;
   justify-content: center;
   align-items: center;

@@ -7,8 +7,6 @@ import { banUserInfoState } from "@/recoil/atom";
 import { IBanUserInfo } from "@/types/interface/user.interface";
 import { languageState } from "@/recoil/atom";
 import OptionButton from "./OptionButton";
-import { userInfoState } from "@/recoil/atom";
-import { UserInfoDTO } from "@/types/dto/member.dto";
 import { reportUserInfoState } from "@/recoil/atom";
 import { ReportDTO } from "@/types/dto/member.dto";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
@@ -35,7 +33,6 @@ const ProfileOption: React.FC<IProfileOptionButtonProps> = ({
   const setBanUserInfo = useSetRecoilState<IBanUserInfo>(banUserInfoState);
   const [reportUserInfo, setReportUserInfo] =
     useRecoilState<ReportDTO>(reportUserInfoState);
-  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const { openModal } = useModal();
   const { openBannedMemberSection } = useRightSectionHandler();
 

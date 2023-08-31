@@ -10,6 +10,7 @@ import useModal from "@/hooks/useModal";
 import useToaster from "@/hooks/useToaster";
 import { axiosBlockUser } from "@/api/axios/axios.custom";
 import { callbackStoreState } from "@/recoil/atom";
+import { followType } from "@/types/enum/followType.enum";
 
 const BanModal: React.FC = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
@@ -21,7 +22,13 @@ const BanModal: React.FC = () => {
   const { popToast } = useToaster();
 
   const handleOnClick = async () => {
+    console.log(banUserInfo);
     await closeModal(ModalType.BAN);
+    //이미 차단된 유저 차단 시도 시
+    if (banUserInfo.followType === followType.BLOCK) {
+      popToast("이미 차단된 유저입니다.", "N");
+      return;
+    }
     await axiosBlockUser(banUserInfo.memberId as number);
     if (banUserInfo.callback) banUserInfo.callback();
     //검색창에서 프로필 카드 모달을 띄웠을 시 차단할 경우 프로필 카드 모달과 검색창 아이템의 팔로우 타입 버튼 모두 렌더링 해주기 위함

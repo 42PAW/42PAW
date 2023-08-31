@@ -1,6 +1,3 @@
-import { memo, useState } from "react";
-import useModal from "../../../hooks/useModal";
-import { ModalType } from "../../../types/enum/modal.enum";
 import styled from "styled-components";
 import ProfileOption from "@/components/OptionButton/ProfileOption";
 import { ProfileInfoDTO } from "@/types/dto/member.dto";
@@ -11,25 +8,16 @@ import { Country } from "@/types/enum/country.enum";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useQueryClient } from "@tanstack/react-query";
 
-// const CountInfo = ({ label, value }: { label: string; value: number }) => (
-//   <li>
-//     <div>{label}</div>
-//     <span>{value}</span>
-//   </li>
-// );
-
 const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   const { openFollowerSection, openFollowingSection } =
     useRightSectionHandler();
+
   const handleFollowerClick = () => {
     openFollowerSection();
   };
 
   const handleFollowingClick = () => {
-    // 팔로잉을 클릭했을 때 수행할 작업
     openFollowingSection();
-    // console.log("팔로잉을 클릭했습니다.");
-    // 원하는 작업을 여기에 추가하세요
   };
 
   return (
@@ -49,16 +37,6 @@ const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
     </CountInfoStyled>
   );
 };
-
-const CountInfoCover = styled.div`
-  position: absolute;
-  top: 0;
-  left: 33.33%; /* 팔로워 영역의 시작 위치 */
-  width: 33.33%; /* 팔로워 영역의 너비 */
-  height: 100%;
-  cursor: pointer;
-  z-index: 1;
-`;
 
 const UserInfoItems = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   const countryEmoji = useCountryEmoji(userInfo.country as Country);
@@ -86,7 +64,7 @@ const ProfileInfoComponent: React.FC<{
       <img
         className="profileImage"
         alt="Profile image"
-        src={userInfo.profileImageUrl || "/src/assets/userW.png"}
+        src={userInfo.profileImageUrl || "/assets/userW.png"}
       />
       <div className="content-wrapper">
         <UserInfoItems userInfo={userInfo} />
@@ -217,7 +195,7 @@ const ProfileHeaderStyled = styled.div`
   //   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   font-size: 1.6rem;
 
-  background-image: url("/src/assets/intersect.png");
+  background-image: url("/assets/intersect.png");
   background-size: 100% 320px;
   background-repeat: no-repeat;
   background-position-y: bottom;

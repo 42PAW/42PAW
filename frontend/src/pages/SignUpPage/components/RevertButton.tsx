@@ -17,7 +17,7 @@ const RevertButton = ({ setStep, to, setIsFading }: RevertButtonProps) => {
 
   return (
     <RevertButtonStyled onClick={handleRevert}>
-      <img src="/src/assets/arrow.png" />
+      <img src="/assets/arrow.png" />
     </RevertButtonStyled>
   );
 };

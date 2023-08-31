@@ -36,7 +36,7 @@ const SettingButton: React.FC<props> = ({ children }) => {
   return (
     <WrapperStyled onMouseLeave={() => handleToggle("ON")}>
       <ToggleStyled onClick={() => handleToggle("OFF")}>
-        <img src="/src/assets/burger.png" />
+        <img src="/assets/burger.png" />
       </ToggleStyled>
       <MenuStyled $isToggled={isToggled}>
         <MenuList onClick={() => handleToggle("OFF")}>
@@ -47,12 +47,12 @@ const SettingButton: React.FC<props> = ({ children }) => {
           )}
           <MenuItemWrapperStyled>
             <MenuItemStyled onClick={() => openModal(ModalType.LANGUAGE)}>
-              <img src="/src/assets/globalW.png" />
+              <img src="/assets/globalW.png" />
             </MenuItemStyled>
           </MenuItemWrapperStyled>
           <MenuItemWrapperStyled>
             <MenuItemStyled onClick={handleOpenAnimalFilterSection}>
-              <img src="/src/assets/categoryW.png" />
+              <img src="/assets/categoryW.png" />
             </MenuItemStyled>
           </MenuItemWrapperStyled>
         </MenuList>

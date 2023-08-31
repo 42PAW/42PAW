@@ -1,7 +1,3 @@
-import { useState, useEffect, useRef } from "react";
-import useModal from "../../../hooks/useModal";
-import { ModalType } from "../../../types/enum/modal.enum";
-import Button from "@/components/ButtonComponent";
 import styled from "styled-components";
 import ProfileInfoComponent from "@/pages/ProfilePage/Component/ProfileInfoComponent";
 import PhotoZoneComponent from "@/pages/ProfilePage/Component/PhotoZoneComponent";

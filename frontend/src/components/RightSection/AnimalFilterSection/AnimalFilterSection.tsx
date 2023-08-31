@@ -39,12 +39,14 @@ const AnimalFilterSection = () => {
   return (
     <WrapperStyled>
       <CategoryIconContainerStyled>
-        <img src="/src/assets/categoryW.png" />
+        <img src="/assets/categoryW.png" />
         필터
       </CategoryIconContainerStyled>
       {animalCategory && (
         <AnimalButtonContainer
           columns={2}
+          buttonRow={50}
+          buttonFontSize={145}
           array={animalCategory}
           setter={setAnimalCategory}
         />

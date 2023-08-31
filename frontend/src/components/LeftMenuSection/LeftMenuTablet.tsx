@@ -21,8 +21,6 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
   const { openSearchSection } = useRightSectionHandler();
   const touchStartY = useRef<number | null>(null);
-  const isProfilePage: boolean =
-    location.pathname === "/my-profile" || location.pathname === "/profile";
   const setCurrentMemberId = useSetRecoilState<number | null>(
     currentMemberIdState
   );
@@ -80,15 +78,11 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
     <>
       <BannerStyled $isBannerVisible={isBannerVisible}>
         <BannerLogoStyled onClick={handleClickLogo}>
-          <img src="/src/assets/paw.png" />
+          <img src="/assets/paw.png" />
         </BannerLogoStyled>
         <SettingButtonContainerStyled>
           <SettingButton>
-            <img
-              alt="Login"
-              src="/src/assets/logout.png"
-              onClick={handleLoginButton}
-            />
+            <img src="/assets/logout.png" onClick={handleLoginButton} />
           </SettingButton>
         </SettingButtonContainerStyled>
       </BannerStyled>
@@ -96,23 +90,23 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
         <nav>
           <MenuListStyled>
             <li onClick={moveToMain}>
-              <ListImageStyled alt="Main" src="/src/assets/home.png" />
+              <ListImageStyled alt="Main" src="/assets/home.png" />
             </li>
             <li onClick={openSearchSection}>
-              <ListImageStyled alt="Search" src="/src/assets/search.png" />
+              <ListImageStyled alt="Search" src="/assets/search.png" />
             </li>
             <li onClick={moveToUpload}>
-              <ListImageStyled alt="MyProfile" src="/src/assets/upload.png" />
+              <ListImageStyled alt="MyProfile" src="/assets/upload.png" />
             </li>
             <li>
               {userInfo ? (
                 <ProfileImageStyled
-                  src={userInfo.profileImageUrl || "/src/assets/userW.png"}
+                  src={userInfo.profileImageUrl || "/assets/userW.png"}
                   onClick={handleOpenMyProfile}
                 />
               ) : (
                 <ProfileImageStyled
-                  src="/src/assets/userW.png"
+                  src="/assets/userW.png"
                   onClick={handleLogin}
                 />
               )}

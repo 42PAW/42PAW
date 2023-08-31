@@ -29,7 +29,7 @@ const ProfileImageSection: React.FC<SectionProps> = ({ setStep }) => {
       />
       <h1>사진을 선택해주세요</h1>
       <NextButtonStyled onClick={handleOnClick}>
-        <img src="/src/assets/arrowW.png" />
+        <img src="/assets/arrowW.png" />
       </NextButtonStyled>
     </WrapperStyled>
   );

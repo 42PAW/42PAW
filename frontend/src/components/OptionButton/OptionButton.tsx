@@ -27,7 +27,7 @@ const OptionButton: React.FC<IOptionButtonProps> = ({ children }) => {
   return (
     <WrapperStyled onMouseLeave={() => handleToggle("ON")}>
       <ToggleStyled onClick={() => handleToggle("OFF")}>
-        <img src="/src/assets/optionW.png" />
+        <img src="/assets/optionW.png" />
       </ToggleStyled>
       <MenuStyled $isToggled={isToggled}>
         <MenuList onClick={() => handleToggle("OFF")}>{children}</MenuList>
@@ -37,6 +37,7 @@ const OptionButton: React.FC<IOptionButtonProps> = ({ children }) => {
 };
 
 const WrapperStyled = styled.div`
+  padding-top: 5px;
   position: relative;
   display: flex;
   flex-direction: column;

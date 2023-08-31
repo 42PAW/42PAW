@@ -26,11 +26,11 @@ const PostListItem: React.FC<PostListItemProps> = ({
       <ThumbnailStyled src={post.images[0]} />
       <ThumbnailInfoStyled onClick={moveToProfileBoards}>
         <div>
-          <img src="/src/assets/thumbnailLike.png" />
+          <img src="/assets/thumbnailLike.png" />
           <div>{post.reactionCount}</div>
         </div>
         <div>
-          <img src="/src/assets/thumbnailComment.png" />
+          <img src="/assets/thumbnailComment.png" />
           <div>{post.commentCount}</div>
         </div>
       </ThumbnailInfoStyled>

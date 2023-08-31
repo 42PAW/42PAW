@@ -38,14 +38,12 @@ const FollowTypeButton = ({
     location.pathname
   );
   const handleClickFollowType = async () => {
-    let response;
     try {
-      if (status === followType.NONE)
-        response = await axiosFollow(memberId as number);
+      if (status === followType.NONE) await axiosFollow(memberId as number);
       if (status === followType.FOLLOWING)
-        response = await axiosUnfollow(memberId as number);
+        await axiosUnfollow(memberId as number);
       if (status === followType.BLOCK)
-        response = await axiosUndoBlockUser(memberId as number);
+        await axiosUndoBlockUser(memberId as number);
 
       if (callback) {
         callback();

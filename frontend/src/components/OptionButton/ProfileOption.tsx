@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import styled from "styled-components";
 import { ModalType } from "@/types/enum/modal.enum";
@@ -43,6 +43,7 @@ const ProfileOption: React.FC<IProfileOptionButtonProps> = ({
     memberId: memberId,
     userName: memberName,
     callback: callback,
+    followType: null,
   };
 
   const handleBan = () => {

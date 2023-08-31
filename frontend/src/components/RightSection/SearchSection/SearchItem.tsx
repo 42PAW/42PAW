@@ -44,7 +44,7 @@ const SearchItem = (props: SearchItemProps) => {
     <SearchItemStyled>
       <UserImageContainerStyled>
         <img
-          src={profileImageUrl || "/src/assets/userW.png"}
+          src={profileImageUrl || "/assets/userW.png"}
           onClick={handleOpenProfile}
         />
       </UserImageContainerStyled>
@@ -66,6 +66,7 @@ const SearchItem = (props: SearchItemProps) => {
             <BoardOption
               memberId={memberId}
               memberName={memberName}
+              followStatus={relationship}
               callback={updateFollowType}
             />
           </SearchItemRightSideStyled>
@@ -106,6 +107,7 @@ const SearchItemRightStyled = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
   margin-left: 10px;
   margin-right: 10px;
@@ -141,6 +143,7 @@ const SearchItemRightSideStyled = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  align-items: center;
 `;
 
 const BufferStyled = styled.div`

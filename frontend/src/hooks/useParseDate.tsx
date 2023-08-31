@@ -1,5 +1,5 @@
 const useParseDate = () => {
-  const parseDate = (rawDate: string) => {
+  const parseDate = (rawDate: string | Date) => {
     const parsedDate = new Date(rawDate);
 
     const year = parsedDate.getFullYear();

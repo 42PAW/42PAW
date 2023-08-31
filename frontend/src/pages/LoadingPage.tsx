@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 const LoadingPage = () => {
   return (
     <WrapperStyled>
-      <img src="/src/assets/paw.png" />
+      <img src="/assets/paw.png" />
       <div>🅒 2023. 42PAW. all rights reserved.</div>
     </WrapperStyled>
   );

@@ -49,7 +49,7 @@ const ProfileCard = ({
           {registerData.memberName}
         </ProfileCardNicknameStyled>
         <ProfileCardEmptyImageStyled>
-          <img src={imagePreview ? imagePreview : "/src/assets/userG.png"} />
+          <img src={imagePreview ? imagePreview : "/assets/userG.png"} />
         </ProfileCardEmptyImageStyled>
         <ProfileCardFormStyled>
           {step === Section.ProfileImage ? (

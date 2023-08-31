@@ -18,12 +18,16 @@ const renderAnimalSpecies = (buttonName: string) => {
  */
 interface AnimalButtonContainerProps {
   columns: number;
+  buttonRow: number;
+  buttonFontSize: number;
   array?: AnimalSpecies[];
   setter: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const AnimalButtonContainer = ({
   columns,
+  buttonRow,
+  buttonFontSize,
   array,
   setter,
 }: AnimalButtonContainerProps): JSX.Element => {
@@ -55,13 +59,14 @@ const AnimalButtonContainer = ({
   };
 
   return (
-    <AnimalButtonContainerStyled $columns={columns}>
+    <AnimalButtonContainerStyled $columns={columns} $buttonRow={buttonRow}>
       {buttons.map((buttonName) => (
         <AnimalButtonStyled
           key={buttonName}
           onClick={() => handleButtonClick(buttonName)}
           $selectedAnimals={selectedAnimals}
           $buttonName={buttonName}
+          $buttonFontSize={buttonFontSize}
         >
           {renderAnimalSpecies(buttonName)}
         </AnimalButtonStyled>
@@ -70,18 +75,22 @@ const AnimalButtonContainer = ({
   );
 };
 
-const AnimalButtonContainerStyled = styled.div<{ $columns: number }>`
+const AnimalButtonContainerStyled = styled.div<{
+  $columns: number;
+  $buttonRow: number;
+}>`
   z-index: 2;
   display: grid;
   grid-template-columns: repeat(${(props) => props.$columns}, 120px);
-  grid-auto-rows: 50px;
-  grid-row-gap: 15px;
-  grid-column-gap: 15px;
+  grid-auto-rows: ${(props) => `${props.$buttonRow}px`}; //default: 50px
+  grid-row-gap: 15px; //default: 15px
+  grid-column-gap: 15px; //default: 15px
 `;
 
 const AnimalButtonStyled = styled.button<{
   $selectedAnimals: Set<string>;
   $buttonName: string;
+  $buttonFontSize: number;
 }>`
   display: flex;
   flex-direction: column;
@@ -90,8 +99,9 @@ const AnimalButtonStyled = styled.button<{
   border-radius: 50px;
   border: none;
   margin: 0;
+  width: 100%;
   font-weight: 600;
-  font-size: 145%;
+  font-size: ${(props) => `${props.$buttonFontSize}%`}; //default: 145%
   color: ${(props) =>
     props.$selectedAnimals.has(props.$buttonName)
       ? "var(--white)"

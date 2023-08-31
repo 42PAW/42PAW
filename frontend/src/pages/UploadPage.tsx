@@ -10,7 +10,7 @@ const UploadPage = () => {
 };
 
 const WrapperStyled = styled.div`
-  height: 100%;
+  height: 100vh;
 `;
 
 export default UploadPage;

@@ -93,7 +93,7 @@ const HeaderStyled = styled.h1`
 
 const LanguageItemContainerStyled = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 100px);
+  grid-template-columns: repeat(2, 1fr);
   grid-auto-rows: 30px;
   grid-row-gap: 10px;
   padding: 0px 10px;
@@ -101,6 +101,7 @@ const LanguageItemContainerStyled = styled.div`
 
 const LanguageItemStyled = styled.button`
   height: 30px;
+  padding: 0px 10px;
   border-radius: 5px;
   border: none;
   font-size: 1.2rem;

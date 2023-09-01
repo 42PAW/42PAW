@@ -108,15 +108,14 @@ const MenuItemWrapperStyled = styled.li`
 `;
 
 const MenuItemStyled = styled.div`
-  position: absolute;
   cursor: pointer;
   font-size: 10px;
-  padding: 2px 5px;
+  padding: 2px 3px;
   color: var(--lightgrey);
   border-radius: 20px;
   text-decoration: none;
   &:hover {
-    font-weight: bold;
+    opacity: 0.8;
   }
 `;
 

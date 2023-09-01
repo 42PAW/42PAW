@@ -25,7 +25,7 @@ const OptionButton: React.FC<IOptionButtonProps> = ({ children }) => {
   };
 
   return (
-    <WrapperStyled onMouseLeave={() => handleToggle("ON")}>
+    <WrapperStyled>
       <ToggleStyled onClick={() => handleToggle("OFF")}>
         <img src="/assets/optionW.png" />
       </ToggleStyled>

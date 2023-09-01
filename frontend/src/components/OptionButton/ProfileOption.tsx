@@ -78,7 +78,7 @@ const ProfileOption: React.FC<IProfileOptionButtonProps> = ({
         <>
           <MenuItemWrapperStyled>
             <MenuItemStyled onClick={handleBanListClick}>
-              차단목록
+              차단 목록
             </MenuItemStyled>
           </MenuItemWrapperStyled>
           <MenuItemWrapperStyled>
@@ -101,15 +101,14 @@ const MenuItemWrapperStyled = styled.li`
 `;
 
 const MenuItemStyled = styled.div`
-  position: absolute;
   cursor: pointer;
   font-size: 10px;
-  padding: 2px 5px;
+  padding: 2px 3px;
   color: var(--lightgrey);
   border-radius: 20px;
   text-decoration: none;
   &:hover {
-    font-weight: bold;
+    opacity: 0.8;
   }
 `;
 

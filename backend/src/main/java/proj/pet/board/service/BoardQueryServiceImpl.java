@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import proj.pet.block.domain.Block;
 import proj.pet.block.repository.BlockRepository;
 import proj.pet.board.domain.Board;
 import proj.pet.board.dto.BoardInfoDto;
@@ -40,10 +41,10 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	@Override
 	public BoardsPaginationDto getMainViewBoards(Long loginUserId, PageRequest pageRequest) {
 		//TODO: QueryDSL로 리팩토링 여부 결정하기
-//		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
+		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
 		List<BoardInfoDto> result = boardRepository.getMainViewBoards(pageRequest).stream()
-//				.filter(board -> blocks.stream().parallel().noneMatch(
-//						block -> block.getTo().getId().equals(board.getMember().getId())))
+				.filter(board -> blocks.stream().noneMatch(
+						block -> block.getTo().getId().equals(board.getMember().getId())))
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());
@@ -53,10 +54,10 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	@Override
 	public BoardsPaginationDto getHotBoards(Long loginUserId, PageRequest pageRequest) {
 		//TODO: QueryDSL로 리팩토링 여부 결정하기
-//		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
+		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
 		List<BoardInfoDto> result = boardRepository.getHotBoards(pageRequest).stream()
-//				.filter(board -> blocks.stream().parallel().noneMatch(
-//						block -> block.getTo().getId().equals(board.getMember().getId())))
+				.filter(board -> blocks.stream().noneMatch(
+						block -> block.getTo().getId().equals(board.getMember().getId())))
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());

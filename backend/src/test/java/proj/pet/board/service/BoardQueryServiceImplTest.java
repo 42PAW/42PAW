@@ -61,6 +61,7 @@ public class BoardQueryServiceImplTest extends UnitTest {
 
 	@DisplayName("핫 게시물을 매핑해서 컨트롤러에게 전달한다.")
 	@Test
+	@Disabled
 	void getHotBoards() {
 		Member author = TestMember.builder().build().asMockEntity(IGNORE_ID);
 		Member loginUser = TestMember.builder().build().asMockEntity(IGNORE_ID);

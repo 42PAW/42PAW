@@ -48,7 +48,10 @@ const LeftMenuSection = () => {
   };
 
   const handleLogout = () => {
-    removeCookie("access_token");
+    removeCookie("access_token", {
+      path: "/",
+      domain: `${import.meta.env.VITE_FE_DOMAIN}`,
+    });
     window.location.replace("/");
   };
 

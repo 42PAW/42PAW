@@ -22,7 +22,6 @@ const BanModal: React.FC = () => {
   const { popToast } = useToaster();
 
   const handleOnClick = async () => {
-    console.log(banUserInfo);
     await closeModal(ModalType.BAN);
     //이미 차단된 유저 차단 시도 시
     if (banUserInfo.followType === followType.BLOCK) {

@@ -114,8 +114,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 	 */
 	@Override
 	public MemberProfileResponseDto getMemberProfile(Long loginUserId, Long memberId) {
-		return getProfile(memberId,
-				loginUserId == 0 ? NONE : followQueryService.getFollowType(loginUserId, memberId));
+		return getProfile(memberId, followQueryService.getFollowType(loginUserId, memberId));
 	}
 
 	/**

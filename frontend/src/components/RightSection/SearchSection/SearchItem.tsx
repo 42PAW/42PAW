@@ -78,10 +78,11 @@ const SearchItem = (props: SearchItemProps) => {
 
 const SearchItemStyled = styled.div`
   height: 52px;
+  min-height: 52px;
   display: flex;
   align-items: center;
   width: 90%;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   margin-left: 10px;
   margin-right: 10px;
   border-radius: 30px;

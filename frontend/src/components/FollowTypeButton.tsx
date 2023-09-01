@@ -118,11 +118,7 @@ const ButtonStyled = styled.button<{
       : "transparent"};
   color: ${({ $status }) =>
     $status === followType.FOLLOWING ? "var(--pink)" : "var(--white)"};
-  transition: all 0.2s ease;
   cursor: pointer;
-  // &:hover {
-  //   opacity: 0.8;
-  // }
 `;
 
 export default FollowTypeButton;

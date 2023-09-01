@@ -91,7 +91,7 @@ const RightSectionStyled = styled.div<{
     z-index: 4;
     display: ${(props) => (props.$isRightSectionOpened ? "flex" : "none")};
     height: 90%;
-    background-color: #dbdcfec3;
+    background-color: #dbdcfed2;
     position: absolute;
     width: 100%;
     bottom: 0;

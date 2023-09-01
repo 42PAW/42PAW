@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { useInView } from "react-intersection-observer";
@@ -13,25 +13,27 @@ import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation"
 import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTemplate";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import { useNavigate, useLocation } from "react-router-dom";
+import useDebounce from "@/hooks/useDebounce";
 
 const MyProfileBoardsPage = () => {
+  const { debounce } = useDebounce();
+  const [loading, setLoading] = useState(true);
   const location = useLocation();
   const navigator = useNavigate();
   const [boardCategory, setBoardCategory] =
     useRecoilState<Board>(boardCategoryState);
   const [ref, inView] = useInView();
   const { fetchBoards } = useFetch();
-  const { data, fetchNextPage, hasNextPage, isLoading, isError } =
-    useInfiniteQuery(
-      ["boards", boardCategory],
-      ({ pageParam = 0 }) => fetchBoards(pageParam),
-      {
-        getNextPageParam: (lastPage, allPages) => {
-          if (!lastPage || lastPage.length === 0) return undefined;
-          return allPages.length;
-        },
-      }
-    );
+  const { data, fetchNextPage, hasNextPage, isError } = useInfiniteQuery(
+    ["boards", boardCategory],
+    ({ pageParam = 0 }) => fetchBoards(pageParam),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        if (!lastPage || lastPage.length === 0) return undefined;
+        return allPages.length;
+      },
+    }
+  );
   const [currentProfileBoardId] = useRecoilState(currentProfileBoardIdState);
 
   const isBoardPage: boolean = location.pathname === "/my-profile/boards";
@@ -40,6 +42,8 @@ const MyProfileBoardsPage = () => {
   useEffect(() => {
     if (isBoardPage) setBoardCategory(Board.MINE);
     else if (isScrapPage) setBoardCategory(Board.SCRAPPED);
+    setLoading(true);
+    debounce("myProfileBoardsLoading", () => setLoading(false), 500);
   }, []);
 
   useEffect(() => {
@@ -48,7 +52,7 @@ const MyProfileBoardsPage = () => {
     }
   }, [inView, hasNextPage]);
 
-  if (isLoading) {
+  if (loading) {
     return (
       <WrapperStyled $boardExists={true}>
         <SkeletonBoardTemplate />

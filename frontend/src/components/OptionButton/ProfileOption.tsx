@@ -35,7 +35,6 @@ const ProfileOption: React.FC<IProfileOptionButtonProps> = ({
     useRecoilState<ReportDTO>(reportUserInfoState);
   const { openModal } = useModal();
   const { openBannedMemberSection } = useRightSectionHandler();
-
   const banUser = {
     memberId: memberId,
     userName: memberName,

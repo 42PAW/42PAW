@@ -89,18 +89,18 @@ const RightSectionStyled = styled.div<{
   transition: opacity 0.5s ease-in-out, margin-right 0.5s ease-in-out;
   @media (max-width: 1023px) {
     z-index: 4;
-    height: ${(props) => (props.$isRightSectionOpened ? "92%" : "0%")};
+    display: ${(props) => (props.$isRightSectionOpened ? "flex" : "none")};
+    height: 90%;
     background-color: #dbdcfec3;
     position: absolute;
     width: 100%;
     bottom: 0;
     transition: height 0.3s ease;
     margin-left: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    * {
-      display: ${(props) => !props.$isRightSectionOpened && "none"};
-    }
   }
 `;
 

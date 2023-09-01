@@ -1,13 +1,17 @@
-import { useState } from "react";
-import { useSetRecoilState, useRecoilState } from "recoil";
+import { atom, useSetRecoilState, useRecoilState } from "recoil";
 import styled from "styled-components";
 import { Board } from "@/types/enum/board.category.enum";
 import { boardCategoryState } from "@/recoil/atom";
 import { languageState } from "@/recoil/atom";
 
+export const buttonToggledState = atom<0 | 1 | 2>({
+  key: "buttongToggled",
+  default: 0,
+});
+
 const BoardSortToggle = () => {
   const [language] = useRecoilState<any>(languageState);
-  const [buttonToggled, setbuttonToggled] = useState<number>(0);
+  const [buttonToggled, setbuttonToggled] = useRecoilState(buttonToggledState);
   const setBoard = useSetRecoilState<Board>(boardCategoryState);
 
   const handleToggle = (toggle: string) => {
@@ -48,7 +52,6 @@ const BoardSortToggleWrapperStyled = styled.div`
   position: absolute;
   margin-top: 2%;
   z-index: 1;
-  width: 255px;
 `;
 
 const SortTabStyled = styled.div<{ $buttonToggled: number }>`
@@ -62,7 +65,7 @@ const SortTabStyled = styled.div<{ $buttonToggled: number }>`
       : $buttonToggled === 1
       ? "var(--lightpurple)"
       : "var(--lightpurple)"};
-  margin-left: ${({ $buttonToggled }) => $buttonToggled * 85}px;
+  margin-left: ${({ $buttonToggled }) => $buttonToggled * 33.3}%;
   transition: all 0.3s ease-in-out;
   border-radius: 30px;
 `;

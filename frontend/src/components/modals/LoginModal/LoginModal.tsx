@@ -11,7 +11,9 @@ const LoginModal: React.FC = () => {
   );
 
   const redirectLogin = () =>
-    window.location.replace(`${import.meta.env.VITE_AUTH_LOGIN}`);
+    window.location.replace(
+      `${import.meta.env.VITE_BE_SERVER}` + "/v1/auth/login"
+    );
 
   return (
     <ModalLayout

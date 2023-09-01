@@ -61,7 +61,7 @@ const PhotoCategoryToggleStyled = styled.div`
   position: sticky;
   top: 0px;
   background: linear-gradient(100deg, #999bc6 50%, #d3c3ce 150%);
-  border-radius: 10px 10px 0px 0px;
+
   button {
     display: flex;
     align-items: center;
@@ -71,12 +71,6 @@ const PhotoCategoryToggleStyled = styled.div`
     width: 50%;
     position: relative;
     transition: all 0.3s ease;
-    &:nth-child(1) {
-      border-top-left-radius: 10px;
-    }
-    &:nth-child(2) {
-      border-top-right-radius: 10px;
-    }
   }
 
   button:hover {

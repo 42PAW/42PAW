@@ -1,7 +1,12 @@
 package proj.pet.board.service;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import proj.pet.block.domain.Block;
+import proj.pet.block.repository.BlockRepository;
 import proj.pet.board.domain.Board;
 import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsPaginationDto;
@@ -12,10 +17,6 @@ import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-
 @QueryService
 @RequiredArgsConstructor
 public class BoardQueryServiceImpl implements BoardQueryService {
@@ -23,6 +24,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	private final static String EMPTY_STRING = "";
 	private final BoardRepository boardRepository;
 	private final BoardMapper boardMapper;
+	private final BlockRepository blockRepository;
 
 	/**
 	 * 메인 화면에 보여줄 게시글 목록을 가져온다.
@@ -38,7 +40,10 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 */
 	@Override
 	public BoardsPaginationDto getMainViewBoards(Long loginUserId, PageRequest pageRequest) {
+		List<Block> blocks = blockRepository.findAllByMemberIdList(loginUserId);
 		List<BoardInfoDto> result = boardRepository.getMainViewBoards(pageRequest).stream()
+				.filter(board -> blocks.stream().parallel().noneMatch(
+						block -> block.getTo().getId().equals(board.getMember().getId())))
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());
@@ -55,7 +60,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
 	@Override
 	public BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId,
-	                                           PageRequest pageRequest) {
+			PageRequest pageRequest) {
 		List<BoardInfoDto> result = boardRepository.getMemberBoards(memberId, pageRequest).stream()
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();

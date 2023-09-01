@@ -53,7 +53,11 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
 	@Override
 	public BoardsPaginationDto getHotBoards(Long loginUserId, PageRequest pageRequest) {
+		//TODO: QueryDSL로 리팩토링 여부 결정하기
+		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
 		List<BoardInfoDto> result = boardRepository.getHotBoards(pageRequest).stream()
+				.filter(board -> blocks.stream().parallel().noneMatch(
+						block -> block.getTo().getId().equals(board.getMember().getId())))
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());

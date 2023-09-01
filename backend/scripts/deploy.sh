@@ -1,8 +1,8 @@
 #!/bin/bash
 
-SERVICE_NAME=cabi_service
-SOURCE_DIR_PATH=~/42cabi_dev/backend/build/libs
-TARGET_PATH=/usr/local/cabi_service.jar
+SERVICE_NAME=petboot
+SOURCE_DIR_PATH=/home/ec2-user/deploy
+TARGET_PATH=/usr/local/pet_service.jar
 
 echo "jar 파일이 있는지 확인합니다"
 if [ -e ${TARGET_PATH} ] ; then

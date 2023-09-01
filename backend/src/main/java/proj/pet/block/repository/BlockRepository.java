@@ -34,7 +34,7 @@ public interface BlockRepository extends JpaRepository<Block, Long> {
 	@Query("SELECT b " +
 			"FROM Block b " +
 			"WHERE b.from.id = :memberId")
-	List<Block> findAllByMemberIdList(@Param("memberId") Long memberId);
+	List<Block> findAllByMemberIdToList(@Param("memberId") Long memberId);
 
 	boolean existsByFromIdAndToId(Long fromId, Long toId);
 }

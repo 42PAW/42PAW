@@ -1,5 +1,12 @@
 package proj.pet.category.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,14 +24,6 @@ import proj.pet.testutil.test.E2ETest;
 import proj.pet.testutil.testdouble.category.TestAnimalCategory;
 import proj.pet.testutil.testdouble.category.TestMemberCategoryFilter;
 import proj.pet.testutil.testdouble.member.TestMember;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class CategoryControllerTest extends E2ETest {
 
@@ -61,11 +60,14 @@ class CategoryControllerTest extends E2ETest {
 		@DisplayName("사용자는 본인의 동물 카테고리 필터를 수정할 수 있다.")
 		void updateMyCategories() throws Exception {
 			persistHelper.persist(loginUser);
-			loginUser.setCategoryFilters(TestMemberCategoryFilter.ofMany(loginUser, categories.get(0), categories.get(1)));
+			loginUser.setCategoryFilters(
+					TestMemberCategoryFilter.ofMany(loginUser, categories.get(0),
+							categories.get(1)));
 			persistHelper.flushAndClear();
 
 			String token = stubToken(loginUser, now, 28);
-			CategoryUpdateRequestDto dto = new CategoryUpdateRequestDto(List.of(Species.AMPHIBIAN, Species.BIRD, Species.SMALL_ANIMAL));
+			CategoryUpdateRequestDto dto = new CategoryUpdateRequestDto(
+					List.of(Species.AMPHIBIAN, Species.BIRD, Species.SMALL_ANIMAL));
 			MockHttpServletRequestBuilder req = patch(url)
 					.header(HttpHeaders.AUTHORIZATION, BEARER + token)
 					.contentType(JSON_CONTENT_TYPE)
@@ -81,7 +83,8 @@ class CategoryControllerTest extends E2ETest {
 						assertThat(categories)
 								.extracting(MemberCategoryFilter::getAnimalCategory)
 								.extracting(AnimalCategory::getSpecies)
-								.containsExactlyInAnyOrder(Species.AMPHIBIAN, Species.BIRD, Species.SMALL_ANIMAL);
+								.containsExactlyInAnyOrder(Species.AMPHIBIAN, Species.BIRD,
+										Species.SMALL_ANIMAL);
 					});
 
 
@@ -95,8 +98,9 @@ class CategoryControllerTest extends E2ETest {
 	@Nested
 	@DisplayName("PATCH /v1/categories/boards/{boardId}")
 	class UpdateBoardCategories {
+
 		@Test
-		@DisplayName("")
+//		@DisplayName("")
 		void updateBoardCategories() throws Exception {
 
 		}

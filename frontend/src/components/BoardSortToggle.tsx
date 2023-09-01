@@ -80,6 +80,7 @@ const BoardSortToggleStyled = styled.div<{ $buttonToggled: number }>`
   background-color: var(--transparent);
   button {
     z-index: 1;
+    padding: 0px 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -89,6 +90,7 @@ const BoardSortToggleStyled = styled.div<{ $buttonToggled: number }>`
     border-radius: 30px;
     border: none;
     width: 33.3%;
+    min-width: 70px;
     font-size: 1rem;
   }
 `;

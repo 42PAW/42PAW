@@ -1,10 +1,17 @@
 package proj.pet.board.service;
 
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.data.domain.PageRequest;
+import proj.pet.block.repository.BlockRepository;
 import proj.pet.board.domain.Board;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.mapper.BoardMapper;
@@ -13,14 +20,8 @@ import proj.pet.testutil.test.UnitTest;
 import proj.pet.testutil.testdouble.board.TestBoard;
 import proj.pet.testutil.testdouble.member.TestMember;
 
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-
 public class BoardQueryServiceImplTest extends UnitTest {
+
 	private static final Long IGNORE_ID = null;
 	@Mock
 	private final BoardMapper boardMapper = BoardMapper.INSTANCE;
@@ -28,6 +29,8 @@ public class BoardQueryServiceImplTest extends UnitTest {
 	private BoardQueryServiceImpl boardQueryService;
 	@Mock
 	private BoardRepository boardRepository;
+	@Mock
+	private BlockRepository blockRepository;
 
 	@DisplayName("일반 게시글을 매핑해서 컨트롤러에게 전달한다.")
 	@Test
@@ -44,6 +47,7 @@ public class BoardQueryServiceImplTest extends UnitTest {
 						.build().asMockEntity(IGNORE_ID));
 		PageRequest pageRequest = PageRequest.of(0, 10);
 		given(boardRepository.getMainViewBoards(pageRequest)).willReturn(boards);
+		given(blockRepository.findAllByMemberIdToList(loginUser.getId())).willReturn(List.of());
 
 		//when
 		boardQueryService.getMainViewBoards(loginUser.getId(), pageRequest);
@@ -135,7 +139,8 @@ public class BoardQueryServiceImplTest extends UnitTest {
 						.member(follwing)
 						.build().asMockEntity(IGNORE_ID));
 		PageRequest pageRequest = PageRequest.of(0, 10);
-		given(boardRepository.getFollowingsBoards(loginUser.getId(), pageRequest)).willReturn(boards);
+		given(boardRepository.getFollowingsBoards(loginUser.getId(), pageRequest)).willReturn(
+				boards);
 
 		//when
 		boardQueryService.getFollowingsBoards(loginUser.getId(), pageRequest);

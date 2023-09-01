@@ -108,9 +108,12 @@ export const axiosGetTrendingBoards = async (
       });
       return response.data;
     }
-    const response = await axios.get(axiosGetTrendingBoardsURL, {
-      params: { size: size, page: page },
-    });
+    const response = await axios.get(
+      `${import.meta.env.VITE_BE_SERVER}` + axiosGetTrendingBoardsURL,
+      {
+        params: { size: size, page: page },
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -164,7 +167,9 @@ export const axiosGetOtherBoards = async (
       return response.data;
     }
     const response = await axios.get(
-      axiosGetOtherBoardsURL + memberId.toString(),
+      `${import.meta.env.VITE_BE_SERVER}` +
+        axiosGetOtherBoardsURL +
+        memberId.toString(),
       {
         params: { size: size, page: page },
       }
@@ -268,7 +273,10 @@ export const axiosGetProfile = async (memberId: number): Promise<any> => {
       return response.data;
     }
     const response = await axios.get(
-      axiosGetProfileURL + memberId.toString() + "/profile"
+      `${import.meta.env.VITE_BE_SERVER}` +
+        axiosGetProfileURL +
+        memberId.toString() +
+        "/profile"
     );
     return response.data;
   } catch (error) {
@@ -426,7 +434,9 @@ export const axiosReport = async (
 const axiosGetWorldStatisticsURL = "/v1/statistics/world";
 export const axiosGetWorldStatistics = async (): Promise<any> => {
   try {
-    const response = await axios.get(axiosGetWorldStatisticsURL);
+    const response = await axios.get(
+      `${import.meta.env.VITE_BE_SERVER}` + axiosGetWorldStatisticsURL
+    );
     return response;
   } catch (error) {
     throw error;
@@ -446,9 +456,12 @@ export const axiosGetSearchResults = async (
       });
       return response.data.result;
     }
-    const response = await axios.get(axiosGetSearchResultsURL, {
-      params: { name: name, size: size, page: page },
-    });
+    const response = await axios.get(
+      `${import.meta.env.VITE_BE_SERVER}` + axiosGetSearchResultsURL,
+      {
+        params: { name: name, size: size, page: page },
+      }
+    );
     return response.data.result;
   } catch (error) {
     throw error;
@@ -487,7 +500,10 @@ export const axiosGetFollowerList = async (
       );
     } else {
       response = await axios.get(
-        axiosGetFollowerListURL + memberId.toString() + "/followers",
+        `${import.meta.env.VITE_BE_SERVER}` +
+          axiosGetFollowerListURL +
+          memberId.toString() +
+          "/followers",
         {
           params: { size: size, page: page },
         }
@@ -531,7 +547,10 @@ export const axiosGetFollowingList = async (
       );
     } else {
       response = await axios.get(
-        axiosGetFollowingListURL + memberId.toString() + "/followings",
+        `${import.meta.env.VITE_BE_SERVER}` +
+          axiosGetFollowingListURL +
+          memberId.toString() +
+          "/followings",
         {
           params: { size: size, page: page },
         }

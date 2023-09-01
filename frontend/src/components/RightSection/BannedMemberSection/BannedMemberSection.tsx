@@ -34,8 +34,6 @@ const BannedMemberSection = () => {
   }
 
   const handleUpdateFollowType = async () => {
-    // 팔로우 상태 변경 후 최신 데이터를 가져옴
-    console.log("팔로우 상태 변경 후 최신 데이터를 가져옴");
     await fetchBanList();
     BanListQuery.refetch(); // 쿼리를 수동으로 다시 호출하여 데이터를 업데이트함
   };

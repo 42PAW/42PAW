@@ -7,17 +7,25 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import { axiosGetBanList } from "@/api/axios/axios.custom";
 import { MemberPreviewResponseDto } from "@/types/dto/member.dto.ts";
+import { useQueryClient } from "@tanstack/react-query";
 
 const BannedMemberSection = () => {
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
+  const queryClient = useQueryClient();
+  queryClient.invalidateQueries(["BanList"]);
+
+  const fetchBanList = async () => {
+    try {
+      const response = await axiosGetBanList(1000, 0);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const BanListQuery = useQuery<MemberPreviewResponseDto[]>({
     queryKey: ["BanList"],
-    queryFn: async () => {
-      const response = await axiosGetBanList(1000, 0);
-      return response.then(
-        (res: { result: MemberPreviewResponseDto[] }) => res.result
-      );
-    }, // debounce 추가할거면 추가하기
+    queryFn: fetchBanList, // debounce 추가할거면 추가하기
     refetchOnMount: "always",
   });
 
@@ -27,7 +35,8 @@ const BannedMemberSection = () => {
 
   const handleUpdateFollowType = async () => {
     // 팔로우 상태 변경 후 최신 데이터를 가져옴
-    await axiosGetBanList(1000, 0);
+    console.log("팔로우 상태 변경 후 최신 데이터를 가져옴");
+    await fetchBanList();
     BanListQuery.refetch(); // 쿼리를 수동으로 다시 호출하여 데이터를 업데이트함
   };
 

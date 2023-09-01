@@ -1,4 +1,4 @@
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   boardCategoryState,
   currentBoardIdState,
@@ -21,23 +21,26 @@ import {
   axiosGetMyFollowingList,
   axiosGetFollowingList,
 } from "@/api/axios/axios.custom";
+import { buttonToggledState } from "@/components/BoardSortToggle";
 
 const useFetch = (memberId?: number | null) => {
-  const [boardCategory] = useRecoilState<Board>(boardCategoryState);
+  const [boardCategory, setBoardCategory] =
+    useRecoilState<Board>(boardCategoryState);
+  const setButtonToggled = useSetRecoilState(buttonToggledState);
 
   const fetchBoards = async (page?: number) => {
     try {
       if (!page) page = 0;
       if (boardCategory === Board.DEFAULT) {
-        const response = await axiosGetBoards(20, page);
+        const response = await axiosGetBoards(10, page);
         return response.result;
       }
       if (boardCategory === Board.TRENDING) {
-        const response = await axiosGetTrendingBoards(20, page);
+        const response = await axiosGetTrendingBoards(10, page);
         return response.result;
       }
       if (boardCategory === Board.FOLLOWING) {
-        const response = await axiosGetFollowingBoards(20, page);
+        const response = await axiosGetFollowingBoards(10, page);
         return response.result;
       }
       if (boardCategory === Board.MINE) {
@@ -56,6 +59,11 @@ const useFetch = (memberId?: number | null) => {
         return response.result;
       }
     } catch (error) {
+      // 비 로그인 시 팔로우 게시물 접근 -> 기본 게시물로 이동
+      if (boardCategory === Board.FOLLOWING) {
+        setButtonToggled(0);
+        setBoardCategory(Board.DEFAULT);
+      }
       throw error;
     }
   };

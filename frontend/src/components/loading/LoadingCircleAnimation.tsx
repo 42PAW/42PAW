@@ -57,17 +57,17 @@ const loaderPathAnimation = keyframes`
 
 const colorAnimation = keyframes`
   0% {
-    stroke: var(--transparent);
+    stroke: var(--transparent2);
   }
   40% {
-    stroke: var(--transparent);
+    stroke: var(--transparent2);
   }
   66% {
-    stroke: var(--transparent);
+    stroke: var(--transparent2);
   }
   80%,
   90% {
-    stroke: var(--transparent);
+    stroke: var(--transparent2);
   }
 `;
 
@@ -79,7 +79,7 @@ const LoaderPath = styled.circle`
   stroke-linecap: round;
   fill: none;
   stroke-width: 2;
-  stroke: var(--transparent);
+  stroke: var(--transparent2);
 `;
 
 export default LoadingCircleAnimation;

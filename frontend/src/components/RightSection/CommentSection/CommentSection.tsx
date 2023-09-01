@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
@@ -12,12 +12,15 @@ import useFetch from "@/hooks/useFetch";
 import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
 import { boardCategoryState } from "@/recoil/atom";
+import useDebounce from "@/hooks/useDebounce";
 
 const isOnlyWhitespace = (str: string) => {
   return str.trim() === "";
 };
 
 const CommentSection = () => {
+  const [loading, setLoading] = useState(true);
+  const { debounce } = useDebounce();
   const { fetchComments } = useFetch();
   const [currentBoardId] = useRecoilState<number | null>(currentBoardIdState);
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
@@ -27,6 +30,11 @@ const CommentSection = () => {
     queryKey: ["comments", currentBoardId],
     queryFn: fetchComments,
   });
+
+  useEffect(() => {
+    setLoading(true);
+    debounce("commentsLoading", () => setLoading(false), 300);
+  }, [currentBoardId]);
 
   const handleOnchange = (e: any) => {
     setComment(e.target.value);
@@ -88,7 +96,7 @@ const CommentSection = () => {
       }
     }
   };
-  if (isLoading) {
+  if (loading || isLoading) {
     return (
       <WrapperStyled>
         <LoadingCircleAnimation />
@@ -140,7 +148,6 @@ const WrapperStyled = styled.div`
   height: 100%;
   flex: 1;
   width: 100%;
-  overflow: scroll;
 `;
 
 const CommentItemWrapperStyled = styled.div`
@@ -148,6 +155,7 @@ const CommentItemWrapperStyled = styled.div`
   width: 100%;
   height: calc(100% - 40px);
   overflow-y: scroll;
+  overflow-x: hidden;
 `;
 
 const NoCommentMessageStyled = styled.div`

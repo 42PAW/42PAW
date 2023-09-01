@@ -41,7 +41,7 @@ const SearchSection = () => {
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
+    if (searchInput !== "") setIsLoading(true);
     debounce("search", updateSearchResult, 500);
   }, [searchInput]);
 
@@ -113,9 +113,11 @@ const SearchSection = () => {
         ) : (
           <NoSearchMessageStyled>
             {isLoading ? (
-              <div>
+              <div style={{ marginTop: "20px" }}>
                 <LoadingDotsAnimation />
               </div>
+            ) : searchInput === "" ? (
+              <div>인트라 혹은 닉네임을 입력해주세요</div>
             ) : (
               <div>검색 결과가 없습니다</div>
             )}
@@ -146,9 +148,11 @@ const shakeAnimation = keyframes`
 
 const SearchBarStyled = styled.div<{ $isInput: boolean }>`
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding: 10px 10px;
   margin-top: 15px;
+  margin-bottom: 15px;
   width: 85%;
   border-radius: 30px;
   background: var(--transparent);
@@ -170,6 +174,7 @@ const SearchBarStyled = styled.div<{ $isInput: boolean }>`
   }
   // 검색 버튼
   button {
+    align-items: center;
     display: flex;
     justify-content: flex-end;
     border: none;
@@ -188,8 +193,10 @@ const SearchItemWrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
   width: 100%;
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `;
 
 const NoSearchMessageStyled = styled.div`

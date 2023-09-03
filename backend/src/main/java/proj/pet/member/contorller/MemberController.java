@@ -105,7 +105,7 @@ public class MemberController {
 	@AuthGuard(level = USER_OR_ADMIN)
 	public MemberProfileChangeResponseDto changeMyProfile(
 			@UserSession UserSessionDto userSessionDto,
-			@RequestBody MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
+			@ModelAttribute MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
 		return memberFacadeService.changeMemberProfile(userSessionDto,
 				memberProfileChangeRequestDto);
 	}

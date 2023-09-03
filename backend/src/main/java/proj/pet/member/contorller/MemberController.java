@@ -101,7 +101,7 @@ public class MemberController {
 	 * @param memberProfileChangeRequestDto 수정할 프로필 정보
 	 * @return MemberProfileChangeResponseDto   수정된 프로필 정보
 	 */
-	@PostMapping("me/profile")
+	@PostMapping(value = "me/profile", consumes = "multipart/form-data")
 	@AuthGuard(level = USER_OR_ADMIN)
 	public MemberProfileChangeResponseDto changeMyProfile(
 			@UserSession UserSessionDto userSessionDto,

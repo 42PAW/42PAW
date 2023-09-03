@@ -5,7 +5,6 @@ import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useQueryClient } from "@tanstack/react-query";
-import intersect from "@/assets/intersect.png";
 
 const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   const { openFollowerSection, openFollowingSection } =
@@ -168,7 +167,7 @@ const ProfileHeaderStyled = styled.div`
   min-height: 386px;
   font-size: 1.6rem;
 
-  background-image: url(${intersect});
+  background-image: url("/assets/Intersect.png");
   background-size: 100% 320px;
   background-repeat: no-repeat;
   background-position-y: bottom;

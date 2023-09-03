@@ -33,7 +33,7 @@ const CommentSection = () => {
 
   useEffect(() => {
     setLoading(true);
-    debounce("commentsLoading", () => setLoading(false), 300);
+    debounce("commentsLoading", () => setLoading(false), 400);
   }, [currentBoardId]);
 
   const handleOnchange = (e: any) => {
@@ -176,13 +176,13 @@ const CommentInputContainerStyled = styled.div`
   justify-content: space-evenly;
   width: 100%;
   height: 40px;
+  font-size: 1.3rem;
   border-top: 1px solid var(--transparent);
   padding-top: 2%;
   padding-bottom: 2%;
   input {
     height: 50%;
     width: 70%;
-
     border: none;
     border-bottom: 1px solid var(--white);
     background-color: transparent;

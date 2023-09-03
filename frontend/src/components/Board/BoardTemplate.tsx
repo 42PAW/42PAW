@@ -378,9 +378,6 @@ const NoCommentStyled = styled.div`
   font-weight: 400;
   color: var(--lightgrey);
   margin-top: 3%;
-  @media (min-width: 1024px) {
-    margin-bottom: 5px;
-  }
 `;
 
 export default BoardTemplate;

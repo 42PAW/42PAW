@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 
 const renderAnimalSpecies = (buttonName: string) => {
@@ -75,6 +75,12 @@ const AnimalButtonContainer = ({
   );
 };
 
+const waveAnimation = keyframes`
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+`;
+
 const AnimalButtonContainerStyled = styled.div<{
   $columns: number;
   $buttonRow: number;
@@ -114,6 +120,11 @@ const AnimalButtonStyled = styled.button<{
     props.$selectedAnimals.has(props.$buttonName)
       ? "var(--clicked-shadow)"
       : "var(--button-shadow)"};
+  background: ${(props) =>
+    props.$selectedAnimals.has(props.$buttonName) &&
+    "linear-gradient(270deg, var(--lightpurple), var(--lightpink))"};
+  background-size: 200% 200%;
+  animation: ${waveAnimation} 3s ease infinite;
   &:hover {
     opacity: 0.8;
   }

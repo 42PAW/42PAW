@@ -103,7 +103,9 @@ const MenuStyled = styled.div<{ $isToggled: boolean }>`
   right: 38px;
   opacity: ${({ $isToggled }) => ($isToggled ? 1 : 0)};
   visibility: ${({ $isToggled }) => ($isToggled ? "visible" : "hidden")};
-  transition: all 0.3s;
+  @media (min-width: 1024px) {
+    transition: all 0.3s;
+  }
   z-index: 1;
 `;
 

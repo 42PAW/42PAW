@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { axiosCreateBoard } from "@/api/axios/axios.custom";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
@@ -379,7 +379,7 @@ const CancelbuttonStyled = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  pointer: cursor;
+  cursor: pointer;
   width: 70px;
   height: 25px;
   font-size: 12px;

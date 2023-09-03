@@ -91,7 +91,7 @@ const BannerStyled = styled.div`
 
 const BannerBufferStyled = styled.div`
   color: transparent;
-  width: 35px;
+  width: 36px;
   aspect-ratio: 1 / 1;
 `;
 

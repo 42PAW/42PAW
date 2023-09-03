@@ -86,7 +86,7 @@ public class MemberController {
 	 * @param memberId       멤버 아이디
 	 * @return MemberProfileResponseDto 멤버 프로필
 	 */
-	@GetMapping("{memberId}/profile")
+	@GetMapping("/{memberId}/profile")
 	@AuthGuard(level = ANYONE)
 	public MemberProfileResponseDto getMemberProfile(
 			@UserSession UserSessionDto userSessionDto,
@@ -101,11 +101,11 @@ public class MemberController {
 	 * @param memberProfileChangeRequestDto 수정할 프로필 정보
 	 * @return MemberProfileChangeResponseDto   수정된 프로필 정보
 	 */
-	@PatchMapping("me/profile")
+	@PostMapping(value = "/me/profile", consumes = "multipart/form-data")
 	@AuthGuard(level = USER_OR_ADMIN)
 	public MemberProfileChangeResponseDto changeMyProfile(
 			@UserSession UserSessionDto userSessionDto,
-			@RequestBody MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
+			@ModelAttribute MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
 		return memberFacadeService.changeMemberProfile(userSessionDto,
 				memberProfileChangeRequestDto);
 	}
@@ -138,7 +138,7 @@ public class MemberController {
 	 * @param size           페이지 사이즈
 	 * @return BoardsResponseDto    게시글 목록
 	 */
-	@GetMapping("{memberId}/boards")
+	@GetMapping("/{memberId}/boards")
 	@AuthGuard(level = ANYONE)
 	public BoardsPaginationDto getMemberBoards(
 			@UserSession UserSessionDto userSessionDto,

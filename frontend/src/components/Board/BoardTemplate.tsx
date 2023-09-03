@@ -264,7 +264,7 @@ const BoardOptionButtonStyled = styled.div`
 `;
 
 const BoardBodyStyled = styled.div`
-  height: 96.2%;
+  height: 96.8%;
   width: 100%;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;

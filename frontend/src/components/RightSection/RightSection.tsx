@@ -86,7 +86,7 @@ const RightSectionStyled = styled.div<{
   box-shadow: var(--default-shadow);
   margin-right: ${(props) => (props.$isRightSectionOpened ? "0px" : "-480px")};
   opacity: ${(props) => (props.$isRightSectionOpened ? 1 : 0)};
-  transition: opacity 0.5s ease-in-out, margin-right 0.5s ease-in-out;
+  transition: opacity 0.4s ease-in-out, margin-right 0.4s ease-in-out;
   @media (max-width: 1023px) {
     z-index: 4;
     display: ${(props) => (props.$isRightSectionOpened ? "flex" : "none")};

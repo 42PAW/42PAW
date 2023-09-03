@@ -109,7 +109,7 @@ const CountInfoStyled = styled.ul`
   display: flex;
   width: 100%;
   padding: 0;
-  margin: 0 0 25px 0;
+  margin: 0 0 21px 0;
   li {
     font-size: 1rem;
     display: flex;
@@ -175,8 +175,8 @@ const ProfileHeaderStyled = styled.div`
   @media (max-width: 1023px) {
     min-height: 256px;
     font-size: 1.6rem;
-
-    background: linear-gradient(210deg, #878abea0 30%, #d1c1cd 98.34%);
+    margin-top: 0px;
+    background: linear-gradient(210deg, #878abea0 0%, #d1c1cd 99.34%);
   }
   .content-wrapper {
     display: flex;
@@ -195,8 +195,8 @@ const ProfileHeaderStyled = styled.div`
     filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.25));
     border-radius: 50%;
     @media (max-width: 1023px) {
-      margin-top: -10px;
-      width: 100px;
+      margin-top: 10px;
+      width: 80px;
     }
   }
 

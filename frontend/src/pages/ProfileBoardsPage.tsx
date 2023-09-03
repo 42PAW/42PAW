@@ -52,6 +52,8 @@ const ProfileBoardsPage = () => {
     return (
       <WrapperStyled $boardExists={true}>
         <SkeletonBoardTemplate />
+        <SkeletonBoardTemplate />
+        <SkeletonBoardTemplate />
         <LoadingAnimation />
       </WrapperStyled>
     );

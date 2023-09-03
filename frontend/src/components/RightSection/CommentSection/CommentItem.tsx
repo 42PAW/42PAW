@@ -84,7 +84,8 @@ const CommentItemRightStyled = styled.div`
 `;
 
 const NicknameToggleContainerStyled = styled.div`
-  margin-top: 8px;
+  margin-top: 6px;
+  margin-bottom: -2px;
   display: flex;
   position: relative;
   align-items: center;

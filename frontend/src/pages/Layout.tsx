@@ -45,7 +45,6 @@ const Layout = () => {
   };
 
   useEffect(() => {
-    console.log("cicd works!");
     //로그인 성공 시 유저 정보 받아오기
     if (token && !userInfo) getMyInfo();
     //비로그인 상태에서 로컬 스토리지 키값을 통해 언어 설정
@@ -104,7 +103,8 @@ const MainAreaStyled = styled.main<{
   align-items: center;
   height: 100%;
   min-height: 800px;
-  width: ${(props) => (props.$isProfilePage ? `600px` : "500px")};
+  width: 600px;
+  /* width: ${(props) => (props.$isProfilePage ? `600px` : "600px")}; */
 `;
 
 export default Layout;

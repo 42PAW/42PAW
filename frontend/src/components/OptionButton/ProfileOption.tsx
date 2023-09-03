@@ -10,6 +10,7 @@ import OptionButton from "./OptionButton";
 import { reportUserInfoState } from "@/recoil/atom";
 import { ReportDTO } from "@/types/dto/member.dto";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
+import { useState } from "react";
 
 /**
  * @boardId (optional) 신고, 차단, 삭제할 게시물의 id
@@ -61,6 +62,10 @@ const ProfileOption: React.FC<IProfileOptionButtonProps> = ({
     openBannedMemberSection();
   };
 
+  const handleProfileEditClick = () => {
+    openModal(ModalType.PROFILEEDIT);
+  };
+
   return (
     <OptionButton>
       {memberId !== 0 ? (
@@ -82,8 +87,8 @@ const ProfileOption: React.FC<IProfileOptionButtonProps> = ({
             </MenuItemStyled>
           </MenuItemWrapperStyled>
           <MenuItemWrapperStyled>
-            <MenuItemStyled onClick={() => console.log(2)}>
-              {language.report}
+            <MenuItemStyled onClick={handleProfileEditClick}>
+              프로필 수정
             </MenuItemStyled>
           </MenuItemWrapperStyled>
         </>

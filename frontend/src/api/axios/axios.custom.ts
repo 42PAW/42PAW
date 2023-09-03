@@ -1,6 +1,9 @@
 import axios from "axios";
 import instance from "@/api/axios/axios.instance";
-import { SignUpInfoDTO } from "@/types/dto/member.dto";
+import {
+  SignUpInfoDTO,
+  MemberProfileChangeRequestDto,
+} from "@/types/dto/member.dto";
 import { CreateBoardDTO } from "@/types/dto/board.dto";
 import { getCookie } from "../cookie/cookies";
 import { Language } from "@/types/enum/language.enum";
@@ -29,8 +32,32 @@ export const axiosSignUp = async ({
         "Content-Type": "multipart/form-data",
       },
     });
-
     return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosChangeMyProfileURL = "/v1/members/me/profile";
+export const axiosChangeMyProfile = async ({
+  memberName,
+  imageData,
+  statement,
+}: MemberProfileChangeRequestDto): Promise<any> => {
+  try {
+    console.log("axiosChangeMyProfile, " + memberName);
+    const formData = new FormData();
+    if (memberName) formData.append("memberName", memberName);
+    if (imageData) formData.append("imageImage", imageData);
+    if (statement) formData.append("statement", statement);
+    const response = await instance.post(axiosChangeMyProfileURL, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log("axiosChangeMyProfile2, " + memberName);
+
+    return response;
   } catch (error) {
     throw error;
   }

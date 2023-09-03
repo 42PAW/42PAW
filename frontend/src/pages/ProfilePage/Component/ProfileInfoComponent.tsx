@@ -89,7 +89,7 @@ const UserInfoStyled = styled.div`
 
   .memberName {
     font-weight: 600;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
   .intraName {
     color: var(--transparent2);
@@ -110,10 +110,9 @@ const CountInfoStyled = styled.ul`
   display: flex;
   width: 100%;
   padding: 0;
-  margin: 0 0 30px 0;
-
+  margin: 0 0 25px 0;
   li {
-    font-size: 1.2rem;
+    font-size: 1rem;
     display: flex;
     flex-direction: column;
     width: calc(100% / 3);
@@ -140,18 +139,21 @@ const CountInfoStyled = styled.ul`
   }
 
   span {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 600;
   }
 `;
 
 const BoardOptionButtonStyled = styled.div`
   position: absolute;
-  top: 135px;
-  right: 15px;
+  top: 130px;
+  right: 20px;
   width: 30px;
   &:focus {
     opacity: 0.6;
+  }
+  @media (max-width: 1023px) {
+    top: 5px;
   }
 `;
 
@@ -160,17 +162,23 @@ const ProfileHeaderStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 30px;
+  margin-top: 20px;
   color: var(--white);
   width: 100%;
   min-height: 386px;
   font-size: 1.6rem;
 
-  background-image: url("${intersect}");
+  background-image: url(${intersect});
   background-size: 100% 320px;
   background-repeat: no-repeat;
   background-position-y: bottom;
 
+  @media (max-width: 1023px) {
+    min-height: 256px;
+    font-size: 1.6rem;
+
+    background: linear-gradient(210deg, #878abea0 30%, #d1c1cd 98.34%);
+  }
   .content-wrapper {
     display: flex;
     flex-direction: column;
@@ -187,6 +195,10 @@ const ProfileHeaderStyled = styled.div`
     background-color: var(--transparent); /* 이미지가 없을 때 배경 색상 */
     filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.25));
     border-radius: 50%;
+    @media (max-width: 1023px) {
+      margin-top: -10px;
+      width: 100px;
+    }
   }
 
   .meatballsMenuIcon {
@@ -199,7 +211,7 @@ const ProfileHeaderStyled = styled.div`
 
 const CaptionSectionStyled = styled.div`
   font-weight: 500;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
 `;
 
 export default ProfileInfoComponent;

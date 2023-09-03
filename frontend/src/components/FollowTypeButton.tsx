@@ -102,12 +102,13 @@ const ButtonStyled = styled.button<{
   height: ${({ $size }) => ($size === "large" ? "40px" : "33px")};
   width: ${({ $size }) => ($size === "large" ? "200px" : "90px")};
   border-radius: ${({ $size }) => ($size === "large" ? "20px" : "10px")};
-  font-size: ${({ $size }) => $size === "large" && "1.6rem"};
+  font-size: ${({ $size }) => $size === "large" && "1.3rem"};
   font-weight: ${({ $size }) => $size === "large" && "bold"};
-  margin-top: ${({ $size }) => $size === "large" && "-20px"};
+  margin-top: ${({ $size }) => $size === "large" && "-15px"};
   border: 1px solid
     ${({ $status }) =>
       $status === followType.BLOCK ? "#fc5656" : "var(--white)"};
+  border: ${({ $size }) => $size === "large" && "0.5px solid var(--white)"};
   background-color: ${({ $status, $size }) =>
     $status === followType.BLOCK
       ? "#fc5656"

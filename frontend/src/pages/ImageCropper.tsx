@@ -102,29 +102,29 @@ const FixedCropperStyled = styled(FixedCropper)`
   align-items: center;
   background-color: var(--transparent);
   overflow: auto;
-  width: 55%;
-  height: 285px;
+  width: 350px;
+  height: 350px;
   border-radius: 5px;
   border: 5px solid var(--white);
-  margin-top: 5px;
 `;
 
 const CropperUtilsStyled = styled.div`
   display: flex;
   justify-content: flex-end;
-  width: 55%;
-  height: 20px;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  width: 350px;
+  height: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 const TodayDateStyled = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 5px;
   height: 20px;
-  margin-right: 50%;
-  font-size: 10px;
+  margin-right: 170px;
+  font-size: 1.3rem;
   color: var(--white);
   justify-content: flex-start;
   font-weight: lighter;
@@ -136,18 +136,13 @@ const CropSummitStyled = styled.button`
   align-items: center;
   background-color: var(--purple);
   pointer: cursor;
-  width: 40px;
-  height: 100%;
+  width: 50px;
   border-radius: 10px;
   margin-right: 10px;
   cursor: pointer;
   border: none;
   font-weight: lighter;
   box-shadow: 0px 4px 4px var(--grey);
-  img {
-    width: 15px;
-    height: 15px;
-  }
 `;
 
 const ResetButtonStyled = styled.button`
@@ -156,17 +151,12 @@ const ResetButtonStyled = styled.button`
   align-items: center;
   background-color: var(--purple);
   pointer: cursor;
-  width: 40px;
-  height: 100%;
+  width: 50px;
   border-radius: 10px;
   cursor: pointer;
   border: none;
   font-weight: lighter;
   box-shadow: 0px 4px 4px var(--grey);
-  img {
-    width: 15px;
-    height: 15px;
-  }
 `;
 
 export default ImageCropper;

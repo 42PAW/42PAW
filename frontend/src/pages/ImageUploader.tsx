@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { axiosCreateBoard } from "@/api/axios/axios.custom";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
@@ -42,10 +42,12 @@ const ImageUploader = () => {
 
   const handlePreviewHover = (index: number | null) => {
     setHoveringIndex(index);
+    console.log("hover: ", index);
   };
 
   // delete the image: update uploadFiles
   const handleDeleteClick = (indexToDelete: number) => {
+    console.log("delete: ", indexToDelete);
     if (indexToDelete >= 0 && indexToDelete < uploadFiles.length) {
       const updatedFiles = uploadFiles.filter(
         (_, index) => index !== indexToDelete
@@ -72,7 +74,7 @@ const ImageUploader = () => {
       return;
     }
     setFilecnt(filecnt + selectedFiles.length);
-    convertToWebp(selectedFiles);
+    convertToWebp(selectedFiles as Blob[]);
   };
 
   // caption change
@@ -194,8 +196,8 @@ const ImageUploader = () => {
       <CategoryButtonStyled>
         <AnimalButtonContainer
           columns={3}
-          buttonRow={17}
-          buttonFontSize={110}
+          buttonRow={30}
+          buttonFontSize={120}
           array={categoryList}
           setter={setCategoryList}
         />
@@ -209,32 +211,21 @@ const ImageUploader = () => {
   );
 };
 
-const WrapperStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  width: 500px;
-  height: 100%;
-  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
-`;
-
 const SmallPreviewStyled = styled.div`
   display: flex;
   justify-content: flex-start;
-  width: 55%;
+  width: 350px;
+  height: 50px;
   border-radius: 10px;
-  margin-top: 2%;
+  margin-bottom: 10px;
 `;
 
 const SmallPreviewUnitStyled = styled.div`
   display: flex;
   position: relative;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  margin-right: 7px;
+  width: 47px;
+  height: 47px;
+  margin-right: 20px;
   background-color: var(--transparent);
   border: 4px solid var(--white);
   border-radius: 10px;
@@ -260,8 +251,8 @@ const SmallUploadButtonWrapperStyled = styled.div`
   background-size: cover;
   border-radius: 10px;
   pointer: cursor;
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   justify-content: center;
   align-items: center;
 `;
@@ -274,8 +265,8 @@ const SmallUploadButton = styled.input`
 `;
 
 const UploadMainPreviewWrapperStyled = styled.div`
-  width: 55%;
-  height: 285px;
+  width: 350px;
+  height: 350px;
   justify-content: center;
   align-items: center;
   color: var(--white);
@@ -289,7 +280,7 @@ const UploadMainPreviewWrapperStyled = styled.div`
 const UploadMainPreviewStyled = styled.input`
   opacity: 0;
   width: 100%;
-  height: 93%;
+  height: 100%;
   cursor: pointer;
 `;
 
@@ -298,16 +289,26 @@ const UploadDemandStyled = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%
+  height: 50px;
   color: var(--white);
   font-size: 1.3rem;
+`;
+
+const WrapperStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  height: 100%;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
 `;
 
 const DivisionLineStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 57%;
+  width: 380px;
   height: 1px;
   background-color: var(--white);
 `;
@@ -315,21 +316,21 @@ const DivisionLineStyled = styled.div`
 const CaptionBoxStyled = styled.div`
   display: flex;
   align-items: start;
-  width: 60%;
-  height: 4%;
+  width: 380px;
+  height: 50px;
   margin-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   textarea {
     display: flex;
-    width: 100%;
-    height: 70%
+    width: 380px;
+    height: 100px;
     border: none;
     background: none;
-    outline: none;
-    border: none;
+    outline: none
     caret-color: var(--white);
     color: var(--white);
-    font-size: 12px;
+    font-size: 1.3rem;
+    font-family: "Noto Sans KR", sans-serif;
     font-weight: lighter;
     white-space: pre-wrap;
     overflow-y: scroll;
@@ -341,19 +342,20 @@ const CaptionBoxStyled = styled.div`
 
 const CategoryButtonStyled = styled.div`
   display: flex;
-  width: 75%;
+  width: 80%;
   justify-content: center;
   align-items: center;
   background-color: var(--transparent);
   border-radius: 10px;
-  padding: 10px;
+  margin-top: 10px;
+  padding: 15px;
 `;
 
 const ButtonDivStyled = styled.div`
   display: flex;
   width: 80%;
   justify-content: center;
-  margin-top: 5px;
+  margin-top: 10px;
 `;
 
 const UploadbuttonStyled = styled.button`
@@ -361,9 +363,8 @@ const UploadbuttonStyled = styled.button`
   justify-content: center;
   align-items: center;
   pointer: cursor;
-  width: 70px;
-  height: 25px;
-  font-size: 12px;
+  width: 100px;
+  height: 40px;
   background-color: var(--purple);
   color: var(--white);
   border: none;
@@ -380,9 +381,8 @@ const CancelbuttonStyled = styled.button`
   justify-content: center;
   align-items: center;
   pointer: cursor;
-  width: 70px;
-  height: 25px;
-  font-size: 12px;
+  width: 100px;
+  height: 40px;
   background-color: var(--white);
   color: var(--black);
   border: none;

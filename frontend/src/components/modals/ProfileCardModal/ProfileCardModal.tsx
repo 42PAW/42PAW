@@ -145,7 +145,7 @@ const WrapperStyled = styled.div`
   @media (max-width: 1023px) {
     background-color: var(--transparent);
     width: 280px;
-    height: 470px;
+    height: 480px;
   }
 `;
 
@@ -210,7 +210,7 @@ const MainAreaStyled = styled.div`
 
   @media (max-width: 1023px) {
     position: absolute;
-    bottom: -290px;
+    bottom: -280px;
     border-radius: 100%;
   }
   @media (min-width: 1024px) {
@@ -249,6 +249,7 @@ const StatementStyled = styled.div`
   font-size: 1.2rem;
   width: 200px;
   text-align: center;
+  min-height: 17.5px;
   @media (min-width: 1024px) {
     margin-top: 30px;
   }

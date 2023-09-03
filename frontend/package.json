@@ -19,6 +19,7 @@
     "cors": "^2.8.5",
     "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
+    "react-advanced-cropper": "^0.19.3",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-infinite-scroll-component": "^6.1.0",

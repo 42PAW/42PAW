@@ -144,3 +144,18 @@ export const currentProfileBoardIdState = atom<number | null>({
   key: "currentProfileBoardId",
   default: null,
 });
+
+export const uploadFileState = atom<Blob[]>({
+  key: "uploadFile",
+  default: [],
+});
+
+export const uploadDefaultFileState = atom<Blob[]>({
+  key: "uploadDefaultFile",
+  default: [],
+});
+
+export const currentUploadIndexState = atom<number>({
+  key: "currentUploadIndex",
+  default: 0,
+});

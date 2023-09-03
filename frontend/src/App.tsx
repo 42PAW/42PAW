@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "@/pages/Layout";
 import MainPage from "@/pages/MainPage";
 import NoticePage from "@/pages/NoticePage";
@@ -18,7 +18,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 300);
   }, []);
 
   return (
@@ -37,6 +37,7 @@ function App() {
             path="profile/:memberId/boards"
             element={<ProfileBoardsPage />}
           />
+          <Route path="*" element={<Navigate to="/error" />} />
         </Route>
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/error" element={<NotFoundPage />} />

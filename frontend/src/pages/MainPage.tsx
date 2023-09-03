@@ -8,19 +8,26 @@ import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import useFetch from "@/hooks/useFetch";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { LegacyRef, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation";
 import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTemplate";
 import useDebounce from "@/hooks/useDebounce";
+import { useRef } from "react";
 
 const MainPage = () => {
+  //useInview의 ref값을 참조하는 요소에 대한 root 참조값
+  const rootRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(true);
   const [boardCategory, setBoardCategory] =
     useRecoilState<Board>(boardCategoryState);
   const { fetchBoards } = useFetch();
   const navigator = useNavigate();
-  const [ref, inView] = useInView();
+  const [ref, inView] = useInView({
+    triggerOnce: false,
+    root: rootRef.current,
+    rootMargin: "0px 0px 2500px 0px", //ref를 참조하는 요소를 root 기준 margin bottom을 줌. 2500px이면 대략 Board 5-6개의 height
+  });
   const { debounce } = useDebounce();
   const { data, fetchNextPage, hasNextPage, isError } = useInfiniteQuery(
     ["boards", boardCategory],
@@ -45,14 +52,21 @@ const MainPage = () => {
   }, [inView, hasNextPage]);
 
   useEffect(() => {
+    // 스켈레톤 뷰를 보여주기 위한 loading 시간
     setLoading(true);
     debounce("mainPageLoading", () => setLoading(false), 500);
+    //게시물 카테고리 변경할 때마다 화면 맨 위로 스크롤
+    if (rootRef.current) {
+      rootRef.current.scrollTop = 0;
+    }
   }, [boardCategory]);
 
   if (loading) {
     return (
       <WrapperStyled $boardExists={true}>
         <LoadingAnimation />
+        <SkeletonBoardTemplate />
+        <SkeletonBoardTemplate />
         <SkeletonBoardTemplate />
       </WrapperStyled>
     );
@@ -71,7 +85,10 @@ const MainPage = () => {
   }
 
   return (
-    <WrapperStyled $boardExists={true}>
+    <WrapperStyled
+      $boardExists={true}
+      ref={rootRef as LegacyRef<HTMLDivElement>}
+    >
       {data?.pages.map((page) =>
         page.map((board: IBoardInfo) => (
           <BoardTemplate
@@ -96,9 +113,9 @@ const MainPage = () => {
         ))
       )}
       {hasNextPage && (
-        <FetchObserverStyled ref={ref}>
+        <BoardsEndStyled ref={ref}>
           <LoadingCircleAnimation />
-        </FetchObserverStyled>
+        </BoardsEndStyled>
       )}
       {!hasNextPage && (
         <BoardsEndStyled>더 이상 게시물이 존재하지 않습니다.</BoardsEndStyled>
@@ -119,19 +136,13 @@ const WrapperStyled = styled.div<{ $boardExists?: boolean }>`
 `;
 
 const BoardsEndStyled = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 10px;
   margin-bottom: 30px;
   color: var(--white);
-`;
-
-const FetchObserverStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
 `;
 
 const NoBoardsStyled = styled.div`

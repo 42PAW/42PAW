@@ -45,7 +45,7 @@ const Layout = () => {
   };
 
   useEffect(() => {
-    console.log("cicd works");
+    console.log("cicd works!");
     //로그인 성공 시 유저 정보 받아오기
     if (token && !userInfo) getMyInfo();
     //비로그인 상태에서 로컬 스토리지 키값을 통해 언어 설정

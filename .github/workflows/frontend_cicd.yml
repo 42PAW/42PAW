@@ -28,9 +28,9 @@ jobs:
       #   run: npm run lint --prefix frontend
       - name: env 파일 생성
         run: |
-          echo "${{ secrets.FRONTEND_ENV }}" | base64 --decode > frontend/.env
-          echo "${{ secrets.FRONTEND_ENV_LOCAL }}" | base64 --decode > frontend/.env.local
-          echo "${{ secrets.FRONTEND_ENV_PRODUCTION }}" | base64 --decode > frontend/.env.production
+          echo "${{ secrets.FRONTEND_ENV }}" > frontend/.env
+          echo "${{ secrets.FRONTEND_ENV_LOCAL }}" > frontend/.env.local
+          echo "${{ secrets.FRONTEND_ENV_PRODUCTION }}" > frontend/.env.production
       - name: 빌드 체크
         run: npm run build --prefix frontend
       # - name: 단위 테스트 체크

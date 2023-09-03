@@ -51,7 +51,7 @@ const ToggleStyled = styled.button`
   border: none;
   img {
     cursor: pointer;
-    width: 100%;
+    width: 20px;
   }
   img:hover {
     opacity: 0.7;
@@ -69,7 +69,6 @@ const MenuStyled = styled.div<{ $isToggled: boolean }>`
   border-radius: 10px;
   color: var(--grey);
   background: var(--white);
-
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
   opacity: ${({ $isToggled }) => ($isToggled ? 1 : 0)};
   visibility: ${({ $isToggled }) => ($isToggled ? "visible" : "hidden")};

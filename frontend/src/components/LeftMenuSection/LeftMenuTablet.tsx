@@ -1,4 +1,3 @@
-import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import useNavigateCustom from "@/hooks/useNavigateCustom";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
@@ -17,53 +16,11 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   handleClickLogo,
   userInfo,
 }) => {
-  const [isBannerVisible, setIsBannerVisible] = useState(true);
   const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
   const { openSearchSection } = useRightSectionHandler();
-  const touchStartY = useRef<number | null>(null);
   const setCurrentMemberId = useSetRecoilState<number | null>(
     currentMemberIdState
   );
-
-  useEffect(() => {
-    window.addEventListener("wheel", handleWheel);
-    window.addEventListener("touchstart", handleTouchStart);
-    window.addEventListener("touchmove", handleTouchMove);
-
-    return () => {
-      window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchmove", handleTouchMove);
-    };
-  }, []);
-
-  const handleWheel = (event: WheelEvent) => {
-    const deltaY = event.deltaY;
-    if (deltaY > 0) {
-      setIsBannerVisible(false);
-    } else if (deltaY < 0) {
-      setIsBannerVisible(true);
-    }
-  };
-
-  const handleTouchStart = (event: TouchEvent) => {
-    if (touchStartY.current === null) return;
-
-    touchStartY.current = event.touches[0].clientY;
-  };
-
-  const handleTouchMove = (event: TouchEvent) => {
-    if (touchStartY.current === null) return;
-
-    const deltaY = touchStartY.current - event.touches[0].clientY;
-    if (deltaY > 50) {
-      setIsBannerVisible(false);
-    } else if (deltaY < -50) {
-      setIsBannerVisible(true);
-    }
-
-    touchStartY.current = null;
-  };
 
   const handleOpenMyProfile = () => {
     setCurrentMemberId(userInfo!.memberId);
@@ -76,7 +33,7 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
 
   return (
     <>
-      <BannerStyled $isBannerVisible={isBannerVisible}>
+      <BannerStyled>
         <BannerLogoStyled onClick={handleClickLogo}>
           <img src="/assets/paw.png" />
         </BannerLogoStyled>
@@ -118,19 +75,16 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   );
 };
 
-const BannerStyled = styled.div<{ $isBannerVisible: boolean }>`
+const BannerStyled = styled.div`
   z-index: 2;
-  position: sticky;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
   height: 45px;
-  margin-top: ${(props) => (props.$isBannerVisible ? "0" : "-50px")};
   padding-bottom: 2px;
   border-bottom: 1px solid var(--transparent);
   background-color: var(--transparent);
-  transform: translateY(${(props) => (props.$isBannerVisible ? "0" : "-100%")});
   transition: transform 0.1s ease-in-out, margin-top 0.2s ease;
   line-height: 15px;
 `;

@@ -14,7 +14,7 @@ import {
   currentUploadIndexState,
 } from "@/recoil/atom";
 
-const ImageCropper = ({ src }) => {
+const ImageCropper = ({ src }: any) => {
   const cropperRef = useRef<FixedCropperRef>(null);
   const { parseDate } = useParseDate();
   const [uploadFiles, setUploadFiles] = useRecoilState<Blob[]>(uploadFileState);

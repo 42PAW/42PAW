@@ -1,53 +1,70 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { axiosCreateBoard } from "@/api/axios/axios.custom";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
-import useParseDate from "@/hooks/useParseDate";
 import AnimalButtonContainer from "@/components/AnimalButtonContainer";
 import useToaster from "@/hooks/useToaster";
+import ImageCropper from "./ImageCropper";
+import {
+  uploadFileState,
+  uploadDefaultFileState,
+  currentUploadIndexState,
+} from "@/recoil/atom";
 
 const ImageUploader = () => {
   // category list
   const [categoryList, setCategoryList] = useState<AnimalSpecies[]>([]);
   // upload files
-  const [uploadFiles, setUploadFiles] = useState<Blob[]>([]);
+  const [uploadFiles, setUploadFiles] = useRecoilState<Blob[]>(uploadFileState);
+  const [uploadDefaultFiles, setUploadDefaultFiles] = useRecoilState<Blob[]>(
+    uploadDefaultFileState
+  );
   // caption
   const [caption, setCaption] = useState("");
   // check if the user is trying to put more than 5 images
   const [filecnt, setFilecnt] = useState<number>(0);
   // if u click small preview, it will be selected & shown in main preview box
-  // const [selectedPreviewIndex, setSelectedPreviewIndex] = useState<number>(0);
+  const [selectedPreviewIndex, setSelectedPreviewIndex] =
+    useRecoilState<number>(currentUploadIndexState);
   // if u hover small preview, it will be shown in main preview box -> it's for deleting or editing image
   const [hoveringIndex, setHoveringIndex] = useState<number | null>(null);
   // utils
-  const { parseDate } = useParseDate();
   const { popToast } = useToaster();
 
   const uploadFilesCount = uploadFiles.length;
   const showUploadButton = uploadFilesCount < 5;
 
   // handle preview click: select the image & show it in main preview box
-  // const handlePreviewClick = (index: number) => {
-  //   setSelectedPreviewIndex(index);
-  // };
+  const handlePreviewClick = (index: number) => {
+    setSelectedPreviewIndex(index);
+  };
 
-  const handlePreviewHover = (index: number) => {
+  const handlePreviewHover = (index: number | null) => {
     setHoveringIndex(index);
+    console.log("hover: ", index);
   };
 
   // delete the image: update uploadFiles
   const handleDeleteClick = (indexToDelete: number) => {
-    const updatedFiles = uploadFiles.filter(
-      (_, index) => index !== indexToDelete
-    );
-    setUploadFiles(updatedFiles);
+    console.log("delete: ", indexToDelete);
+    if (indexToDelete >= 0 && indexToDelete < uploadFiles.length) {
+      const updatedFiles = uploadFiles.filter(
+        (_, index) => index !== indexToDelete
+      );
+      const updatedDefaultFiles = uploadDefaultFiles.filter(
+        (_, index) => index !== indexToDelete
+      );
+      setUploadFiles(updatedFiles);
+      setUploadDefaultFiles(updatedDefaultFiles);
+      setFilecnt(filecnt - 1);
+    }
   };
 
   // handle image change: convert to webp & update uploadFiles
   const handleImageChange = (e: any) => {
-    if (!uploadFiles) return;
     const selectedFiles: Blob[] = Array.from(e.target.files);
-    if (!selectedFiles || !uploadFiles) return;
+    if (!selectedFiles) return;
     if (selectedFiles.some((file: any) => file.size > 5000000)) {
       popToast("5MB 이하의 이미지만 업로드 가능합니다.", "N");
       return;
@@ -57,7 +74,6 @@ const ImageUploader = () => {
       return;
     }
     setFilecnt(filecnt + selectedFiles.length);
-    setUploadFiles([...uploadFiles, ...selectedFiles]);
     convertToWebp(selectedFiles as Blob[]);
   };
 
@@ -68,11 +84,12 @@ const ImageUploader = () => {
 
   // convert any image file to webp
   const convertToWebp = (files: any) => {
-    files.forEach(() => {
+    files.forEach((file: Blob) => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
 
       const img = new Image();
+
       img.onload = () => {
         canvas.width = img.width;
         canvas.height = img.height;
@@ -82,9 +99,14 @@ const ImageUploader = () => {
           const webpFile = new File([webpBlob as BlobPart], "image.webp", {
             type: "image/webp",
           });
-          setUploadFiles([...uploadFiles, webpFile]);
+          setUploadFiles((prevUploadFiles) => [...prevUploadFiles, webpFile]);
+          setUploadDefaultFiles((prevUploadDefaultFiles) => [
+            ...prevUploadDefaultFiles,
+            webpFile,
+          ]);
         }, "image/webp");
       };
+      img.src = URL.createObjectURL(file as Blob);
     });
   };
 
@@ -117,11 +139,11 @@ const ImageUploader = () => {
         {uploadFiles.map((file: Blob, index: number) => (
           <SmallPreviewUnitStyled
             key={index}
-            // onClick={() => handlePreviewClick(index)}
+            onClick={() => handlePreviewClick(index)}
             onMouseEnter={() => handlePreviewHover(index)}
-            onMouseLeave={() => handlePreviewHover(0)} //원래 null
+            onMouseLeave={() => handlePreviewHover(null)}
           >
-            <img src={URL.createObjectURL(file)} alt={"Preview ${index + 1}"} />
+            <img src={URL.createObjectURL(file)} alt={`Preview ${index + 1}`} />
             {hoveringIndex === index && (
               <DeleteButtonStyled onClick={() => handleDeleteClick(index)}>
                 x
@@ -140,6 +162,16 @@ const ImageUploader = () => {
           </SmallUploadButtonWrapperStyled>
         )}
       </SmallPreviewStyled>
+      {uploadFiles.length > 0 &&
+        (selectedPreviewIndex < uploadFilesCount ? (
+          <ImageCropper
+            src={URL.createObjectURL(uploadFiles[selectedPreviewIndex])}
+          />
+        ) : (
+          <ImageCropper
+            src={URL.createObjectURL(uploadFiles[uploadFiles.length - 1])}
+          />
+        ))}
       {uploadFilesCount === 0 && (
         <UploadMainPreviewWrapperStyled>
           <UploadDemandStyled>이미지를 업로드해주세요!</UploadDemandStyled>
@@ -151,7 +183,6 @@ const ImageUploader = () => {
           />
         </UploadMainPreviewWrapperStyled>
       )}
-      <TodayDateStyled>{parseDate(new Date())}</TodayDateStyled>
       <DivisionLineStyled />
       <CaptionBoxStyled>
         <textarea
@@ -192,18 +223,19 @@ const SmallPreviewStyled = styled.div`
 const SmallPreviewUnitStyled = styled.div`
   display: flex;
   position: relative;
-  width: 50px;
-  height: 50px;
+  width: 47px;
+  height: 47px;
   margin-right: 20px;
-  background-color: var(--white);
+  background-color: var(--transparent);
+  border: 4px solid var(--white);
   border-radius: 10px;
   overflow: hidden;
 `;
 
 const DeleteButtonStyled = styled.button`
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 2px;
+  right: 2px;
   background-color: red;
   color: white;
   border: none;
@@ -219,8 +251,8 @@ const SmallUploadButtonWrapperStyled = styled.div`
   background-size: cover;
   border-radius: 10px;
   pointer: cursor;
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   justify-content: center;
   align-items: center;
 `;
@@ -238,7 +270,7 @@ const UploadMainPreviewWrapperStyled = styled.div`
   justify-content: center;
   align-items: center;
   color: var(--white);
-  border-radius: 10px;
+  border-radius: 5px;
   border: 5px solid var(--white);
   margin-top: 10px;
   margin-bottom: 10px;
@@ -270,18 +302,6 @@ const WrapperStyled = styled.div`
   width: 500px;
   height: 100%;
   box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
-`;
-
-const TodayDateStyled = styled.div`
-  display: flex;
-  width: 80%;
-  padding-left: 45px;
-  margin-bottom: 10px;
-  font-size: 1.3rem;
-  color: var(--white);
-  justify-content: flex-start;
-  align-items: center;
-  font-weight: lighter;
 `;
 
 const DivisionLineStyled = styled.div`

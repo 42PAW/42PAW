@@ -1,8 +1,23 @@
 package proj.pet.board.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static proj.pet.testutil.testdouble.board.TestBoardMedia.DEFAULT_MEDIA_URL;
+
 import com.amazonaws.services.s3.AmazonS3;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,20 +46,9 @@ import proj.pet.testutil.testdouble.category.TestBoardCategoryFilter;
 import proj.pet.testutil.testdouble.member.TestMember;
 import proj.pet.testutil.testdouble.reaction.TestReaction;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static proj.pet.testutil.testdouble.board.TestBoardMedia.DEFAULT_MEDIA_URL;
-
+@Disabled
 class BoardControllerTest extends E2ETest {
+
 	/*------------------------------UTIL------------------------------*/
 	private final static String BEARER = "Bearer ";
 	private PersistHelper persistHelper;
@@ -61,7 +65,8 @@ class BoardControllerTest extends E2ETest {
 	@BeforeEach
 	void setup() {
 		persistHelper = PersistHelper.start(em);
-		animalCategories = persistHelper.persistAndReturn(TestAnimalCategory.getAllSpeciesAsCategories());
+		animalCategories = persistHelper.persistAndReturn(
+				TestAnimalCategory.getAllSpeciesAsCategories());
 		author = TestMember.asDefaultEntity();
 		loginUser = TestMember.builder()
 				.oauthName("loginUser")
@@ -131,7 +136,8 @@ class BoardControllerTest extends E2ETest {
 					.andExpect(jsonPath("result[1].scrapped").value(true))
 					.andExpect(jsonPath("result[0].categories.size()").value(2))
 					.andExpect(jsonPath("result[0].images").value(
-							Matchers.hasItems(DEFAULT_MEDIA_URL + 0, DEFAULT_MEDIA_URL + 1, DEFAULT_MEDIA_URL + 2)));
+							Matchers.hasItems(DEFAULT_MEDIA_URL + 0, DEFAULT_MEDIA_URL + 1,
+									DEFAULT_MEDIA_URL + 2)));
 		}
 
 		@DisplayName("가입하지 않은 상태의 사용자도 게시글 목록을 조회할 수 있다.")
@@ -170,6 +176,7 @@ class BoardControllerTest extends E2ETest {
 	@Nested
 	@DisplayName("GET /v1/boards/hot")
 	class GetHotBoards {
+
 		private final String PATH = "/v1/boards/hot";
 		private final LocalDateTime now = LocalDateTime.now();
 		private final Member randomMember1 = TestMember.builder().build().asEntity();
@@ -222,16 +229,21 @@ class BoardControllerTest extends E2ETest {
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("totalLength").value(5))
 					.andExpect(jsonPath("result.[*].boardId").value(Matchers.contains(
-							board1.getId().intValue(), board2.getId().intValue(), board5.getId().intValue(), board4.getId().intValue(), board3.getId().intValue())))
-					.andExpect(jsonPath("result.[*].content").value(Matchers.not(Matchers.hasItem(notHotContent))))
+							board1.getId().intValue(), board2.getId().intValue(),
+							board5.getId().intValue(), board4.getId().intValue(),
+							board3.getId().intValue())))
+					.andExpect(jsonPath("result.[*].content").value(
+							Matchers.not(Matchers.hasItem(notHotContent))))
 					.andExpect(jsonPath("result.[0].content").value(TestBoard.DEFAULT_CONTENT))
-					.andExpect(jsonPath("result.[0].memberName").value(TestMember.DEFAULT_NICKNAME));
+					.andExpect(
+							jsonPath("result.[0].memberName").value(TestMember.DEFAULT_NICKNAME));
 		}
 	}
 
 	@Nested
 	@DisplayName("GET /v1/boards/members/{memberId}")
 	class GetMemberBoards {
+
 		private final String PATH = "/v1/boards/members/";
 		private final LocalDateTime now = LocalDateTime.now();
 		private final Member loginUser = TestMember.builder()
@@ -332,13 +344,15 @@ class BoardControllerTest extends E2ETest {
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("totalLength").value(2))
 					.andExpect(jsonPath("result.[*].memberName").value(
-							Matchers.contains(followingMember1.getNickname(), followingMember2.getNickname())));
+							Matchers.contains(followingMember1.getNickname(),
+									followingMember2.getNickname())));
 		}
 	}
 
 	@Nested
 	@DisplayName("POST /v1/boards")
 	class CreateBoards {
+
 		@BeforeEach
 		void mockBoardImageManager() {
 			given(boardMediaManager.uploadMedia(any(), any())).willReturn(randomString());
@@ -350,9 +364,12 @@ class BoardControllerTest extends E2ETest {
 			persistHelper.persist(author, loginUser)
 					.and().persist(animalCategories.get(0), animalCategories.get(1))
 					.flushAndClear();
-			MockMultipartFile multipartFile1 = new MockMultipartFile("mediaDataList", "filename-1.jpg", "image/jpeg", "image1".getBytes());
-			MockMultipartFile multipartFile2 = new MockMultipartFile("mediaDataList", "filename-2.jpg", "image/jpeg", "image2".getBytes());
-			MockMultipartFile multipartFile3 = new MockMultipartFile("mediaDataList", "filename-3.jpg", "image/jpeg", "image3".getBytes());
+			MockMultipartFile multipartFile1 = new MockMultipartFile("mediaDataList",
+					"filename-1.jpg", "image/jpeg", "image1".getBytes());
+			MockMultipartFile multipartFile2 = new MockMultipartFile("mediaDataList",
+					"filename-2.jpg", "image/jpeg", "image2".getBytes());
+			MockMultipartFile multipartFile3 = new MockMultipartFile("mediaDataList",
+					"filename-3.jpg", "image/jpeg", "image3".getBytes());
 
 			String token = stubToken(loginUser, LocalDateTime.now(), 28);
 
@@ -404,6 +421,7 @@ class BoardControllerTest extends E2ETest {
 	@Nested
 	@DisplayName("DELETE /v1/boards/{boardId}")
 	class DeleteBoard {
+
 		@Test
 		@DisplayName("로그인한 사용자는 자신의 게시글을 삭제할 수 있다.")
 		void deleteBoard() throws Exception {

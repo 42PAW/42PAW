@@ -61,6 +61,10 @@ const ProfileOption: React.FC<IProfileOptionButtonProps> = ({
     openBannedMemberSection();
   };
 
+  const handleProfileEditClick = () => {
+    openModal(ModalType.PROFILEEDIT);
+  };
+
   return (
     <OptionButton>
       {memberId !== 0 ? (
@@ -82,8 +86,8 @@ const ProfileOption: React.FC<IProfileOptionButtonProps> = ({
             </MenuItemStyled>
           </MenuItemWrapperStyled>
           <MenuItemWrapperStyled>
-            <MenuItemStyled onClick={() => console.log(2)}>
-              {language.report}
+            <MenuItemStyled onClick={handleProfileEditClick}>
+              프로필 수정
             </MenuItemStyled>
           </MenuItemWrapperStyled>
         </>

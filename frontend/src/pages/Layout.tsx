@@ -7,21 +7,19 @@ import RightSection from "@/components/RightSection/RightSection";
 import ModalContainer from "@/components/modals/ModalContainer";
 import Toaster from "@/components/toast/Toaster";
 import { getCookie } from "@/api/cookie/cookies";
-import { axiosMyInfo } from "@/api/axios/axios.custom";
 import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
 import useTranslator from "@/hooks/useTranslator";
 import { Language } from "@/types/enum/language.enum";
 import LeftMenuSection from "@/components/LeftMenuSection/LeftMenuSection";
 import BoardSortToggle from "@/components/BoardSortToggle";
+import useFetch from "@/hooks/useFetch";
 
 const Layout = () => {
   const location = useLocation();
   const token = getCookie("access_token");
   const localLanguage = localStorage.getItem("language");
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoDTO | null>(
-    userInfoState
-  );
+  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [isRightSectionOpened] = useRecoilState<boolean>(
     isRightSectionOpenedState
   );
@@ -33,20 +31,11 @@ const Layout = () => {
   const isProfilePage: boolean = /^\/(my-)?profile(\/\d+)?$/.test(
     location.pathname
   );
-
-  const getMyInfo = async () => {
-    try {
-      const { data: myInfo } = await axiosMyInfo();
-      setUserInfo(myInfo);
-      translator(myInfo.language);
-    } catch (error) {
-      throw error;
-    }
-  };
+  const { fetchMyInfo } = useFetch();
 
   useEffect(() => {
     //로그인 성공 시 유저 정보 받아오기
-    if (token && !userInfo) getMyInfo();
+    if (token && !userInfo) fetchMyInfo();
     //비로그인 상태에서 로컬 스토리지 키값을 통해 언어 설정
     if (!token && localLanguage) translator(localLanguage as Language);
   }, []);

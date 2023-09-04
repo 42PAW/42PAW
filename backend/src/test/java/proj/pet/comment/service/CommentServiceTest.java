@@ -1,6 +1,10 @@
 package proj.pet.comment.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,13 +17,12 @@ import proj.pet.board.repository.BoardRepository;
 import proj.pet.comment.domain.Comment;
 import proj.pet.comment.repository.CommentRepository;
 import proj.pet.exception.ServiceException;
-import proj.pet.member.domain.*;
+import proj.pet.member.domain.Country;
+import proj.pet.member.domain.Member;
+import proj.pet.member.domain.MemberRole;
+import proj.pet.member.domain.OauthProfile;
+import proj.pet.member.domain.OauthType;
 import proj.pet.member.repository.MemberRepository;
-
-import java.time.LocalDateTime;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -53,7 +56,8 @@ class CommentServiceTest {
 		em.clear();
 
 		//when
-		commentService.addCommentToBoard(loginUser.getId(), board.getId(), "이것은 댓글이여", LocalDateTime.now());
+		commentService.addCommentToBoard(loginUser.getId(), board.getId(), "이것은 댓글이여",
+				LocalDateTime.now());
 
 		//then
 		Comment comment = commentRepository.findById(1L).get();
@@ -64,8 +68,8 @@ class CommentServiceTest {
 	}
 
 	@DisplayName("본인이 작성한 댓글을 지울 수 있다.")
-	@Disabled
 	@Test
+	@Disabled
 	void deleteComment() {
 		//given
 		LocalDateTime now = LocalDateTime.now();

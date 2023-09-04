@@ -36,5 +36,5 @@ public interface BoardMapper {
 			int reactionCount, int commentCount,
 			String previewCommentUser, String previewComment);
 
-	BoardsPaginationDto toBoardsResponseDto(List<BoardInfoDto> result, int totalLength);
+	BoardsPaginationDto toBoardsResponseDto(List<BoardInfoDto> result, long totalLength);
 }

@@ -20,16 +20,3 @@ export interface IprofileInfo {
   followerCount: number;
   boardCount: number;
 }
-
-/**
- * @memberName 유저 이름
- * @imageData 프로필 이미지
- * @statement 한 줄 소개
- * @nicknameUpdatedAt 유저 이름 갱신 날짜
- */
-export interface IchangeProfileInfo {
-  memberName: string;
-  imageData: string;
-  statement: string;
-  nicknameUpdatedAt: string;
-}

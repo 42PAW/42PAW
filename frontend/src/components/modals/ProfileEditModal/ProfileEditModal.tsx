@@ -1,15 +1,17 @@
 import { styled } from "styled-components";
 import ModalLayout from "@/components/modals/ModalLayout";
 import { ModalType } from "@/types/enum/modal.enum";
-import { currentOpenModalState, myProfileInfoState } from "@/recoil/atom";
+import { currentOpenModalState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 import useModal from "../../../hooks/useModal";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
-import { IchangeProfileInfo } from "@/types/interface/profile.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosChangeMyProfile } from "@/api/axios/axios.custom";
 import { ChangeEvent, useState } from "react";
-import { MemberProfileChangeRequestDto } from "@/types/dto/member.dto";
+import {
+  MemberProfileChangeRequestDto,
+  ProfileInfoDTO,
+} from "@/types/dto/member.dto";
 import useToaster from "@/hooks/useToaster";
 import useNicknameValidation from "@/hooks/useNicknameValidation";
 import useDebounce from "@/hooks/useDebounce";
@@ -17,8 +19,9 @@ import useFetch from "@/hooks/useFetch";
 
 const ProfileEditModal = () => {
   const queryClient = useQueryClient();
-  const [previousProfileInfo] =
-    useRecoilState<IchangeProfileInfo>(myProfileInfoState);
+  const prevProfileInfo = queryClient.getQueryData<ProfileInfoDTO | undefined>([
+    "myProfile",
+  ]); // undefined일 경우를 대비해 타입 지정 (어떤 문제가 생길려나?)
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
@@ -30,13 +33,12 @@ const ProfileEditModal = () => {
   const { closeModal } = useModal();
   const [profileInfo, setProfileInfo] = useState<MemberProfileChangeRequestDto>(
     {
-      memberName: previousProfileInfo?.memberName!,
+      memberName: prevProfileInfo?.memberName!,
       imageData: null,
-      statement: previousProfileInfo?.statement!,
+      statement: prevProfileInfo?.statement!,
     }
   );
   const { fetchMyInfo } = useFetch();
-
   const editProfileMutation = useMutation(
     (profileInfo: MemberProfileChangeRequestDto) =>
       axiosChangeMyProfile(profileInfo),
@@ -44,6 +46,9 @@ const ProfileEditModal = () => {
       onSuccess: () => {
         // 캐시가 있는 모든 쿼리 무효화
         queryClient.invalidateQueries(["myProfile"]);
+        console.log(
+          "nicknameUpdatedAt : " + prevProfileInfo?.nicknameUpdatedAt
+        );
         fetchMyInfo();
       },
     }
@@ -55,14 +60,14 @@ const ProfileEditModal = () => {
       popToast("잠시 후에 다시 시도해주세요.", "N");
       return;
     }
-    if (profileInfo.memberName !== previousProfileInfo?.memberName) {
-      const isValid = await nicknameValidation(profileInfo.memberName);
+    if (profileInfo.memberName !== prevProfileInfo?.memberName) {
+      const isValid = await nicknameValidation(profileInfo.memberName!);
       if (!isValid) {
         setIsWrong(true);
         debounce("nickname", () => setIsWrong(false), 2000);
         return;
       }
-    }
+    } else profileInfo.memberName = null;
     console.log("profileInfo: " + profileInfo);
     editProfileMutation.mutate(profileInfo);
     popToast("성공적으로 수정하였습니다.", "P");
@@ -80,7 +85,7 @@ const ProfileEditModal = () => {
 
   // img wepb 변환
   const [imagePreview, setImagePreview] = useState<string>(
-    previousProfileInfo?.imageData!
+    prevProfileInfo?.profileImageUrl!
   );
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -167,7 +172,7 @@ const ProfileEditModal = () => {
               placeholder="최대 10자 이내"
               name="name"
               type="text"
-              value={profileInfo.memberName}
+              value={profileInfo.memberName!}
               onChange={(e) => handleNameChange(e)}
               maxLength={10}
             />

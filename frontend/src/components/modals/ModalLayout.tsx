@@ -13,6 +13,7 @@ interface IModalLayoutProps {
   isOpen: boolean;
   children: ReactNode;
   zIndex?: number;
+  position?: "bottom";
 }
 
 const ModalLayout: React.FC<IModalLayoutProps> = ({
@@ -20,6 +21,7 @@ const ModalLayout: React.FC<IModalLayoutProps> = ({
   isOpen,
   children,
   zIndex,
+  position,
 }) => {
   const { closeModal } = useModal();
   if (!isOpen) return null;
@@ -31,7 +33,10 @@ const ModalLayout: React.FC<IModalLayoutProps> = ({
       }}
       $zIndex={zIndex}
     >
-      <ModalContainer onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+      <ModalContainer
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        $position={position}
+      >
         {children}
       </ModalContainer>
     </ModalOverlay>
@@ -62,13 +67,22 @@ const ModalOverlay = styled.div<{ $zIndex: number | undefined }>`
   /* backdrop-filter: blur(5px); */
 `;
 
-const ModalContainer = styled.div`
+const ModalContainer = styled.div<{ $position: "bottom" | undefined }>`
   display: flex;
+  position: absolute;
   flex-direction: column;
   align-items: center;
-  border-radius: 15px;
+  border-radius: 10px;
   box-shadow: var(--default-shadow);
   animation: ${fadeIn} 0.3s;
+  @media (max-width: 1023px) {
+    bottom: ${({ $position }) => $position === "bottom" && "0"};
+    border-radius: ${({ $position }) => $position === "bottom" && "0"};
+    border-top-left-radius: ${({ $position }) =>
+      $position === "bottom" && "10px"};
+    border-top-right-radius: ${({ $position }) =>
+      $position === "bottom" && "10px"};
+  }
 `;
 
 export default ModalLayout;

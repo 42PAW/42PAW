@@ -45,8 +45,6 @@ const useFetch = (memberId?: number | null) => {
       if (boardCategory === Board.DEFAULT) {
         const response = await axiosGetBoards(20, page);
         setBoardsLength(response.result.length);
-        console.log(response.result.length);
-        console.log("fetched");
         return response.result;
       }
       if (boardCategory === Board.TRENDING) {

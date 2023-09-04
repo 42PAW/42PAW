@@ -20,13 +20,20 @@ import {
   axiosGetFollowerList,
   axiosGetMyFollowingList,
   axiosGetFollowingList,
+  axiosMyInfo,
 } from "@/api/axios/axios.custom";
 import { buttonToggledState } from "@/components/BoardSortToggle";
+import useTranslator from "@/hooks/useTranslator";
 
 const useFetch = (memberId?: number | null) => {
   const [boardCategory, setBoardCategory] =
     useRecoilState<Board>(boardCategoryState);
   const setButtonToggled = useSetRecoilState(buttonToggledState);
+  const [currentBoardId] = useRecoilState<number | null>(currentBoardIdState);
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoDTO | null>(
+    userInfoState
+  );
+  const { translator } = useTranslator();
 
   const fetchBoards = async (page?: number) => {
     try {
@@ -68,8 +75,6 @@ const useFetch = (memberId?: number | null) => {
     }
   };
 
-  const [currentBoardId] = useRecoilState<number | null>(currentBoardIdState);
-
   const fetchComments = async () => {
     try {
       if (!currentBoardId) {
@@ -81,8 +86,6 @@ const useFetch = (memberId?: number | null) => {
       throw error;
     }
   };
-
-  const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
 
   const fetchProfile = async () => {
     try {
@@ -123,9 +126,15 @@ const useFetch = (memberId?: number | null) => {
     }
   };
 
-  //   const fetchBanList = async () => {
-  //     try {
-  //       const response = await axiosGetBanList(1000, 0);
+  const fetchMyInfo = async () => {
+    try {
+      const { data: myInfo } = await axiosMyInfo();
+      setUserInfo(myInfo);
+      translator(myInfo.language);
+    } catch (error) {
+      throw error;
+    }
+  };
 
   return {
     fetchBoards,
@@ -133,6 +142,7 @@ const useFetch = (memberId?: number | null) => {
     fetchProfile,
     fetchFollowerList,
     fetchFollowingList,
+    fetchMyInfo,
   };
 };
 

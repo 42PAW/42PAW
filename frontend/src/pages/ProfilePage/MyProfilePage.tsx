@@ -45,9 +45,10 @@ const MyProfilePage = () => {
 
   if (isLoading) {
     return (
-      <WrapperStyled>
+      <>
         <LoadingAnimation />
-      </WrapperStyled>
+        <WrapperStyled></WrapperStyled>
+      </>
     );
   }
 

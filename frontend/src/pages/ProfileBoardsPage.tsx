@@ -64,7 +64,7 @@ const ProfileBoardsPage = () => {
   }
 
   return (
-    <WrapperStyled $boardExists={true}>
+    <WrapperStyled $boardExists={true} id="scrollContainer">
       {data?.pages.map((page) =>
         page.map((board: IBoardInfo) => (
           <BoardTemplate

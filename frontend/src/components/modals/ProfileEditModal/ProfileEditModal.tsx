@@ -51,27 +51,43 @@ const ProfileEditModal = () => {
         );
         fetchMyInfo();
       },
+      onError: (error) => {
+        throw error;
+      },
     }
   );
 
   // submitProfileInfo
   const onChangeProfileInfo = async () => {
-    if (isWrong === true) {
-      popToast("잠시 후에 다시 시도해주세요.", "N");
-      return;
-    }
-    if (profileInfo.memberName !== prevProfileInfo?.memberName) {
-      const isValid = await nicknameValidation(profileInfo.memberName!);
-      if (!isValid) {
-        setIsWrong(true);
-        debounce("nickname", () => setIsWrong(false), 2000);
+    try {
+      if (isWrong === true) {
+        popToast("잠시 후에 다시 시도해주세요.", "N");
         return;
       }
-    } else profileInfo.memberName = null;
-    console.log("profileInfo: " + profileInfo);
-    editProfileMutation.mutate(profileInfo);
-    popToast("성공적으로 수정하였습니다.", "P");
-    closeModal(ModalType.PROFILEEDIT);
+      if (profileInfo.memberName !== prevProfileInfo?.memberName) {
+        const isValid = await nicknameValidation(profileInfo.memberName!);
+        if (!isValid) {
+          setIsWrong(true);
+          debounce("nickname", () => setIsWrong(false), 2000);
+          return;
+        }
+      } else profileInfo.memberName = null;
+      try {
+        const mutationResult = await editProfileMutation.mutateAsync(
+          profileInfo
+        ); // 기다림
+        if (mutationResult) {
+          popToast("성공적으로 수정하였습니다.", "P");
+          closeModal(ModalType.PROFILEEDIT);
+        }
+      } catch (error: any) {
+        if (error.response) {
+          popToast(error.response.data.message, "N");
+        }
+      }
+    } catch (error) {
+      throw error;
+    }
   };
   const imageReset = () => {
     setProfileInfo((profileInfo) => {
@@ -100,6 +116,10 @@ const ProfileEditModal = () => {
         ctx.drawImage(imageBitmap, 0, 0);
         canvas.toBlob(async (webpBlob) => {
           if (webpBlob) {
+            if (webpBlob.size > 10000000) {
+              popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
+              return;
+            }
             setProfileInfo({ ...profileInfo, imageData: webpBlob });
             const webpDataURL = URL.createObjectURL(webpBlob);
             setImagePreview(webpDataURL);

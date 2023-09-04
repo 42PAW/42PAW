@@ -6,7 +6,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.util.Streamable;
 import proj.pet.block.domain.Block;
 import proj.pet.block.repository.BlockRepository;
 import proj.pet.board.domain.Board;
@@ -15,6 +14,7 @@ import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.MemberCategoryFilter;
+import proj.pet.category.repository.AnimalCategoryRepository;
 import proj.pet.category.repository.MemberCategoryFilterRepository;
 import proj.pet.comment.domain.Comment;
 import proj.pet.follow.domain.FollowType;
@@ -23,10 +23,6 @@ import proj.pet.mapper.BoardMapper;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
 
 @QueryService
 @RequiredArgsConstructor
@@ -38,20 +34,23 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	private final FollowRepository followRepository;
 	private final BlockRepository blockRepository;
 	private final MemberCategoryFilterRepository memberCategoryFilterRepository;
+	private final AnimalCategoryRepository animalCategoryRepository;
 
 	/**
 	 * 찾아온 게시글들의 Page에서 차단 유저와 카테고리 필터로 필터링 후 {@link BoardInfoDto}로 변환하여 리스트로 반환한다.
 	 *
-	 * @param loginUserId      로그인한 유저의 id - 로그인하지 않았다면 0
-	 *                         <br>   참고 : {@link proj.pet.member.domain.UserAspect}
-	 * @param boardPages       변환할 게시글
-	 * @param blocks           로그인한 유저가 차단한 유저들의 목록
-	 * @param animalCategories 로그인한 유저가 선택한 카테고리 필터
+	 * @param loginUserId 로그인한 유저의 id - 로그인하지 않았다면 0
+	 *                    <br>   참고 : {@link proj.pet.member.domain.UserAspect}
+	 * @param boardPages  변환할 게시글
 	 * @return {@link List<BoardInfoDto>}
 	 */
-	private List<BoardInfoDto> getBoardInfoDtos(Long loginUserId, Page<Board> boardPages,
-			List<Block> blocks, List<AnimalCategory> animalCategories) {
+	private List<BoardInfoDto> getBoardInfoDtos(Long loginUserId, Page<Board> boardPages) {
+		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
 		List<Long> blockIds = blocks.stream().map(block -> block.getTo().getId()).toList();
+		List<AnimalCategory> animalCategories = (loginUserId == 0) ?
+				animalCategoryRepository.findAll() :
+				memberCategoryFilterRepository.findAllByMemberIdWithJoin(loginUserId)
+						.stream().map(MemberCategoryFilter::getAnimalCategory).toList();
 		return boardPages.filter(board -> !blockIds.contains(board.getMember().getId()))
 				.filter(board -> animalCategories.stream().anyMatch(animalCategory ->
 						board.getCategoriesAsSpecies().contains(animalCategory.getSpecies())))
@@ -84,9 +83,10 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 				.map(comment -> comment.getMember().getNickname()).orElse(EMPTY_STRING);
 		String previewCommentContent = latestComment
 				.map(Comment::getContent).orElse(EMPTY_STRING);
-		FollowType followType = followRepository.existsByFromIdAndToId(loginUserId, board.getMember().getId())
-				? FollowType.FOLLOWING
-				: FollowType.NONE;
+		FollowType followType =
+				followRepository.existsByFromIdAndToId(loginUserId, board.getMember().getId())
+						? FollowType.FOLLOWING
+						: FollowType.NONE;
 
 		return boardMapper.toBoardInfoDto(
 				board, board.getMember(),
@@ -111,13 +111,8 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	@Override
 	public BoardsPaginationDto getMainViewBoards(Long loginUserId, PageRequest pageRequest) {
 		//TODO: QueryDSL로 리팩토링 여부 결정하기
-		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
-		List<AnimalCategory> animalCategories =
-				memberCategoryFilterRepository.findAllByMemberIdWithJoin(loginUserId)
-						.stream().map(MemberCategoryFilter::getAnimalCategory).toList();
 		Page<Board> boardPages = boardRepository.getMainViewBoards(pageRequest);
-		List<BoardInfoDto> result = getBoardInfoDtos(loginUserId, boardPages, blocks,
-				animalCategories);
+		List<BoardInfoDto> result = getBoardInfoDtos(loginUserId, boardPages);
 		return boardMapper.toBoardsResponseDto(result, boardPages.getTotalElements());
 	}
 
@@ -126,22 +121,16 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	@Override
 	public BoardsPaginationDto getHotBoards(Long loginUserId, PageRequest pageRequest) {
 		//TODO: QueryDSL로 리팩토링 여부 결정하기
-		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
-		List<AnimalCategory> animalCategories =
-				memberCategoryFilterRepository.findAllByMemberIdWithJoin(loginUserId)
-						.stream().map(MemberCategoryFilter::getAnimalCategory).toList();
 		Page<Board> boardPages = boardRepository.getHotBoards(pageRequest);
-		List<BoardInfoDto> result =
-				getBoardInfoDtos(loginUserId, boardPages, blocks, animalCategories);
+		List<BoardInfoDto> result = getBoardInfoDtos(loginUserId, boardPages);
 		return boardMapper.toBoardsResponseDto(result, boardPages.getTotalElements());
 	}
 
 	@Override
 	public BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId,
-	                                           PageRequest pageRequest) {
+			PageRequest pageRequest) {
 		List<BoardInfoDto> result = boardRepository.getMemberBoards(memberId, pageRequest).stream()
-				.map(board -> createBoardInfoDto(loginUserId, board))
-				.toList();
+				.map(board -> createBoardInfoDto(loginUserId, board)).toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());
 	}
 

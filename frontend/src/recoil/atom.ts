@@ -5,7 +5,6 @@ import { BoardsInfoDTO, CommentInfoDTO } from "@/types/dto/board.dto";
 import { Board } from "@/types/enum/board.category.enum";
 import { IBanUserInfo } from "@/types/interface/user.interface";
 import { IToastInfo } from "@/types/interface/toast.interface";
-import { IchangeProfileInfo } from "@/types/interface/profile.interface";
 import Translator from "@/languages/Translator";
 import { UserInfoDTO } from "@/types/dto/member.dto";
 import { IDeleteInfo } from "@/types/interface/option.interface";
@@ -149,16 +148,6 @@ export const uploadDefaultFileState = atom<Blob[]>({
 export const currentUploadIndexState = atom<number>({
   key: "currentUploadIndex",
   default: 0,
-});
-
-export const myProfileInfoState = atom<IchangeProfileInfo>({
-  key: "myProfileInfo",
-  default: {
-    memberName: "",
-    imageData: "",
-    statement: "",
-    nicknameUpdatedAt: "",
-  },
 });
 
 export const boardsLengthState = atom<number>({

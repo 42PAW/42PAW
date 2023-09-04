@@ -11,7 +11,7 @@ export interface SignUpInfoDTO {
 }
 
 export interface MemberProfileChangeRequestDto {
-  memberName: string;
+  memberName: string | null;
   imageData: Blob | null;
   statement: string;
 }

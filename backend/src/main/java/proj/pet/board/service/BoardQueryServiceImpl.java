@@ -6,7 +6,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.util.Streamable;
 import proj.pet.block.domain.Block;
 import proj.pet.block.repository.BlockRepository;
 import proj.pet.board.domain.Board;
@@ -24,10 +23,6 @@ import proj.pet.mapper.BoardMapper;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
 
 @QueryService
 @RequiredArgsConstructor
@@ -50,9 +45,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 * @return {@link List<BoardInfoDto>}
 	 */
 	private List<BoardInfoDto> getBoardInfoDtos(Long loginUserId, Page<Board> boardPages) {
-		System.out.println("loginUserId = " + loginUserId);
 		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
-		blocks.forEach(System.out::println);
 		List<Long> blockIds = blocks.stream().map(block -> block.getTo().getId()).toList();
 		List<AnimalCategory> animalCategories = (loginUserId == 0) ?
 				animalCategoryRepository.findAll() :
@@ -90,9 +83,10 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 				.map(comment -> comment.getMember().getNickname()).orElse(EMPTY_STRING);
 		String previewCommentContent = latestComment
 				.map(Comment::getContent).orElse(EMPTY_STRING);
-		FollowType followType = followRepository.existsByFromIdAndToId(loginUserId, board.getMember().getId())
-				? FollowType.FOLLOWING
-				: FollowType.NONE;
+		FollowType followType =
+				followRepository.existsByFromIdAndToId(loginUserId, board.getMember().getId())
+						? FollowType.FOLLOWING
+						: FollowType.NONE;
 
 		return boardMapper.toBoardInfoDto(
 				board, board.getMember(),
@@ -134,7 +128,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
 	@Override
 	public BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId,
-	                                           PageRequest pageRequest) {
+			PageRequest pageRequest) {
 		List<BoardInfoDto> result = boardRepository.getMemberBoards(memberId, pageRequest).stream()
 				.map(board -> createBoardInfoDto(loginUserId, board)).toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());

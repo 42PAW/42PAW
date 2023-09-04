@@ -1,16 +1,19 @@
 package proj.pet.board.repository;
 
+import static proj.pet.board.domain.QBoard.board;
+import static proj.pet.scrap.domain.QScrap.scrap;
+
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import proj.pet.block.domain.Block;
 import proj.pet.board.domain.Board;
-
-import java.util.List;
-
-import static proj.pet.board.domain.QBoard.board;
-import static proj.pet.scrap.domain.QScrap.scrap;
+import proj.pet.category.domain.BoardCategoryFilter;
+import proj.pet.utils.domain.MemberCompositeKey;
 
 /**
  * QueryDSL을 사용하는 BoardRepository의 커스텀 구현체
@@ -28,9 +31,12 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @return 생성시각 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
 	 */
 	@Override
-	public List<Board> getMainViewBoards(PageRequest pageRequest) {
+	public List<Board> getMainViewBoards(
+			List<Block> blocks,
+			List<BoardCategoryFilter> categories,
+			PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
-				board.deletedAt.isNull(),
+				getPredicateWithBlockCategoryFiltering(blocks, categories),
 				board.createdAt.desc(),
 				pageRequest);
 	}
@@ -42,9 +48,12 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @return 반응 수 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
 	 */
 	@Override
-	public List<Board> getHotBoards(PageRequest pageRequest) {
+	public List<Board> getHotBoards(
+			List<Block> blocks,
+			List<BoardCategoryFilter> categories,
+			PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
-				board.deletedAt.isNull(),
+				getPredicateWithBlockCategoryFiltering(blocks, categories),
 				board.reactions.size().desc(),
 				pageRequest);
 	}
@@ -111,7 +120,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @return {@link Board} 페이지네이션 - Page 아님
 	 */
 	private List<Board> getBoardsWithFetchJoin(Predicate predicate,
-	                                           OrderSpecifier<?> orderSpecifier, PageRequest pageRequest) {
+			OrderSpecifier<?> orderSpecifier, PageRequest pageRequest) {
 		return queryFactory.selectFrom(board)
 				.where(predicate)
 				.orderBy(orderSpecifier)
@@ -134,5 +143,22 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 				.where(board.member.id.eq(memberId)
 						.and(board.deletedAt.isNull()))
 				.fetchFirst();
+	}
+
+	private Predicate getPredicateWithBlockCategoryFiltering(
+			List<Block> blocks,
+			List<BoardCategoryFilter> categories) {
+		BooleanBuilder predicate = new BooleanBuilder();
+		predicate.and(board.deletedAt.isNull());
+		for (Block block : blocks) {
+			MemberCompositeKey id = block.getId();
+			if (id != null) {
+				predicate.and(board.member.id.ne(id.getTargetMemberId()));
+			}
+		}
+		for (BoardCategoryFilter category : categories) {
+			predicate.and(board.categoryFilters.contains(category));
+		}
+		return predicate;
 	}
 }

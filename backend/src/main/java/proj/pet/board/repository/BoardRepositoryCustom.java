@@ -1,15 +1,18 @@
 package proj.pet.board.repository;
 
-import org.springframework.data.domain.PageRequest;
-import proj.pet.board.domain.Board;
-
 import java.util.List;
+import org.springframework.data.domain.PageRequest;
+import proj.pet.block.domain.Block;
+import proj.pet.board.domain.Board;
+import proj.pet.category.domain.BoardCategoryFilter;
 
 public interface BoardRepositoryCustom {
 
-	List<Board> getMainViewBoards(PageRequest pageRequest);
+	List<Board> getMainViewBoards(
+			List<Block> blocks, List<BoardCategoryFilter> categories, PageRequest pageRequest);
 
-	List<Board> getHotBoards(PageRequest pageRequest);
+	List<Board> getHotBoards(
+			List<Block> blocks, List<BoardCategoryFilter> categories, PageRequest pageRequest);
 
 	List<Board> getMemberBoards(Long memberId, PageRequest pageRequest);
 

@@ -1,5 +1,6 @@
 package proj.pet.board.service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,10 @@ import proj.pet.board.domain.Board;
 import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.board.repository.BoardRepository;
+import proj.pet.category.domain.BoardCategoryFilter;
+import proj.pet.category.domain.MemberCategoryFilter;
+import proj.pet.category.repository.BoardCategoryFilterRepository;
+import proj.pet.category.repository.MemberCategoryFilterRepository;
 import proj.pet.comment.domain.Comment;
 import proj.pet.mapper.BoardMapper;
 import proj.pet.reaction.domain.Reaction;
@@ -25,6 +30,8 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	private final BoardRepository boardRepository;
 	private final BoardMapper boardMapper;
 	private final BlockRepository blockRepository;
+	private final MemberCategoryFilterRepository memberCategoryFilterRepository;
+	private final BoardCategoryFilterRepository boardCategoryFilterRepository;
 
 	/**
 	 * 메인 화면에 보여줄 게시글 목록을 가져온다.
@@ -42,11 +49,16 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	public BoardsPaginationDto getMainViewBoards(Long loginUserId, PageRequest pageRequest) {
 		//TODO: QueryDSL로 리팩토링 여부 결정하기
 		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
-		List<BoardInfoDto> result = boardRepository.getMainViewBoards(pageRequest).stream()
-				.filter(board -> blocks.stream().noneMatch(
-						block -> block.getTo().getId().equals(board.getMember().getId())))
-				.map(board -> createBoardInfoDto(loginUserId, board))
-				.toList();
+		List<BoardCategoryFilter> boardCategoryFilters = new ArrayList<>();
+		memberCategoryFilterRepository.findAllByMemberIdWithJoin(loginUserId)
+				.stream().map(MemberCategoryFilter::getAnimalCategory)
+				.forEach(animalCategory -> boardCategoryFilters.addAll(
+						boardCategoryFilterRepository
+								.findAllByAnimalCategoryIdWithJoin(animalCategory.getId())));
+		List<BoardInfoDto> result =
+				boardRepository.getMainViewBoards(blocks, boardCategoryFilters, pageRequest)
+						.stream().map(board -> createBoardInfoDto(loginUserId, board))
+						.toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());
 	}
 	// TODO: result.size가 아닌 전체 길이를 가져오도록 수정 및 최적화 필요, 혹시 변할 수도 있으니 아직 함수 중복에 대해서는 리팩터링하지 않았음.
@@ -55,11 +67,16 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	public BoardsPaginationDto getHotBoards(Long loginUserId, PageRequest pageRequest) {
 		//TODO: QueryDSL로 리팩토링 여부 결정하기
 		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
-		List<BoardInfoDto> result = boardRepository.getHotBoards(pageRequest).stream()
-				.filter(board -> blocks.stream().noneMatch(
-						block -> block.getTo().getId().equals(board.getMember().getId())))
-				.map(board -> createBoardInfoDto(loginUserId, board))
-				.toList();
+		List<BoardCategoryFilter> boardCategoryFilters = new ArrayList<>();
+		memberCategoryFilterRepository.findAllByMemberIdWithJoin(loginUserId)
+				.stream().map(MemberCategoryFilter::getAnimalCategory)
+				.forEach(animalCategory -> boardCategoryFilters.addAll(
+						boardCategoryFilterRepository
+								.findAllByAnimalCategoryIdWithJoin(animalCategory.getId())));
+		List<BoardInfoDto> result =
+				boardRepository.getHotBoards(blocks, boardCategoryFilters, pageRequest)
+						.stream().map(board -> createBoardInfoDto(loginUserId, board))
+						.toList();
 		return boardMapper.toBoardsResponseDto(result, result.size());
 	}
 

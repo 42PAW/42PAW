@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import ProfileOption from "@/components/OptionButton/ProfileOption";
 import { ProfileInfoDTO } from "@/types/dto/member.dto";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useQueryClient } from "@tanstack/react-query";
+import MeatballButton from "@/components/MeatballButton";
 
 const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   const { openFollowerSection, openFollowingSection } =
@@ -55,8 +55,8 @@ const ProfileInfoComponent: React.FC<{
   memberId: number;
 }> = ({ userInfo, memberId }) => {
   const queryClient = useQueryClient();
-
   if (!userInfo) return <div>No user information available.</div>;
+
   return (
     <ProfileHeaderStyled>
       <img
@@ -69,15 +69,16 @@ const ProfileInfoComponent: React.FC<{
         <CaptionSectionStyled>{userInfo.statement}</CaptionSectionStyled>
         <CountInfo userInfo={userInfo} />
       </div>
-      <BoardOptionButtonStyled>
-        <ProfileOption
+      <MeatballButtonContainerStyled>
+        <MeatballButton
           memberId={memberId}
           memberName={userInfo.memberName}
           callback={() => {
             queryClient.invalidateQueries(["profile", memberId]);
           }}
+          component="profile"
         />
-      </BoardOptionButtonStyled>
+      </MeatballButtonContainerStyled>
     </ProfileHeaderStyled>
   );
 };
@@ -143,7 +144,7 @@ const CountInfoStyled = styled.ul`
   }
 `;
 
-const BoardOptionButtonStyled = styled.div`
+const MeatballButtonContainerStyled = styled.div`
   position: absolute;
   top: 130px;
   right: 20px;

@@ -1,5 +1,23 @@
 package proj.pet.board.service;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.InstanceOfAssertFactories.type;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static proj.pet.exception.ExceptionStatus.ALREADY_DELETED_BOARD;
+import static proj.pet.exception.ExceptionStatus.NOT_FOUND_BOARD;
+import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
+import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -9,13 +27,13 @@ import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.domain.Board;
 import proj.pet.board.domain.BoardMedia;
 import proj.pet.board.domain.BoardMediaManager;
-import proj.pet.board.repository.BoardCategoryFilterRepository;
 import proj.pet.board.repository.BoardMediaRepository;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.BoardCategoryFilter;
 import proj.pet.category.domain.Species;
 import proj.pet.category.repository.AnimalCategoryRepository;
+import proj.pet.category.repository.BoardCategoryFilterRepository;
 import proj.pet.comment.domain.Comment;
 import proj.pet.comment.repository.CommentRepository;
 import proj.pet.dto.ExceptionStatusDto;
@@ -30,22 +48,6 @@ import proj.pet.testutil.testdouble.category.TestBoardCategoryFilter;
 import proj.pet.testutil.testdouble.comment.TestComment;
 import proj.pet.testutil.testdouble.member.TestMember;
 import proj.pet.utils.domain.ConsumptionCompositeKey;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.InstanceOfAssertFactories.type;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static proj.pet.exception.ExceptionStatus.*;
 
 public class BoardServiceImplTest extends UnitTest {
 
@@ -84,7 +86,8 @@ public class BoardServiceImplTest extends UnitTest {
 		private final Board stubbedBoard = TestBoard.builder().build().asMockEntity(IGNORE_ID);
 
 		private final List<Species> givenSpecies = List.of(Species.DOG, Species.REPTILE);
-		private final List<MultipartFile> givenMedia = List.of(stubMultipartFile(), stubMultipartFile());
+		private final List<MultipartFile> givenMedia = List.of(stubMultipartFile(),
+				stubMultipartFile());
 		private final String givenContent = "content";
 		private final LocalDateTime now = LocalDateTime.now();
 		private final List<AnimalCategory> stubbedAnimalCategories = List.of(
@@ -104,15 +107,19 @@ public class BoardServiceImplTest extends UnitTest {
 						.build().asMockEntity(IGNORE_ID));
 
 		@Test
-		@DisplayName("멤버가 존재하면, 카테고리 필터와 미디어를 업데이트하고, 게시글 생성에 성공한다.") // ?
+		@DisplayName("멤버가 존재하면, 카테고리 필터와 미디어를 업데이트하고, 게시글 생성에 성공한다.")
+			// ?
 		void 성공_게시글_생성() {
 			//given
 			Member member = TestMember.builder().build().asMockEntity(existMemberId);
 			given(memberRepository.findById(existMemberId)).willReturn(Optional.of(member));
 			given(boardRepository.save(any(Board.class))).willReturn(stubbedBoard);
-			given(animalCategoryRepository.findBySpeciesIn(givenSpecies)).willReturn(stubbedAnimalCategories);
-			given(boardCategoryFilterRepository.saveAll(anyList())).willReturn(stubbedBoardCategoryFilters);
-			given(boardMediaManager.uploadMedia(any(MultipartFile.class), any(String.class))).willReturn(RANDOM_STRING);
+			given(animalCategoryRepository.findBySpeciesIn(givenSpecies)).willReturn(
+					stubbedAnimalCategories);
+			given(boardCategoryFilterRepository.saveAll(anyList())).willReturn(
+					stubbedBoardCategoryFilters);
+			given(boardMediaManager.uploadMedia(any(MultipartFile.class),
+					any(String.class))).willReturn(RANDOM_STRING);
 			given(boardMediaRepository.saveAll(anyList())).willReturn(stubbedBoardMedias);
 
 			//when
@@ -120,7 +127,8 @@ public class BoardServiceImplTest extends UnitTest {
 
 			//then
 			then(stubbedBoard).should().addCategoryFilters(stubbedBoardCategoryFilters);
-			then(boardMediaManager).should(times(stubbedBoardMedias.size())).uploadMedia(any(MultipartFile.class), any(String.class));
+			then(boardMediaManager).should(times(stubbedBoardMedias.size()))
+					.uploadMedia(any(MultipartFile.class), any(String.class));
 			then(stubbedBoard).should().addMediaList(stubbedBoardMedias);
 			then(boardRepository).should().save(stubbedBoard);
 		}
@@ -133,7 +141,9 @@ public class BoardServiceImplTest extends UnitTest {
 			given(memberRepository.findById(noneExistMemberId)).willReturn(Optional.empty());
 
 			//when, then
-			assertThatThrownBy(() -> boardService.createBoard(noneExistMemberId, givenSpecies, givenMedia, givenContent, now))
+			assertThatThrownBy(
+					() -> boardService.createBoard(noneExistMemberId, givenSpecies, givenMedia,
+							givenContent, now))
 					.asInstanceOf(type(ServiceException.class))
 					.extracting(ServiceException::getStatus)
 					.extracting(ExceptionStatusDto::getStatusCode)
@@ -189,7 +199,8 @@ public class BoardServiceImplTest extends UnitTest {
 			//then
 			then(boardRepository).should().findById(boardId);
 			then(commentRepository).should().deleteAll(authorsBoard.getComments());
-			then(boardCategoryFilterRepository).should().deleteAll(authorsBoard.getCategoryFilters());
+			then(boardCategoryFilterRepository).should()
+					.deleteAll(authorsBoard.getCategoryFilters());
 			then(boardMediaRepository).should().deleteAll(authorsBoard.getMediaList());
 			then(authorsBoard).should().delete();
 		}
@@ -198,7 +209,8 @@ public class BoardServiceImplTest extends UnitTest {
 		@Test
 		void 실패_게시글_존재하지_않음() {
 			//given
-			given(memberRepository.findById(normalMember.getId())).willReturn(Optional.of(normalMember));
+			given(memberRepository.findById(normalMember.getId())).willReturn(
+					Optional.of(normalMember));
 			given(boardRepository.findById(IGNORE_ID)).willReturn(Optional.empty());
 
 			//when, then
@@ -250,11 +262,13 @@ public class BoardServiceImplTest extends UnitTest {
 					.deletedAt(null)
 					.build().asMockEntity(boardId);
 			given(boardRepository.findById(boardId)).willReturn(Optional.of(authorsBoard));
-			given(memberRepository.findById(normalMember.getId())).willReturn(Optional.of(normalMember));
+			given(memberRepository.findById(normalMember.getId())).willReturn(
+					Optional.of(normalMember));
 			given(authorsBoard.isOwnedBy(normalMember)).willReturn(false);
 
 			//when, then
-			assertThatThrownBy(() -> boardService.deleteBoard(normalMember.getId(), authorsBoard.getId()))
+			assertThatThrownBy(
+					() -> boardService.deleteBoard(normalMember.getId(), authorsBoard.getId()))
 					.asInstanceOf(type(ServiceException.class))
 					.extracting(ServiceException::getStatus)
 					.extracting(ExceptionStatusDto::getStatusCode)

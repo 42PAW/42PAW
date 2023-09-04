@@ -37,7 +37,6 @@ public class BoardMedia extends IdentityDomain implements Validatable {
 		this.mediaUrl = mediaUrl;
 		this.index = index;
 		this.mediaType = mediaType;
-		System.out.println("board = " + board + ", mediaUrl = " + mediaUrl + ", index = " + index + ", mediaType = " + mediaType);
 		RuntimeExceptionThrower.checkValidity(this);
 	}
 

@@ -64,7 +64,6 @@ public class FollowController {
 			@RequestParam("page") int page,
 			@RequestParam("size") int size
 	) {
-		System.out.println("result = " + followFacadeService.getMyFollowings(userSessionDto, page, size));
 		return followFacadeService.getMyFollowings(userSessionDto, page, size);
 	}
 

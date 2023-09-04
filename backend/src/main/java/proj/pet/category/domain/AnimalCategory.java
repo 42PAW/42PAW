@@ -1,18 +1,24 @@
 package proj.pet.category.domain;
 
-import jakarta.persistence.*;
+import static lombok.AccessLevel.PROTECTED;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import proj.pet.utils.domain.IdentityDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
-
-import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Table(name = "ANIMAL_CATEGORY")
 @NoArgsConstructor(access = PROTECTED)
 @Getter
+@ToString
 public class AnimalCategory extends IdentityDomain implements Validatable {
 
 	private static final int MAX_NAME_LENGTH = 32;
@@ -30,7 +36,8 @@ public class AnimalCategory extends IdentityDomain implements Validatable {
 		return new AnimalCategory(species);
 	}
 
-	@Override public boolean isValid() {
+	@Override
+	public boolean isValid() {
 		return species != null
 				&& species.name().length() <= MAX_NAME_LENGTH;
 	}

@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
-import BoardOption from "@/components/OptionButton/BoardOption";
 import useParseDate from "@/hooks/useParseDate";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { currentMemberIdState } from "@/recoil/atom";
 import useModal from "@/hooks/useModal";
 import { ModalType } from "@/types/enum/modal.enum";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
+import MeatballButton from "@/components/MeatballButton";
+import { currentBoardIdState } from "@/recoil/atom";
 
 const CommentItem = (commentInfo: CommentInfoDTO) => {
   const {
@@ -20,6 +21,7 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
   } = commentInfo;
 
   const setCurrentMemberId = useSetRecoilState(currentMemberIdState);
+  const [currentBoardId] = useRecoilState(currentBoardIdState);
   const { openModal } = useModal();
   const { parseDate } = useParseDate();
   const parsedDate = parseDate(createdAt);
@@ -43,10 +45,12 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
             {memberName} {useCountryEmoji(country)}
             <span>{parsedDate}</span>
           </NicknameContainerStyled>
-          <BoardOption
-            commentId={commentId}
+          <MeatballButton
             memberId={memberId}
+            boardId={currentBoardId as number}
+            commentId={commentId}
             memberName={memberName}
+            component="comment"
           />
         </NicknameToggleContainerStyled>
         <CommentContentContainerStyled>{comment}</CommentContentContainerStyled>

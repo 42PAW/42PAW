@@ -38,7 +38,6 @@ public class MemberController {
 			HttpServletRequest req, HttpServletResponse res,
 			@ModelAttribute MemberCreateRequestDto memberCreateRequestDto
 	) {
-		System.out.println("userSessionDto = " + userSessionDto);
 		memberFacadeService.createMember(userSessionDto, req, res, memberCreateRequestDto);
 	}
 

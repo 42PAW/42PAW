@@ -6,9 +6,9 @@ import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { MemberSearchResponseDTO } from "@/types/dto/member.dto.ts";
 import useModal from "@/hooks/useModal";
 import { ModalType } from "@/types/enum/modal.enum";
-import BoardOption from "@/components/OptionButton/BoardOption";
 import { currentMemberIdState } from "@/recoil/atom";
 import { callbackStoreState } from "@/recoil/atom";
+import MeatballButton from "@/components/MeatballButton";
 
 interface SearchItemProps extends MemberSearchResponseDTO {
   updateFollowType: () => void;
@@ -63,11 +63,12 @@ const SearchItem = (props: SearchItemProps) => {
               callback={updateFollowType}
             />
             <BufferStyled />
-            <BoardOption
+            <MeatballButton
               memberId={memberId}
               memberName={memberName}
               followStatus={relationship}
               callback={updateFollowType}
+              component="search"
             />
           </SearchItemRightSideStyled>
         )}

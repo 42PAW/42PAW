@@ -7,32 +7,33 @@ import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
 import { currentBoardIdState } from "@/recoil/atom";
 import useModal from "@/hooks/useModal";
 import useToaster from "@/hooks/useToaster";
-import { deleteInfoState } from "@/recoil/atom";
-import { IDeleteInfo } from "@/types/interface/option.interface";
 import { axiosDeleteBoard, axiosDeleteComment } from "@/api/axios/axios.custom";
-import { useResetRecoilState } from "recoil";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import { boardCategoryState } from "@/recoil/atom";
 import { Board } from "@/types/enum/board.category.enum";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
+import { IMeatballMdoalUtils } from "@/components/MeatballButton";
+import { meatballModalUtilsState } from "@/components/MeatballButton";
 
 const DeleteModal = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
   const [currentBoardId] = useRecoilState<number | null>(currentBoardIdState);
-  const [deleteInfo] = useRecoilState<IDeleteInfo>(deleteInfoState);
+  const [meatballModealUtils] = useRecoilState<IMeatballMdoalUtils>(
+    meatballModalUtilsState
+  );
   const [boardCategory] = useRecoilState<Board>(boardCategoryState);
-  const resetDeleteInfo = useResetRecoilState(deleteInfoState);
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
   const { popToast } = useToaster();
 
   const deleteContent = async () => {
-    if (deleteInfo.boardId) await axiosDeleteBoard(deleteInfo.boardId);
-    if (deleteInfo.commentId) await axiosDeleteComment(deleteInfo.commentId);
-    resetDeleteInfo();
+    if (meatballModealUtils.commentId)
+      await axiosDeleteComment(meatballModealUtils.commentId);
+    else if (meatballModealUtils.boardId)
+      await axiosDeleteBoard(meatballModealUtils.boardId);
     closeModal(ModalType.DELETE);
     popToast("해당 글이 삭제되었습니다.", "P");
   };
@@ -83,7 +84,8 @@ const DeleteModal = () => {
           if (!prevData) return prevData;
           const updatedBoards = prevData.pages.map((page: IBoardInfo[]) =>
             page.filter(
-              (board: IBoardInfo) => board.boardId !== deleteInfo.boardId
+              (board: IBoardInfo) =>
+                board.boardId !== meatballModealUtils.boardId
             )
           );
 
@@ -99,7 +101,7 @@ const DeleteModal = () => {
       isOpen={currentOpenModal.deleteModal}
     >
       <WrapperStyled>
-        {deleteInfo.commentId ? (
+        {meatballModealUtils.commentId ? (
           <>
             <h1>댓글 삭제</h1>
             <ContentStyled>해당 댓글을 삭제하시겠습니까?</ContentStyled>

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import proj.pet.comment.domain.Comment;
 import proj.pet.comment.dto.CommentDto;
 import proj.pet.comment.dto.CommentResponseDto;
+import proj.pet.follow.domain.FollowType;
 import proj.pet.member.domain.Member;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public interface CommentMapper {
 	@Mapping(target = "comment", source = "comment.content")
 	@Mapping(target = "createdAt", source = "comment.createdAt")
 	@Mapping(target = "country", source = "member.country")
-	CommentDto toCommentDto(Comment comment, Member member);
+	CommentDto toCommentDto(Comment comment, Member member, FollowType followType);
 
 	CommentResponseDto toCommentResponseDto(List<CommentDto> result, int totalLength);
 }

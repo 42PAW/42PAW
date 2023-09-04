@@ -6,6 +6,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.util.Streamable;
 import proj.pet.block.domain.Block;
 import proj.pet.block.repository.BlockRepository;
 import proj.pet.board.domain.Board;
@@ -16,10 +17,16 @@ import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.MemberCategoryFilter;
 import proj.pet.category.repository.MemberCategoryFilterRepository;
 import proj.pet.comment.domain.Comment;
+import proj.pet.follow.domain.FollowType;
+import proj.pet.follow.repository.FollowRepository;
 import proj.pet.mapper.BoardMapper;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 @QueryService
 @RequiredArgsConstructor
@@ -28,6 +35,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	private final static String EMPTY_STRING = "";
 	private final BoardRepository boardRepository;
 	private final BoardMapper boardMapper;
+	private final FollowRepository followRepository;
 	private final BlockRepository blockRepository;
 	private final MemberCategoryFilterRepository memberCategoryFilterRepository;
 
@@ -76,11 +84,14 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 				.map(comment -> comment.getMember().getNickname()).orElse(EMPTY_STRING);
 		String previewCommentContent = latestComment
 				.map(Comment::getContent).orElse(EMPTY_STRING);
+		FollowType followType = followRepository.existsByFromIdAndToId(loginUserId, board.getMember().getId())
+				? FollowType.FOLLOWING
+				: FollowType.NONE;
 
 		return boardMapper.toBoardInfoDto(
 				board, board.getMember(),
 				board.findBoardMediaUrls(), board.getCategoriesAsSpecies(),
-				isUserScrapped, isUserReacted,
+				isUserScrapped, isUserReacted, followType,
 				reactionCount, commentCount,
 				previewCommentUserName, previewCommentContent);
 	}
@@ -127,7 +138,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
 	@Override
 	public BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId,
-			PageRequest pageRequest) {
+	                                           PageRequest pageRequest) {
 		List<BoardInfoDto> result = boardRepository.getMemberBoards(memberId, pageRequest).stream()
 				.map(board -> createBoardInfoDto(loginUserId, board))
 				.toList();

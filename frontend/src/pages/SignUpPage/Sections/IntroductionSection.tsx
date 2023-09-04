@@ -44,10 +44,10 @@ const IntroductionSection: React.FC<SectionProps> = ({
       />
       <InputContainer>
         <input
-          placeholder="최대 30자 이내"
+          placeholder="최대 30자 이내" // 국가에 따라 언어 변경
           value={registerData.statement}
           onChange={handleOnChange}
-          maxLength={40}
+          maxLength={30}
           onKeyDown={handleKeyDown}
         ></input>
         <button onClick={submitStatement}>

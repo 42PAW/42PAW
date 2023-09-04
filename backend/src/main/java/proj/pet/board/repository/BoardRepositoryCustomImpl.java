@@ -19,7 +19,7 @@ import proj.pet.board.domain.Board;
 @RequiredArgsConstructor
 public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
-	private static final Predicate EMPTY_PREDICATE = board.member.deletedAt.isNull();
+	//	private static final Predicate EMPTY_PREDICATE = board.deletedAt.isNull();
 	private final JPAQueryFactory queryFactory;
 
 	/**
@@ -45,7 +45,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	@Override
 	public Page<Board> getHotBoards(PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
-				EMPTY_PREDICATE,
+				board.deletedAt.isNull(),
 				board.reactions.size().desc(),
 				pageRequest);
 	}

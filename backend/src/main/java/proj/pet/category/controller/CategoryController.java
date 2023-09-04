@@ -1,7 +1,11 @@
 package proj.pet.category.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import proj.pet.auth.domain.AuthGuard;
 import proj.pet.auth.domain.AuthLevel;
 import proj.pet.category.dto.CategoryResponseDto;
@@ -29,15 +33,5 @@ public class CategoryController {
 			@RequestBody CategoryUpdateRequestDto categoryUpdateRequestDto
 	) {
 		categoryFacadeService.updateMyCategories(userSessionDto, categoryUpdateRequestDto);
-	}
-
-	@PatchMapping("/boards/{boardId}")
-	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
-	public void updateBoardCategories(
-			@UserSession UserSessionDto userSessionDto,
-			@PathVariable Long boardId,
-			@RequestBody CategoryUpdateRequestDto categoryUpdateRequestDto
-	) {
-		categoryFacadeService.updateBoardCategories(userSessionDto, boardId, categoryUpdateRequestDto);
 	}
 }

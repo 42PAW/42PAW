@@ -6,6 +6,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.util.Streamable;
 import proj.pet.block.domain.Block;
 import proj.pet.block.repository.BlockRepository;
 import proj.pet.board.domain.Board;
@@ -43,14 +44,15 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 */
 	private List<BoardInfoDto> getBoardInfoDtos(Long loginUserId, Page<Board> boardPages,
 			List<Block> blocks, List<AnimalCategory> animalCategories) {
-		return boardPages
-				.filter(board -> blocks.stream().noneMatch(
-						block -> block.getTo().getId().equals(board.getMember().getId())))
-				.filter(board ->
-						animalCategories.stream().anyMatch(animalCategory ->
-								board.getCategoriesAsSpecies()
-										.contains(animalCategory.getSpecies())))
-				.map(board -> createBoardInfoDto(loginUserId, board)).toList();
+		Streamable<Board> filtered = boardPages.filter(board -> blocks.stream().noneMatch(
+				block -> block.getTo().getId().equals(board.getMember().getId())));
+		if (!animalCategories.isEmpty()) {
+			filtered = filtered.filter(board ->
+					animalCategories.stream().anyMatch(animalCategory ->
+							board.getCategoriesAsSpecies()
+									.contains(animalCategory.getSpecies())));
+		}
+		return filtered.map(board -> createBoardInfoDto(loginUserId, board)).toList();
 	}
 
 	/**
@@ -139,16 +141,19 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
 	@Override
 	public BoardsPaginationDto getScraps(Long loginUserId, PageRequest pageRequest) {
-		List<BoardInfoDto> result = boardRepository.getScrapBoards(loginUserId, pageRequest)
-				.stream()
-				.map(board -> createBoardInfoDto(loginUserId, board))
-				.toList();
-		return boardMapper.toBoardsResponseDto(result, result.size());
+		Page<Board> scrapBoards = boardRepository.getScrapBoards(loginUserId, pageRequest);
+		List<BoardInfoDto> result =
+				scrapBoards.map(board -> createBoardInfoDto(loginUserId, board)).toList();
+		return boardMapper.toBoardsResponseDto(result, scrapBoards.getTotalElements());
 	}
 
 	@Override
 	public BoardsPaginationDto getFollowingsBoards(Long memberId, PageRequest pageRequest) {
-		List<BoardInfoDto> result = boardRepository.getFollowingsBoards(memberId, pageRequest)
+		System.out.println("memberId = " + memberId);
+		System.out.println("pageRequest = " + pageRequest);
+		Page<Board> followingsBoards = boardRepository.getFollowingsBoards(memberId, pageRequest);
+		System.out.println("followingsBoards = " + followingsBoards);
+		List<BoardInfoDto> result = followingsBoards
 				.stream()
 				.map(board -> createBoardInfoDto(memberId, board))
 				.toList();

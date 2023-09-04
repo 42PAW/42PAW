@@ -1,7 +1,9 @@
 package proj.pet.reaction.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.Disabled;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 import proj.pet.board.domain.Board;
 import proj.pet.board.domain.VisibleScope;
 import proj.pet.board.repository.BoardRepository;
-import proj.pet.member.domain.*;
+import proj.pet.member.domain.Country;
+import proj.pet.member.domain.Member;
+import proj.pet.member.domain.MemberRole;
+import proj.pet.member.domain.OauthProfile;
+import proj.pet.member.domain.OauthType;
 import proj.pet.member.repository.MemberRepository;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.reaction.domain.ReactionType;
 import proj.pet.reaction.repository.ReactionRepository;
-
-import java.time.LocalDateTime;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -41,7 +43,6 @@ class ReactionServiceTest {
 
 
 	@DisplayName("사용자는 게시글에 리액션 할 수 있다.")
-	@Disabled
 	@Test
 	void createReaction() {
 		//given
@@ -68,7 +69,8 @@ class ReactionServiceTest {
 		LocalDateTime now = LocalDateTime.now();
 		Member member = memberRepository.save(stubMember("sanan", MemberRole.USER, now));
 		Board board = boardRepository.save(Board.of(member, VisibleScope.PUBLIC, "글의 내용", now));
-		Reaction reaction = reactionRepository.save(Reaction.of(board, member, ReactionType.LIKE, now));
+		Reaction reaction = reactionRepository.save(
+				Reaction.of(board, member, ReactionType.LIKE, now));
 		em.flush();
 		em.clear();
 

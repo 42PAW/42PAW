@@ -78,8 +78,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @return 해당 멤버의 생성시각 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
 	 */
 	@Override
-	public List<Board> getScrapBoards(Long loginUserId, PageRequest pageRequest) {
-		return queryFactory
+	public Page<Board> getScrapBoards(Long loginUserId, PageRequest pageRequest) {
+		List<Board> query = queryFactory
 				.select(board)
 				.from(scrap)
 				.join(scrap.board, board)
@@ -89,6 +89,14 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 				.offset(pageRequest.getOffset())
 				.limit(pageRequest.getPageSize())
 				.fetch();
+		long count = queryFactory
+				.select(board.count())
+				.from(scrap)
+				.join(scrap.board, board)
+				.where(scrap.member.id.eq(loginUserId)
+						.and(board.deletedAt.isNull()))
+				.fetchFirst();
+		return new PageImpl<>(query, pageRequest, count);
 	}
 
 	/**

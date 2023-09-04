@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.UUID;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -46,7 +45,6 @@ import proj.pet.testutil.testdouble.category.TestBoardCategoryFilter;
 import proj.pet.testutil.testdouble.member.TestMember;
 import proj.pet.testutil.testdouble.reaction.TestReaction;
 
-@Disabled
 class BoardControllerTest extends E2ETest {
 
 	/*------------------------------UTIL------------------------------*/

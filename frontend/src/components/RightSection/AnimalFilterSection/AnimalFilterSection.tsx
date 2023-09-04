@@ -70,11 +70,11 @@ const CategoryIconContainerStyled = styled.div`
   display: flex;
   align-items: center;
   margin-top: 30px;
-  margin-left: 15%;
+  margin-left: 19%;
   margin-bottom: 50px;
   color: var(--white);
   font-weight: bold;
-  font-size: 16px;
+  font-size: 1.3rem;
   img {
     margin-right: 10px;
     width: 6%;

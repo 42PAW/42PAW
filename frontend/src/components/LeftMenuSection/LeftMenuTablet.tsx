@@ -34,6 +34,7 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   return (
     <>
       <BannerStyled>
+        <BannerBufferStyled>.</BannerBufferStyled>
         <BannerLogoStyled onClick={handleClickLogo}>
           <img src="/assets/paw.png" />
         </BannerLogoStyled>
@@ -76,9 +77,8 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
 };
 
 const BannerStyled = styled.div`
-  z-index: 2;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: 100vw;
   height: 45px;
@@ -89,22 +89,27 @@ const BannerStyled = styled.div`
   line-height: 15px;
 `;
 
+const BannerBufferStyled = styled.div`
+  color: transparent;
+  width: 36px;
+  aspect-ratio: 1 / 1;
+`;
+
 const BannerLogoStyled = styled.div`
   text-align: center;
   font-family: "Monoton";
   margin-top: 10px;
+  margin-left: 10px;
   color: var(--white);
   font-size: 1.8rem;
   img {
     cursor: pointer;
-    width: 45px;
+    width: 40px;
     margin-bottom: 5px;
   }
 `;
 
 const SettingButtonContainerStyled = styled.div`
-  position: absolute;
-  right: 0;
   margin-top: 8px;
   margin-right: 5px;
 `;
@@ -118,7 +123,7 @@ const MenuStyled = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100vw;
-  background-color: #c5c6dcfa;
+  background-color: #c1c2e1f9;
   margin-top: -48px;
   top: 100%;
   height: 48px;

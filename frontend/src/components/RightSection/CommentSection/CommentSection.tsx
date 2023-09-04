@@ -184,15 +184,19 @@ const CommentInputContainerStyled = styled.div`
     height: 50%;
     width: 70%;
     border: none;
+    border-radius: 0;
     border-bottom: 1px solid var(--white);
     background-color: transparent;
     color: var(--white);
     outline: none;
+    font-size: 13px;
   }
   input::placeholder {
+    font-size: 13px;
     color: var(--transparent);
   }
   button {
+    font-size: 13px;
     cursor: pointer;
     height: 31px;
     width: 70px;

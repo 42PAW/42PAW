@@ -44,7 +44,7 @@ const WrapperStyled = styled.div`
   display: grid;
   max-height: calc(100% - 50px);
   grid-template-columns: repeat(3, 1fr);
-  @media (max-width: 767px) {
+  @media (max-width: 1023px) {
     grid-template-columns: repeat(2, 1fr);
   }
   gap: 2px;

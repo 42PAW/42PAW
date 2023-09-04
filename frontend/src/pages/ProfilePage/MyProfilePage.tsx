@@ -1,5 +1,5 @@
 import ProfileTemplate from "@/pages/ProfilePage/Component/ProfileTemplate";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useFetch from "@/hooks/useFetch";
 import { useQuery } from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
@@ -8,8 +8,12 @@ import { useRecoilState } from "recoil";
 import { boardCategoryState } from "@/recoil/atom";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import { useNavigate } from "react-router-dom";
+import useDebounce from "@/hooks/useDebounce";
+import styled from "styled-components";
 
 const MyProfilePage = () => {
+  const [loading, setLoading] = useState(true);
+  const { debounce } = useDebounce();
   const { fetchProfile } = useFetch();
   const navigator = useNavigate();
   const profileQuery = useQuery({
@@ -26,6 +30,8 @@ const MyProfilePage = () => {
 
   useEffect(() => {
     setBoardCategory(Board.MINE);
+    setLoading(true);
+    debounce("myProfileLoading", () => setLoading(false), 400);
   }, []);
 
   const boardsQuery = useQuery<IBoardInfo[]>({
@@ -34,24 +40,36 @@ const MyProfilePage = () => {
     keepPreviousData: true,
   });
 
-  const isLoading = profileQuery.isLoading || boardsQuery.isLoading;
+  const isLoading = loading || profileQuery.isLoading || boardsQuery.isLoading;
   const isError = profileQuery.isError || boardsQuery.isError;
 
   if (isLoading) {
-    return <LoadingAnimation />;
+    return (
+      <>
+        <LoadingAnimation />
+        <WrapperStyled></WrapperStyled>
+      </>
+    );
   }
 
   if (isError) navigator("/");
 
   return (
-    <ProfileTemplate
-      userInfo={profileQuery.data || null}
-      boards={boardsQuery.data || null}
-      tabState={boardCategory}
-      onTabChange={handleTabState}
-      memberId={0}
-    />
+    <WrapperStyled>
+      <ProfileTemplate
+        userInfo={profileQuery.data || null}
+        boards={boardsQuery.data || null}
+        tabState={boardCategory}
+        onTabChange={handleTabState}
+        memberId={0}
+      />
+    </WrapperStyled>
   );
 };
+
+const WrapperStyled = styled.div`
+  height: 100vh;
+  width: 100%;
+`;
 
 export default MyProfilePage;

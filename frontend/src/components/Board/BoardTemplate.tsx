@@ -20,6 +20,7 @@ import useParseDate from "@/hooks/useParseDate";
 import { useSpring, animated } from "@react-spring/web";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
+import { animateScroll as scroll } from "react-scroll";
 
 interface BoardTemplateProps extends IBoardInfo {
   scrollIntoView?: boolean;
@@ -43,7 +44,6 @@ const BoardTemplate = (board: BoardTemplateProps) => {
     createdAt,
     scrollIntoView,
   } = board;
-
   const boardRef = useRef<HTMLDivElement | null>(null);
   const [isReactedRender, setIsReactedRender] = useState<boolean>(reacted);
   const [isScrappedRender, setIsScrappedRender] = useState<boolean>(scrapped);
@@ -79,8 +79,10 @@ const BoardTemplate = (board: BoardTemplateProps) => {
 
   useLayoutEffect(() => {
     if (scrollIntoView && boardRef.current) {
-      boardRef.current.scrollIntoView({
-        block: "center",
+      scroll.scrollTo(boardRef.current.offsetTop - 10, {
+        duration: 0,
+        smooth: "easeInOutCubic",
+        containerId: "scrollContainer",
       });
     }
   }, [scrollIntoView]);
@@ -264,7 +266,7 @@ const BoardOptionButtonStyled = styled.div`
 `;
 
 const BoardBodyStyled = styled.div`
-  height: 96.2%;
+  height: 96.8%;
   width: 100%;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;

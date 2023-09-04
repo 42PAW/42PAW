@@ -159,10 +159,6 @@ const NoBoardsStyled = styled.div`
   color: var(--white);
   font-size: 1.3rem;
   opacity: 0.7;
-  img {
-    width: 50px;
-    margin-bottom: 5px;
-  }
 `;
 
 export default MainPage;

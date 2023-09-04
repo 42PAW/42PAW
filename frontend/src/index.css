@@ -48,6 +48,7 @@ body {
     #e6dade 86.75%
   );
   background-repeat: no-repeat;
+  -webkit-tap-highlight-color: transparent;
 }
 
 *::-webkit-scrollbar {

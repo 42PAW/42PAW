@@ -137,7 +137,7 @@ const LoginButtonStyled = styled.div`
 `;
 
 const SettingButtonContainerStyled = styled.div`
-  bottom: 4px;
+  top: 4px;
   right: 7px;
   position: absolute;
 `;

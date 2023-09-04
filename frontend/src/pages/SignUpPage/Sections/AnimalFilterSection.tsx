@@ -5,6 +5,7 @@ import { Section } from "@/pages/SignUpPage/SignUpPage";
 import AnimalButtonContainer from "@/components/AnimalButtonContainer";
 import RevertButton from "@/pages/SignUpPage/components/RevertButton";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
+import useToaster from "@/hooks/useToaster";
 
 const AnimalFilterSection: React.FC<SectionProps> = ({
   registerData,
@@ -13,7 +14,13 @@ const AnimalFilterSection: React.FC<SectionProps> = ({
 }) => {
   const [isFading, setIsFading] = useState<boolean>(true);
   const [categoryList, setCategoryList] = useState<AnimalSpecies[]>([]);
+  const { popToast } = useToaster();
+
   const handleOnClick = () => {
+    if (categoryList.length === 0) {
+      popToast("카테고리를 선택해주세요.", "N");
+      return;
+    }
     setRegisterData({ ...registerData, categoryFilters: [...categoryList] });
     setIsFading(true);
     setTimeout(() => {

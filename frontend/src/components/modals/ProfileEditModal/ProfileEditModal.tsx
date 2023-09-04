@@ -68,6 +68,16 @@ const ProfileEditModal = () => {
     popToast("성공적으로 수정하였습니다.", "P");
     closeModal(ModalType.PROFILEEDIT);
   };
+  const imageReset = () => {
+    setProfileInfo((profileInfo) => {
+      return {
+        ...profileInfo,
+        imageData: null,
+      };
+    });
+    setImagePreview("");
+  };
+
   // img wepb 변환
   const [imagePreview, setImagePreview] = useState<string>(
     previousProfileInfo?.imageData!
@@ -108,121 +118,181 @@ const ProfileEditModal = () => {
     });
   };
 
+  const handleStatementChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length > 30) {
+      e.target.value = e.target.value.slice(0, 30);
+    }
+    setProfileInfo((profileInfo) => {
+      return {
+        ...profileInfo,
+        statement: e.target.value,
+      };
+    });
+  };
+
   return (
     <ModalLayout
       modalName={ModalType.PROFILEEDIT}
       isOpen={currentOpenModal.profileEditModal}
     >
       <WrapperStyled>
-        <NameStyled>
-          <table>
-            <tbody>
-              <tr>
-                <td>
-                  <Person.Text>이름</Person.Text>
-                </td>
-                <td>
-                  <input
-                    placeholder="최대 10자 이내"
-                    name="name"
-                    type="text"
-                    value={profileInfo.memberName}
-                    onChange={(e) => {
-                      handleNameChange(e);
-                    }}
-                    minLength={3}
-                    maxLength={10}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </NameStyled>
-        <img src={imagePreview ? imagePreview : "/assets/userG.png"} />
-
-        <input
-          type="file"
-          accept="image/*"
-          id="profileImage"
-          onChange={handleImageChange}
+        <LogoStyled>
+          <img src="/assets/paw.png" />
+        </LogoStyled>
+        <ProfileImageStyled
+          src={imagePreview ? imagePreview : "/assets/userG.png"}
         />
-        <table>
-          <tbody>
-            <tr>
-              <td>
-                <Person.Text>한 줄 소개</Person.Text>
-              </td>
-              <td>
-                <input
-                  type="text"
-                  placeholder="최대 30자 이내" // 국가에 따라 언어 변경
-                  value={profileInfo.statement}
-                  maxLength={30}
-                  onChange={(e) => {
-                    if (e.target.value.length > 30) {
-                      e.target.value = e.target.value.slice(0, 30);
-                    }
-                    setProfileInfo((profileInfo) => {
-                      return {
-                        ...profileInfo,
-                        statement: e.target.value,
-                      };
-                    });
-                  }}
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        {/* <CaptionStyled>{profileInfo.statement}</CaptionStyled> */}
-        <ButtonContainerStyled>
-          <button onClick={onChangeProfileInfo}>완료</button>
-          <button onClick={() => closeModal(ModalType.PROFILEEDIT)}>
-            취소
-          </button>
-        </ButtonContainerStyled>
+        <MainAreaStyled>
+          <EditImageStyled>
+            <label htmlFor="uploadPhoto">이미지 업로드</label>
+            <input
+              type="file"
+              accept="image/*"
+              id="uploadPhoto"
+              onChange={handleImageChange}
+              style={{ display: "none" }}
+            />
+            <label htmlFor="profileImageReset">이미지 제거</label>
+            <input
+              type="button"
+              accept="image/*"
+              id="profileImageReset"
+              onClick={imageReset}
+              style={{ display: "none" }}
+            />
+          </EditImageStyled>
+          <EditInfoStyled>
+            <span>이름</span>
+            <input
+              placeholder="최대 10자 이내"
+              name="name"
+              type="text"
+              value={profileInfo.memberName}
+              onChange={(e) => handleNameChange(e)}
+              maxLength={10}
+            />
+          </EditInfoStyled>
+          <EditInfoStyled>
+            <span>자기소개</span>
+            <input
+              type="text"
+              placeholder="최대 30자 이내" // 국가에 따라 언어 변경
+              value={profileInfo.statement}
+              maxLength={50}
+              onChange={(e) => handleStatementChange(e)}
+            />
+          </EditInfoStyled>
+          <ButtonContainerStyled.Button>
+            <button onClick={onChangeProfileInfo}>완료</button>
+            <button onClick={() => closeModal(ModalType.PROFILEEDIT)}>
+              취소
+            </button>
+          </ButtonContainerStyled.Button>
+        </MainAreaStyled>
       </WrapperStyled>
     </ModalLayout>
   );
 };
 
 const WrapperStyled = styled.div`
+  overflow: hidden;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: var(--transparent);
   width: 280px;
-  background-color: var(--white);
+  height: 450px;
   border-radius: 15px;
-  color: var(--grey);
+  color: var(--white);
 `;
 
-const NameStyled = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 40px;
-  margin-bottom: 5px;
-  h1 {
-    width: 180px;
-    font-size: 1.8rem;
-    border-bottom: 1.5px solid var(--grey);
-    text-align: center;
+const LogoStyled = styled.div`
+  z-index: 3;
+  position: absolute;
+  left: 11px;
+  top: 8px;
+  img {
+    width: 35px;
   }
-  button {
-    background-color: transparent;
-    border: none;
-    img {
-      width: 20px;
-      height: 20px;
+`;
+
+const ProfileImageStyled = styled.img`
+  width: 110%;
+  aspect-ratio: 1 / 1;
+  border-radius: 0;
+`;
+
+const MainAreaStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  bottom: none;
+  height: 450px;
+  width: 600px;
+  background: linear-gradient(
+    228deg,
+    #878abe 0%,
+    #d1c1cd 52.34%,
+    #e6dade 76.75%
+  );
+
+  position: absolute;
+  bottom: -280px;
+  border-radius: 100%;
+`;
+
+const EditImageStyled = styled.div`
+  // const ProfileImageStyled = styled.img
+  margin-top: 20px;
+  margin-bottom: 10px;
+  label {
+    cursor: pointer;
+    margin-right: 15px;
+    margin-left: 15px;
+
+    &:hover {
+      color: var(--transparent2);
+      font-weight: 500;
     }
   }
 `;
 
-// const ProfileImageStyled = styled.img`
+const EditInfoStyled = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  span {
+    margin-right: 10px;
+    font-size: 1.2rem;
+    width: 50px;
+    text-align: center;
+  }
+  ::placeholder {
+    color: #d9d9d9;
+  }
+  input {
+    width: 180px;
+    height: 20px;
+    border: none;
+    border-bottom: 1.5px solid var(--white);
+    font-size: 1.2rem;
+    text-align: center;
+    background-color: transparent;
+    color: var(--white);
+    &:focus {
+      outline: none;
+    }
+  }
+`;
 //   border-radius: 100%;
 //   width: 100px;
 //   margin-top: 20px;
-// `;
-// const CaptionStyled = styled.div`
+//
+`;
+// const CaptionStyled = styled.div`;
 //   display: flex; /* Use flexbox */
 //   align-items: center; /* Vertically center the text */
 //   justify-content: center; /* Horizontally center the text */
@@ -239,57 +309,33 @@ const NameStyled = styled.div`
 //   padding-inline: 10px;
 // `;
 
-const ButtonContainerStyled = styled.div`
-  margin-top: 30px;
-  margin: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 215px;
-  button {
-    cursor: pointer;
-    height: 25px;
-    width: 100px;
-    border-radius: 10px;
-    border: none;
-    &:nth-child(1) {
-      background-color: var(--purple);
-      color: var(--white);
+const ButtonContainerStyled = {
+  Button: styled.div`
+    margin-top: 30px;
+    margin: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 215px;
+    button {
+      cursor: pointer;
+      height: 25px;
+      width: 100px;
+      border-radius: 10px;
+      border: none;
+      &:nth-child(1) {
+        background-color: var(--purple);
+        color: var(--white);
+      }
+      &:nth-child(2) {
+        background-color: var(--lightgrey);
+        //   border: 1px solid var(--lightgrey);
+        color: var(--white);
+      }
+      &:hover {
+        opacity: 0.7;
+      }
     }
-    &:nth-child(2) {
-      background-color: var(--lightgrey);
-      //   border: 1px solid var(--lightgrey);
-      color: var(--white);
-    }
-    &:hover {
-      opacity: 0.7;
-    }
-  }
-`;
-
-const Person = {
-  InputTable: styled.table`
-    border-spacing: 18px 0;
-
-    text-align: center;
-
-    margin: 0 auto;
-  `,
-
-  Text: styled.h3``,
-
-  SaveButton: styled.button`
-    width: 92px;
-    height: 32px;
-
-    border: none;
-    border-radius: 8px;
-
-    background-color: orange;
-
-    color: #fff;
-
-    cursor: pointer;
   `,
 };
 

@@ -211,6 +211,7 @@ const ProfileHeaderStyled = styled.div`
 const CaptionSectionStyled = styled.div`
   font-weight: 500;
   font-size: 1.2rem;
+  width: 300px;
 `;
 
 export default ProfileInfoComponent;

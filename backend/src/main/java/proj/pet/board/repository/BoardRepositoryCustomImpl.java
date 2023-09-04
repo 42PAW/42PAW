@@ -78,13 +78,13 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 		List<Board> query = queryFactory
 				.select(board)
 				.from(scrap)
-				.join(scrap.board, board)
 				.where(scrap.member.id.eq(loginUserId)
 						.and(scrap.member.deletedAt.isNull())
 						.and(board.deletedAt.isNull()))
 				.orderBy(board.createdAt.desc())
 				.offset(pageRequest.getOffset())
 				.limit(pageRequest.getPageSize())
+				.join(scrap.board, board)
 				.fetch();
 		long count = queryFactory
 				.select(board.count())
@@ -126,8 +126,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 				.where(predicate)
 				.offset(pageRequest.getOffset())
 				.limit(pageRequest.getPageSize())
-				.orderBy(orderSpecifier)
-				.orderBy(board.createdAt.desc())
+				.orderBy(board.createdAt.desc(), orderSpecifier)
 				.leftJoin(board.member).fetchJoin()
 				.fetch();
 		long count = queryFactory.selectFrom(board)

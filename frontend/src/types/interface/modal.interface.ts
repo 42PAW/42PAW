@@ -13,4 +13,5 @@ export interface ICurrentModalStateInfo {
   profileEditModal: boolean;
   languageModal: boolean;
   loginModal: boolean;
+  meatballModal: boolean;
 }

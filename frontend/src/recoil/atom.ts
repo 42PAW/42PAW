@@ -7,7 +7,7 @@ import { IBanUserInfo } from "@/types/interface/user.interface";
 import { IToastInfo } from "@/types/interface/toast.interface";
 import { IchangeProfileInfo } from "@/types/interface/profile.interface";
 import Translator from "@/languages/Translator";
-import { UserInfoDTO, ReportDTO } from "@/types/dto/member.dto";
+import { UserInfoDTO } from "@/types/dto/member.dto";
 import { IDeleteInfo } from "@/types/interface/option.interface";
 
 export const userInfoState = atom<UserInfoDTO | null>({
@@ -92,6 +92,7 @@ export const currentOpenModalState = atom<ICurrentModalStateInfo>({
     profileEditModal: false,
     languageModal: false,
     loginModal: false,
+    meatballModal: false,
   },
 });
 
@@ -107,17 +108,6 @@ export const banUserInfoState = atom<IBanUserInfo>({
     memberId: null,
     userName: "",
     followType: null,
-  },
-});
-
-export const reportUserInfoState = atom<ReportDTO>({
-  key: "reportUserInfo",
-  default: {
-    reportedMemberId: null,
-    boardId: null,
-    commentId: null,
-    reason: null,
-    content: "",
   },
 });
 
@@ -160,6 +150,7 @@ export const currentUploadIndexState = atom<number>({
   key: "currentUploadIndex",
   default: 0,
 });
+
 export const myProfileInfoState = atom<IchangeProfileInfo>({
   key: "myProfileInfo",
   default: {
@@ -168,4 +159,9 @@ export const myProfileInfoState = atom<IchangeProfileInfo>({
     statement: "",
     nicknameUpdatedAt: "",
   },
+});
+
+export const boardsLengthState = atom<number>({
+  key: "boardsLength",
+  default: 10000,
 });

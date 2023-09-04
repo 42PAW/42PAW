@@ -4,7 +4,6 @@ import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import BoardPhotoBox from "@/components/Board/BoardPhotoBox";
-import BoardOption from "@/components/OptionButton/BoardOption";
 import useModal from "@/hooks/useModal";
 import { ModalType } from "@/types/enum/modal.enum";
 import { languageState } from "@/recoil/atom";
@@ -21,6 +20,7 @@ import { useSpring, animated } from "@react-spring/web";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
 import { animateScroll as scroll } from "react-scroll";
+import MeatballButton from "../MeatballButton";
 
 interface BoardTemplateProps extends IBoardInfo {
   scrollIntoView?: boolean;
@@ -153,10 +153,11 @@ const BoardTemplate = (board: BoardTemplateProps) => {
             </div>
           </BoardProfileStyled>
           <BoardOptionButtonStyled>
-            <BoardOption
+            <MeatballButton
               memberId={memberId}
               boardId={boardId}
               memberName={memberName}
+              component="board"
             />
           </BoardOptionButtonStyled>
         </BoardHeaderStyled>

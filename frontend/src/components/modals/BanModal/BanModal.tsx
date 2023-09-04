@@ -4,37 +4,40 @@ import ModalLayout from "@/components/modals/ModalLayout";
 import { ModalType } from "@/types/enum/modal.enum";
 import { currentOpenModalState } from "@/recoil/atom";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
-import { banUserInfoState } from "@/recoil/atom";
-import { IBanUserInfo } from "@/types/interface/user.interface";
 import useModal from "@/hooks/useModal";
 import useToaster from "@/hooks/useToaster";
 import { axiosBlockUser } from "@/api/axios/axios.custom";
 import { callbackStoreState } from "@/recoil/atom";
 import { followType } from "@/types/enum/followType.enum";
+import { IMeatballMdoalUtils } from "@/components/MeatballButton";
+import { meatballModalUtilsState } from "@/components/MeatballButton";
 
 const BanModal: React.FC = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
-  const [banUserInfo] = useRecoilState<IBanUserInfo>(banUserInfoState);
   const [callbackStore] = useRecoilState<Function[]>(callbackStoreState);
+  const [meatballModealUtils] = useRecoilState<IMeatballMdoalUtils>(
+    meatballModalUtilsState
+  );
   const { closeModal } = useModal();
   const { popToast } = useToaster();
 
   const handleOnClick = async () => {
     await closeModal(ModalType.BAN);
     //이미 차단된 유저 차단 시도 시
-    if (banUserInfo.followType === followType.BLOCK) {
+    console.log(meatballModealUtils);
+    if (meatballModealUtils.followStatus == followType.BLOCK) {
       popToast("이미 차단된 유저입니다.", "N");
       return;
     }
-    await axiosBlockUser(banUserInfo.memberId as number);
-    if (banUserInfo.callback) banUserInfo.callback();
+    await axiosBlockUser(meatballModealUtils.memberId as number);
+    if (meatballModealUtils.callback) meatballModealUtils.callback();
     //검색창에서 프로필 카드 모달을 띄웠을 시 차단할 경우 프로필 카드 모달과 검색창 아이템의 팔로우 타입 버튼 모두 렌더링 해주기 위함
     if (callbackStore.length !== 0) {
       callbackStore.forEach((callback) => callback());
     }
-    popToast(`${banUserInfo.userName} 님이 차단됐습니다.`, "N");
+    popToast(`${meatballModealUtils.memberName} 님이 차단됐습니다.`, "N");
   };
 
   return (
@@ -42,7 +45,7 @@ const BanModal: React.FC = () => {
       <WrapperStyled>
         <h1>차단하기</h1>
         <ContentStyled>
-          {banUserInfo.userName} 님을 차단하시겠습니까?
+          {meatballModealUtils.memberName} 님을 차단하시겠습니까?
         </ContentStyled>
         <button onClick={handleOnClick}>차단</button>
       </WrapperStyled>

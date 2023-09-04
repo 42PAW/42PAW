@@ -8,7 +8,6 @@ public interface CategoryFacadeService {
 
 	CategoryResponseDto getCategories();
 
-	void updateMyCategories(UserSessionDto userSessionDto, CategoryUpdateRequestDto categoryUpdateRequestDto);
-
-	void updateBoardCategories(UserSessionDto userSessionDto, Long boardId, CategoryUpdateRequestDto categoryUpdateRequestDto);
+	void updateMyCategories(UserSessionDto userSessionDto,
+			CategoryUpdateRequestDto categoryUpdateRequestDto);
 }

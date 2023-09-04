@@ -1,5 +1,8 @@
 package proj.pet.board.service;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -47,16 +50,12 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 * @return {@link List<BoardInfoDto>}
 	 */
 	private List<BoardInfoDto> getBoardInfoDtos(Long loginUserId, Page<Board> boardPages,
-	                                            List<Block> blocks, List<AnimalCategory> animalCategories) {
-		Streamable<Board> filtered = boardPages.filter(board -> blocks.stream().noneMatch(
-				block -> block.getTo().getId().equals(board.getMember().getId())));
-		if (!animalCategories.isEmpty()) {
-			filtered = filtered.filter(board ->
-					animalCategories.stream().anyMatch(animalCategory ->
-							board.getCategoriesAsSpecies()
-									.contains(animalCategory.getSpecies())));
-		}
-		return filtered.map(board -> createBoardInfoDto(loginUserId, board)).toList();
+			List<Block> blocks, List<AnimalCategory> animalCategories) {
+		List<Long> blockIds = blocks.stream().map(block -> block.getTo().getId()).toList();
+		return boardPages.filter(board -> !blockIds.contains(board.getMember().getId()))
+				.filter(board -> animalCategories.stream().anyMatch(animalCategory ->
+						board.getCategoriesAsSpecies().contains(animalCategory.getSpecies())))
+				.map(board -> createBoardInfoDto(loginUserId, board)).toList();
 	}
 
 	/**

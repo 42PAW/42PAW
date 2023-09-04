@@ -29,6 +29,7 @@ public enum ExceptionStatus {
 	NOT_FOUND_REACTION(HttpStatus.NOT_FOUND, "존재하지 않는 반응입니다."),
 	NOT_FOUND_SCRAP(HttpStatus.NOT_FOUND, "존재하지 않는 스크랩입니다."),
 	NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."),
+	NOT_ENOUGH_NICKNAME_CHANGE_PERIOD(HttpStatus.BAD_REQUEST, "닉네임은 30일에 한번만 변경 가능합니다."),
 
 	/*-----------------------------------DOMAIN-----------------------------------*/
 	INVARIANT_VIOLENCE(HttpStatus.BAD_REQUEST, "불변식에 위배되는 생성 매개변수입니다."),

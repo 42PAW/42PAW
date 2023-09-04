@@ -1,6 +1,7 @@
 package proj.pet.board.service;
 
 import static proj.pet.exception.ExceptionStatus.ALREADY_DELETED_BOARD;
+import static proj.pet.exception.ExceptionStatus.INVALID_ARGUMENT;
 import static proj.pet.exception.ExceptionStatus.NOT_FOUND_BOARD;
 import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
 import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
@@ -65,6 +66,10 @@ public class BoardServiceImpl implements BoardService {
 			String content,
 			LocalDateTime now
 	) {
+		// TODO: 컨트롤러 & 정책으로 빼기
+		if (speciesList == null || speciesList.isEmpty()) {
+			throw new ServiceException(INVALID_ARGUMENT, "동물 카테고리를 선택해주세요.");
+		}
 		Member member = memberRepository.findById(memberId)
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		Board board = boardRepository.save(

@@ -18,11 +18,10 @@ public class CategoryFacadeServiceImpl implements CategoryFacadeService {
 		return categoryQueryService.getAllCategories();
 	}
 
-	@Override public void updateMyCategories(UserSessionDto userSessionDto, CategoryUpdateRequestDto categoryUpdateRequestDto) {
-		categoryService.updateMemberCategories(userSessionDto.getMemberId(), categoryUpdateRequestDto.getCategories());
-	}
-
-	@Override public void updateBoardCategories(UserSessionDto userSessionDto, Long boardId, CategoryUpdateRequestDto categoryUpdateRequestDto) {
-		categoryService.updateBoardCategories(userSessionDto.getMemberId(), boardId, categoryUpdateRequestDto.getCategories());
+	@Override
+	public void updateMyCategories(UserSessionDto userSessionDto,
+			CategoryUpdateRequestDto categoryUpdateRequestDto) {
+		categoryService.updateMemberCategories(userSessionDto.getMemberId(),
+				categoryUpdateRequestDto.getCategories());
 	}
 }

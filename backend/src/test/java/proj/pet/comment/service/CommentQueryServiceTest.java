@@ -58,7 +58,7 @@ class CommentQueryServiceTest {
 		em.clear();
 
 		//when
-		CommentResponseDto commentResponseDto = commentQueryService.findCommentsByBoardId(board.getId(), PageRequest.of(0, 10));
+		CommentResponseDto commentResponseDto = commentQueryService.findCommentsByBoardId(loginUser.getId(), board.getId(), PageRequest.of(0, 10));
 
 		//then
 		List<CommentDto> result = commentResponseDto.getResult();

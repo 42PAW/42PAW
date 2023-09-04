@@ -18,6 +18,7 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
     comment,
     profileImageUrl,
     createdAt,
+    followType,
   } = commentInfo;
 
   const setCurrentMemberId = useSetRecoilState(currentMemberIdState);
@@ -50,6 +51,7 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
             boardId={currentBoardId as number}
             commentId={commentId}
             memberName={memberName}
+            followStatus={followType}
             component="comment"
           />
         </NicknameToggleContainerStyled>

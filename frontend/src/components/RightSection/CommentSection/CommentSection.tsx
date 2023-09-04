@@ -118,6 +118,7 @@ const CommentSection = () => {
               comment={comment.comment}
               profileImageUrl={comment.profileImageUrl}
               createdAt={comment.createdAt}
+              followType={comment.followType}
             />
           ))
         ) : (

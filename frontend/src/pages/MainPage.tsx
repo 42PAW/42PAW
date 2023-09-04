@@ -111,6 +111,7 @@ const MainPage = () => {
             previewCommentUser={board.previewCommentUser}
             previewComment={board.previewComment}
             createdAt={board.createdAt}
+            followType={board.followType}
           />
         ))
       )}

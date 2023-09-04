@@ -89,6 +89,7 @@ const MyProfileBoardsPage = () => {
             previewCommentUser={board.previewCommentUser}
             previewComment={board.previewComment}
             createdAt={board.createdAt}
+            followType={board.followType}
             scrollIntoView={
               board.boardId === currentProfileBoardId ? true : false
             }

@@ -14,6 +14,7 @@ import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTempla
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import { useNavigate, useParams } from "react-router-dom";
 import useDebounce from "@/hooks/useDebounce";
+import { followType } from "@/types/enum/followType.enum";
 
 const ProfileBoardsPage = () => {
   const { debounce } = useDebounce();
@@ -85,6 +86,7 @@ const ProfileBoardsPage = () => {
             previewCommentUser={board.previewCommentUser}
             previewComment={board.previewComment}
             createdAt={board.createdAt}
+            followType={board.followType}
             scrollIntoView={
               board.boardId === currentProfileBoardId ? true : false
             }

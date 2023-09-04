@@ -10,7 +10,6 @@ import OptionButton from "./OptionButton";
 import { reportUserInfoState } from "@/recoil/atom";
 import { ReportDTO } from "@/types/dto/member.dto";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
-import { useState } from "react";
 
 /**
  * @boardId (optional) 신고, 차단, 삭제할 게시물의 id

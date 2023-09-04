@@ -50,7 +50,7 @@ const BoardWrapperStyled = styled.div`
   margin-top: 3%;
   margin-bottom: 5%;
   border-radius: 25px;
-  padding-bottom: 12%;
+  padding-bottom: 7%;
   box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
   background-color: var(--transparent);
 `;
@@ -73,7 +73,7 @@ const BoardProfileStyled = styled.div`
     cursor: pointer;
     height: 60%;
     aspect-ratio: 1 / 1;
-    margin-left: 3%;
+    margin-left: 2%;
     border-radius: 100%;
     background: linear-gradient(270deg, var(--lightpurple), var(--lightpink));
     background-size: 200% 200%;
@@ -103,7 +103,7 @@ const BoardOptionButtonStyled = styled.div`
 `;
 
 const BoardBodyStyled = styled.div`
-  height: 97.2%;
+  height: 96.2%;
   width: 100%;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;

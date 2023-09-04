@@ -92,7 +92,8 @@ const MainAreaStyled = styled.main<{
   align-items: center;
   height: 100%;
   min-height: 800px;
-  width: ${(props) => (props.$isProfilePage ? `600px` : "500px")};
+  width: 600px;
+  /* width: ${(props) => (props.$isProfilePage ? `600px` : "600px")}; */
 `;
 
 export default Layout;

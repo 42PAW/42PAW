@@ -105,10 +105,10 @@ const MenuListStyled = styled.ul`
     padding: 10px 10px;
     width: 25px;
     transition: all 0.3s ease;
+    border-radius: 30%;
   }
   img:hover {
     background-color: var(--transparent);
-    border-radius: 30%;
   }
 `;
 

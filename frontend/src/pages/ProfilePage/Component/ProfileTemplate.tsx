@@ -60,7 +60,6 @@ const ProfileWrapperStyled = styled.div`
   width: calc(100% - 40px);
   margin: 0 auto;
   min-width: 450px; /* 최소 폭 지정 */
-  max-width: 552px; /* 최대 폭 지정 */
   // align-items: center;
   display: flex; /* Add flex display */
   flex-direction: column; /* Set flex direction to column */

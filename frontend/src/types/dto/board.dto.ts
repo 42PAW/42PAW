@@ -1,6 +1,7 @@
 import { IBoardInfo } from "@/types/interface/board.interface";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 import { Country } from "../enum/country.enum";
+import { followType } from "../enum/followType.enum";
 /**
  * @result 불러올 각 Board에 대한 정보를 담고 있는 배열
  * @totalLength Boards의 전체 개수
@@ -26,6 +27,7 @@ export interface CommentInfoDTO {
   comment: string;
   profileImageUrl: string;
   createdAt: string;
+  followType: followType;
 }
 
 export interface CreateBoardDTO {

@@ -42,6 +42,7 @@ const BoardTemplate = (board: BoardTemplateProps) => {
     previewCommentUser,
     previewComment,
     createdAt,
+    followType,
     scrollIntoView,
   } = board;
   const boardRef = useRef<HTMLDivElement | null>(null);
@@ -157,6 +158,7 @@ const BoardTemplate = (board: BoardTemplateProps) => {
               memberId={memberId}
               boardId={boardId}
               memberName={memberName}
+              followStatus={followType}
               component="board"
             />
           </BoardOptionButtonStyled>

@@ -1,10 +1,10 @@
 {
-  "name": "42paw",
-  "short_name": "42paw",
+  "name": "42PAW",
+  "short_name": "42PAW",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#485EEE",
+  "theme_color": "#afb1d1",
   "icons": [
     {
       "src": "icons/icon.png",

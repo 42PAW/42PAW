@@ -1,15 +1,17 @@
 import { styled } from "styled-components";
 import ModalLayout from "@/components/modals/ModalLayout";
 import { ModalType } from "@/types/enum/modal.enum";
-import { currentOpenModalState, myProfileInfoState } from "@/recoil/atom";
+import { currentOpenModalState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 import useModal from "../../../hooks/useModal";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
-import { IchangeProfileInfo } from "@/types/interface/profile.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosChangeMyProfile } from "@/api/axios/axios.custom";
 import { ChangeEvent, useState } from "react";
-import { MemberProfileChangeRequestDto } from "@/types/dto/member.dto";
+import {
+  MemberProfileChangeRequestDto,
+  ProfileInfoDTO,
+} from "@/types/dto/member.dto";
 import useToaster from "@/hooks/useToaster";
 import useNicknameValidation from "@/hooks/useNicknameValidation";
 import useDebounce from "@/hooks/useDebounce";
@@ -17,8 +19,9 @@ import useFetch from "@/hooks/useFetch";
 
 const ProfileEditModal = () => {
   const queryClient = useQueryClient();
-  const [previousProfileInfo] =
-    useRecoilState<IchangeProfileInfo>(myProfileInfoState);
+  const prevProfileInfo = queryClient.getQueryData<ProfileInfoDTO | undefined>([
+    "myProfile",
+  ]); // undefined일 경우를 대비해 타입 지정 (어떤 문제가 생길려나?)
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
@@ -30,13 +33,12 @@ const ProfileEditModal = () => {
   const { closeModal } = useModal();
   const [profileInfo, setProfileInfo] = useState<MemberProfileChangeRequestDto>(
     {
-      memberName: previousProfileInfo?.memberName!,
+      memberName: prevProfileInfo?.memberName!,
       imageData: null,
-      statement: previousProfileInfo?.statement!,
+      statement: prevProfileInfo?.statement!,
     }
   );
   const { fetchMyInfo } = useFetch();
-
   const editProfileMutation = useMutation(
     (profileInfo: MemberProfileChangeRequestDto) =>
       axiosChangeMyProfile(profileInfo),
@@ -44,6 +46,9 @@ const ProfileEditModal = () => {
       onSuccess: () => {
         // 캐시가 있는 모든 쿼리 무효화
         queryClient.invalidateQueries(["myProfile"]);
+        console.log(
+          "nicknameUpdatedAt : " + prevProfileInfo?.nicknameUpdatedAt
+        );
         fetchMyInfo();
       },
     }
@@ -55,22 +60,32 @@ const ProfileEditModal = () => {
       popToast("잠시 후에 다시 시도해주세요.", "N");
       return;
     }
-    if (profileInfo.memberName !== previousProfileInfo?.memberName) {
-      const isValid = await nicknameValidation(profileInfo.memberName);
+    if (profileInfo.memberName !== prevProfileInfo?.memberName) {
+      const isValid = await nicknameValidation(profileInfo.memberName!);
       if (!isValid) {
         setIsWrong(true);
         debounce("nickname", () => setIsWrong(false), 2000);
         return;
       }
-    }
+    } else profileInfo.memberName = null;
     console.log("profileInfo: " + profileInfo);
     editProfileMutation.mutate(profileInfo);
     popToast("성공적으로 수정하였습니다.", "P");
     closeModal(ModalType.PROFILEEDIT);
   };
+  const imageReset = () => {
+    setProfileInfo((profileInfo) => {
+      return {
+        ...profileInfo,
+        imageData: null,
+      };
+    });
+    setImagePreview("");
+  };
+
   // img wepb 변환
   const [imagePreview, setImagePreview] = useState<string>(
-    previousProfileInfo?.imageData!
+    prevProfileInfo?.profileImageUrl!
   );
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -108,188 +123,202 @@ const ProfileEditModal = () => {
     });
   };
 
+  const handleStatementChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length > 30) {
+      e.target.value = e.target.value.slice(0, 30);
+    }
+    setProfileInfo((profileInfo) => {
+      return {
+        ...profileInfo,
+        statement: e.target.value,
+      };
+    });
+  };
+
   return (
     <ModalLayout
       modalName={ModalType.PROFILEEDIT}
       isOpen={currentOpenModal.profileEditModal}
     >
       <WrapperStyled>
-        <NameStyled>
-          <table>
-            <tbody>
-              <tr>
-                <td>
-                  <Person.Text>이름</Person.Text>
-                </td>
-                <td>
-                  <input
-                    placeholder="최대 10자 이내"
-                    name="name"
-                    type="text"
-                    value={profileInfo.memberName}
-                    onChange={(e) => {
-                      handleNameChange(e);
-                    }}
-                    minLength={3}
-                    maxLength={10}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </NameStyled>
-        <img src={imagePreview ? imagePreview : "/assets/userG.png"} />
-
-        <input
-          type="file"
-          accept="image/*"
-          id="profileImage"
-          onChange={handleImageChange}
+        <LogoStyled>
+          <img src="/assets/paw.png" />
+        </LogoStyled>
+        <ProfileImageStyled
+          src={imagePreview ? imagePreview : "/assets/userG.png"}
         />
-        <table>
-          <tbody>
-            <tr>
-              <td>
-                <Person.Text>한 줄 소개</Person.Text>
-              </td>
-              <td>
-                <input
-                  type="text"
-                  placeholder="최대 30자 이내" // 국가에 따라 언어 변경
-                  value={profileInfo.statement}
-                  maxLength={30}
-                  onChange={(e) => {
-                    if (e.target.value.length > 30) {
-                      e.target.value = e.target.value.slice(0, 30);
-                    }
-                    setProfileInfo((profileInfo) => {
-                      return {
-                        ...profileInfo,
-                        statement: e.target.value,
-                      };
-                    });
-                  }}
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        {/* <CaptionStyled>{profileInfo.statement}</CaptionStyled> */}
-        <ButtonContainerStyled>
-          <button onClick={onChangeProfileInfo}>완료</button>
-          <button onClick={() => closeModal(ModalType.PROFILEEDIT)}>
-            취소
-          </button>
-        </ButtonContainerStyled>
+        <MainAreaStyled>
+          <EditImageStyled>
+            <label htmlFor="uploadPhoto">이미지 업로드</label>
+            <input
+              type="file"
+              accept="image/*"
+              id="uploadPhoto"
+              onChange={handleImageChange}
+              style={{ display: "none" }}
+            />
+            <label htmlFor="profileImageReset">이미지 제거</label>
+            <input
+              type="button"
+              accept="image/*"
+              id="profileImageReset"
+              onClick={imageReset}
+              style={{ display: "none" }}
+            />
+          </EditImageStyled>
+          <EditInfoStyled>
+            <span>이름</span>
+            <input
+              placeholder="최대 10자 이내"
+              name="name"
+              type="text"
+              value={profileInfo.memberName!}
+              onChange={(e) => handleNameChange(e)}
+              maxLength={10}
+            />
+          </EditInfoStyled>
+          <EditInfoStyled>
+            <span>자기소개</span>
+            <input
+              type="text"
+              placeholder="최대 30자 이내" // 국가에 따라 언어 변경
+              value={profileInfo.statement}
+              maxLength={50}
+              onChange={(e) => handleStatementChange(e)}
+            />
+          </EditInfoStyled>
+          <ButtonContainerStyled.Button>
+            <button onClick={onChangeProfileInfo}>완료</button>
+            <button onClick={() => closeModal(ModalType.PROFILEEDIT)}>
+              취소
+            </button>
+          </ButtonContainerStyled.Button>
+        </MainAreaStyled>
       </WrapperStyled>
     </ModalLayout>
   );
 };
 
 const WrapperStyled = styled.div`
+  overflow: hidden;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: var(--transparent);
   width: 280px;
-  background-color: var(--white);
+  height: 450px;
   border-radius: 15px;
-  color: var(--grey);
+  color: var(--white);
 `;
 
-const NameStyled = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 40px;
-  margin-bottom: 5px;
-  h1 {
-    width: 180px;
-    font-size: 1.8rem;
-    border-bottom: 1.5px solid var(--grey);
-    text-align: center;
-  }
-  button {
-    background-color: transparent;
-    border: none;
-    img {
-      width: 20px;
-      height: 20px;
-    }
+const LogoStyled = styled.div`
+  z-index: 3;
+  position: absolute;
+  left: 11px;
+  top: 8px;
+  img {
+    width: 35px;
   }
 `;
 
-// const ProfileImageStyled = styled.img`
-//   border-radius: 100%;
-//   width: 100px;
-//   margin-top: 20px;
-// `;
-// const CaptionStyled = styled.div`
-//   display: flex; /* Use flexbox */
-//   align-items: center; /* Vertically center the text */
-//   justify-content: center; /* Horizontally center the text */
-//   height: 50px;
-//   width: 180px;
-//   border: 0.5px dashed;
-//   border-radius: 5px;
-//   background-color: #f1f1f1;
-//   margin-top: 25px;
-//   color: var(--grey, #000000);
-//   font-size: 1.4rem;
-//   text-align: center;
-//   word-break: keep-all;
-//   padding-inline: 10px;
-// `;
+const ProfileImageStyled = styled.img`
+  width: 110%;
+  aspect-ratio: 1 / 1;
+  border-radius: 0;
+`;
 
-const ButtonContainerStyled = styled.div`
-  margin-top: 30px;
-  margin: 25px;
+const MainAreaStyled = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  width: 215px;
-  button {
+  bottom: none;
+  height: 450px;
+  width: 600px;
+  background: linear-gradient(
+    228deg,
+    #878abe 0%,
+    #d1c1cd 52.34%,
+    #e6dade 76.75%
+  );
+
+  position: absolute;
+  bottom: -280px;
+  border-radius: 100%;
+`;
+
+const EditImageStyled = styled.div`
+  // const ProfileImageStyled = styled.img
+  margin-top: 20px;
+  margin-bottom: 10px;
+  label {
     cursor: pointer;
-    height: 25px;
-    width: 100px;
-    border-radius: 10px;
-    border: none;
-    &:nth-child(1) {
-      background-color: var(--purple);
-      color: var(--white);
-    }
-    &:nth-child(2) {
-      background-color: var(--lightgrey);
-      //   border: 1px solid var(--lightgrey);
-      color: var(--white);
-    }
+    margin-right: 15px;
+    margin-left: 15px;
     &:hover {
-      opacity: 0.7;
+      color: var(--transparent2);
+      font-weight: 500;
     }
   }
 `;
 
-const Person = {
-  InputTable: styled.table`
-    border-spacing: 18px 0;
-
+const EditInfoStyled = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  span {
+    margin-right: 10px;
+    font-size: 1.2rem;
+    width: 50px;
     text-align: center;
-
-    margin: 0 auto;
-  `,
-
-  Text: styled.h3``,
-
-  SaveButton: styled.button`
-    width: 92px;
-    height: 32px;
-
+  }
+  ::placeholder {
+    color: #d9d9d9;
+  }
+  input {
+    width: 180px;
+    height: 20px;
     border: none;
-    border-radius: 8px;
+    border-bottom: 1.5px solid var(--white);
+    font-size: 1.2rem;
+    text-align: center;
+    background-color: transparent;
+    color: var(--white);
+    &:focus {
+      outline: none;
+    }
+  }
+`;
 
-    background-color: orange;
-
-    color: #fff;
-
-    cursor: pointer;
+const ButtonContainerStyled = {
+  Button: styled.div`
+    margin-top: 30px;
+    margin: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 215px;
+    button {
+      cursor: pointer;
+      height: 25px;
+      width: 100px;
+      border-radius: 10px;
+      border: none;
+      &:nth-child(1) {
+        background-color: var(--purple);
+        color: var(--white);
+      }
+      &:nth-child(2) {
+        background-color: var(--lightgrey);
+        //   border: 1px solid var(--lightgrey);
+        color: var(--white);
+      }
+      &:hover {
+        opacity: 0.7;
+      }
+    }
   `,
 };
 

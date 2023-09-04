@@ -8,6 +8,7 @@ import proj.pet.auth.domain.jwt.JwtPayload;
 import proj.pet.category.domain.MemberCategoryFilter;
 import proj.pet.category.domain.Species;
 import proj.pet.category.repository.AnimalCategoryRepository;
+import proj.pet.exception.ServiceException;
 import proj.pet.mapper.MemberMapper;
 import proj.pet.member.domain.*;
 import proj.pet.member.dto.MemberProfileChangeRequestDto;
@@ -16,8 +17,10 @@ import proj.pet.member.dto.UserSessionDto;
 import proj.pet.member.repository.MemberRepository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static proj.pet.exception.ExceptionStatus.NOT_ENOUGH_NICKNAME_CHANGE_PERIOD;
 import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
 
 @Service
@@ -101,6 +104,11 @@ public class MemberServiceImpl implements MemberService {
 		Member member = memberRepository.findById(userSessionDto.getMemberId())
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		if (memberProfileChangeRequestDto.getMemberName() != null) {
+			LocalDateTime changeableDate = member.getNicknameUpdatedAt().plusDays(30);
+			if (changeableDate.isAfter(LocalDateTime.now())) {
+				throw new ServiceException(NOT_ENOUGH_NICKNAME_CHANGE_PERIOD,
+						"닉네임 변경은 " + changeableDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + " 이후에 가능합니다.");
+			}
 			member.changeNickname(memberProfileChangeRequestDto.getMemberName(),
 					LocalDateTime.now());
 		}

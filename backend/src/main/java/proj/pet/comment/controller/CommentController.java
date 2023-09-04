@@ -23,11 +23,12 @@ public class CommentController {
 	@GetMapping("/boards/{boardId}")
 	@AuthGuard(level = ANYONE)
 	public CommentResponseDto getCommentsByBoardId(
+			@UserSession UserSessionDto userSessionDto,
 			@PathVariable("boardId") Long boardId,
 			@RequestParam("page") int page,
 			@RequestParam("size") int size) {
 		PageRequest pageRequest = PageRequest.of(page, size);
-		return commentFacadeService.getCommentsByBoardId(boardId, pageRequest);
+		return commentFacadeService.getCommentsByBoardId(userSessionDto, boardId, pageRequest);
 	}
 
 	@PostMapping

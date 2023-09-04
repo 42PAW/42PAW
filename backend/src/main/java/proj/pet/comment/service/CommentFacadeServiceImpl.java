@@ -19,8 +19,8 @@ public class CommentFacadeServiceImpl implements CommentFacadeService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public CommentResponseDto getCommentsByBoardId(Long boardId, PageRequest pageRequest) {
-		return commentQueryService.findCommentsByBoardId(boardId, pageRequest);
+	public CommentResponseDto getCommentsByBoardId(UserSessionDto userSessionDto, Long boardId, PageRequest pageRequest) {
+		return commentQueryService.findCommentsByBoardId(userSessionDto.getMemberId(), boardId, pageRequest);
 	}
 
 	@Transactional

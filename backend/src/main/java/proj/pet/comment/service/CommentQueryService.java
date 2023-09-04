@@ -5,6 +5,6 @@ import proj.pet.comment.dto.CommentResponseDto;
 
 public interface CommentQueryService {
 
-	CommentResponseDto findCommentsByBoardId(Long boardId, PageRequest pageRequest);
+	CommentResponseDto findCommentsByBoardId(Long loginUserId, Long boardId, PageRequest pageRequest);
 
 }

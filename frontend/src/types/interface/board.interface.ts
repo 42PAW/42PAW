@@ -1,3 +1,5 @@
+import { followType } from "../enum/followType.enum";
+
 /**
  * @boardId 게시물의 id
  * @memberName 게시물 작성 유저 id
@@ -31,4 +33,5 @@ export interface IBoardInfo {
   previewCommentUser: string;
   previewComment: string;
   createdAt: string;
+  followType: followType;
 }

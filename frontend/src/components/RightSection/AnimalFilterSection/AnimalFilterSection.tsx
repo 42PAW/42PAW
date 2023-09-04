@@ -28,6 +28,10 @@ const AnimalFilterSection = () => {
   }, []);
 
   const updateAnimalCategory = () => {
+    if (!animalCategory || animalCategory.length === 0) {
+      popToast("카테고리를 선택해주세요.", "N");
+      return;
+    }
     // 로그인 상태 -> api에 실제 데이터 변경 요청
     if (userInfo) {
       axiosUpdateAnimalCategory(animalCategory as AnimalSpecies[]);

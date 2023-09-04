@@ -7,7 +7,7 @@ import proj.pet.member.dto.UserSessionDto;
 
 public interface CommentFacadeService {
 
-	CommentResponseDto getCommentsByBoardId(Long boardId, PageRequest pageRequest);
+	CommentResponseDto getCommentsByBoardId(UserSessionDto userSessionDto, Long boardId, PageRequest pageRequest);
 
 	void createComment(UserSessionDto userSessionDto, CommentRequestDto commentRequestDto);
 

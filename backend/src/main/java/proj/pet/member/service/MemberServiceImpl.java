@@ -1,5 +1,11 @@
 package proj.pet.member.service;
 
+import static proj.pet.exception.ExceptionStatus.NOT_ENOUGH_NICKNAME_CHANGE_PERIOD;
+import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,18 +16,15 @@ import proj.pet.category.domain.Species;
 import proj.pet.category.repository.AnimalCategoryRepository;
 import proj.pet.exception.ServiceException;
 import proj.pet.mapper.MemberMapper;
-import proj.pet.member.domain.*;
+import proj.pet.member.domain.Country;
+import proj.pet.member.domain.Language;
+import proj.pet.member.domain.Member;
+import proj.pet.member.domain.MemberImageManager;
+import proj.pet.member.domain.MemberRole;
 import proj.pet.member.dto.MemberProfileChangeRequestDto;
 import proj.pet.member.dto.MemberProfileChangeResponseDto;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.member.repository.MemberRepository;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
-import static proj.pet.exception.ExceptionStatus.NOT_ENOUGH_NICKNAME_CHANGE_PERIOD;
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
 
 @Service
 @RequiredArgsConstructor
@@ -99,15 +102,17 @@ public class MemberServiceImpl implements MemberService {
 	 * @throws proj.pet.exception.DomainException  변경할 닉네임, 프로필 이미지, 한줄 소개가 null을 포함해 잘못된 값 일 때
 	 */
 	@Override
-	public MemberProfileChangeResponseDto changeMemberProfile(UserSessionDto userSessionDto,
-	                                                          MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
+	public MemberProfileChangeResponseDto changeMemberProfile(
+			UserSessionDto userSessionDto,
+			MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
 		Member member = memberRepository.findById(userSessionDto.getMemberId())
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		if (memberProfileChangeRequestDto.getMemberName() != null) {
 			LocalDateTime changeableDate = member.getNicknameUpdatedAt().plusDays(30);
 			if (changeableDate.isAfter(LocalDateTime.now())) {
 				throw new ServiceException(NOT_ENOUGH_NICKNAME_CHANGE_PERIOD,
-						"닉네임 변경은 " + changeableDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + " 이후에 가능합니다.");
+						"닉네임 변경은 " + changeableDate.format(
+								DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + " 이후에 가능합니다.");
 			}
 			member.changeNickname(memberProfileChangeRequestDto.getMemberName(),
 					LocalDateTime.now());
@@ -117,6 +122,9 @@ public class MemberServiceImpl implements MemberService {
 			String profileImageUrl = memberImageManager.uploadMemberProfileImage(
 					memberProfileChangeRequestDto.getProfileImage());
 			member.changeProfileImageUrl(profileImageUrl);
+		} else if (memberProfileChangeRequestDto.isProfileImageChanged()) {
+			memberImageManager.deleteMemberProfileImage(member.getProfileImageUrl());
+			member.changeProfileImageUrl(null);
 		}
 		if (memberProfileChangeRequestDto.getStatement() != null) {
 			member.changeStatement(memberProfileChangeRequestDto.getStatement());

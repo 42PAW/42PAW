@@ -32,8 +32,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	public Page<Board> getMainViewBoards(PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
 				board.deletedAt.isNull(),
-				board.id.asc(),
-				pageRequest);
+				pageRequest, board.createdAt.desc());
 	}
 
 	/**
@@ -46,8 +45,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	public Page<Board> getHotBoards(PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
 				board.deletedAt.isNull(),
-				board.reactions.size().desc(),
-				pageRequest);
+				pageRequest, board.reactions.size().desc(), board.createdAt.desc());
 	}
 
 	/**
@@ -62,8 +60,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 		return getBoardsWithFetchJoin(
 				board.member.id.eq(memberId)
 						.and(board.deletedAt.isNull()),
-				board.createdAt.desc(),
-				pageRequest);
+				pageRequest, board.createdAt.desc());
 	}
 
 	/**
@@ -108,25 +105,24 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 		return getBoardsWithFetchJoin(
 				board.member.followers.any().id.memberId.eq(memberId)
 						.and(board.deletedAt.isNull()),
-				board.createdAt.desc(),
-				pageRequest);
+				pageRequest, board.createdAt.desc());
 	}
 
 	/**
 	 * predicate와 orderSpecifier 조건을 만족하는 {@link Board} List를 조회한다.
 	 *
-	 * @param predicate      where 조건
-	 * @param orderSpecifier 정렬 조건
-	 * @param pageRequest    페이지네이션
+	 * @param predicate       where 조건
+	 * @param pageRequest     페이지네이션
+	 * @param orderSpecifiers 정렬 조건 가변인수
 	 * @return {@link Board} 페이지네이션 - Page 아님
 	 */
 	private Page<Board> getBoardsWithFetchJoin(Predicate predicate,
-			OrderSpecifier<?> orderSpecifier, PageRequest pageRequest) {
+			PageRequest pageRequest, OrderSpecifier<?>... orderSpecifiers) {
 		List<Board> boards = queryFactory.selectFrom(board)
 				.where(predicate)
 				.offset(pageRequest.getOffset())
 				.limit(pageRequest.getPageSize())
-				.orderBy(board.createdAt.desc(), orderSpecifier)
+				.orderBy(orderSpecifiers)
 				.leftJoin(board.member).fetchJoin()
 				.fetch();
 		long count = queryFactory.selectFrom(board)

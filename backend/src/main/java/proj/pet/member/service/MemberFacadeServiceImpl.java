@@ -49,7 +49,6 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 		memberService.uploadMemberProfileImage(member.getId(),
 				memberCreateRequestDto.getImageData());
 		oauthService.refreshRoleOfServerToken(req, res, LocalDateTime.now());
-		System.out.println("member = " + member.getId());
 	}
 
 	/**

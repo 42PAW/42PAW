@@ -18,7 +18,6 @@ public class BlockQueryServiceImpl implements BlockQueryService {
 
 	@Override
 	public List<Block> getBlockList(Long memberId, Pageable pageable) {
-		System.out.println("memberId = " + memberId + ", pageable = " + pageable);
 		return blockRepository.findAllByMemberId(memberId, pageable).toList();
 	}
 }

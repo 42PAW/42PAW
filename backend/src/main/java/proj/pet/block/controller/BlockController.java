@@ -1,15 +1,7 @@
 package proj.pet.block.controller;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import proj.pet.auth.domain.AuthGuard;
 import proj.pet.auth.domain.AuthLevel;
 import proj.pet.block.dto.BlockRequestDto;
@@ -17,6 +9,8 @@ import proj.pet.block.service.BlockFacadeService;
 import proj.pet.member.domain.UserSession;
 import proj.pet.member.dto.MemberPreviewResponseDto;
 import proj.pet.member.dto.UserSessionDto;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/blocks")
@@ -48,7 +42,6 @@ public class BlockController {
 			@RequestParam("page") int page,
 			@RequestParam("size") int size
 	) {
-		System.out.println(userSessionDto + "\n$$$\n" + page + "\n$$$\n" + size);
 		return blockFacadeService.getMyBlockList(userSessionDto, page, size);
 	}
 }

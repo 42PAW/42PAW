@@ -4,7 +4,6 @@ import ModalLayout from "@/components/modals/ModalLayout";
 import { ModalType } from "@/types/enum/modal.enum";
 import { currentOpenModalState } from "@/recoil/atom";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
-import BoardOption from "@/components/OptionButton/BoardOption";
 import { useQuery } from "@tanstack/react-query";
 import useFetch from "@/hooks/useFetch";
 import { userInfoState } from "@/recoil/atom";
@@ -17,6 +16,7 @@ import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
 import FollowTypeButton from "../../FollowTypeButton";
 import { useQueryClient } from "@tanstack/react-query";
+import MeatballButton from "@/components/MeatballButton";
 
 const ProfileCardModal = () => {
   const queryClient = useQueryClient();
@@ -66,7 +66,7 @@ const ProfileCardModal = () => {
         </LogoStyled>
         <OptionButtonContainerStyled>
           {currentMemberId !== userInfo?.memberId && (
-            <BoardOption
+            <MeatballButton
               memberId={currentMemberId as number}
               memberName={profileData.memberName}
               followStatus={profileData.followType}
@@ -76,6 +76,7 @@ const ProfileCardModal = () => {
                   currentMemberId as number,
                 ]);
               }}
+              component="modal"
             />
           )}
         </OptionButtonContainerStyled>

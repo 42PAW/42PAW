@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useRecoilState, useResetRecoilState } from "recoil";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { styled } from "styled-components";
 import ModalLayout from "@/components/modals//ModalLayout";
 import ReportCategoryOption from "@/components/modals/ReportModal/ReportCategoryOption";
@@ -9,7 +9,10 @@ import { currentOpenModalState } from "@/recoil/atom";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
 import useToaster from "@/hooks/useToaster";
 import { axiosReport } from "@/api/axios/axios.custom";
-import { reportUserInfoState } from "@/recoil/atom";
+import {
+  IMeatballMdoalUtils,
+  meatballModalUtilsState,
+} from "@/components/MeatballButton";
 import { ReportDTO } from "@/types/dto/member.dto";
 import useModal from "@/hooks/useModal";
 
@@ -49,9 +52,17 @@ const reportOptions = [
 ];
 
 const ReportModal: React.FC = () => {
+  const [meatballModalUtils] = useRecoilState<IMeatballMdoalUtils>(
+    meatballModalUtilsState
+  );
   const [content, setContent] = useState<string>("");
-  const [reportUserInfo] = useRecoilState<ReportDTO>(reportUserInfoState);
-  const resetReportUserInfo = useResetRecoilState(reportUserInfoState);
+  const [reportUserInfo, setReportUserInfo] = useState<ReportDTO>({
+    reportedMemberId: null,
+    boardId: null,
+    commentId: null,
+    reason: null,
+    content: "",
+  });
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
@@ -60,6 +71,15 @@ const ReportModal: React.FC = () => {
   );
   const { popToast } = useToaster();
   const { closeModal } = useModal();
+
+  useEffect(() => {
+    setReportUserInfo({
+      ...reportUserInfo,
+      reportedMemberId: meatballModalUtils.memberId,
+      boardId: meatballModalUtils.boardId ?? null,
+      commentId: meatballModalUtils.commentId ?? null,
+    });
+  }, []);
 
   const handleSelectCategory = (category: ReportReason) => {
     setSelectedCategory(category);
@@ -79,7 +99,6 @@ const ReportModal: React.FC = () => {
       reportUserInfo.commentId
     );
     popToast("신고가 접수됐습니다.", "P");
-    resetReportUserInfo();
   };
 
   const handleContent = (e: React.ChangeEvent<HTMLInputElement>) => {

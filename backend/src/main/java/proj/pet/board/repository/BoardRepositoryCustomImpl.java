@@ -3,7 +3,6 @@ package proj.pet.board.repository;
 import static proj.pet.board.domain.QBoard.board;
 import static proj.pet.scrap.domain.QScrap.scrap;
 
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import proj.pet.block.domain.Block;
 import proj.pet.board.domain.Board;
-import proj.pet.category.domain.BoardCategoryFilter;
-import proj.pet.utils.domain.MemberCompositeKey;
 
 /**
  * QueryDSL을 사용하는 BoardRepository의 커스텀 구현체
@@ -35,8 +31,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	@Override
 	public Page<Board> getMainViewBoards(PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
-				EMPTY_PREDICATE,
-				board.createdAt.desc(),
+				board.deletedAt.isNull(),
+				board.id.asc(),
 				pageRequest);
 	}
 
@@ -84,6 +80,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 				.from(scrap)
 				.join(scrap.board, board)
 				.where(scrap.member.id.eq(loginUserId)
+						.and(scrap.member.deletedAt.isNull())
 						.and(board.deletedAt.isNull()))
 				.orderBy(board.createdAt.desc())
 				.offset(pageRequest.getOffset())
@@ -92,8 +89,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 		long count = queryFactory
 				.select(board.count())
 				.from(scrap)
-				.join(scrap.board, board)
 				.where(scrap.member.id.eq(loginUserId)
+						.and(scrap.member.deletedAt.isNull())
 						.and(board.deletedAt.isNull()))
 				.fetchFirst();
 		return new PageImpl<>(query, pageRequest, count);
@@ -127,16 +124,11 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 			OrderSpecifier<?> orderSpecifier, PageRequest pageRequest) {
 		List<Board> boards = queryFactory.selectFrom(board)
 				.where(predicate)
-				.orderBy(orderSpecifier)
-				.orderBy(board.createdAt.desc())
-				.join(board.member).fetchJoin()
-				.join(board.categoryFilters)
-//				.join(board.comments).fetchJoin()
-//				.join(board.reactions)
-//				.join(board.mediaList).fetchJoin()
-//				.join(board.scraps).fetchJoin()
 				.offset(pageRequest.getOffset())
 				.limit(pageRequest.getPageSize())
+				.orderBy(orderSpecifier)
+				.orderBy(board.createdAt.desc())
+				.leftJoin(board.member).fetchJoin()
 				.fetch();
 		long count = queryFactory.selectFrom(board)
 				.where(predicate)
@@ -150,24 +142,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 		return queryFactory.select(board.count())
 				.from(board)
 				.where(board.member.id.eq(memberId)
+						.and(board.member.isNull())
 						.and(board.deletedAt.isNull()))
 				.fetchFirst();
-	}
-
-	private Predicate getPredicateWithBlockCategoryFiltering(
-			List<Block> blocks,
-			List<BoardCategoryFilter> categories) {
-		BooleanBuilder predicate = new BooleanBuilder();
-		predicate.and(board.deletedAt.isNull());
-		for (Block block : blocks) {
-			MemberCompositeKey id = block.getId();
-			if (id != null) {
-				predicate.and(board.member.id.ne(id.getTargetMemberId()));
-			}
-		}
-		for (BoardCategoryFilter category : categories) {
-			predicate.and(board.categoryFilters.contains(category));
-		}
-		return predicate;
 	}
 }

@@ -44,8 +44,9 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 */
 	private List<BoardInfoDto> getBoardInfoDtos(Long loginUserId, Page<Board> boardPages,
 			List<Block> blocks, List<AnimalCategory> animalCategories) {
-		Streamable<Board> filtered = boardPages.filter(board -> blocks.stream().noneMatch(
-				block -> block.getTo().getId().equals(board.getMember().getId())));
+		List<Long> blockIds = blocks.stream().map(block -> block.getTo().getId()).toList();
+		Streamable<Board> filtered = boardPages.filter(board -> !blockIds.contains(
+				board.getMember().getId()));
 		if (!animalCategories.isEmpty()) {
 			filtered = filtered.filter(board ->
 					animalCategories.stream().anyMatch(animalCategory ->

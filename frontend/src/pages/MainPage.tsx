@@ -14,11 +14,13 @@ import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation"
 import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTemplate";
 import useDebounce from "@/hooks/useDebounce";
 import { useRef } from "react";
+import { boardsLengthState } from "@/recoil/atom";
 
 const MainPage = () => {
   //useInview의 ref값을 참조하는 요소에 대한 root 참조값
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(true);
+  const [boardsLength] = useRecoilState<number>(boardsLengthState);
   const [boardCategory, setBoardCategory] =
     useRecoilState<Board>(boardCategoryState);
   const { fetchBoards } = useFetch();
@@ -26,7 +28,7 @@ const MainPage = () => {
   const [ref, inView] = useInView({
     triggerOnce: false,
     root: rootRef.current,
-    rootMargin: "0px 0px 2500px 0px", //ref를 참조하는 요소를 root 기준 margin bottom을 줌. 2500px이면 대략 Board 5-6개의 height
+    rootMargin: `0px 0px ${boardsLength * 300}px 0px`, //ref를 참조하는 요소를 root 기준 margin bottom을 줌.
   });
   const { debounce } = useDebounce();
   const { data, fetchNextPage, hasNextPage, isError } = useInfiniteQuery(

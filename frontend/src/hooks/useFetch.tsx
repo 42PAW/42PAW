@@ -1,4 +1,4 @@
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState, useResetRecoilState } from "recoil";
 import {
   boardCategoryState,
   currentBoardIdState,
@@ -24,8 +24,11 @@ import {
 } from "@/api/axios/axios.custom";
 import { buttonToggledState } from "@/components/BoardSortToggle";
 import useTranslator from "@/hooks/useTranslator";
+import { boardsLengthState } from "@/recoil/atom";
 
 const useFetch = (memberId?: number | null) => {
+  const setBoardsLength = useSetRecoilState<number>(boardsLengthState);
+  const resetBoardsLength = useResetRecoilState(boardsLengthState);
   const [boardCategory, setBoardCategory] =
     useRecoilState<Board>(boardCategoryState);
   const setButtonToggled = useSetRecoilState(buttonToggledState);
@@ -36,18 +39,24 @@ const useFetch = (memberId?: number | null) => {
   const { translator } = useTranslator();
 
   const fetchBoards = async (page?: number) => {
+    resetBoardsLength();
     try {
       if (!page) page = 0;
       if (boardCategory === Board.DEFAULT) {
-        const response = await axiosGetBoards(10, page);
+        const response = await axiosGetBoards(20, page);
+        setBoardsLength(response.result.length);
+        console.log(response.result.length);
+        console.log("fetched");
         return response.result;
       }
       if (boardCategory === Board.TRENDING) {
-        const response = await axiosGetTrendingBoards(10, page);
+        const response = await axiosGetTrendingBoards(20, page);
+        setBoardsLength(response.result.length);
         return response.result;
       }
       if (boardCategory === Board.FOLLOWING) {
-        const response = await axiosGetFollowingBoards(10, page);
+        const response = await axiosGetFollowingBoards(20, page);
+        setBoardsLength(response.result.length);
         return response.result;
       }
       if (boardCategory === Board.MINE) {

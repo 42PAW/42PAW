@@ -150,6 +150,7 @@ export const currentUploadIndexState = atom<number>({
   key: "currentUploadIndex",
   default: 0,
 });
+
 export const myProfileInfoState = atom<IchangeProfileInfo>({
   key: "myProfileInfo",
   default: {
@@ -158,4 +159,9 @@ export const myProfileInfoState = atom<IchangeProfileInfo>({
     statement: "",
     nicknameUpdatedAt: "",
   },
+});
+
+export const boardsLengthState = atom<number>({
+  key: "boardsLength",
+  default: 10000,
 });

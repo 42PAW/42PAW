@@ -54,7 +54,6 @@ export const axiosChangeMyProfile = async ({
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log("success");
     return response;
   } catch (error) {
     throw error;

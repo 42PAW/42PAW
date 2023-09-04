@@ -24,16 +24,17 @@ const MyProfileBoardsPage = () => {
     useRecoilState<Board>(boardCategoryState);
   const [ref, inView] = useInView();
   const { fetchBoards } = useFetch();
-  const { data, fetchNextPage, hasNextPage, isError } = useInfiniteQuery(
-    ["boards", boardCategory],
-    ({ pageParam = 0 }) => fetchBoards(pageParam),
-    {
-      getNextPageParam: (lastPage, allPages) => {
-        if (!lastPage || lastPage.length === 0) return undefined;
-        return allPages.length;
-      },
-    }
-  );
+  const { data, fetchNextPage, hasNextPage, isError, isLoading } =
+    useInfiniteQuery(
+      ["boards", boardCategory],
+      ({ pageParam = 0 }) => fetchBoards(pageParam),
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          if (!lastPage || lastPage.length === 0) return undefined;
+          return allPages.length;
+        },
+      }
+    );
   const [currentProfileBoardId] = useRecoilState(currentProfileBoardIdState);
 
   const isBoardPage: boolean = location.pathname === "/my-profile/boards";
@@ -52,7 +53,7 @@ const MyProfileBoardsPage = () => {
     }
   }, [inView, hasNextPage]);
 
-  if (loading) {
+  if (loading || isLoading) {
     return (
       <WrapperStyled $boardExists={true}>
         <SkeletonBoardTemplate />

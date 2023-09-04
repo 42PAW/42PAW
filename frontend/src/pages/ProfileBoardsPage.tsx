@@ -14,7 +14,6 @@ import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTempla
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import { useNavigate, useParams } from "react-router-dom";
 import useDebounce from "@/hooks/useDebounce";
-import { followType } from "@/types/enum/followType.enum";
 
 const ProfileBoardsPage = () => {
   const { debounce } = useDebounce();
@@ -25,16 +24,17 @@ const ProfileBoardsPage = () => {
   const [ref, inView] = useInView();
   const { memberId } = useParams<{ memberId: string }>();
   const { fetchBoards } = useFetch(Number(memberId));
-  const { data, fetchNextPage, hasNextPage, isError } = useInfiniteQuery(
-    ["boards", boardCategory],
-    ({ pageParam = 0 }) => fetchBoards(pageParam),
-    {
-      getNextPageParam: (lastPage, allPages) => {
-        if (!lastPage || lastPage.length === 0) return undefined;
-        return allPages.length;
-      },
-    }
-  );
+  const { data, fetchNextPage, hasNextPage, isError, isLoading } =
+    useInfiniteQuery(
+      ["boards", boardCategory],
+      ({ pageParam = 0 }) => fetchBoards(pageParam),
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          if (!lastPage || lastPage.length === 0) return undefined;
+          return allPages.length;
+        },
+      }
+    );
   const [currentProfileBoardId] = useRecoilState(currentProfileBoardIdState);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const ProfileBoardsPage = () => {
     }
   }, [inView, hasNextPage]);
 
-  if (loading) {
+  if (loading || isLoading) {
     return (
       <WrapperStyled $boardExists={true}>
         <SkeletonBoardTemplate />

@@ -255,7 +255,6 @@ const EditImageStyled = styled.div`
     cursor: pointer;
     margin-right: 15px;
     margin-left: 15px;
-
     &:hover {
       color: var(--transparent2);
       font-weight: 500;
@@ -292,27 +291,6 @@ const EditInfoStyled = styled.div`
     }
   }
 `;
-//   border-radius: 100%;
-//   width: 100px;
-//   margin-top: 20px;
-//
-`;
-// const CaptionStyled = styled.div`;
-//   display: flex; /* Use flexbox */
-//   align-items: center; /* Vertically center the text */
-//   justify-content: center; /* Horizontally center the text */
-//   height: 50px;
-//   width: 180px;
-//   border: 0.5px dashed;
-//   border-radius: 5px;
-//   background-color: #f1f1f1;
-//   margin-top: 25px;
-//   color: var(--grey, #000000);
-//   font-size: 1.4rem;
-//   text-align: center;
-//   word-break: keep-all;
-//   padding-inline: 10px;
-// `;
 
 const ButtonContainerStyled = {
   Button: styled.div`

@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import BoardTemplate from "@/components/Board/BoardTemplate";
 import { boardCategoryState } from "@/recoil/atom";
@@ -15,11 +15,13 @@ import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTempla
 import useDebounce from "@/hooks/useDebounce";
 import { useRef } from "react";
 import { boardsLengthState } from "@/recoil/atom";
+import { buttonToggledState } from "@/components/BoardSortToggle";
 
 const MainPage = () => {
   //useInview의 ref값을 참조하는 요소에 대한 root 참조값
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(true);
+  const setButtonToggled = useSetRecoilState(buttonToggledState);
   const [boardsLength] = useRecoilState<number>(boardsLengthState);
   const [boardCategory, setBoardCategory] =
     useRecoilState<Board>(boardCategoryState);
@@ -45,6 +47,7 @@ const MainPage = () => {
 
   useEffect(() => {
     setBoardCategory(Board.DEFAULT);
+    setButtonToggled(0);
   }, []);
 
   useEffect(() => {

@@ -1,9 +1,6 @@
 package proj.pet.mapper;
 
 
-import static org.mapstruct.factory.Mappers.getMapper;
-
-import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -12,13 +9,18 @@ import proj.pet.board.domain.Board;
 import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.category.domain.Species;
+import proj.pet.follow.domain.FollowType;
 import proj.pet.member.domain.Member;
+
+import java.util.List;
+
+import static org.mapstruct.factory.Mappers.getMapper;
 
 @Mapper(componentModel = "spring")
 @Component
 public interface BoardMapper {
 
-	final static String TO_BOARD_INFO_DTO = "toBoardInfoDto";
+	String TO_BOARD_INFO_DTO = "toBoardInfoDto";
 	BoardMapper INSTANCE = getMapper(BoardMapper.class);
 
 	@Named(TO_BOARD_INFO_DTO)
@@ -30,7 +32,7 @@ public interface BoardMapper {
 	BoardInfoDto toBoardInfoDto(
 			Board board, Member member,
 			List<String> images, List<Species> categories,
-			boolean scrapped, boolean reacted,
+			boolean scrapped, boolean reacted, FollowType followType,
 			int reactionCount, int commentCount,
 			String previewCommentUser, String previewComment);
 

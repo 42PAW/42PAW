@@ -9,6 +9,8 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import proj.pet.block.domain.Block;
 import proj.pet.board.domain.Board;
@@ -31,12 +33,9 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @return 생성시각 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
 	 */
 	@Override
-	public List<Board> getMainViewBoards(
-			List<Block> blocks,
-			List<BoardCategoryFilter> categories,
-			PageRequest pageRequest) {
+	public Page<Board> getMainViewBoards(PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
-				getPredicateWithBlockCategoryFiltering(blocks, categories),
+				EMPTY_PREDICATE,
 				board.createdAt.desc(),
 				pageRequest);
 	}
@@ -48,12 +47,9 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @return 반응 수 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
 	 */
 	@Override
-	public List<Board> getHotBoards(
-			List<Block> blocks,
-			List<BoardCategoryFilter> categories,
-			PageRequest pageRequest) {
+	public Page<Board> getHotBoards(PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
-				getPredicateWithBlockCategoryFiltering(blocks, categories),
+				EMPTY_PREDICATE,
 				board.reactions.size().desc(),
 				pageRequest);
 	}
@@ -66,7 +62,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @return 해당 멤버의 생성시각 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
 	 */
 	@Override
-	public List<Board> getMemberBoards(Long memberId, PageRequest pageRequest) {
+	public Page<Board> getMemberBoards(Long memberId, PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
 				board.member.id.eq(memberId)
 						.and(board.deletedAt.isNull()),
@@ -103,7 +99,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @return 해당 멤버의 생성시각 기준으로 정렬된 {@link Board} 페이지네이션 - Page 아님
 	 */
 	@Override
-	public List<Board> getFollowingsBoards(Long memberId, PageRequest pageRequest) {
+	public Page<Board> getFollowingsBoards(Long memberId, PageRequest pageRequest) {
 		return getBoardsWithFetchJoin(
 				board.member.followers.any().id.memberId.eq(memberId)
 						.and(board.deletedAt.isNull()),
@@ -119,13 +115,14 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 * @param pageRequest    페이지네이션
 	 * @return {@link Board} 페이지네이션 - Page 아님
 	 */
-	private List<Board> getBoardsWithFetchJoin(Predicate predicate,
+	private Page<Board> getBoardsWithFetchJoin(Predicate predicate,
 			OrderSpecifier<?> orderSpecifier, PageRequest pageRequest) {
-		return queryFactory.selectFrom(board)
+		List<Board> boards = queryFactory.selectFrom(board)
 				.where(predicate)
 				.orderBy(orderSpecifier)
 				.orderBy(board.createdAt.desc())
 				.join(board.member).fetchJoin()
+				.join(board.categoryFilters)
 //				.join(board.comments).fetchJoin()
 //				.join(board.reactions)
 //				.join(board.mediaList).fetchJoin()
@@ -133,6 +130,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 				.offset(pageRequest.getOffset())
 				.limit(pageRequest.getPageSize())
 				.fetch();
+		long count = queryFactory.selectFrom(board)
+				.where(predicate)
+				.stream().count();
+		return new PageImpl<>(boards, pageRequest, count);
 	}
 	//TODO : https://jojoldu.tistory.com/457 / N+1을 피하는 방법 찾아보기
 

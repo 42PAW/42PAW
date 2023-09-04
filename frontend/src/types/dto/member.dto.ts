@@ -16,12 +16,6 @@ export interface MemberProfileChangeRequestDto {
   statement: string;
 }
 
-export interface MemberProfileChangeResponseDto {
-  memberName: string;
-  imageData: string;
-  statement: string;
-}
-
 export interface ReportDTO {
   reportedMemberId: number | null;
   boardId: number | null;

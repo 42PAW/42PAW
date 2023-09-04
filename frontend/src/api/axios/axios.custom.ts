@@ -45,17 +45,15 @@ export const axiosChangeMyProfile = async ({
   statement,
 }: MemberProfileChangeRequestDto): Promise<any> => {
   try {
-    console.log("axiosChangeMyProfile, " + memberName);
     const formData = new FormData();
     if (memberName) formData.append("memberName", memberName);
-    if (imageData) formData.append("imageImage", imageData);
+    if (imageData) formData.append("profileImage", imageData);
     if (statement) formData.append("statement", statement);
     const response = await instance.post(axiosChangeMyProfileURL, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log("axiosChangeMyProfile2, " + memberName);
 
     return response;
   } catch (error) {

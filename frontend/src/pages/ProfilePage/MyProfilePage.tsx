@@ -7,8 +7,8 @@ import { Board } from "@/types/enum/board.category.enum";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { boardCategoryState, myProfileInfoState } from "@/recoil/atom";
 import { IBoardInfo } from "@/types/interface/board.interface";
-import { MemberProfileChangeResponseDto } from "@/types/dto/member.dto";
 import { useNavigate } from "react-router-dom";
+import { IchangeProfileInfo } from "@/types/interface/profile.interface";
 
 const MyProfilePage = () => {
   const { fetchProfile } = useFetch();
@@ -20,8 +20,7 @@ const MyProfilePage = () => {
   const { fetchBoards } = useFetch();
   const [boardCategory, setBoardCategory] =
     useRecoilState<Board>(boardCategoryState);
-  const setMyInfo =
-    useSetRecoilState<MemberProfileChangeResponseDto>(myProfileInfoState);
+  const setMyInfo = useSetRecoilState<IchangeProfileInfo>(myProfileInfoState);
 
   const handleTabState = (newTabState: Board) => {
     setBoardCategory(newTabState);
@@ -38,8 +37,8 @@ const MyProfilePage = () => {
         memberName: profileQuery.data.memberName,
         imageData: profileQuery.data.profileImageUrl,
         statement: profileQuery.data.statement,
+        nicknameUpdatedAt: profileQuery.data.nicknameUpdatedAt,
       });
-      console.log("imageData: ", profileQuery.data.imageData);
     }
   }, [profileQuery.data]); // profileQuery.data가 변경될 때마다 실행
 

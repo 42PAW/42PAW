@@ -5,12 +5,9 @@ import { BoardsInfoDTO, CommentInfoDTO } from "@/types/dto/board.dto";
 import { Board } from "@/types/enum/board.category.enum";
 import { IBanUserInfo } from "@/types/interface/user.interface";
 import { IToastInfo } from "@/types/interface/toast.interface";
+import { IchangeProfileInfo } from "@/types/interface/profile.interface";
 import Translator from "@/languages/Translator";
-import {
-  UserInfoDTO,
-  ReportDTO,
-  MemberProfileChangeResponseDto,
-} from "@/types/dto/member.dto";
+import { UserInfoDTO, ReportDTO } from "@/types/dto/member.dto";
 import { IDeleteInfo } from "@/types/interface/option.interface";
 
 export const userInfoState = atom<UserInfoDTO | null>({
@@ -163,11 +160,12 @@ export const currentUploadIndexState = atom<number>({
   key: "currentUploadIndex",
   default: 0,
 });
-export const myProfileInfoState = atom<MemberProfileChangeResponseDto>({
+export const myProfileInfoState = atom<IchangeProfileInfo>({
   key: "myProfileInfo",
   default: {
     memberName: "",
     imageData: "",
     statement: "",
+    nicknameUpdatedAt: "",
   },
 });

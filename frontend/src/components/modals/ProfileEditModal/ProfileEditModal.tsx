@@ -5,20 +5,28 @@ import { currentOpenModalState, myProfileInfoState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 import useModal from "../../../hooks/useModal";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
-import { useMutation } from "@tanstack/react-query";
+import { IchangeProfileInfo } from "@/types/interface/profile.interface";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosChangeMyProfile } from "@/api/axios/axios.custom";
 import { ChangeEvent, useState } from "react";
-import {
-  MemberProfileChangeRequestDto,
-  MemberProfileChangeResponseDto,
-} from "@/types/dto/member.dto";
+import { MemberProfileChangeRequestDto } from "@/types/dto/member.dto";
+import useToaster from "@/hooks/useToaster";
+import useNicknameValidation from "@/hooks/useNicknameValidation";
+import useDebounce from "@/hooks/useDebounce";
+import useFetch from "@/hooks/useFetch";
 
 const ProfileEditModal = () => {
+  const queryClient = useQueryClient();
   const [previousProfileInfo] =
-    useRecoilState<MemberProfileChangeResponseDto>(myProfileInfoState);
+    useRecoilState<IchangeProfileInfo>(myProfileInfoState);
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
+  const [isWrong, setIsWrong] = useState<boolean>(false);
+  const { popToast } = useToaster();
+  const { nicknameValidation } = useNicknameValidation();
+  const { debounce } = useDebounce();
+
   const { closeModal } = useModal();
   const [profileInfo, setProfileInfo] = useState<MemberProfileChangeRequestDto>(
     {
@@ -27,13 +35,38 @@ const ProfileEditModal = () => {
       statement: previousProfileInfo?.statement!,
     }
   );
+  const { fetchMyInfo } = useFetch();
+
   const editProfileMutation = useMutation(
     (profileInfo: MemberProfileChangeRequestDto) =>
-      axiosChangeMyProfile(profileInfo)
+      axiosChangeMyProfile(profileInfo),
+    {
+      onSuccess: () => {
+        // 캐시가 있는 모든 쿼리 무효화
+        queryClient.invalidateQueries(["myProfile"]);
+        fetchMyInfo();
+      },
+    }
   );
-  const onChangeProfileInfo = () => {
-    console.log(profileInfo);
+
+  // submitProfileInfo
+  const onChangeProfileInfo = async () => {
+    if (isWrong === true) {
+      popToast("잠시 후에 다시 시도해주세요.", "N");
+      return;
+    }
+    if (profileInfo.memberName !== previousProfileInfo?.memberName) {
+      const isValid = await nicknameValidation(profileInfo.memberName);
+      if (!isValid) {
+        setIsWrong(true);
+        debounce("nickname", () => setIsWrong(false), 2000);
+        return;
+      }
+    }
+    console.log("profileInfo: " + profileInfo);
     editProfileMutation.mutate(profileInfo);
+    popToast("성공적으로 수정하였습니다.", "P");
+    closeModal(ModalType.PROFILEEDIT);
   };
   // img wepb 변환
   const [imagePreview, setImagePreview] = useState<string>(
@@ -62,6 +95,19 @@ const ProfileEditModal = () => {
   };
   // img wepb 변환
 
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length > 10) {
+      e.target.value = e.target.value.slice(0, 10);
+    }
+
+    setProfileInfo((profileInfo) => {
+      return {
+        ...profileInfo,
+        memberName: e.target.value,
+      };
+    });
+  };
+
   return (
     <ModalLayout
       modalName={ModalType.PROFILEEDIT}
@@ -77,16 +123,15 @@ const ProfileEditModal = () => {
                 </td>
                 <td>
                   <input
+                    placeholder="최대 10자 이내"
+                    name="name"
                     type="text"
                     value={profileInfo.memberName}
-                    onChange={(e) =>
-                      setProfileInfo((profileInfo) => {
-                        return {
-                          ...profileInfo,
-                          memberName: e.target.value,
-                        };
-                      })
-                    }
+                    onChange={(e) => {
+                      handleNameChange(e);
+                    }}
+                    minLength={3}
+                    maxLength={10}
                   />
                 </td>
               </tr>
@@ -113,14 +158,17 @@ const ProfileEditModal = () => {
                   placeholder="최대 30자 이내" // 국가에 따라 언어 변경
                   value={profileInfo.statement}
                   maxLength={30}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    if (e.target.value.length > 30) {
+                      e.target.value = e.target.value.slice(0, 30);
+                    }
                     setProfileInfo((profileInfo) => {
                       return {
                         ...profileInfo,
                         statement: e.target.value,
                       };
-                    })
-                  }
+                    });
+                  }}
                 />
               </td>
             </tr>

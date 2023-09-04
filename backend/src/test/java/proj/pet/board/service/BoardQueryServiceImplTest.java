@@ -1,6 +1,11 @@
 package proj.pet.board.service;
 
-import org.junit.jupiter.api.Disabled;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,20 +18,13 @@ import proj.pet.board.domain.Board;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.category.domain.MemberCategoryFilter;
 import proj.pet.category.repository.MemberCategoryFilterRepository;
+import proj.pet.follow.repository.FollowRepository;
 import proj.pet.mapper.BoardMapper;
 import proj.pet.member.domain.Member;
 import proj.pet.testutil.test.UnitTest;
 import proj.pet.testutil.testdouble.board.TestBoard;
 import proj.pet.testutil.testdouble.member.TestMember;
 
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-
-@Disabled("TODO: 추후 변경")
 public class BoardQueryServiceImplTest extends UnitTest {
 
 	private static final Long IGNORE_ID = 999L;
@@ -40,6 +38,8 @@ public class BoardQueryServiceImplTest extends UnitTest {
 	private BlockRepository blockRepository;
 	@Mock
 	private MemberCategoryFilterRepository memberCategoryFilterRepository;
+	@Mock
+	private FollowRepository followRepository;
 
 	@DisplayName("일반 게시글을 매핑해서 컨트롤러에게 전달한다.")
 	@Test
@@ -141,18 +141,20 @@ public class BoardQueryServiceImplTest extends UnitTest {
 	@DisplayName("팔로잉한 멤버의 게시물을 매핑해서 컨트롤러에게 전달한다.")
 	@Test
 	void getFollowingsBoards() {
-		Member follwing = TestMember.builder().build().asMockEntity(IGNORE_ID);
+		Member following = TestMember.builder().build().asMockEntity(IGNORE_ID);
 		Member loginUser = TestMember.builder().build().asMockEntity(IGNORE_ID);
 		Page<Board> boards = new PageImpl<>(List.of(
 				TestBoard.builder()
-						.member(follwing)
+						.member(following)
 						.build().asMockEntity(IGNORE_ID),
 				TestBoard.builder()
-						.member(follwing)
+						.member(following)
 						.build().asMockEntity(IGNORE_ID)));
 		PageRequest pageRequest = PageRequest.of(0, 10);
-		given(boardRepository.getFollowingsBoards(loginUser.getId(), pageRequest)).willReturn(
-				boards);
+		given(boardRepository.getFollowingsBoards(loginUser.getId(), pageRequest))
+				.willReturn(boards);
+		given(followRepository.existsByFromIdAndToId(loginUser.getId(),
+				following.getId())).willReturn(true);
 
 		//when
 		boardQueryService.getFollowingsBoards(loginUser.getId(), pageRequest);

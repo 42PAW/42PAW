@@ -27,6 +27,12 @@ public class TestMemberCategoryFilter implements TestEntity<MemberCategoryFilter
 				.toList();
 	}
 
+	public static List<MemberCategoryFilter> ofMany(Member member, List<AnimalCategory> categories) {
+		return categories.stream()
+				.map(category -> MemberCategoryFilter.of(member, category))
+				.toList();
+	}
+
 	@Override public MemberCategoryFilter asEntity() {
 		return MemberCategoryFilter.of(
 				member,

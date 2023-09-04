@@ -1,23 +1,8 @@
 package proj.pet.board.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static proj.pet.testutil.testdouble.board.TestBoardMedia.DEFAULT_MEDIA_URL;
-
 import com.amazonaws.services.s3.AmazonS3;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -43,10 +28,23 @@ import proj.pet.testutil.testdouble.board.TestBoard;
 import proj.pet.testutil.testdouble.board.TestBoardMedia;
 import proj.pet.testutil.testdouble.category.TestAnimalCategory;
 import proj.pet.testutil.testdouble.category.TestBoardCategoryFilter;
+import proj.pet.testutil.testdouble.category.TestMemberCategoryFilter;
 import proj.pet.testutil.testdouble.member.TestMember;
 import proj.pet.testutil.testdouble.reaction.TestReaction;
 
-@Disabled
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static proj.pet.testutil.testdouble.board.TestBoardMedia.DEFAULT_MEDIA_URL;
+
 class BoardControllerTest extends E2ETest {
 
 	/*------------------------------UTIL------------------------------*/
@@ -96,7 +94,9 @@ class BoardControllerTest extends E2ETest {
 		@DisplayName("가입한 사용자가 좋아요, 스크랩 한 게시글 목록을 조회한다.")
 		void getMainViewBoards() throws Exception {
 			// given
-			persistHelper.persist(author, loginUser);
+
+			persistHelper.persist(author, loginUser)
+					.and().persist(TestMemberCategoryFilter.ofMany(loginUser, animalCategories));
 			Board board1 = TestBoard.builder().member(author)
 					.build().asEntity();
 			Board board2 = TestBoard.builder().member(author)
@@ -112,7 +112,10 @@ class BoardControllerTest extends E2ETest {
 							TestBoardCategoryFilter.ofMany(
 									board1,
 									animalCategories.get(0),
-									animalCategories.get(1)))
+									animalCategories.get(1)),
+							TestBoardCategoryFilter.ofMany(
+									board2,
+									animalCategories.get(0)))
 					.and().persist(
 							Reaction.of(board1, loginUser, ReactionType.LIKE, now),
 							Scrap.of(loginUser, board2, now))
@@ -149,7 +152,16 @@ class BoardControllerTest extends E2ETest {
 					.build().asEntity();
 			Board board2 = TestBoard.builder().member(author)
 					.build().asEntity();
-			persistHelper.persist(board1, board2);
+			persistHelper.persist(board1, board2)
+					.and().persist(
+							TestBoardCategoryFilter.ofMany(
+									board1,
+									animalCategories.get(0),
+									animalCategories.get(1)),
+							TestBoardCategoryFilter.ofMany(
+									board2,
+									animalCategories.get(0)))
+					.flushAndClear();
 
 			MockHttpServletRequestBuilder req = get(PATH)
 					.param("page", "0")
@@ -187,7 +199,8 @@ class BoardControllerTest extends E2ETest {
 		@DisplayName("사용자는 인기 게시글을 조회할 수 있다. 좋아요 순, 그리고 최신 순으로 정렬된다.")
 		void getHotBoards() throws Exception {
 			// given
-			persistHelper.persist(author, loginUser, randomMember1, randomMember2, randomMember3);
+			persistHelper.persist(author, loginUser, randomMember1, randomMember2, randomMember3)
+					.and().persist(TestMemberCategoryFilter.ofMany(loginUser, animalCategories));
 			String notHotContent = "this is not hot";
 			Board board1 = TestBoard.asDefaultEntity(author);
 			Board board2 = TestBoard.asDefaultEntity(author);
@@ -204,6 +217,13 @@ class BoardControllerTest extends E2ETest {
 					.content(notHotContent)
 					.build().asEntity();
 			persistHelper.persist(board1, board2, board3, board4, notHotBoard, board5)
+					.and().persist(
+							TestBoardCategoryFilter.ofMany(board1, animalCategories.get(0)),
+							TestBoardCategoryFilter.ofMany(board2, animalCategories.get(0)),
+							TestBoardCategoryFilter.ofMany(board3, animalCategories.get(0)),
+							TestBoardCategoryFilter.ofMany(board4, animalCategories.get(0)),
+							TestBoardCategoryFilter.ofMany(board5, animalCategories.get(0)),
+							TestBoardCategoryFilter.ofMany(notHotBoard, animalCategories.get(0)))
 					.and().persist(
 							TestReaction.ofMany(board1, ReactionType.LIKE, now,
 									randomMember1, randomMember2, randomMember3),
@@ -227,10 +247,12 @@ class BoardControllerTest extends E2ETest {
 			mockMvc.perform(req)
 					.andDo(print())
 					.andExpect(status().isOk())
-					.andExpect(jsonPath("totalLength").value(5))
+					.andExpect(jsonPath("totalLength").value(6))
 					.andExpect(jsonPath("result.[*].boardId").value(Matchers.contains(
-							board1.getId().intValue(), board2.getId().intValue(),
-							board5.getId().intValue(), board4.getId().intValue(),
+							board1.getId().intValue(),
+							board2.getId().intValue(),
+							board5.getId().intValue(),
+							board4.getId().intValue(),
 							board3.getId().intValue())))
 					.andExpect(jsonPath("result.[*].content").value(
 							Matchers.not(Matchers.hasItem(notHotContent))))

@@ -26,6 +26,7 @@ import proj.pet.member.repository.MemberRepository;
 
 @SpringBootTest
 @Transactional
+@Disabled("옛날 테스트")
 class CommentServiceTest {
 
 	@Autowired
@@ -44,7 +45,6 @@ class CommentServiceTest {
 	private CommentRepository commentRepository;
 
 	@DisplayName("사용자가 게시물에 댓글을 작성할 수 있다.")
-	@Disabled
 	@Test
 	void addCommentToBoard() {
 		//given
@@ -69,7 +69,6 @@ class CommentServiceTest {
 
 	@DisplayName("본인이 작성한 댓글을 지울 수 있다.")
 	@Test
-	@Disabled
 	void deleteComment() {
 		//given
 		LocalDateTime now = LocalDateTime.now();

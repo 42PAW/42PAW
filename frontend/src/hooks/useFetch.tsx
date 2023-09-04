@@ -43,17 +43,17 @@ const useFetch = (memberId?: number | null) => {
     try {
       if (!page) page = 0;
       if (boardCategory === Board.DEFAULT) {
-        const response = await axiosGetBoards(20, page);
+        const response = await axiosGetBoards(10, page);
         setBoardsLength(response.result.length);
         return response.result;
       }
       if (boardCategory === Board.TRENDING) {
-        const response = await axiosGetTrendingBoards(20, page);
+        const response = await axiosGetTrendingBoards(10, page);
         setBoardsLength(response.result.length);
         return response.result;
       }
       if (boardCategory === Board.FOLLOWING) {
-        const response = await axiosGetFollowingBoards(20, page);
+        const response = await axiosGetFollowingBoards(10, page);
         setBoardsLength(response.result.length);
         return response.result;
       }

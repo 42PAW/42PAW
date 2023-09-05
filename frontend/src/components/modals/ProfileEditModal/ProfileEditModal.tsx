@@ -240,12 +240,12 @@ const ProfileEditModal = () => {
               onKeyDown={handleEnterKey}
             />
           </EditInfoStyled>
-          <ButtonContainerStyled.Button>
+          <ButtonContainerStyled>
             <button onClick={onChangeProfileInfo}>완료</button>
             <button onClick={() => closeModal(ModalType.PROFILEEDIT)}>
               취소
             </button>
-          </ButtonContainerStyled.Button>
+          </ButtonContainerStyled>
         </MainAreaStyled>
       </WrapperStyled>
     </ModalLayout>
@@ -286,7 +286,7 @@ const MainAreaStyled = styled.div`
   flex-direction: column;
   align-items: center;
   bottom: none;
-  height: 450px;
+  height: 480px;
   width: 600px;
   background: linear-gradient(
     228deg,
@@ -319,8 +319,8 @@ const EditInfoStyled = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-top: 15px;
+  // margin-bottom: 10px;
   span {
     margin-right: 10px;
     font-size: 1.2rem;
@@ -345,34 +345,31 @@ const EditInfoStyled = styled.div`
   }
 `;
 
-const ButtonContainerStyled = {
-  Button: styled.div`
-    margin-top: 30px;
-    margin: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 215px;
-    button {
-      cursor: pointer;
-      height: 25px;
-      width: 100px;
-      border-radius: 10px;
-      border: none;
-      &:nth-child(1) {
-        background-color: var(--purple);
-        color: var(--white);
-      }
-      &:nth-child(2) {
-        background-color: var(--lightgrey);
-        //   border: 1px solid var(--lightgrey);
-        color: var(--white);
-      }
-      &:hover {
-        opacity: 0.7;
-      }
+const ButtonContainerStyled = styled.div`
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 215px;
+  button {
+    cursor: pointer;
+    height: 33px;
+    width: 90px;
+    border-radius: 10px;
+    border: 1px solid var(--white);
+    &:nth-child(1) {
+      background-color: transparent;
+      color: var(--white);
     }
-  `,
-};
+    &:nth-child(2) {
+      background-color: transparent;
+      color: var(--white);
+    }
+    &:hover {
+      background-color: var(--white);
+      color: var(--pink);
+    }
+  }
+`;
 
 export default ProfileEditModal;

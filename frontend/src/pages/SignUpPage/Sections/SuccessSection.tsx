@@ -15,7 +15,7 @@ const SuccessSection: React.FC<SectionProps> = ({ registerData }) => {
   });
 
   const signUpComplete = async () => {
-    await axiosSignUp(registerData);
+    axiosSignUp(registerData);
     setTimeout(() => {
       navigator("/");
     }, 2000);
@@ -39,12 +39,12 @@ const WrapperStyled = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   width: 100vw;
 
   h1 {
     margin-top: -400px;
-    font-size: 3rem;
+    font-size: 2.5rem;
     text-align: center;
   }
 

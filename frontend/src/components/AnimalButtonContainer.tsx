@@ -32,7 +32,7 @@ const AnimalButtonContainer = ({
   setter,
 }: AnimalButtonContainerProps): JSX.Element => {
   const [selectedAnimals, setSelectedAnimals] = useState<Set<string>>(
-    new Set(array ?? [AnimalSpecies.DOG, AnimalSpecies.CAT])
+    new Set(array)
   );
 
   const buttons: string[] = [

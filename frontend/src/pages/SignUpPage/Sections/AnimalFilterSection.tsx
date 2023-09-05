@@ -64,7 +64,7 @@ const WrapperStyled = styled.div<{ $isFading: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   width: 100vw;
   opacity: ${({ $isFading }) => ($isFading ? 0 : 1)};
   transition: opacity 0.2s ease;

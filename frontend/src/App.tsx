@@ -21,6 +21,13 @@ function App() {
     }, 300);
   }, []);
 
+  function setScreenSize() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+  }
+  window.addEventListener("resize", setScreenSize);
+  setScreenSize();
+
   return (
     <BrowserRouter>
       {loading && <LoadingPage />}

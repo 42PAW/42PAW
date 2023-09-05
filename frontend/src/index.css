@@ -32,8 +32,6 @@
 html,
 body {
   margin: 0;
-  height: 100%;
-  /* min-width: 갤럭시 폴드 기준 */
   min-width: 262px;
   overflow: hidden;
   font-size: 10px;
@@ -48,6 +46,7 @@ body {
     #e6dade 86.75%
   );
   background-repeat: no-repeat;
+  -webkit-tap-highlight-color: transparent;
 }
 
 *::-webkit-scrollbar {

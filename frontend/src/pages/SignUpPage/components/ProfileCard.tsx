@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
 import { Section, SectionType } from "@/pages/SignUpPage/SignUpPage";
 import { SignUpInfoDTO } from "@/types/dto/member.dto";
+import useToaster from "@/hooks/useToaster";
 
 /**
  * @registerData.memberName 유저가 설정한 닉네임
@@ -20,10 +21,16 @@ const ProfileCard = ({
   step,
 }: IProfileCardProps) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const { popToast } = useToaster();
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      console.log(file.size);
+      if (file.size > 10000000) {
+        popToast("사진 용량은 10MB가 넘어갈 수 없습니다", "N");
+        return;
+      }
       const imageBitmap = await createImageBitmap(file);
       const canvas = document.createElement("canvas");
       canvas.width = imageBitmap.width;
@@ -49,7 +56,9 @@ const ProfileCard = ({
           {registerData.memberName}
         </ProfileCardNicknameStyled>
         <ProfileCardEmptyImageStyled>
-          <img src={imagePreview ? imagePreview : "/assets/userG.png"} />
+          <LabelStyled htmlFor="profileImage">
+            <img src={imagePreview ? imagePreview : "/assets/userG.png"} />
+          </LabelStyled>
         </ProfileCardEmptyImageStyled>
         <ProfileCardFormStyled>
           {step === Section.ProfileImage ? (
@@ -115,6 +124,17 @@ const ProfileCardFormStyled = styled.form`
       color: var(--grey);
       font-weight: 500;
     }
+  }
+`;
+
+const LabelStyled = styled.label`
+  cursor: pointer;
+  width: 150px;
+  height: 150px;
+  aspect-ratio: 1 / 1;
+  img {
+    width: 100%;
+    height: 100%;
   }
 `;
 

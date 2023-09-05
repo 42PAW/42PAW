@@ -36,17 +36,22 @@ const ImageUploader = () => {
   const { parseDate } = useParseDate();
 
   useEffect(() => {
-    console.log("preview index: ", prevIndex);
-    console.log("selected index ", selectedPreviewIndex);
-  }, [selectedPreviewIndex]);
+    console.log("upload files: ", uploadFiles);
+    console.log("url list: ", urlList);
+    console.log("default files: ", uploadDefaultFiles);
+  }, [uploadFiles, urlList, uploadDefaultFiles]);
 
   const resetImage = (index: number) => {
+    console.log("reset index: ", index);
+    console.log("reset prev index: ", prevIndex);
+    console.log("reset selected index: ", selectedPreviewIndex);
+    const newUrlList = [...urlList];
+    URL.revokeObjectURL(newUrlList[index]);
+    newUrlList[index] = URL.createObjectURL(uploadDefaultFiles[index]);
+    setUrlList(newUrlList);
     const resetFiles = [...uploadFiles];
     resetFiles[index] = uploadDefaultFiles[index];
     setUploadFiles(resetFiles);
-    const newUrlList = [...urlList];
-    newUrlList[index] = URL.createObjectURL(uploadDefaultFiles[index]);
-    setUrlList(newUrlList);
   };
 
   const cropImage = (index: number) => {
@@ -76,6 +81,7 @@ const ImageUploader = () => {
             const newUrlList = [...urlList];
             newUrlList[index] = URL.createObjectURL(webpFile);
             setUrlList(newUrlList);
+            console.log("crop");
           }
         }, "image/webp");
       };
@@ -83,22 +89,31 @@ const ImageUploader = () => {
   };
 
   const handlePreviewClick = (index: number) => {
+    if (index === selectedPreviewIndex) {
+      return;
+    }
     cropImage(prevIndex);
     setSelectedPreviewIndex(index);
     setPrevIndex(index);
   };
 
   const handleDeleteClick = (indexToDelete: number) => {
-    if (indexToDelete >= 0 && indexToDelete < uploadFiles.length) {
-      const updatedFiles = uploadFiles.filter(
-        (_, index) => index !== indexToDelete
-      );
-      const updatedDefaultFiles = uploadDefaultFiles.filter(
-        (_, index) => index !== indexToDelete
-      );
-      setUploadFiles(updatedFiles);
-      setUploadDefaultFiles(updatedDefaultFiles);
+    const updatedFiles = [...uploadFiles];
+    updatedFiles.splice(indexToDelete, 1);
+
+    const updatedDefaultFiles = [...uploadDefaultFiles];
+    updatedDefaultFiles.splice(indexToDelete, 1);
+
+    const updatedUrlList = [...urlList];
+    URL.revokeObjectURL(updatedUrlList[indexToDelete]);
+    updatedUrlList.splice(indexToDelete, 1);
+
+    setUploadFiles(updatedFiles);
+    if (indexToDelete === uploadFiles.length) {
+      setSelectedPreviewIndex(uploadFiles.length - 1);
     }
+    setUploadDefaultFiles(updatedDefaultFiles);
+    setUrlList(updatedUrlList);
   };
 
   const handleImageChange = (e: any) => {
@@ -112,8 +127,6 @@ const ImageUploader = () => {
       popToast("5개 이하의 이미지만 업로드 가능합니다.", "N");
       return;
     }
-    const newUrls = selectedFiles.map((file) => URL.createObjectURL(file));
-    setUrlList([...urlList, ...newUrls]);
     convertToWebp(selectedFiles);
   };
 
@@ -122,6 +135,8 @@ const ImageUploader = () => {
   };
 
   const convertToWebp = (files: any) => {
+    const newUrls = files.map((file) => URL.createObjectURL(file));
+    setUrlList([...urlList, ...newUrls]);
     files.forEach((file: Blob) => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
@@ -184,12 +199,12 @@ const ImageUploader = () => {
   return (
     <WrapperStyled>
       <SmallPreviewStyled>
-        {uploadFiles.map((file: Blob, index: number) => (
+        {urlList.map((url: string, index: number) => (
           <SmallPreviewUnitStyled
             key={index}
             onClick={() => handlePreviewClick(index)}
           >
-            <img src={urlList[index]} alt={`Preview ${index + 1}`} />
+            <img src={url} />
             {index === selectedPreviewIndex && (
               <DeleteButtonStyled onClick={() => handleDeleteClick(index)}>
                 x

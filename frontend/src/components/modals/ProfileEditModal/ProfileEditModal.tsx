@@ -132,15 +132,30 @@ const ProfileEditModal = () => {
     // test
     if (file) {
       if (file.type === "image/heic" || file.type === "image/HEIC") {
-        let blob = file;
-        heic2any({ blob: blob, toType: "image/webp" }).then(function (
-          resultBlob: any
-        ) {
-          file = new File([resultBlob], file!.name.split(".")[0] + ".webp", {
-            type: "image/webp",
-            lastModified: new Date().getTime(),
+        fetch(URL.createObjectURL(file))
+          .then((res) => res.blob())
+          .then((blob) => heic2any({ blob }))
+          .then((conversionResult) => {
+            setProfileInfo({
+              ...profileInfo,
+              imageData: conversionResult as Blob,
+              profileImageChanged: true,
+            });
+            const webpDataURL = URL.createObjectURL(conversionResult as Blob);
+            setImagePreview(webpDataURL);
+            return;
+            // conversionResult is a BLOB
+            // of the PNG formatted image
           });
-        });
+        // let blob = file;
+        // heic2any({ blob: blob, toType: "image/webp" }).then(function (
+        //   resultBlob: any
+        // ) {
+        //   file = new File([resultBlob], file!.name.split(".")[0] + ".webp", {
+        //     type: "image/webp",
+        //     lastModified: new Date().getTime(),
+        //   });
+        // });
       }
     }
     // test
@@ -158,6 +173,7 @@ const ProfileEditModal = () => {
         ctx.drawImage(imageBitmap, 0, 0);
         canvas.toBlob(async (webpBlob) => {
           if (webpBlob) {
+            alert("webpBlob : " + webpBlob + " / " + webpBlob?.type);
             setProfileInfo({
               ...profileInfo,
               imageData: webpBlob,

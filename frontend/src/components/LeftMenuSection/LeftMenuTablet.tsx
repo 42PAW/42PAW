@@ -116,7 +116,7 @@ const SettingButtonContainerStyled = styled.div`
 
 const MenuStyled = styled.div`
   z-index: 1;
-  position: absolute;
+  position: fixed;
   display: flex;
   border-top: 1px solid var(--transparent);
   flex-direction: row;
@@ -124,8 +124,7 @@ const MenuStyled = styled.div`
   align-items: center;
   width: 100vw;
   background-color: #c1c2e1f9;
-  margin-top: -48px;
-  top: 100%;
+  bottom: 0;
   height: 48px;
   div {
     padding: 7px 10px;

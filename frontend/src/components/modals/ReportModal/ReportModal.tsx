@@ -178,6 +178,7 @@ const CategoryContatinerStyled = styled.div`
 
 const EtcInputStyled = styled.input`
   margin-top: 8px;
+  border-radius: 0px;
   border: none;
   border-bottom: 0.7px solid var(--grey);
   width: 130px;

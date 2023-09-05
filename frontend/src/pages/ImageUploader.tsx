@@ -35,12 +35,6 @@ const ImageUploader = () => {
   const { popToast } = useToaster();
   const { parseDate } = useParseDate();
 
-  useEffect(() => {
-    console.log("upload files: ", uploadFiles);
-    console.log("url list: ", urlList);
-    console.log("default files: ", uploadDefaultFiles);
-  }, [uploadFiles, urlList, uploadDefaultFiles]);
-
   const resetImage = (index: number) => {
     console.log("reset index: ", index);
     console.log("reset prev index: ", prevIndex);
@@ -92,9 +86,9 @@ const ImageUploader = () => {
     if (index === selectedPreviewIndex) {
       return;
     }
-    cropImage(prevIndex);
+    cropImage(selectedPreviewIndex);
     setSelectedPreviewIndex(index);
-    setPrevIndex(index);
+    // setPrevIndex(index);
   };
 
   const handleDeleteClick = (indexToDelete: number) => {
@@ -110,10 +104,16 @@ const ImageUploader = () => {
 
     setUploadFiles(updatedFiles);
     if (indexToDelete === uploadFiles.length) {
+      console.log(uploadFiles.length - 1);
       setSelectedPreviewIndex(uploadFiles.length - 1);
     }
     setUploadDefaultFiles(updatedDefaultFiles);
     setUrlList(updatedUrlList);
+    if (indexToDelete !== 0) {
+      setSelectedPreviewIndex(indexToDelete - 1);
+    } else {
+      setSelectedPreviewIndex(0);
+    }
   };
 
   const handleImageChange = (e: any) => {
@@ -204,9 +204,14 @@ const ImageUploader = () => {
             key={index}
             onClick={() => handlePreviewClick(index)}
           >
-            <img src={url} />
+            <img src={urlList[index]} />
             {index === selectedPreviewIndex && (
-              <DeleteButtonStyled onClick={() => handleDeleteClick(index)}>
+              <DeleteButtonStyled
+                onClick={() => {
+                  (e: React.MouseEvent) => e.stopPropagation();
+                  handleDeleteClick(index);
+                }}
+              >
                 x
               </DeleteButtonStyled>
             )}

@@ -95,6 +95,7 @@ const ProfileEditModal = () => {
       return {
         ...profileInfo,
         imageData: null,
+        profileImageChanged: "true",
       };
     });
     setImagePreview("");
@@ -121,7 +122,11 @@ const ProfileEditModal = () => {
               popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
               return;
             }
-            setProfileInfo({ ...profileInfo, imageData: webpBlob });
+            setProfileInfo({
+              ...profileInfo,
+              imageData: webpBlob,
+              profileImageChanged: "true",
+            });
             const webpDataURL = URL.createObjectURL(webpBlob);
             setImagePreview(webpDataURL);
           }

@@ -1,9 +1,7 @@
 import axios from "axios";
 import instance from "@/api/axios/axios.instance";
-import {
-  SignUpInfoDTO,
-  MemberProfileChangeRequestDto,
-} from "@/types/dto/member.dto";
+import { SignUpInfoDTO } from "@/types/dto/member.dto";
+import { IChangeProfileInfo } from "@/types/interface/profileChange.interface";
 import { CreateBoardDTO } from "@/types/dto/board.dto";
 import { getCookie } from "../cookie/cookies";
 import { Language } from "@/types/enum/language.enum";
@@ -43,14 +41,22 @@ export const axiosChangeMyProfile = async ({
   memberName,
   imageData,
   statement,
+  nameChanged,
   profileImageChanged,
-}: MemberProfileChangeRequestDto): Promise<any> => {
+  statementChanged,
+}: IChangeProfileInfo): Promise<any> => {
   try {
     const formData = new FormData();
-    if (memberName) formData.append("memberName", memberName);
+    if (nameChanged) formData.append("memberName", memberName);
     if (imageData) formData.append("profileImage", imageData);
-    if (statement || statement === "") formData.append("statement", statement);
-    formData.append("profileImageChanged", profileImageChanged);
+    if (statementChanged) formData.append("statement", statement);
+    formData.append(
+      "profileImageChanged",
+      profileImageChanged ? "true" : "false"
+    );
+    console.log("formData.memberName: " + formData.get("memberName"));
+    console.log("formData.profileImage: " + formData.get("profileImage"));
+    console.log("formData.statement: " + formData.get("statement"));
     const response = await instance.post(axiosChangeMyProfileURL, formData, {
       headers: {
         "Content-Type": "multipart/form-data",

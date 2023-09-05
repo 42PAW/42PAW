@@ -5,17 +5,16 @@ import { currentOpenModalState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 import useModal from "../../../hooks/useModal";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
+import { IChangeProfileInfo } from "@/types/interface/profileChange.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosChangeMyProfile } from "@/api/axios/axios.custom";
 import { ChangeEvent, useState, useRef } from "react";
-import {
-  MemberProfileChangeRequestDto,
-  ProfileInfoDTO,
-} from "@/types/dto/member.dto";
+import { ProfileInfoDTO } from "@/types/dto/member.dto";
 import useToaster from "@/hooks/useToaster";
 import useNicknameValidation from "@/hooks/useNicknameValidation";
 import useDebounce from "@/hooks/useDebounce";
 import useFetch from "@/hooks/useFetch";
+import heic2any from "heic2any";
 
 const ProfileEditModal = () => {
   const queryClient = useQueryClient();
@@ -34,24 +33,20 @@ const ProfileEditModal = () => {
   const nameInputRef = useRef<HTMLInputElement | null>(null); // name input 요소에 대한 ref
   const statementInputRef = useRef<HTMLInputElement | null>(null); // statement input 요소에 대한 ref
 
-  const [profileInfo, setProfileInfo] = useState<MemberProfileChangeRequestDto>(
-    {
-      memberName: prevProfileInfo?.memberName!,
-      imageData: null,
-      statement: prevProfileInfo?.statement!,
-      profileImageChanged: "false",
-    }
-  );
+  const [profileInfo, setProfileInfo] = useState<IChangeProfileInfo>({
+    memberName: prevProfileInfo?.memberName!,
+    imageData: null,
+    statement: prevProfileInfo?.statement!,
+    nameChanged: false,
+    profileImageChanged: false,
+    statementChanged: false,
+  });
   const editProfileMutation = useMutation(
-    (profileInfo: MemberProfileChangeRequestDto) =>
-      axiosChangeMyProfile(profileInfo),
+    (profileInfo: IChangeProfileInfo) => axiosChangeMyProfile(profileInfo),
     {
       onSuccess: () => {
         // 캐시가 있는 모든 쿼리 무효화
         queryClient.invalidateQueries(["myProfile"]);
-        console.log(
-          "nicknameUpdatedAt : " + prevProfileInfo?.nicknameUpdatedAt
-        );
         fetchMyInfo();
       },
       onError: (error) => {
@@ -72,7 +67,6 @@ const ProfileEditModal = () => {
       } else if (e.target === statementInputRef.current) {
         // statement input 요소에서 엔터 키를 눌렀을 때
         onChangeProfileInfo(); // onChangeProfileInfo 함수 호출
-        console.log("statementInputRef");
       }
     }
   };
@@ -85,16 +79,21 @@ const ProfileEditModal = () => {
         return;
       }
       if (profileInfo.memberName !== prevProfileInfo?.memberName) {
+        profileInfo.nameChanged = true;
         const isValid = await nicknameValidation(profileInfo.memberName!);
         if (!isValid) {
           setIsWrong(true);
           debounce("nickname", () => setIsWrong(false), 2000);
           return;
         }
-      } else profileInfo.memberName = "";
-      // if (profileInfo.statement === prevProfileInfo?.statement) {
-      //   profileInfo.statement = null;
-      // }
+      } else {
+        profileInfo.nameChanged = false;
+      }
+      if (profileInfo.statement !== prevProfileInfo?.statement) {
+        profileInfo.statementChanged = true;
+      } else {
+        profileInfo.statementChanged = false;
+      }
       try {
         const mutationResult = await editProfileMutation.mutateAsync(
           profileInfo
@@ -117,7 +116,7 @@ const ProfileEditModal = () => {
       return {
         ...profileInfo,
         imageData: null,
-        profileImageChanged: "true",
+        profileImageChanged: true,
       };
     });
     setImagePreview("");
@@ -129,8 +128,12 @@ const ProfileEditModal = () => {
   );
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    let file = e.target.files?.[0];
     if (file) {
+      if (file.size > 10000000) {
+        popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
+        return;
+      }
       const imageBitmap = await createImageBitmap(file);
       const canvas = document.createElement("canvas");
       canvas.width = imageBitmap.width;
@@ -140,14 +143,30 @@ const ProfileEditModal = () => {
         ctx.drawImage(imageBitmap, 0, 0);
         canvas.toBlob(async (webpBlob) => {
           if (webpBlob) {
-            if (webpBlob.size > 10000000) {
-              popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
-              return;
+            // test
+            if (
+              webpBlob.type === "image/heic" ||
+              webpBlob.type === "image/HEIC"
+            ) {
+              let blob = webpBlob;
+              heic2any({ blob, toType: "image/webp" }).then(function (
+                resultBlob: any
+              ) {
+                webpBlob = new File(
+                  [resultBlob],
+                  webpBlob!.name.split(".")[0] + ".webp",
+                  {
+                    type: "image/webp",
+                    lastModified: new Date().getTime(),
+                  }
+                );
+              });
             }
+            // test
             setProfileInfo({
               ...profileInfo,
               imageData: webpBlob,
-              profileImageChanged: "true",
+              profileImageChanged: true,
             });
             const webpDataURL = URL.createObjectURL(webpBlob);
             setImagePreview(webpDataURL);

@@ -10,13 +10,6 @@ export interface SignUpInfoDTO {
   categoryFilters: AnimalSpecies[];
 }
 
-export interface MemberProfileChangeRequestDto {
-  memberName: string;
-  imageData: Blob | null;
-  statement: string;
-  profileImageChanged: string;
-}
-
 export interface ReportDTO {
   reportedMemberId: number | null;
   boardId: number | null;

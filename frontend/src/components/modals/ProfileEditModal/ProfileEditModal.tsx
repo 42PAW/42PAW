@@ -135,21 +135,6 @@ const ProfileEditModal = () => {
       maxSizeMB: 1,
       maxWidthOrHeight: 2520,
     };
-    // const resizeFile = async () => {
-    //   try {
-    //     const compressedFile = await imageCompression(file!, options);
-    //     setProfileInfo({
-    //       ...profileInfo,
-    //       imageData: compressedFile as Blob,
-    //       profileImageChanged: true,
-    //     });
-    //     const webpDataURL = URL.createObjectURL(compressedFile as Blob);
-    //     setImagePreview(webpDataURL);
-    //     return;
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
     // test
     if (file) {
       if (file.type === "image/heic" || file.type === "image/HEIC") {
@@ -165,41 +150,16 @@ const ProfileEditModal = () => {
                 lastModified: new Date().getTime(),
               }
             );
-            alert("size: " + file.size);
-            // resizeFile();
           })
           .catch((e) => {
             alert(e);
           });
-        // resizeFile();
-        //   let blob = file;
-        //   heic2any({ blob: blob, toType: "image/webp" }).then(function (
-        //     resultBlob: any
-        //   ) {
-        //     file = new File([resultBlob], file!.name.split(".")[0] + ".webp", {
-        //       type: "image/webp",
-        //       lastModified: new Date().getTime(),
-        //     });
-        //   });
-        //   setProfileInfo({
-        //     ...profileInfo,
-        //     imageData: file,
-        //     profileImageChanged: true,
-        //   });
-        //   const webpDataURL = URL.createObjectURL(file);
-        //   setImagePreview(webpDataURL);
-        //   return;
-        // }
       }
-    }
-    // test
-    if (file) {
       const compressedFile = await imageCompression(file!, options);
       if (compressedFile.size > 10000000) {
         popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
         return;
       }
-      alert("22");
       const imageBitmap = await createImageBitmap(compressedFile);
       const canvas = document.createElement("canvas");
       canvas.width = imageBitmap.width;

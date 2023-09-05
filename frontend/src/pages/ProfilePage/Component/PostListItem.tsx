@@ -54,7 +54,7 @@ const ThumbnailInfoStyled = styled.div`
   justify-content: space-evenly;
   cursor: pointer;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1 / 1;
   position: absolute;
   top: 0;
   color: white;

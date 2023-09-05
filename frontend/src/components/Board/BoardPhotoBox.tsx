@@ -56,6 +56,7 @@ const PhotoZoneStyled = styled.div`
   overflow: hidden;
   background-color: var(--lightpurple);
   img {
+    margin-top: 3px;
     height: 100%;
     width: 100%;
     aspect-ratio: 1 / 1;

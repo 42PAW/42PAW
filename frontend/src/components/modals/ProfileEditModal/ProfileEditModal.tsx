@@ -278,6 +278,7 @@ const LogoStyled = styled.div`
 const ProfileImageStyled = styled.img`
   width: 110%;
   aspect-ratio: 1 / 1;
+  object-fit: cover;
   border-radius: 0;
 `;
 

@@ -15,6 +15,7 @@ import useNicknameValidation from "@/hooks/useNicknameValidation";
 import useDebounce from "@/hooks/useDebounce";
 import useFetch from "@/hooks/useFetch";
 import heic2any from "heic2any";
+import imageCompression from "browser-image-compression";
 
 const ProfileEditModal = () => {
   const queryClient = useQueryClient();
@@ -104,6 +105,7 @@ const ProfileEditModal = () => {
         }
       } catch (error: any) {
         if (error.response) {
+          popToast("error", "N");
           popToast(error.response.data.message, "N");
         }
       }
@@ -129,42 +131,76 @@ const ProfileEditModal = () => {
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     let file = e.target.files?.[0];
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 2520,
+    };
+    // const resizeFile = async () => {
+    //   try {
+    //     const compressedFile = await imageCompression(file!, options);
+    //     setProfileInfo({
+    //       ...profileInfo,
+    //       imageData: compressedFile as Blob,
+    //       profileImageChanged: true,
+    //     });
+    //     const webpDataURL = URL.createObjectURL(compressedFile as Blob);
+    //     setImagePreview(webpDataURL);
+    //     return;
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
     // test
     if (file) {
       if (file.type === "image/heic" || file.type === "image/HEIC") {
-        fetch(URL.createObjectURL(file))
+        await fetch(URL.createObjectURL(file))
           .then((res) => res.blob())
-          .then((blob) => heic2any({ blob }))
+          .then((blob) => heic2any({ blob, toType: "image/webp" }))
           .then((conversionResult) => {
-            setProfileInfo({
-              ...profileInfo,
-              imageData: conversionResult as Blob,
-              profileImageChanged: true,
-            });
-            const webpDataURL = URL.createObjectURL(conversionResult as Blob);
-            setImagePreview(webpDataURL);
-            return;
-            // conversionResult is a BLOB
-            // of the PNG formatted image
+            file = new File(
+              [conversionResult as Blob],
+              file!.name.split(".")[0] + ".webp",
+              {
+                type: "image/webp",
+                lastModified: new Date().getTime(),
+              }
+            );
+            alert("size: " + file.size);
+            // resizeFile();
+          })
+          .catch((e) => {
+            alert(e);
           });
-        // let blob = file;
-        // heic2any({ blob: blob, toType: "image/webp" }).then(function (
-        //   resultBlob: any
-        // ) {
-        //   file = new File([resultBlob], file!.name.split(".")[0] + ".webp", {
-        //     type: "image/webp",
-        //     lastModified: new Date().getTime(),
+        // resizeFile();
+        //   let blob = file;
+        //   heic2any({ blob: blob, toType: "image/webp" }).then(function (
+        //     resultBlob: any
+        //   ) {
+        //     file = new File([resultBlob], file!.name.split(".")[0] + ".webp", {
+        //       type: "image/webp",
+        //       lastModified: new Date().getTime(),
+        //     });
         //   });
-        // });
+        //   setProfileInfo({
+        //     ...profileInfo,
+        //     imageData: file,
+        //     profileImageChanged: true,
+        //   });
+        //   const webpDataURL = URL.createObjectURL(file);
+        //   setImagePreview(webpDataURL);
+        //   return;
+        // }
       }
     }
     // test
     if (file) {
-      if (file.size > 10000000) {
+      const compressedFile = await imageCompression(file!, options);
+      if (compressedFile.size > 10000000) {
         popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
         return;
       }
-      const imageBitmap = await createImageBitmap(file);
+      alert("22");
+      const imageBitmap = await createImageBitmap(compressedFile);
       const canvas = document.createElement("canvas");
       canvas.width = imageBitmap.width;
       canvas.height = imageBitmap.height;
@@ -173,7 +209,6 @@ const ProfileEditModal = () => {
         ctx.drawImage(imageBitmap, 0, 0);
         canvas.toBlob(async (webpBlob) => {
           if (webpBlob) {
-            alert("webpBlob : " + webpBlob + " / " + webpBlob?.type);
             setProfileInfo({
               ...profileInfo,
               imageData: webpBlob,

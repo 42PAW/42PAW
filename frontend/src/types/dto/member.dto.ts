@@ -14,6 +14,7 @@ export interface MemberProfileChangeRequestDto {
   memberName: string | null;
   imageData: Blob | null;
   statement: string;
+  profileImageChanged: string | null;
 }
 
 export interface ReportDTO {

@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import BoardTemplate from "@/components/Board/BoardTemplate";
 import { boardCategoryState } from "@/recoil/atom";
@@ -15,11 +15,13 @@ import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTempla
 import useDebounce from "@/hooks/useDebounce";
 import { useRef } from "react";
 import { boardsLengthState } from "@/recoil/atom";
+import { buttonToggledState } from "@/components/BoardSortToggle";
 
 const MainPage = () => {
   //useInview의 ref값을 참조하는 요소에 대한 root 참조값
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(true);
+  const setButtonToggled = useSetRecoilState(buttonToggledState);
   const [boardsLength] = useRecoilState<number>(boardsLengthState);
   const [boardCategory, setBoardCategory] =
     useRecoilState<Board>(boardCategoryState);
@@ -31,20 +33,21 @@ const MainPage = () => {
     rootMargin: `0px 0px ${boardsLength * 300}px 0px`, //ref를 참조하는 요소를 root 기준 margin bottom을 줌. 300px을 준 이유는 한 게시물의 길이를 대략적으로 600px로 보았기 때문. 전체 게시물 길이의 절반에 왔을 때 fetch 유도.
   });
   const { debounce } = useDebounce();
-  const { data, fetchNextPage, hasNextPage, isError } = useInfiniteQuery(
-    ["boards", boardCategory],
-    ({ pageParam = 0 }) => fetchBoards(pageParam),
-    {
-      getNextPageParam: (lastPage, allPages) => {
-        if (!lastPage || lastPage.length === 0) return undefined;
-        return allPages.length;
-      },
-      keepPreviousData: true,
-    }
-  );
+  const { data, fetchNextPage, hasNextPage, isError, isLoading } =
+    useInfiniteQuery(
+      ["boards", boardCategory],
+      ({ pageParam = 0 }) => fetchBoards(pageParam),
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          if (!lastPage || lastPage.length === 0) return undefined;
+          return allPages.length;
+        },
+      }
+    );
 
   useEffect(() => {
     setBoardCategory(Board.DEFAULT);
+    setButtonToggled(0);
   }, []);
 
   useEffect(() => {
@@ -63,7 +66,7 @@ const MainPage = () => {
     }
   }, [boardCategory]);
 
-  if (loading) {
+  if (loading || isLoading) {
     return (
       <WrapperStyled $boardExists={true}>
         <LoadingAnimation />

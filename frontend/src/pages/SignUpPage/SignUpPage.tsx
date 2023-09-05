@@ -121,7 +121,7 @@ const SignUpPage = () => {
 const MainStyled = styled.main`
   position: relative;
   overflow: hidden;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   width: 100vw;
 `;
 
@@ -143,11 +143,11 @@ const ProfileCardContainerStyled = styled.div<{
       case Section.ProfileImage:
         return "translate(-50%, -300px)";
       case Section.Introduction:
-        return "translate(-50%, -470px)";
+        return "translate(-50%, -450px)";
       case Section.AnimalFilter:
-        return "translate(-50%, -470px)";
+        return "translate(-50%, -450px)";
       case Section.Success:
-        return "translate(-50%, -470px)";
+        return "translate(-50%, -450px)";
     }
   }};
 `;

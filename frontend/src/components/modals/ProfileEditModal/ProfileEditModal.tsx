@@ -5,17 +5,16 @@ import { currentOpenModalState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 import useModal from "../../../hooks/useModal";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
+import { IChangeProfileInfo } from "@/types/interface/profileChange.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosChangeMyProfile } from "@/api/axios/axios.custom";
-import { ChangeEvent, useState } from "react";
-import {
-  MemberProfileChangeRequestDto,
-  ProfileInfoDTO,
-} from "@/types/dto/member.dto";
+import { ChangeEvent, useState, useRef } from "react";
+import { ProfileInfoDTO } from "@/types/dto/member.dto";
 import useToaster from "@/hooks/useToaster";
 import useNicknameValidation from "@/hooks/useNicknameValidation";
 import useDebounce from "@/hooks/useDebounce";
 import useFetch from "@/hooks/useFetch";
+import heic2any from "heic2any";
 
 const ProfileEditModal = () => {
   const queryClient = useQueryClient();
@@ -29,27 +28,25 @@ const ProfileEditModal = () => {
   const { popToast } = useToaster();
   const { nicknameValidation } = useNicknameValidation();
   const { debounce } = useDebounce();
-
   const { closeModal } = useModal();
-  const [profileInfo, setProfileInfo] = useState<MemberProfileChangeRequestDto>(
-    {
-      memberName: prevProfileInfo?.memberName!,
-      imageData: null,
-      statement: prevProfileInfo?.statement!,
-      profileImageChanged: "false",
-    }
-  );
   const { fetchMyInfo } = useFetch();
+  const nameInputRef = useRef<HTMLInputElement | null>(null); // name input 요소에 대한 ref
+  const statementInputRef = useRef<HTMLInputElement | null>(null); // statement input 요소에 대한 ref
+
+  const [profileInfo, setProfileInfo] = useState<IChangeProfileInfo>({
+    memberName: prevProfileInfo?.memberName!,
+    imageData: null,
+    statement: prevProfileInfo?.statement!,
+    nameChanged: false,
+    profileImageChanged: false,
+    statementChanged: false,
+  });
   const editProfileMutation = useMutation(
-    (profileInfo: MemberProfileChangeRequestDto) =>
-      axiosChangeMyProfile(profileInfo),
+    (profileInfo: IChangeProfileInfo) => axiosChangeMyProfile(profileInfo),
     {
       onSuccess: () => {
         // 캐시가 있는 모든 쿼리 무효화
         queryClient.invalidateQueries(["myProfile"]);
-        console.log(
-          "nicknameUpdatedAt : " + prevProfileInfo?.nicknameUpdatedAt
-        );
         fetchMyInfo();
       },
       onError: (error) => {
@@ -57,6 +54,22 @@ const ProfileEditModal = () => {
       },
     }
   );
+
+  const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && e.nativeEvent.isComposing === false) {
+      if (e.target === nameInputRef.current) {
+        // name input 요소에서 엔터 키를 눌렀을 때
+        if (statementInputRef.current) {
+          statementInputRef.current.focus(); // statement input 요소로 포커스 이동
+          statementInputRef.current.selectionStart =
+            statementInputRef.current.value.length;
+        }
+      } else if (e.target === statementInputRef.current) {
+        // statement input 요소에서 엔터 키를 눌렀을 때
+        onChangeProfileInfo(); // onChangeProfileInfo 함수 호출
+      }
+    }
+  };
 
   // submitProfileInfo
   const onChangeProfileInfo = async () => {
@@ -66,13 +79,21 @@ const ProfileEditModal = () => {
         return;
       }
       if (profileInfo.memberName !== prevProfileInfo?.memberName) {
+        profileInfo.nameChanged = true;
         const isValid = await nicknameValidation(profileInfo.memberName!);
         if (!isValid) {
           setIsWrong(true);
           debounce("nickname", () => setIsWrong(false), 2000);
           return;
         }
-      } else profileInfo.memberName = null;
+      } else {
+        profileInfo.nameChanged = false;
+      }
+      if (profileInfo.statement !== prevProfileInfo?.statement) {
+        profileInfo.statementChanged = true;
+      } else {
+        profileInfo.statementChanged = false;
+      }
       try {
         const mutationResult = await editProfileMutation.mutateAsync(
           profileInfo
@@ -95,6 +116,7 @@ const ProfileEditModal = () => {
       return {
         ...profileInfo,
         imageData: null,
+        profileImageChanged: true,
       };
     });
     setImagePreview("");
@@ -106,8 +128,12 @@ const ProfileEditModal = () => {
   );
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    let file = e.target.files?.[0];
     if (file) {
+      if (file.size > 10000000) {
+        popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
+        return;
+      }
       const imageBitmap = await createImageBitmap(file);
       const canvas = document.createElement("canvas");
       canvas.width = imageBitmap.width;
@@ -117,11 +143,31 @@ const ProfileEditModal = () => {
         ctx.drawImage(imageBitmap, 0, 0);
         canvas.toBlob(async (webpBlob) => {
           if (webpBlob) {
-            if (webpBlob.size > 10000000) {
-              popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
-              return;
+            // test
+            if (
+              webpBlob.type === "image/heic" ||
+              webpBlob.type === "image/HEIC"
+            ) {
+              let blob = webpBlob;
+              heic2any({ blob, toType: "image/webp" }).then(function (
+                resultBlob: any
+              ) {
+                webpBlob = new File(
+                  [resultBlob],
+                  webpBlob!.name.split(".")[0] + ".webp",
+                  {
+                    type: "image/webp",
+                    lastModified: new Date().getTime(),
+                  }
+                );
+              });
             }
-            setProfileInfo({ ...profileInfo, imageData: webpBlob });
+            // test
+            setProfileInfo({
+              ...profileInfo,
+              imageData: webpBlob,
+              profileImageChanged: true,
+            });
             const webpDataURL = URL.createObjectURL(webpBlob);
             setImagePreview(webpDataURL);
           }
@@ -190,30 +236,35 @@ const ProfileEditModal = () => {
           <EditInfoStyled>
             <span>이름</span>
             <input
+              ref={nameInputRef}
               placeholder="최대 10자 이내"
               name="name"
               type="text"
               value={profileInfo.memberName!}
               onChange={(e) => handleNameChange(e)}
               maxLength={10}
+              onKeyDown={handleEnterKey}
             />
           </EditInfoStyled>
           <EditInfoStyled>
             <span>자기소개</span>
             <input
+              ref={statementInputRef}
               type="text"
-              placeholder="최대 30자 이내" // 국가에 따라 언어 변경
+              name="statement"
+              placeholder="최대 50자 이내" // 국가에 따라 언어 변경
               value={profileInfo.statement}
               maxLength={50}
               onChange={(e) => handleStatementChange(e)}
+              onKeyDown={handleEnterKey}
             />
           </EditInfoStyled>
-          <ButtonContainerStyled.Button>
+          <ButtonContainerStyled>
             <button onClick={onChangeProfileInfo}>완료</button>
             <button onClick={() => closeModal(ModalType.PROFILEEDIT)}>
               취소
             </button>
-          </ButtonContainerStyled.Button>
+          </ButtonContainerStyled>
         </MainAreaStyled>
       </WrapperStyled>
     </ModalLayout>
@@ -246,6 +297,7 @@ const LogoStyled = styled.div`
 const ProfileImageStyled = styled.img`
   width: 110%;
   aspect-ratio: 1 / 1;
+  object-fit: cover;
   border-radius: 0;
 `;
 
@@ -254,7 +306,7 @@ const MainAreaStyled = styled.div`
   flex-direction: column;
   align-items: center;
   bottom: none;
-  height: 450px;
+  height: 480px;
   width: 600px;
   background: linear-gradient(
     228deg,
@@ -287,8 +339,8 @@ const EditInfoStyled = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-top: 15px;
+  // margin-bottom: 10px;
   span {
     margin-right: 10px;
     font-size: 1.2rem;
@@ -313,34 +365,31 @@ const EditInfoStyled = styled.div`
   }
 `;
 
-const ButtonContainerStyled = {
-  Button: styled.div`
-    margin-top: 30px;
-    margin: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 215px;
-    button {
-      cursor: pointer;
-      height: 25px;
-      width: 100px;
-      border-radius: 10px;
-      border: none;
-      &:nth-child(1) {
-        background-color: var(--purple);
-        color: var(--white);
-      }
-      &:nth-child(2) {
-        background-color: var(--lightgrey);
-        //   border: 1px solid var(--lightgrey);
-        color: var(--white);
-      }
-      &:hover {
-        opacity: 0.7;
-      }
+const ButtonContainerStyled = styled.div`
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 215px;
+  button {
+    cursor: pointer;
+    height: 33px;
+    width: 90px;
+    border-radius: 10px;
+    border: 1px solid var(--white);
+    &:nth-child(1) {
+      background-color: transparent;
+      color: var(--white);
     }
-  `,
-};
+    &:nth-child(2) {
+      background-color: transparent;
+      color: var(--white);
+    }
+    &:hover {
+      background-color: var(--white);
+      color: var(--pink);
+    }
+  }
+`;
 
 export default ProfileEditModal;

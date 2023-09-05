@@ -136,6 +136,7 @@ const useFetch = (memberId?: number | null) => {
   const fetchMyInfo = async () => {
     try {
       const { data: myInfo } = await axiosMyInfo();
+
       setUserInfo(myInfo);
       translator(myInfo.language);
     } catch (error) {

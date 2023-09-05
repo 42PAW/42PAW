@@ -36,6 +36,7 @@ const ProfileEditModal = () => {
       memberName: prevProfileInfo?.memberName!,
       imageData: null,
       statement: prevProfileInfo?.statement!,
+      profileImageChanged: "false",
     }
   );
   const { fetchMyInfo } = useFetch();

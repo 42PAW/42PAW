@@ -129,6 +129,21 @@ const ProfileEditModal = () => {
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     let file = e.target.files?.[0];
+    // test
+    if (file) {
+      if (file.type === "image/heic" || file.type === "image/HEIC") {
+        let blob = file;
+        heic2any({ blob: blob, toType: "image/webp" }).then(function (
+          resultBlob: any
+        ) {
+          file = new File([resultBlob], file!.name.split(".")[0] + ".webp", {
+            type: "image/webp",
+            lastModified: new Date().getTime(),
+          });
+        });
+      }
+    }
+    // test
     if (file) {
       if (file.size > 10000000) {
         popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
@@ -143,26 +158,6 @@ const ProfileEditModal = () => {
         ctx.drawImage(imageBitmap, 0, 0);
         canvas.toBlob(async (webpBlob) => {
           if (webpBlob) {
-            // test
-            if (
-              webpBlob.type === "image/heic" ||
-              webpBlob.type === "image/HEIC"
-            ) {
-              let blob = webpBlob;
-              heic2any({ blob, toType: "image/webp" }).then(function (
-                resultBlob: any
-              ) {
-                webpBlob = new File(
-                  [resultBlob],
-                  webpBlob!.name.split(".")[0] + ".webp",
-                  {
-                    type: "image/webp",
-                    lastModified: new Date().getTime(),
-                  }
-                );
-              });
-            }
-            // test
             setProfileInfo({
               ...profileInfo,
               imageData: webpBlob,

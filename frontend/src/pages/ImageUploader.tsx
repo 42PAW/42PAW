@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import useParseDate from "@/hooks/useParseDate";
 import { axiosCreateBoard } from "@/api/axios/axios.custom";
@@ -35,21 +35,18 @@ const ImageUploader = () => {
   const { popToast } = useToaster();
   const { parseDate } = useParseDate();
 
-  const resetImage = () => {
-    if (
-      selectedPreviewIndex >= 0 &&
-      selectedPreviewIndex < uploadFiles.length
-    ) {
-      const resetFiles = [...uploadFiles];
-      resetFiles[selectedPreviewIndex] =
-        uploadDefaultFiles[selectedPreviewIndex];
-      setUploadFiles(resetFiles);
-      const newUrlList = [...urlList];
-      newUrlList[selectedPreviewIndex] = URL.createObjectURL(
-        uploadFiles[selectedPreviewIndex]
-      );
-      setUrlList(newUrlList);
-    }
+  useEffect(() => {
+    console.log("preview index: ", prevIndex);
+    console.log("selected index ", selectedPreviewIndex);
+  }, [selectedPreviewIndex]);
+
+  const resetImage = (index: number) => {
+    const resetFiles = [...uploadFiles];
+    resetFiles[index] = uploadDefaultFiles[index];
+    setUploadFiles(resetFiles);
+    const newUrlList = [...urlList];
+    newUrlList[index] = URL.createObjectURL(uploadDefaultFiles[index]);
+    setUrlList(newUrlList);
   };
 
   const cropImage = (index: number) => {
@@ -71,9 +68,11 @@ const ImageUploader = () => {
             const webpFile = new File([webpBlob], "image.webp", {
               type: "image/webp",
             });
+
             const newUploadFiles = [...uploadFiles];
             newUploadFiles[index] = webpFile;
             setUploadFiles(newUploadFiles);
+
             const newUrlList = [...urlList];
             newUrlList[index] = URL.createObjectURL(webpFile);
             setUrlList(newUrlList);
@@ -84,7 +83,6 @@ const ImageUploader = () => {
   };
 
   const handlePreviewClick = (index: number) => {
-    console.log(prevIndex);
     cropImage(prevIndex);
     setSelectedPreviewIndex(index);
     setPrevIndex(index);
@@ -233,7 +231,7 @@ const ImageUploader = () => {
                 />
                 <CropperUtilsStyled>
                   <TodayDateStyled>{parseDate(new Date())}</TodayDateStyled>
-                  <ResetButtonStyled onClick={resetImage()}>
+                  <ResetButtonStyled onClick={() => resetImage(index)}>
                     <img
                       src="/assets/reset.png"
                       alt="reset"

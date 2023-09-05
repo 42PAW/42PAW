@@ -11,7 +11,6 @@ import proj.pet.category.repository.AnimalCategoryRepository;
 import proj.pet.exception.ServiceException;
 import proj.pet.mapper.MemberMapper;
 import proj.pet.member.domain.*;
-import proj.pet.member.dto.MemberProfileChangeRequestDto;
 import proj.pet.member.dto.MemberProfileChangeResponseDto;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.member.repository.MemberRepository;
@@ -101,30 +100,31 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public MemberProfileChangeResponseDto changeMemberProfile(
 			UserSessionDto userSessionDto,
-			MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
+			String memberName,
+			MultipartFile profileImage,
+			String statement,
+			boolean profileImageChanged) {
 		Member member = memberRepository.findById(userSessionDto.getMemberId())
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
-		if (memberProfileChangeRequestDto.getMemberName() != null) {
+		if (memberName != null) {
 			LocalDateTime changeableDate = member.getNicknameUpdatedAt().plusDays(30);
 			if (changeableDate.isAfter(LocalDateTime.now())) {
 				throw new ServiceException(NOT_ENOUGH_NICKNAME_CHANGE_PERIOD,
 						"닉네임 변경은 " + changeableDate.format(
 								DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + " 이후에 가능합니다.");
 			}
-			member.changeNickname(memberProfileChangeRequestDto.getMemberName(),
-					LocalDateTime.now());
+			member.changeNickname(memberName, LocalDateTime.now());
 		}
-		if (memberProfileChangeRequestDto.getProfileImage() != null) {
+		if (profileImage != null) {
 			memberImageManager.deleteMemberProfileImage(member.getProfileImageUrl());
-			String profileImageUrl = memberImageManager.uploadMemberProfileImage(
-					memberProfileChangeRequestDto.getProfileImage());
+			String profileImageUrl = memberImageManager.uploadMemberProfileImage(profileImage);
 			member.changeProfileImageUrl(profileImageUrl);
-		} else if (memberProfileChangeRequestDto.isProfileImageChanged()) {
+		} else if (profileImageChanged) {
 			memberImageManager.deleteMemberProfileImage(member.getProfileImageUrl());
 			member.changeProfileImageUrl(null);
 		}
-		if (memberProfileChangeRequestDto.getStatement() != null) {
-			member.changeStatement(memberProfileChangeRequestDto.getStatement());
+		if (statement != null) {
+			member.changeStatement(statement);
 		}
 		Member changedMember = memberRepository.findById(userSessionDto.getMemberId())
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);

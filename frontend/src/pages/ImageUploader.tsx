@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
-import { useRecoilState } from "recoil";
 import useParseDate from "@/hooks/useParseDate";
 import { axiosCreateBoard } from "@/api/axios/axios.custom";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
@@ -12,37 +11,32 @@ import {
   ImageRestriction,
 } from "react-advanced-cropper";
 import "react-advanced-cropper/dist/style.css";
-import {
-  uploadFileState,
-  uploadDefaultFileState,
-  currentUploadIndexState,
-  uploadUrlArrayState,
-} from "@/recoil/atom";
 
 const ImageUploader = () => {
   const cropperRef = useRef<FixedCropperRef>(null);
-  const [urlList, setUrlList] = useRecoilState<string[]>(uploadUrlArrayState);
   const [categoryList, setCategoryList] = useState<AnimalSpecies[]>([]);
-  const [uploadFiles, setUploadFiles] = useRecoilState<Blob[]>(uploadFileState);
-  const [uploadDefaultFiles, setUploadDefaultFiles] = useRecoilState<Blob[]>(
-    uploadDefaultFileState
-  );
+  const [uploadFiles, setUploadFiles] = useState<Blob[]>([]);
+  const [uploadDefaultFiles, setUploadDefaultFiles] = useState<Blob[]>([]);
+  const [urlList, setUrlList] = useState<string[]>([]);
+  const [urlDefaultList, setUrlDefaultList] = useState<string[]>([]);
   const [caption, setCaption] = useState("");
-  const [prevIndex, setPrevIndex] = useState<number>(0);
-  const [selectedPreviewIndex, setSelectedPreviewIndex] =
-    useRecoilState<number>(currentUploadIndexState);
+  const [selectedPreviewIndex, setSelectedPreviewIndex] = useState<number>(0);
 
   const { popToast } = useToaster();
   const { parseDate } = useParseDate();
 
+  useEffect(() => {
+    console.log("selectedPreviewIndex", selectedPreviewIndex);
+    console.log("uploadFiles", uploadFiles);
+    console.log("uploadDefaultFiles", uploadDefaultFiles);
+    console.log("urlList", urlList);
+  }, [uploadFiles, uploadDefaultFiles, urlList, selectedPreviewIndex]);
+
   const resetImage = (index: number) => {
-    console.log("reset index: ", index);
-    console.log("reset prev index: ", prevIndex);
-    console.log("reset selected index: ", selectedPreviewIndex);
     const newUrlList = [...urlList];
-    URL.revokeObjectURL(newUrlList[index]);
-    newUrlList[index] = URL.createObjectURL(uploadDefaultFiles[index]);
+    newUrlList[index] = urlDefaultList[index];
     setUrlList(newUrlList);
+
     const resetFiles = [...uploadFiles];
     resetFiles[index] = uploadDefaultFiles[index];
     setUploadFiles(resetFiles);
@@ -67,7 +61,7 @@ const ImageUploader = () => {
             const webpFile = new File([webpBlob], "image.webp", {
               type: "image/webp",
             });
-
+            console.log("crop start");
             const newUploadFiles = [...uploadFiles];
             newUploadFiles[index] = webpFile;
             setUploadFiles(newUploadFiles);
@@ -75,7 +69,7 @@ const ImageUploader = () => {
             const newUrlList = [...urlList];
             newUrlList[index] = URL.createObjectURL(webpFile);
             setUrlList(newUrlList);
-            console.log("crop");
+            console.log("crop end");
           }
         }, "image/webp");
       };
@@ -88,7 +82,6 @@ const ImageUploader = () => {
     }
     cropImage(selectedPreviewIndex);
     setSelectedPreviewIndex(index);
-    // setPrevIndex(index);
   };
 
   const handleDeleteClick = (indexToDelete: number) => {
@@ -102,6 +95,9 @@ const ImageUploader = () => {
     URL.revokeObjectURL(updatedUrlList[indexToDelete]);
     updatedUrlList.splice(indexToDelete, 1);
 
+    const updatedUrlDefaultList = [...urlDefaultList];
+    updatedUrlDefaultList.splice(indexToDelete, 1);
+
     setUploadFiles(updatedFiles);
     if (indexToDelete === uploadFiles.length) {
       console.log(uploadFiles.length - 1);
@@ -109,6 +105,7 @@ const ImageUploader = () => {
     }
     setUploadDefaultFiles(updatedDefaultFiles);
     setUrlList(updatedUrlList);
+    setUrlDefaultList(updatedUrlDefaultList);
     if (indexToDelete !== 0) {
       setSelectedPreviewIndex(indexToDelete - 1);
     } else {
@@ -137,6 +134,7 @@ const ImageUploader = () => {
   const convertToWebp = (files: any) => {
     const newUrls = files.map((file) => URL.createObjectURL(file));
     setUrlList([...urlList, ...newUrls]);
+    setUrlDefaultList([...urlDefaultList, ...newUrls]);
     files.forEach((file: Blob) => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");

@@ -120,8 +120,7 @@ const MenuStyled = styled.div`
   display: flex;
   border-top: 1px solid var(--transparent);
   flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+
   width: 100vw;
   background-color: #c1c2e1f9;
   bottom: 0;
@@ -133,10 +132,10 @@ const MenuStyled = styled.div`
     border-radius: 30px;
   }
   nav {
-    display: flex;
-    flex-direction: row;
-
-    align-items: center;
+    padding-top: 10px;
+  }
+  @media screen and (display-mode: standalone) {
+    height: 80px;
   }
 `;
 

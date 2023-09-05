@@ -32,8 +32,6 @@
 html,
 body {
   margin: 0;
-
-  /* min-width: 갤럭시 폴드 기준 */
   min-width: 262px;
   overflow: hidden;
   font-size: 10px;

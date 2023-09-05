@@ -11,10 +11,10 @@ export interface SignUpInfoDTO {
 }
 
 export interface MemberProfileChangeRequestDto {
-  memberName: string | null;
+  memberName: string;
   imageData: Blob | null;
   statement: string;
-  profileImageChanged: string | null;
+  profileImageChanged: string;
 }
 
 export interface ReportDTO {

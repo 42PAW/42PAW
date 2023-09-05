@@ -7,7 +7,7 @@ import useModal from "../../../hooks/useModal";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosChangeMyProfile } from "@/api/axios/axios.custom";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useRef } from "react";
 import {
   MemberProfileChangeRequestDto,
   ProfileInfoDTO,
@@ -29,8 +29,11 @@ const ProfileEditModal = () => {
   const { popToast } = useToaster();
   const { nicknameValidation } = useNicknameValidation();
   const { debounce } = useDebounce();
-
   const { closeModal } = useModal();
+  const { fetchMyInfo } = useFetch();
+  const nameInputRef = useRef<HTMLInputElement | null>(null); // name input 요소에 대한 ref
+  const statementInputRef = useRef<HTMLInputElement | null>(null); // statement input 요소에 대한 ref
+
   const [profileInfo, setProfileInfo] = useState<MemberProfileChangeRequestDto>(
     {
       memberName: prevProfileInfo?.memberName!,
@@ -39,7 +42,6 @@ const ProfileEditModal = () => {
       profileImageChanged: "false",
     }
   );
-  const { fetchMyInfo } = useFetch();
   const editProfileMutation = useMutation(
     (profileInfo: MemberProfileChangeRequestDto) =>
       axiosChangeMyProfile(profileInfo),
@@ -58,6 +60,23 @@ const ProfileEditModal = () => {
     }
   );
 
+  const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && e.nativeEvent.isComposing === false) {
+      if (e.target === nameInputRef.current) {
+        // name input 요소에서 엔터 키를 눌렀을 때
+        if (statementInputRef.current) {
+          statementInputRef.current.focus(); // statement input 요소로 포커스 이동
+          statementInputRef.current.selectionStart =
+            statementInputRef.current.value.length;
+        }
+      } else if (e.target === statementInputRef.current) {
+        // statement input 요소에서 엔터 키를 눌렀을 때
+        onChangeProfileInfo(); // onChangeProfileInfo 함수 호출
+        console.log("statementInputRef");
+      }
+    }
+  };
+
   // submitProfileInfo
   const onChangeProfileInfo = async () => {
     try {
@@ -72,7 +91,10 @@ const ProfileEditModal = () => {
           debounce("nickname", () => setIsWrong(false), 2000);
           return;
         }
-      } else profileInfo.memberName = null;
+      } else profileInfo.memberName = "";
+      // if (profileInfo.statement === prevProfileInfo?.statement) {
+      //   profileInfo.statement = null;
+      // }
       try {
         const mutationResult = await editProfileMutation.mutateAsync(
           profileInfo
@@ -195,22 +217,27 @@ const ProfileEditModal = () => {
           <EditInfoStyled>
             <span>이름</span>
             <input
+              ref={nameInputRef}
               placeholder="최대 10자 이내"
               name="name"
               type="text"
               value={profileInfo.memberName!}
               onChange={(e) => handleNameChange(e)}
               maxLength={10}
+              onKeyDown={handleEnterKey}
             />
           </EditInfoStyled>
           <EditInfoStyled>
             <span>자기소개</span>
             <input
+              ref={statementInputRef}
               type="text"
-              placeholder="최대 30자 이내" // 국가에 따라 언어 변경
+              name="statement"
+              placeholder="최대 50자 이내" // 국가에 따라 언어 변경
               value={profileInfo.statement}
               maxLength={50}
               onChange={(e) => handleStatementChange(e)}
+              onKeyDown={handleEnterKey}
             />
           </EditInfoStyled>
           <ButtonContainerStyled.Button>

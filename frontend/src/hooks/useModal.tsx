@@ -23,8 +23,16 @@ const useModal = () => {
       [modalName]: false,
     });
   };
+  const switchModal = (from: ModalType, to: ModalType) => {
+    if (callbackStore.length !== 0) setCallbackStore([]);
+    setCurrentOpenModal({
+      ...currentOpenModal,
+      [from]: false,
+      [to]: true,
+    });
+  };
 
-  return { openModal, closeModal };
+  return { openModal, closeModal, switchModal };
 };
 
 export default useModal;

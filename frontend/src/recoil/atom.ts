@@ -154,3 +154,8 @@ export const boardsLengthState = atom<number>({
   key: "boardsLength",
   default: 10000,
 });
+
+export const uploadUrlArrayState = atom<string[]>({
+  key: "uploadUrlArray",
+  default: [],
+});

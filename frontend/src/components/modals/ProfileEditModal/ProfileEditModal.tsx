@@ -15,6 +15,7 @@ import useNicknameValidation from "@/hooks/useNicknameValidation";
 import useDebounce from "@/hooks/useDebounce";
 import useFetch from "@/hooks/useFetch";
 import heic2any from "heic2any";
+import imageCompression from "browser-image-compression";
 
 const ProfileEditModal = () => {
   const queryClient = useQueryClient();
@@ -104,6 +105,7 @@ const ProfileEditModal = () => {
         }
       } catch (error: any) {
         if (error.response) {
+          popToast("error", "N");
           popToast(error.response.data.message, "N");
         }
       }
@@ -129,27 +131,36 @@ const ProfileEditModal = () => {
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     let file = e.target.files?.[0];
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 2520,
+    };
     // test
     if (file) {
       if (file.type === "image/heic" || file.type === "image/HEIC") {
-        let blob = file;
-        heic2any({ blob: blob, toType: "image/webp" }).then(function (
-          resultBlob: any
-        ) {
-          file = new File([resultBlob], file!.name.split(".")[0] + ".webp", {
-            type: "image/webp",
-            lastModified: new Date().getTime(),
+        await fetch(URL.createObjectURL(file))
+          .then((res) => res.blob())
+          .then((blob) => heic2any({ blob, toType: "image/webp" }))
+          .then((conversionResult) => {
+            file = new File(
+              [conversionResult as Blob],
+              file!.name.split(".")[0] + ".webp",
+              {
+                type: "image/webp",
+                lastModified: new Date().getTime(),
+              }
+            );
+          })
+          .catch((e) => {
+            alert(e);
           });
-        });
       }
-    }
-    // test
-    if (file) {
-      if (file.size > 10000000) {
+      const compressedFile = await imageCompression(file!, options);
+      if (compressedFile.size > 10000000) {
         popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
         return;
       }
-      const imageBitmap = await createImageBitmap(file);
+      const imageBitmap = await createImageBitmap(compressedFile);
       const canvas = document.createElement("canvas");
       canvas.width = imageBitmap.width;
       canvas.height = imageBitmap.height;

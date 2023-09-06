@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import useParseDate from "@/hooks/useParseDate";
 import { axiosCreateBoard } from "@/api/axios/axios.custom";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
@@ -24,13 +24,6 @@ const ImageUploader = () => {
 
   const { popToast } = useToaster();
   const { parseDate } = useParseDate();
-
-  useEffect(() => {
-    console.log("selectedPreviewIndex", selectedPreviewIndex);
-    console.log("uploadFiles", uploadFiles);
-    console.log("uploadDefaultFiles", uploadDefaultFiles);
-    console.log("urlList", urlList);
-  }, [uploadFiles, uploadDefaultFiles, urlList, selectedPreviewIndex]);
 
   const resetImage = (index: number) => {
     const newUrlList = [...urlList];
@@ -61,7 +54,6 @@ const ImageUploader = () => {
             const webpFile = new File([webpBlob], "image.webp", {
               type: "image/webp",
             });
-            console.log("crop start");
             const newUploadFiles = [...uploadFiles];
             newUploadFiles[index] = webpFile;
             setUploadFiles(newUploadFiles);
@@ -69,7 +61,6 @@ const ImageUploader = () => {
             const newUrlList = [...urlList];
             newUrlList[index] = URL.createObjectURL(webpFile);
             setUrlList(newUrlList);
-            console.log("crop end");
           }
         }, "image/webp");
       };
@@ -100,7 +91,6 @@ const ImageUploader = () => {
 
     setUploadFiles(updatedFiles);
     if (indexToDelete === uploadFiles.length) {
-      console.log(uploadFiles.length - 1);
       setSelectedPreviewIndex(uploadFiles.length - 1);
     }
     setUploadDefaultFiles(updatedDefaultFiles);
@@ -178,8 +168,8 @@ const ImageUploader = () => {
         content: caption,
       });
       popToast("업로드 완료!", "P");
-      goHome();
-      console.log(response);
+      // goHome();
+      // console.log(response);
     } catch (error) {
       throw error;
     }

@@ -146,7 +146,7 @@ const CountInfoStyled = styled.ul`
 
 const MeatballButtonContainerStyled = styled.div`
   position: absolute;
-  top: 130px;
+  top: 120px;
   right: 20px;
   width: 30px;
   &:focus {
@@ -165,11 +165,11 @@ const ProfileHeaderStyled = styled.div`
   margin-top: 20px;
   color: var(--white);
   width: 100%;
-  min-height: 386px;
+  min-height: 330px;
   font-size: 1.6rem;
 
   background-image: url("/assets/Intersect.png");
-  background-size: 100% 320px;
+  background-size: 100% 260px;
   background-repeat: no-repeat;
   background-position-y: bottom;
 
@@ -192,6 +192,7 @@ const ProfileHeaderStyled = styled.div`
   .profileImage {
     width: 160px;
     aspect-ratio: 1 / 1;
+    object-fit: cover;
     background-color: var(--transparent); /* 이미지가 없을 때 배경 색상 */
     filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.25));
     border-radius: 50%;

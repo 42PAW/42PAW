@@ -54,9 +54,6 @@ export const axiosChangeMyProfile = async ({
       "profileImageChanged",
       profileImageChanged ? "true" : "false"
     );
-    console.log("formData.memberName: " + formData.get("memberName"));
-    console.log("formData.profileImage: " + formData.get("profileImage"));
-    console.log("formData.statement: " + formData.get("statement"));
     const response = await instance.post(axiosChangeMyProfileURL, formData, {
       headers: {
         "Content-Type": "multipart/form-data",

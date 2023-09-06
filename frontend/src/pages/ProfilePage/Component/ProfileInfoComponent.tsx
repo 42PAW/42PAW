@@ -192,6 +192,7 @@ const ProfileHeaderStyled = styled.div`
   .profileImage {
     width: 160px;
     aspect-ratio: 1 / 1;
+    object-fit: cover;
     background-color: var(--transparent); /* 이미지가 없을 때 배경 색상 */
     filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.25));
     border-radius: 50%;

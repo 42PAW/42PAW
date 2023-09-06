@@ -246,6 +246,7 @@ const BoardProfileStyled = styled.div`
     cursor: pointer;
     width: 10%;
     aspect-ratio: 1 / 1;
+    object-fit: cover;
     border-radius: 100%;
   }
   div {

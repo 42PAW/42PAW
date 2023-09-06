@@ -151,8 +151,8 @@ const ProfileEditModal = () => {
               }
             );
           })
-          .catch((e) => {
-            alert(e);
+          .catch((error) => {
+            console.log(error);
           });
       }
       const compressedFile = await imageCompression(file!, options);

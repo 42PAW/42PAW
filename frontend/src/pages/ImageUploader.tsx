@@ -124,15 +124,15 @@ const ImageUploader = () => {
       popToast("5개 이하의 이미지만 업로드 가능합니다.", "N");
       return;
     }
-    convertToWebp(selectedFiles);
+    convertToWebp(selectedFiles as Blob[]);
   };
 
   const captionChange = (e: any) => {
     setCaption(e.target.value);
   };
 
-  const convertToWebp = (files: any) => {
-    const newUrls = files.map((file) => URL.createObjectURL(file));
+  const convertToWebp = (files: Blob[]) => {
+    const newUrls = files.map((file: Blob) => URL.createObjectURL(file));
     setUrlList([...urlList, ...newUrls]);
     setUrlDefaultList([...urlDefaultList, ...newUrls]);
     files.forEach((file: Blob) => {
@@ -202,7 +202,7 @@ const ImageUploader = () => {
             key={index}
             onClick={() => handlePreviewClick(index)}
           >
-            <img src={urlList[index]} />
+            <img src={url} />
             {index === selectedPreviewIndex && (
               <DeleteButtonStyled
                 onClick={() => {
@@ -227,12 +227,12 @@ const ImageUploader = () => {
         )}
       </SmallPreviewStyled>
       {uploadFiles.length > 0 &&
-        uploadFiles.map((file: Blob, index: number) => (
+        urlList.map((url: string, index: number) => (
           <>
             {index === selectedPreviewIndex && (
               <>
                 <FixedCropperStyled
-                  src={urlList[index]}
+                  src={url}
                   ref={cropperRef}
                   stencilProps={{
                     handlers: false,

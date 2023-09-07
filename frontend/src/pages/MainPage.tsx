@@ -16,6 +16,7 @@ import useDebounce from "@/hooks/useDebounce";
 import { useRef } from "react";
 import { boardsLengthState } from "@/recoil/atom";
 import { buttonToggledState } from "@/components/BoardSortToggle";
+import { logoClickObserverState } from "@/recoil/atom";
 
 const MainPage = () => {
   //useInview의 ref값을 참조하는 요소에 대한 root 참조값
@@ -25,6 +26,7 @@ const MainPage = () => {
   const [boardsLength] = useRecoilState<number>(boardsLengthState);
   const [boardCategory, setBoardCategory] =
     useRecoilState<Board>(boardCategoryState);
+  const [logoClickObserver] = useRecoilState<number>(logoClickObserverState);
   const { fetchBoards } = useFetch();
   const navigator = useNavigate();
   const [ref, inView] = useInView({
@@ -64,7 +66,7 @@ const MainPage = () => {
     if (rootRef.current) {
       rootRef.current.scrollTop = 0;
     }
-  }, [boardCategory]);
+  }, [boardCategory, logoClickObserver]);
 
   if (loading || isLoading) {
     return (

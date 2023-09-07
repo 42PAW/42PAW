@@ -139,3 +139,8 @@ export const boardsLengthState = atom<number>({
   key: "boardsLength",
   default: 10000,
 });
+
+export const logoClickObserverState = atom<number>({
+  key: "logoClickObserver",
+  default: 0,
+});

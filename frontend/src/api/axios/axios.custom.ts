@@ -230,7 +230,16 @@ export const axiosGetBoardComments = async (
   page: number
 ): Promise<any> => {
   try {
-    const response = await instance.get(
+    if (token) {
+      const response = await instance.get(
+        axiosGetBoardCommentsURL + boardId.toString(),
+        {
+          params: { size: size, page: page },
+        }
+      );
+      return response.data.result;
+    }
+    const response = await axios.get(
       axiosGetBoardCommentsURL + boardId.toString(),
       {
         params: { size: size, page: page },

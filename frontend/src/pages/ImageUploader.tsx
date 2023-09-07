@@ -108,7 +108,7 @@ const ImageUploader = () => {
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     const options = {
-      maxSizeMB: 5,
+      maxSizeMB: 2,
       maxWidthOrHeight: 2520,
     };
 

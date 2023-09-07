@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { FollowerDTO, UserInfoDTO } from "@/types/dto/member.dto.ts";
 import SearchItem from "@/components/RightSection/SearchSection/SearchItem";
-import { userInfoState, languageState } from "@/recoil/atom";
+import { userInfoState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 import { useQuery } from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
@@ -10,7 +10,6 @@ import { MemberPreviewResponseDto } from "@/types/dto/member.dto.ts";
 import { useQueryClient } from "@tanstack/react-query";
 
 const BannedMemberSection = () => {
-  const [language] = useRecoilState<any>(languageState);
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const queryClient = useQueryClient();
   queryClient.invalidateQueries(["BanList"]);
@@ -58,9 +57,7 @@ const BannedMemberSection = () => {
             />
           ))
         ) : (
-          <NoSearchMessageStyled>
-            {language.noBlockedAccounts}
-          </NoSearchMessageStyled>
+          <NoSearchMessageStyled>차단한 계정이 없습니다.</NoSearchMessageStyled>
         )}
       </BanListWrapperStyled>
     </WrapperStyled>

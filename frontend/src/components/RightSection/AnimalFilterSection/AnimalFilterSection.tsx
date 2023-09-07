@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { styled } from "styled-components";
 import AnimalButtonContainer from "@/components/AnimalButtonContainer";
-import { userInfoState, languageState } from "@/recoil/atom";
+import { userInfoState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 import { axiosUpdateAnimalCategory } from "@/api/axios/axios.custom";
@@ -10,7 +10,6 @@ import useToaster from "@/hooks/useToaster";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 
 const AnimalFilterSection = () => {
-  const [language] = useRecoilState<any>(languageState);
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [animalCategory, setAnimalCategory] = useState<AnimalSpecies[] | null>(
     null
@@ -30,15 +29,13 @@ const AnimalFilterSection = () => {
 
   const updateAnimalCategory = () => {
     if (!animalCategory || animalCategory.length === 0) {
-      const selectCategoryMsg = language.selectCategory;
-      popToast(selectCategoryMsg, "N");
+      popToast("카테고리를 선택해주세요.", "N");
       return;
     }
     // 로그인 상태 -> api에 실제 데이터 변경 요청
     if (userInfo) {
-      const categoryChangeToastMsg = language.categoryChangeToast;
       axiosUpdateAnimalCategory(animalCategory as AnimalSpecies[]);
-      popToast(categoryChangeToastMsg, "P");
+      popToast("동물 카테고리가 변경되었습니다.", "P");
     }
     closeRightSection();
   };
@@ -47,7 +44,7 @@ const AnimalFilterSection = () => {
     <WrapperStyled>
       <CategoryIconContainerStyled>
         <img src="/assets/categoryW.png" />
-        {language.filterTitle}
+        필터
       </CategoryIconContainerStyled>
       {animalCategory && (
         <AnimalButtonContainer
@@ -59,7 +56,7 @@ const AnimalFilterSection = () => {
         />
       )}
       <SubmitButtonStyled onClick={updateAnimalCategory}>
-        {language.confirm}
+        확인
       </SubmitButtonStyled>
     </WrapperStyled>
   );

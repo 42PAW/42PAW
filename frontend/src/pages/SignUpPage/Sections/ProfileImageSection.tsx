@@ -3,8 +3,11 @@ import { styled } from "styled-components";
 import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
 import { Section } from "@/pages/SignUpPage/SignUpPage";
 import RevertButton from "@/pages/SignUpPage/components/RevertButton";
+import { languageState } from "@/recoil/atom";
+import { useRecoilValue } from "recoil";
 
 const ProfileImageSection: React.FC<SectionProps> = ({ setStep }) => {
+  const [language] = useRecoilValue<any>(languageState);
   const [isFading, setIsFading] = useState<boolean>(true);
 
   const handleOnClick = () => {
@@ -27,7 +30,7 @@ const ProfileImageSection: React.FC<SectionProps> = ({ setStep }) => {
         to={Section.Nickname}
         setIsFading={setIsFading}
       />
-      <h1>사진을 선택해주세요</h1>
+      <h1>{language.selectAPhoto}</h1>
       <NextButtonStyled onClick={handleOnClick}>
         <img src="/assets/arrowW.png" />
       </NextButtonStyled>

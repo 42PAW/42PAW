@@ -5,8 +5,12 @@ import { Country } from "@/types/enum/country.enum";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useQueryClient } from "@tanstack/react-query";
 import MeatballButton from "@/components/MeatballButton";
+import { languageState } from "@/recoil/atom";
+import { useRecoilValue } from "recoil";
 
 const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
+  const [language] = useRecoilValue<any>(languageState);
+
   const { openFollowerSection, openFollowingSection } =
     useRightSectionHandler();
 
@@ -21,15 +25,15 @@ const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
   return (
     <CountInfoStyled>
       <li>
-        <div>게시물</div>
+        <div>{language.posts}</div>
         <span>{userInfo.boardCount}</span>
       </li>
       <li onClick={handleFollowerClick}>
-        <div>팔로워</div>
+        <div>{language.followers}</div>
         <span>{userInfo.followerCount}</span>
       </li>
       <li onClick={handleFollowingClick}>
-        <div>팔로잉</div>
+        <div>{language.following}</div>
         <span>{userInfo.followingCount}</span>
       </li>
     </CountInfoStyled>

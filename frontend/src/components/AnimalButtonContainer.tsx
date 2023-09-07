@@ -1,16 +1,22 @@
 import { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
+import { languageState } from "@/recoil/atom";
+import { useRecoilState } from "recoil";
 
 const renderAnimalSpecies = (buttonName: string) => {
-  if (buttonName === AnimalSpecies.DOG) return "🐶 강아지";
-  if (buttonName === AnimalSpecies.CAT) return "🐱 고양이";
-  if (buttonName === AnimalSpecies.FISH) return "🐠 물고기";
-  if (buttonName === AnimalSpecies.BIRD) return "🐤 새";
-  if (buttonName === AnimalSpecies.SMALLANIMAL) return "🐹 소동물";
-  if (buttonName === AnimalSpecies.REPTILE) return "🐍 파충류";
-  if (buttonName === AnimalSpecies.AMPHIBIAN) return "🐸 양서류";
-  if (buttonName === AnimalSpecies.INSECT) return "🐝 곤충";
+  const [language] = useRecoilState<any>(languageState);
+
+  if (buttonName === AnimalSpecies.DOG) return `🐶 ${language.Dogs}`;
+  if (buttonName === AnimalSpecies.CAT) return `🐱 ${language.Cats}`;
+  if (buttonName === AnimalSpecies.FISH) return `🐠 ${language.Fish}`;
+  if (buttonName === AnimalSpecies.BIRD) return `🐤 ${language.Birds}`;
+  if (buttonName === AnimalSpecies.SMALLANIMAL)
+    return `🐹 ${language.SmallAnimals}`;
+  if (buttonName === AnimalSpecies.REPTILE) return `🐍 ${language.Reptiles}`;
+  if (buttonName === AnimalSpecies.AMPHIBIAN)
+    return `🐸 ${language.Amphibians}`;
+  if (buttonName === AnimalSpecies.INSECT) return `🐝 ${language.Insects}`;
 };
 
 /**

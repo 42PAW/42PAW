@@ -5,12 +5,15 @@ import { Section } from "@/pages/SignUpPage/SignUpPage";
 import useToaster from "@/hooks/useToaster";
 import useDebounce from "@/hooks/useDebounce";
 import useNicknameValidation from "@/hooks/useNicknameValidation";
+import { languageState } from "@/recoil/atom";
+import { useRecoilValue } from "recoil";
 
 const NicknameSection: React.FC<SectionProps> = ({
   registerData,
   setRegisterData,
   setStep,
 }) => {
+  const [language] = useRecoilValue<any>(languageState);
   const [isWrong, setIsWrong] = useState<boolean>(false);
   const [isFading, setIsFading] = useState<boolean>(true);
   const { nicknameValidation } = useNicknameValidation();
@@ -19,7 +22,8 @@ const NicknameSection: React.FC<SectionProps> = ({
 
   const submitNickname = async () => {
     if (isWrong === true) {
-      popToast("잠시 후에 다시 시도해주세요.", "N");
+      const tryAgainLaterMsg = language.tryAgainLater;
+      popToast(tryAgainLaterMsg, "N");
       return;
     }
     const isValid = await nicknameValidation(registerData.memberName);
@@ -50,10 +54,10 @@ const NicknameSection: React.FC<SectionProps> = ({
 
   return (
     <WrapperStyled $isFading={isFading}>
-      <h1>당신의 닉네임은 무엇인가요?</h1>
+      <h1>{language.whatsYourNickname}</h1>
       <InputContainer $isWrong={isWrong}>
         <input
-          placeholder="최대 10자 이내"
+          placeholder={language.upTo10Characters}
           value={registerData.memberName}
           onChange={handleOnChange}
           minLength={3}

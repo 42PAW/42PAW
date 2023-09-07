@@ -14,9 +14,12 @@ import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTempla
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import { useNavigate, useParams } from "react-router-dom";
 import useDebounce from "@/hooks/useDebounce";
+import { languageState } from "@/recoil/atom";
+import { useRecoilValue } from "recoil";
 
 const ProfileBoardsPage = () => {
   const { debounce } = useDebounce();
+  const [language] = useRecoilValue<any>(languageState);
   const [loading, setLoading] = useState(true);
   const navigator = useNavigate();
   const [boardCategory, setBoardCategory] =
@@ -99,7 +102,7 @@ const ProfileBoardsPage = () => {
         </FetchObserverStyled>
       )}
       {!hasNextPage && (
-        <BoardsEndStyled>더 이상 게시물이 존재하지 않습니다.</BoardsEndStyled>
+        <BoardsEndStyled>{language.noMorePosts}</BoardsEndStyled>
       )}
     </WrapperStyled>
   );

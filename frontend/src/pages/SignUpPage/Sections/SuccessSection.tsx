@@ -4,8 +4,11 @@ import createConfetti from "canvas-confetti";
 import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
 import { useEffect } from "react";
 import { axiosSignUp } from "@/api/axios/axios.custom";
+import { languageState } from "@/recoil/atom";
+import { useRecoilValue } from "recoil";
 
 const SuccessSection: React.FC<SectionProps> = ({ registerData }) => {
+  const [language] = useRecoilValue<any>(languageState);
   const navigator = useNavigate();
 
   createConfetti({
@@ -28,7 +31,7 @@ const SuccessSection: React.FC<SectionProps> = ({ registerData }) => {
   return (
     <WrapperStyled>
       <h1>
-        환영합니다! <br /> {registerData.memberName}
+        {language.welcome} <br /> {registerData.memberName}
       </h1>
     </WrapperStyled>
   );

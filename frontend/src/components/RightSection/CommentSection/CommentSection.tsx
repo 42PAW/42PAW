@@ -136,7 +136,9 @@ const CommentSection = () => {
           onChange={handleOnchange}
           onKeyDown={handleKeyDown}
         />
-        <button onClick={() => commentMutation.mutate()}>게시</button>
+        <button onClick={() => commentMutation.mutate()}>
+          {language.posting}
+        </button>
       </CommentInputContainerStyled>
     </WrapperStyled>
   );

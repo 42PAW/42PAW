@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { FollowerDTO, UserInfoDTO } from "@/types/dto/member.dto.ts";
 import SearchItem from "@/components/RightSection/SearchSection/SearchItem";
-import { userInfoState } from "@/recoil/atom";
+import { userInfoState, languageState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 import useFetch from "@/hooks/useFetch";
 import { useQuery } from "@tanstack/react-query";
@@ -9,6 +9,7 @@ import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import { useParams } from "react-router-dom";
 
 const FollowingSection = () => {
+  const [language] = useRecoilState<any>(languageState);
   const { memberId } = useParams<{ memberId: string }>();
   const { fetchFollowingList } = useFetch(Number(memberId));
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState); // isMine 체크, 나중에 다른 방법 없나 확인해보기
@@ -47,7 +48,7 @@ const FollowingSection = () => {
             />
           ))
         ) : (
-          <NoSearchMessageStyled>팔로우를 해보세요.</NoSearchMessageStyled>
+          <NoSearchMessageStyled>{language.tryFollowing}</NoSearchMessageStyled>
         )}
       </FollowerItemWrapperStyled>
     </WrapperStyled>

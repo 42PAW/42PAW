@@ -1,5 +1,7 @@
 import useToaster from "./useToaster";
 import { axiosCheckNicknameValid } from "@/api/axios/axios.custom";
+import { languageState } from "@/recoil/atom";
+import { useRecoilValue } from "recoil";
 
 const hasWhitespace = (str: string) => {
   return str.indexOf(" ") >= 0;
@@ -19,23 +21,29 @@ const useNicknameValidation = () => {
    * @param {string} nickname - 유효성을 검사할 닉네임.
    */
   const nicknameValidation = async (nickname: string) => {
+    const [language] = useRecoilValue<any>(languageState);
+
     if (
       nickname.length < 3 ||
       hasWhitespace(nickname) ||
       hasSpecialLetter(nickname)
     ) {
       if (nickname.length < 3) {
-        popToast("닉네임은 3글자 이상이어야 합니다.", "N");
+        const nicknameMinimumCharacterMsg = language.NicknameMinimumCharacter;
+        popToast(nicknameMinimumCharacterMsg, "N");
       } else if (hasWhitespace(nickname)) {
-        popToast("닉네임에 띄어쓰기는 포함될 수 없습니다.", "N");
+        const nicknameExcludeSpaceMsg = language.NicknameExcludeSpace;
+        popToast(nicknameExcludeSpaceMsg, "N");
       } else if (hasSpecialLetter(nickname)) {
-        popToast("유효하지 않은 문자가 포함돼 있습니다.", "N");
+        const nicknameInvalidCharacterMsg = language.NicknameInvalidCharacter;
+        popToast(nicknameInvalidCharacterMsg, "N");
       }
       return false;
     }
     const isMembernameValid = await axiosCheckNicknameValid(nickname);
     if (!isMembernameValid) {
-      popToast("이미 사용 중인 닉네임입니다.", "N");
+      const nicknameAlreadyUsedMsg = language.NicknameAlreadyUsed;
+      popToast(nicknameAlreadyUsedMsg, "N");
       return false;
     }
     return true;

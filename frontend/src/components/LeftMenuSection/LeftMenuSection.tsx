@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import LeftMenuTablet from "@/components/LeftMenuSection/LeftMenuTablet";
 import LeftMenuDesktop from "@/components/LeftMenuSection/LeftMenuDesktop";
 import { userInfoState, languageState } from "@/recoil/atom";
@@ -10,7 +10,6 @@ import { boardCategoryState } from "@/recoil/atom";
 import { Board } from "@/types/enum/board.category.enum";
 import { useQueryClient } from "@tanstack/react-query";
 import LoadingAnimation from "../loading/LoadingAnimation";
-import { logoClickObserverState } from "@/recoil/atom";
 
 export interface LeftMenuProps {
   handleLogin: () => void;
@@ -21,9 +20,6 @@ export interface LeftMenuProps {
 }
 
 const LeftMenuSection = () => {
-  const setLogoClickObserver = useSetRecoilState<number>(
-    logoClickObserverState
-  );
   const [isDesktopScreen, setIsDesktopScreen] = useState(
     window.matchMedia("(min-width: 1024px)").matches
   );
@@ -67,7 +63,6 @@ const LeftMenuSection = () => {
       boardCategory === Board.SCRAPPED
     )
       setBoardCategory(Board.DEFAULT);
-    setLogoClickObserver((prev) => prev + 1);
     queryClient.invalidateQueries(["boards", boardCategory]);
   };
 

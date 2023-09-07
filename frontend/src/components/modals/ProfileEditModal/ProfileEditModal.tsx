@@ -14,8 +14,7 @@ import useToaster from "@/hooks/useToaster";
 import useNicknameValidation from "@/hooks/useNicknameValidation";
 import useDebounce from "@/hooks/useDebounce";
 import useFetch from "@/hooks/useFetch";
-import heic2any from "heic2any";
-import imageCompression from "browser-image-compression";
+import processImage from "@/components/processImage";
 
 const ProfileEditModal = () => {
   const queryClient = useQueryClient();
@@ -130,58 +129,16 @@ const ProfileEditModal = () => {
   );
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    let file = e.target.files?.[0];
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 2520,
-    };
-    // test
+    const file = e.target.files?.[0];
     if (file) {
-      if (file.type === "image/heic" || file.type === "image/HEIC") {
-        await fetch(URL.createObjectURL(file))
-          .then((res) => res.blob())
-          .then((blob) => heic2any({ blob, toType: "image/webp" }))
-          .then((conversionResult) => {
-            file = new File(
-              [conversionResult as Blob],
-              file!.name.split(".")[0] + ".webp",
-              {
-                type: "image/webp",
-                lastModified: new Date().getTime(),
-              }
-            );
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-      const compressedFile = await imageCompression(file!, options);
-      if (compressedFile.size > 10000000) {
+      if (
+        await processImage(file, profileInfo, setProfileInfo, setImagePreview)
+      ) {
         popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
         return;
       }
-      const imageBitmap = await createImageBitmap(compressedFile);
-      const canvas = document.createElement("canvas");
-      canvas.width = imageBitmap.width;
-      canvas.height = imageBitmap.height;
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        ctx.drawImage(imageBitmap, 0, 0);
-        canvas.toBlob(async (webpBlob) => {
-          if (webpBlob) {
-            setProfileInfo({
-              ...profileInfo,
-              imageData: webpBlob,
-              profileImageChanged: true,
-            });
-            const webpDataURL = URL.createObjectURL(webpBlob);
-            setImagePreview(webpDataURL);
-          }
-        }, "image/webp");
-      }
     }
   };
-  // img wepb 변환
 
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length > 10) {

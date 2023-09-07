@@ -201,7 +201,7 @@ const ImageUploader = () => {
       return;
     }
     try {
-      cropImage(selectedPreviewIndex);
+      await cropImage(selectedPreviewIndex);
       await axiosCreateBoard({
         mediaDataList: uploadFiles,
         categoryList: categoryList,

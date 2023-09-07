@@ -106,6 +106,7 @@ const LanguageItemStyled = styled.button`
   border: none;
   font-size: 1.2rem;
   background-color: var(--white);
+  color: black;
   &:hover {
     background-color: var(--lightpurple);
     transition: background-color 0.5s ease;

@@ -177,6 +177,9 @@ const CommentInputContainerStyled = styled.div`
   justify-content: space-evenly;
   width: 100%;
   height: 40px;
+  @media screen and (display-mode: standalone) {
+    margin-bottom: 40px;
+  }
   font-size: 1.3rem;
   border-top: 1px solid var(--transparent);
   padding-top: 2%;

@@ -100,6 +100,9 @@ const WrapperStyled = styled.div`
   }
   button:last-child {
     border: none;
+    @media screen and (display-mode: standalone) {
+      margin-bottom: 40px;
+    }
   }
 `;
 

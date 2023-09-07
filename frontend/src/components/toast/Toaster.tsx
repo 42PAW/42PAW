@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { toastMessagesState } from "@/recoil/atom";
-import { useRecoilState, useResetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { IToastInfo } from "@/types/interface/toast.interface";
 import useDebounce from "@/hooks/useDebounce";
 
@@ -9,7 +9,6 @@ const Toast: React.FC = () => {
   const [toastMessages, setToastMessages] =
     useRecoilState<IToastInfo[]>(toastMessagesState);
   const { debounce } = useDebounce();
-  const resetToastMessage = useResetRecoilState(toastMessagesState);
 
   useEffect(() => {
     debounce("toaster", closeAllToasts, 1300);
@@ -21,9 +20,6 @@ const Toast: React.FC = () => {
       isPopped: false,
     }));
     setToastMessages(updatedToasts);
-    setTimeout(() => {
-      resetToastMessage();
-    }, 200);
   };
 
   return (
@@ -67,7 +63,7 @@ const ToastWrapperStyled = styled.div<{
   $type: string;
 }>`
   position: fixed;
-  top: ${({ $index }) => 50 * $index + 20}px;
+  top: 20px;
   right: 20px;
   background-color: ${({ $type }) =>
     $type === "P" ? "var(--white)" : $type === "N" ? "#fae4e3" : "#fae4e3"};

@@ -171,10 +171,15 @@ const BoardTemplate = (board: BoardTemplateProps) => {
           <ButtonZoneStyled>
             <ReactionCommentContainerStyled>
               <ReactionStyled onClick={handleClickReaction}>
-                <HeartIcon style={ReactionAnimation} src="/assets/likeR.png" />
+                <HeartIcon
+                  style={ReactionAnimation}
+                  src="/assets/pinkHeart.png"
+                />
                 <img
                   src={
-                    isReactedRender ? "/assets/likeR.png" : "/assets/like.png"
+                    isReactedRender
+                      ? "/assets/pinkHeart.png"
+                      : "/assets/like.png"
                   }
                 />
               </ReactionStyled>

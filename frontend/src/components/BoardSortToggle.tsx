@@ -1,5 +1,5 @@
 import { atom, useSetRecoilState, useRecoilState } from "recoil";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Board } from "@/types/enum/board.category.enum";
 import { boardCategoryState } from "@/recoil/atom";
 import { languageState } from "@/recoil/atom";
@@ -47,6 +47,12 @@ const BoardSortToggle = () => {
   );
 };
 
+const waveAnimation = keyframes`
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+`;
+
 const BoardSortToggleWrapperStyled = styled.div`
   border-radius: 30px;
   position: absolute;
@@ -59,16 +65,17 @@ const SortTabStyled = styled.div<{ $buttonToggled: number }>`
   width: 33.3%;
   height: 100%;
   position: absolute;
-  background-color: ${({ $buttonToggled }) =>
+  background: ${({ $buttonToggled }) =>
     $buttonToggled === 0
-      ? "#7378b5"
+      ? "linear-gradient(270deg, var(--lightpurple), var(--lightpink))"
       : $buttonToggled === 1
-      ? "#7378b5"
-      : "#7378b5"};
+      ? "linear-gradient(270deg, var(--lightpurple), var(--lightpink))"
+      : "linear-gradient(270deg, var(--lightpurple), var(--lightpink))"};
   margin-left: ${({ $buttonToggled }) => $buttonToggled * 33.3}%;
   transition: all 0.3s ease-in-out;
   border-radius: 30px;
-  box-sizing: border-box;
+  background-size: 200% 200%;
+  animation: ${waveAnimation} 2s ease infinite;
 `;
 
 const BoardSortToggleStyled = styled.div<{ $buttonToggled: number }>`
@@ -76,7 +83,7 @@ const BoardSortToggleStyled = styled.div<{ $buttonToggled: number }>`
   justify-content: space-around;
   position: relative;
   width: 100%;
-  height: 30px;
+  min-height: 30px;
   border-radius: 30px;
   background-color: var(--transparent);
   button {
@@ -93,8 +100,6 @@ const BoardSortToggleStyled = styled.div<{ $buttonToggled: number }>`
     width: 33.3%;
     min-width: 70px;
     font-size: 1rem;
-    line-height: 30px;
-    height: 30px;
   }
 `;
 

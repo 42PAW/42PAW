@@ -43,7 +43,6 @@ const PostList: React.FC<{ posts: IBoardInfo[] | null }> = ({ posts }) => {
 const WrapperStyled = styled.div`
   display: grid;
   max-height: calc(100% - 50px);
-  margin-top: 3px;
   grid-template-columns: repeat(3, 1fr);
   @media (max-width: 1023px) {
     grid-template-columns: repeat(2, 1fr);

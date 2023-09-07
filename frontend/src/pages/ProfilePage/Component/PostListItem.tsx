@@ -60,6 +60,7 @@ const ThumbnailInfoStyled = styled.div`
   color: white;
   opacity: 0;
   transition: all 0.3s ease;
+  border-radius: 1%;
   &:hover {
     background-color: #00000074;
     opacity: 1;

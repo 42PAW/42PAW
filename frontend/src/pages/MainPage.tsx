@@ -138,7 +138,7 @@ const WrapperStyled = styled.div<{ $boardExists?: boolean }>`
   overflow-y: scroll;
   overflow-x: hidden;
   width: 100%;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
 `;
 
 const BoardsEndStyled = styled.div`

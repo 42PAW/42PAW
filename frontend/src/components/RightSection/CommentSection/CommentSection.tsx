@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 import CommentItem from "@/components/RightSection/CommentSection/CommentItem";
-import { currentBoardIdState } from "@/recoil/atom";
+import { currentBoardIdState, languageState } from "@/recoil/atom";
 import { axiosCreateComment } from "@/api/axios/axios.custom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Board } from "@/types/enum/board.category.enum";
@@ -19,6 +19,7 @@ const isOnlyWhitespace = (str: string) => {
 };
 
 const CommentSection = () => {
+  const [language] = useRecoilState<any>(languageState);
   const [loading, setLoading] = useState(true);
   const { debounce } = useDebounce();
   const { fetchComments } = useFetch();
@@ -123,14 +124,14 @@ const CommentSection = () => {
           ))
         ) : (
           <NoCommentMessageStyled>
-            이 게시글의 첫번째 댓글이 되어주세요
+            {language.demandFirstComment}
           </NoCommentMessageStyled>
         )}
       </CommentItemWrapperStyled>
       <CommentInputContainerStyled>
         <input
           value={comment}
-          placeholder="댓글을 입력해주세요"
+          placeholder={language.enterComment}
           maxLength={50}
           onChange={handleOnchange}
           onKeyDown={handleKeyDown}

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Section, SectionType } from "@/pages/SignUpPage/SignUpPage";
 import { SignUpInfoDTO } from "@/types/dto/member.dto";
 import useToaster from "@/hooks/useToaster";
+import processImage from "@/components/processImage";
 
 /**
  * @registerData.memberName 유저가 설정한 닉네임
@@ -20,31 +21,17 @@ const ProfileCard = ({
   setRegisterData,
   step,
 }: IProfileCardProps) => {
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
   const { popToast } = useToaster();
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      console.log(file.size);
-      if (file.size > 10000000) {
-        popToast("사진 용량은 10MB가 넘어갈 수 없습니다", "N");
+      if (
+        await processImage(file, registerData, setRegisterData, setImagePreview)
+      ) {
+        popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
         return;
-      }
-      const imageBitmap = await createImageBitmap(file);
-      const canvas = document.createElement("canvas");
-      canvas.width = imageBitmap.width;
-      canvas.height = imageBitmap.height;
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        ctx.drawImage(imageBitmap, 0, 0);
-        canvas.toBlob(async (webpBlob) => {
-          if (webpBlob) {
-            setRegisterData({ ...registerData, imageData: webpBlob });
-            const webpDataURL = URL.createObjectURL(webpBlob);
-            setImagePreview(webpDataURL);
-          }
-        }, "image/webp");
       }
     }
   };

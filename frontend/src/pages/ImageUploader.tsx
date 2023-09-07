@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useRef } from "react";
+import { ChangeEvent, useState, useRef } from "react";
 import useParseDate from "@/hooks/useParseDate";
 import { axiosCreateBoard } from "@/api/axios/axios.custom";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
@@ -11,6 +11,8 @@ import {
   ImageRestriction,
 } from "react-advanced-cropper";
 import "react-advanced-cropper/dist/style.css";
+import heic2any from "heic2any";
+import imageCompression from "browser-image-compression";
 
 const ImageUploader = () => {
   const cropperRef = useRef<FixedCropperRef>(null);
@@ -103,51 +105,89 @@ const ImageUploader = () => {
     }
   };
 
-  const handleImageChange = (e: any) => {
-    const selectedFiles: Blob[] = Array.from(e.target.files);
-    if (!selectedFiles) return;
-    if (selectedFiles.some((file: any) => file.size > 10000000)) {
-      popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
-      return;
-    }
+  const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const fileList = e.target.files;
+    const options = {
+      maxSizeMB: 5,
+      maxWidthOrHeight: 2520,
+    };
+
+    if (!fileList) return;
+
+    let selectedFiles = Array.from(fileList);
+
     if (uploadFiles.length + selectedFiles.length > 5) {
       popToast("5개 이하의 이미지만 업로드 가능합니다.", "N");
       return;
     }
-    convertToWebp(selectedFiles as Blob[]);
+
+    const convertedFiles = await Promise.all(
+      selectedFiles.map(async (file: File) => {
+        if (file.type === "image/heic" || file.type === "image/HEIC") {
+          const response = await fetch(URL.createObjectURL(file));
+          const blob = await response.blob();
+          const conversionResult = await heic2any({
+            blob,
+            toType: "image/webp",
+          });
+
+          const webpFile = new File(
+            [conversionResult as Blob],
+            file.name.split(".")[0] + ".webp",
+            {
+              type: "image/webp",
+              lastModified: new Date().getTime(),
+            }
+          );
+
+          return webpFile;
+        } else {
+          const compressedFile = await imageCompression(file, options);
+          if (compressedFile.size <= 10000000) {
+            const imageBitmap = await createImageBitmap(file);
+            const canvas = document.createElement("canvas");
+            canvas.width = imageBitmap.width;
+            canvas.height = imageBitmap.height;
+            const ctx = canvas.getContext("2d");
+
+            if (ctx) {
+              ctx.drawImage(imageBitmap, 0, 0);
+
+              return new Promise((resolve) => {
+                canvas.toBlob((webpBlob) => {
+                  if (webpBlob) {
+                    resolve(webpBlob);
+                  } else {
+                    resolve(null);
+                  }
+                }, "image/webp");
+              });
+            }
+          } else {
+            popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
+            return null;
+          }
+        }
+      })
+    );
+
+    const validConvertedFiles = convertedFiles.filter(
+      (file) => file !== null
+    ) as Blob[];
+
+    setUploadFiles([...uploadFiles, ...validConvertedFiles]);
+    setUploadDefaultFiles([...uploadDefaultFiles, ...validConvertedFiles]);
+
+    const webpDataURLs = validConvertedFiles.map((file: Blob) =>
+      URL.createObjectURL(file)
+    );
+
+    setUrlList([...urlList, ...webpDataURLs]);
+    setUrlDefaultList([...urlDefaultList, ...webpDataURLs]);
   };
 
   const captionChange = (e: any) => {
     setCaption(e.target.value);
-  };
-
-  const convertToWebp = (files: Blob[]) => {
-    const newUrls = files.map((file: Blob) => URL.createObjectURL(file));
-    setUrlList([...urlList, ...newUrls]);
-    setUrlDefaultList([...urlDefaultList, ...newUrls]);
-    files.forEach((file: Blob) => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-
-      const img = new Image();
-      img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx?.drawImage(img, 0, 0);
-
-        canvas.toBlob((webpBlob) => {
-          const webpFile = new File([webpBlob as BlobPart], "image.webp", {
-            type: "image/webp",
-          });
-          setUploadFiles((prevUploadFiles) => [...prevUploadFiles, webpFile]);
-          setUploadDefaultFiles((prevUploadDefaultFiles) => [
-            ...prevUploadDefaultFiles,
-            webpFile,
-          ]);
-        }, "image/webp");
-      };
-      img.src = URL.createObjectURL(file as Blob);
-    });
   };
 
   // upload the board & send axios request
@@ -168,8 +208,7 @@ const ImageUploader = () => {
         content: caption,
       });
       popToast("업로드 완료!", "P");
-      // goHome();
-      // console.log(response);
+      goHome();
     } catch (error) {
       throw error;
     }

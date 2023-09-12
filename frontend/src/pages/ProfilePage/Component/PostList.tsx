@@ -47,7 +47,7 @@ const WrapperStyled = styled.div`
   @media (max-width: 1023px) {
     grid-template-columns: repeat(2, 1fr);
   }
-  gap: 2px;
+  column-gap: 3px;
 `;
 
 export default PostList;

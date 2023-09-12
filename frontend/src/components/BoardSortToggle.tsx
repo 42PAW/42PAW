@@ -83,7 +83,7 @@ const BoardSortToggleStyled = styled.div<{ $buttonToggled: number }>`
   justify-content: space-around;
   position: relative;
   width: 100%;
-  height: 30px;
+  min-height: 30px;
   border-radius: 30px;
   background-color: var(--transparent);
   button {

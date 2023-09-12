@@ -54,12 +54,13 @@ const ThumbnailInfoStyled = styled.div`
   justify-content: space-evenly;
   cursor: pointer;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1 / 1;
   position: absolute;
   top: 0;
   color: white;
   opacity: 0;
   transition: all 0.3s ease;
+  border-radius: 1%;
   &:hover {
     background-color: #00000074;
     opacity: 1;

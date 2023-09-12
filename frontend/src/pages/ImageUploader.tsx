@@ -1,111 +1,193 @@
 import styled from "styled-components";
-import { useState } from "react";
-import { useRecoilState } from "recoil";
+import { ChangeEvent, useState, useRef } from "react";
+import useParseDate from "@/hooks/useParseDate";
 import { axiosCreateBoard } from "@/api/axios/axios.custom";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 import AnimalButtonContainer from "@/components/AnimalButtonContainer";
 import useToaster from "@/hooks/useToaster";
-import ImageCropper from "./ImageCropper";
 import {
-  uploadFileState,
-  uploadDefaultFileState,
-  currentUploadIndexState,
-} from "@/recoil/atom";
+  FixedCropper,
+  FixedCropperRef,
+  ImageRestriction,
+} from "react-advanced-cropper";
+import "react-advanced-cropper/dist/style.css";
+import heic2any from "heic2any";
+import imageCompression from "browser-image-compression";
 
 const ImageUploader = () => {
-  // category list
+  const cropperRef = useRef<FixedCropperRef>(null);
   const [categoryList, setCategoryList] = useState<AnimalSpecies[]>([]);
-  // upload files
-  const [uploadFiles, setUploadFiles] = useRecoilState<Blob[]>(uploadFileState);
-  const [uploadDefaultFiles, setUploadDefaultFiles] = useRecoilState<Blob[]>(
-    uploadDefaultFileState
-  );
-  // caption
+  const [uploadFiles, setUploadFiles] = useState<Blob[]>([]);
+  const [uploadDefaultFiles, setUploadDefaultFiles] = useState<Blob[]>([]);
+  const [urlList, setUrlList] = useState<string[]>([]);
+  const [urlDefaultList, setUrlDefaultList] = useState<string[]>([]);
   const [caption, setCaption] = useState("");
-  // check if the user is trying to put more than 5 images
-  const [filecnt, setFilecnt] = useState<number>(0);
-  // if u click small preview, it will be selected & shown in main preview box
-  const [selectedPreviewIndex, setSelectedPreviewIndex] =
-    useRecoilState<number>(currentUploadIndexState);
-  // if u hover small preview, it will be shown in main preview box -> it's for deleting or editing image
-  const [hoveringIndex, setHoveringIndex] = useState<number | null>(null);
-  // utils
+  const [selectedPreviewIndex, setSelectedPreviewIndex] = useState<number>(0);
+
   const { popToast } = useToaster();
+  const { parseDate } = useParseDate();
 
-  const uploadFilesCount = uploadFiles.length;
-  const showUploadButton = uploadFilesCount < 5;
+  const resetImage = (index: number) => {
+    const newUrlList = [...urlList];
+    newUrlList[index] = urlDefaultList[index];
+    setUrlList(newUrlList);
 
-  // handle preview click: select the image & show it in main preview box
-  const handlePreviewClick = (index: number) => {
-    setSelectedPreviewIndex(index);
+    const resetFiles = [...uploadFiles];
+    resetFiles[index] = uploadDefaultFiles[index];
+    setUploadFiles(resetFiles);
   };
 
-  const handlePreviewHover = (index: number | null) => {
-    setHoveringIndex(index);
-  };
-
-  // delete the image: update uploadFiles
-  const handleDeleteClick = (indexToDelete: number) => {
-    if (indexToDelete >= 0 && indexToDelete < uploadFiles.length) {
-      const updatedFiles = uploadFiles.filter(
-        (_, index) => index !== indexToDelete
-      );
-      const updatedDefaultFiles = uploadDefaultFiles.filter(
-        (_, index) => index !== indexToDelete
-      );
-      setUploadFiles(updatedFiles);
-      setUploadDefaultFiles(updatedDefaultFiles);
-      setFilecnt(filecnt - 1);
-    }
-  };
-
-  // handle image change: convert to webp & update uploadFiles
-  const handleImageChange = (e: any) => {
-    const selectedFiles: Blob[] = Array.from(e.target.files);
-    if (!selectedFiles) return;
-    if (selectedFiles.some((file: any) => file.size > 5000000)) {
-      popToast("5MB 이하의 이미지만 업로드 가능합니다.", "N");
-      return;
-    }
-    if (uploadFiles.length + selectedFiles.length > 5) {
-      popToast("5개 이하의 이미지만 업로드 가능합니다.", "N");
-      return;
-    }
-    setFilecnt(filecnt + selectedFiles.length);
-    convertToWebp(selectedFiles);
-  };
-
-  // caption change
-  const captionChange = (e: any) => {
-    setCaption(e.target.value);
-  };
-
-  // convert any image file to webp
-  const convertToWebp = (files: any) => {
-    files.forEach((file: Blob) => {
-      const canvas = document.createElement("canvas");
+  const cropImage = (index: number) => {
+    const canvas = cropperRef.current?.getCanvas() as HTMLCanvasElement;
+    if (canvas) {
       const ctx = canvas.getContext("2d");
 
       const img = new Image();
+      img.src = canvas.toDataURL("image/webp");
 
       img.onload = () => {
         canvas.width = img.width;
         canvas.height = img.height;
         ctx?.drawImage(img, 0, 0);
 
+        // Convert the canvas to a Blob in WebP format
         canvas.toBlob((webpBlob) => {
-          const webpFile = new File([webpBlob as BlobPart], "image.webp", {
-            type: "image/webp",
-          });
-          setUploadFiles((prevUploadFiles) => [...prevUploadFiles, webpFile]);
-          setUploadDefaultFiles((prevUploadDefaultFiles) => [
-            ...prevUploadDefaultFiles,
-            webpFile,
-          ]);
+          if (webpBlob) {
+            const webpFile = new File([webpBlob], "image.webp", {
+              type: "image/webp",
+            });
+            const newUploadFiles = [...uploadFiles];
+            newUploadFiles[index] = webpFile;
+            setUploadFiles(newUploadFiles);
+
+            const newUrlList = [...urlList];
+            newUrlList[index] = URL.createObjectURL(webpFile);
+            setUrlList(newUrlList);
+          }
         }, "image/webp");
       };
-      img.src = URL.createObjectURL(file as Blob);
-    });
+    }
+  };
+
+  const handlePreviewClick = (index: number) => {
+    if (index === selectedPreviewIndex) {
+      return;
+    }
+    cropImage(selectedPreviewIndex);
+    setSelectedPreviewIndex(index);
+  };
+
+  const handleDeleteClick = (indexToDelete: number) => {
+    const updatedFiles = [...uploadFiles];
+    updatedFiles.splice(indexToDelete, 1);
+
+    const updatedDefaultFiles = [...uploadDefaultFiles];
+    updatedDefaultFiles.splice(indexToDelete, 1);
+
+    const updatedUrlList = [...urlList];
+    URL.revokeObjectURL(updatedUrlList[indexToDelete]);
+    updatedUrlList.splice(indexToDelete, 1);
+
+    const updatedUrlDefaultList = [...urlDefaultList];
+    updatedUrlDefaultList.splice(indexToDelete, 1);
+
+    setUploadFiles(updatedFiles);
+    if (indexToDelete === uploadFiles.length) {
+      setSelectedPreviewIndex(uploadFiles.length - 1);
+    }
+    setUploadDefaultFiles(updatedDefaultFiles);
+    setUrlList(updatedUrlList);
+    setUrlDefaultList(updatedUrlDefaultList);
+    if (indexToDelete !== 0) {
+      setSelectedPreviewIndex(indexToDelete - 1);
+    } else {
+      setSelectedPreviewIndex(0);
+    }
+  };
+
+  const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const fileList = e.target.files;
+    const options = {
+      maxSizeMB: 2,
+      maxWidthOrHeight: 2520,
+    };
+
+    if (!fileList) return;
+
+    let selectedFiles = Array.from(fileList);
+
+    if (uploadFiles.length + selectedFiles.length > 5) {
+      popToast("5개 이하의 이미지만 업로드 가능합니다.", "N");
+      return;
+    }
+
+    const convertedFiles = await Promise.all(
+      selectedFiles.map(async (file: File) => {
+        if (file.type === "image/heic" || file.type === "image/HEIC") {
+          const response = await fetch(URL.createObjectURL(file));
+          const blob = await response.blob();
+          const conversionResult = await heic2any({
+            blob,
+            toType: "image/webp",
+          });
+
+          const webpFile = new File(
+            [conversionResult as Blob],
+            file.name.split(".")[0] + ".webp",
+            {
+              type: "image/webp",
+              lastModified: new Date().getTime(),
+            }
+          );
+
+          return webpFile;
+        } else {
+          const compressedFile = await imageCompression(file, options);
+          if (compressedFile.size <= 10000000) {
+            const imageBitmap = await createImageBitmap(file);
+            const canvas = document.createElement("canvas");
+            canvas.width = imageBitmap.width;
+            canvas.height = imageBitmap.height;
+            const ctx = canvas.getContext("2d");
+
+            if (ctx) {
+              ctx.drawImage(imageBitmap, 0, 0);
+
+              return new Promise((resolve) => {
+                canvas.toBlob((webpBlob) => {
+                  if (webpBlob) {
+                    resolve(webpBlob);
+                  } else {
+                    resolve(null);
+                  }
+                }, "image/webp");
+              });
+            }
+          } else {
+            popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
+            return null;
+          }
+        }
+      })
+    );
+
+    const validConvertedFiles = convertedFiles.filter(
+      (file) => file !== null
+    ) as Blob[];
+
+    setUploadFiles([...uploadFiles, ...validConvertedFiles]);
+    setUploadDefaultFiles([...uploadDefaultFiles, ...validConvertedFiles]);
+
+    const webpDataURLs = validConvertedFiles.map((file: Blob) =>
+      URL.createObjectURL(file)
+    );
+
+    setUrlList([...urlList, ...webpDataURLs]);
+    setUrlDefaultList([...urlDefaultList, ...webpDataURLs]);
+  };
+
+  const captionChange = (e: any) => {
+    setCaption(e.target.value);
   };
 
   // upload the board & send axios request
@@ -114,13 +196,19 @@ const ImageUploader = () => {
       popToast("이미지를 업로드해주세요.", "N");
       return;
     }
+    if (categoryList.length === 0) {
+      popToast("카테고리를 선택해주세요.", "N");
+      return;
+    }
     try {
-      const response = await axiosCreateBoard({
+      await cropImage(selectedPreviewIndex);
+      await axiosCreateBoard({
         mediaDataList: uploadFiles,
         categoryList: categoryList,
         content: caption,
       });
-      console.log(response);
+      popToast("업로드 완료!", "P");
+      goHome();
     } catch (error) {
       throw error;
     }
@@ -129,27 +217,34 @@ const ImageUploader = () => {
   // go home if u click cancel button
   const goHome = () => {
     window.location.href = "/";
+    setUploadFiles([]);
+    setCategoryList([]);
+    setUrlList([]);
+    setCaption("");
   };
 
   return (
     <WrapperStyled>
       <SmallPreviewStyled>
-        {uploadFiles.map((file: Blob, index: number) => (
+        {urlList.map((url: string, index: number) => (
           <SmallPreviewUnitStyled
             key={index}
             onClick={() => handlePreviewClick(index)}
-            onMouseEnter={() => handlePreviewHover(index)}
-            onMouseLeave={() => handlePreviewHover(null)}
           >
-            <img src={URL.createObjectURL(file)} alt={`Preview ${index + 1}`} />
-            {hoveringIndex === index && (
-              <DeleteButtonStyled onClick={() => handleDeleteClick(index)}>
+            <img src={url} />
+            {index === selectedPreviewIndex && (
+              <DeleteButtonStyled
+                onClick={() => {
+                  (e: React.MouseEvent) => e.stopPropagation();
+                  handleDeleteClick(index);
+                }}
+              >
                 x
               </DeleteButtonStyled>
             )}
           </SmallPreviewUnitStyled>
         ))}
-        {showUploadButton && (
+        {uploadFiles.length < 5 && (
           <SmallUploadButtonWrapperStyled>
             <SmallUploadButton
               type="file"
@@ -161,16 +256,42 @@ const ImageUploader = () => {
         )}
       </SmallPreviewStyled>
       {uploadFiles.length > 0 &&
-        (selectedPreviewIndex < uploadFilesCount ? (
-          <ImageCropper
-            src={URL.createObjectURL(uploadFiles[selectedPreviewIndex])}
-          />
-        ) : (
-          <ImageCropper
-            src={URL.createObjectURL(uploadFiles[uploadFiles.length - 1])}
-          />
+        urlList.map((url: string, index: number) => (
+          <>
+            {index === selectedPreviewIndex && (
+              <>
+                <FixedCropperStyled
+                  src={url}
+                  ref={cropperRef}
+                  stencilProps={{
+                    handlers: false,
+                    lines: false,
+                    movable: false,
+                    resizable: false,
+                    grid: true,
+                  }}
+                  stencilSize={{
+                    width: 350,
+                    height: 350,
+                  }}
+                  imageRestriction={ImageRestriction.stencil}
+                />
+                <CropperUtilsStyled>
+                  <TodayDateStyled>{parseDate(new Date())}</TodayDateStyled>
+                  <ResetButtonStyled onClick={() => resetImage(index)}>
+                    <img
+                      src="/assets/reset.png"
+                      alt="reset"
+                      width="20px"
+                      height="20px"
+                    />
+                  </ResetButtonStyled>
+                </CropperUtilsStyled>
+              </>
+            )}
+          </>
         ))}
-      {uploadFilesCount === 0 && (
+      {uploadFiles.length === 0 && (
         <UploadMainPreviewWrapperStyled>
           <UploadDemandStyled>이미지를 업로드해주세요!</UploadDemandStyled>
           <UploadMainPreviewStyled
@@ -190,7 +311,6 @@ const ImageUploader = () => {
           onChange={captionChange}
         />
       </CaptionBoxStyled>
-      {/* category button: to pick some */}
       <CategoryButtonStyled>
         <AnimalButtonContainer
           columns={3}
@@ -200,7 +320,6 @@ const ImageUploader = () => {
           setter={setCategoryList}
         />
       </CategoryButtonStyled>
-      {/* upload & cancel button */}
       <ButtonDivStyled>
         <UploadbuttonStyled onClick={upload}>확인</UploadbuttonStyled>
         <CancelbuttonStyled onClick={goHome}>취소</CancelbuttonStyled>
@@ -391,6 +510,60 @@ const CancelbuttonStyled = styled.button`
   box-shadow: 0px 4px 4px var(--grey);
   &:hover {
     opacity: 0.5;
+  }
+`;
+
+// Cropper
+const FixedCropperStyled = styled(FixedCropper)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--transparent);
+  overflow: auto;
+  width: 55%;
+  height: 285px;
+  border-radius: 5px;
+  border: 5px solid var(--white);
+  margin-top: 5px;
+`;
+
+const CropperUtilsStyled = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 55%;
+  height: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+`;
+
+const TodayDateStyled = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+  margin-right: 50%;
+  font-size: 10px;
+  color: var(--white);
+  justify-content: flex-start;
+  font-weight: lighter;
+`;
+
+const ResetButtonStyled = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--purple);
+  pointer: cursor;
+  width: 40px;
+  height: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  font-weight: lighter;
+  box-shadow: 0px 4px 4px var(--grey);
+  img {
+    width: 15px;
+    height: 15px;
   }
 `;
 

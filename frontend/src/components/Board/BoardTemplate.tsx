@@ -171,10 +171,15 @@ const BoardTemplate = (board: BoardTemplateProps) => {
           <ButtonZoneStyled>
             <ReactionCommentContainerStyled>
               <ReactionStyled onClick={handleClickReaction}>
-                <HeartIcon style={ReactionAnimation} src="/assets/likeR.png" />
+                <HeartIcon
+                  style={ReactionAnimation}
+                  src="/assets/pinkHeart.png"
+                />
                 <img
                   src={
-                    isReactedRender ? "/assets/likeR.png" : "/assets/like.png"
+                    isReactedRender
+                      ? "/assets/pinkHeart.png"
+                      : "/assets/like.png"
                   }
                 />
               </ReactionStyled>
@@ -246,6 +251,7 @@ const BoardProfileStyled = styled.div`
     cursor: pointer;
     width: 10%;
     aspect-ratio: 1 / 1;
+    object-fit: cover;
     border-radius: 100%;
   }
   div {

@@ -159,6 +159,7 @@ const ProfileImageStyled = styled.img`
   cursor: pointer;
   width: 25px;
   aspect-ratio: 1 / 1;
+  object-fit: cover;
   border-radius: 100%;
   padding: 0;
 `;

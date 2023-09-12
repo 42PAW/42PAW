@@ -54,9 +54,6 @@ export const axiosChangeMyProfile = async ({
       "profileImageChanged",
       profileImageChanged ? "true" : "false"
     );
-    console.log("formData.memberName: " + formData.get("memberName"));
-    console.log("formData.profileImage: " + formData.get("profileImage"));
-    console.log("formData.statement: " + formData.get("statement"));
     const response = await instance.post(axiosChangeMyProfileURL, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -233,7 +230,16 @@ export const axiosGetBoardComments = async (
   page: number
 ): Promise<any> => {
   try {
-    const response = await instance.get(
+    if (token) {
+      const response = await instance.get(
+        axiosGetBoardCommentsURL + boardId.toString(),
+        {
+          params: { size: size, page: page },
+        }
+      );
+      return response.data.result;
+    }
+    const response = await axios.get(
       axiosGetBoardCommentsURL + boardId.toString(),
       {
         params: { size: size, page: page },

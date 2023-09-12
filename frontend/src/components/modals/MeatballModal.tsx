@@ -16,7 +16,7 @@ const MeatballMoadal = () => {
   const [meatballModalUtils] = useRecoilState<IMeatballMdoalUtils>(
     meatballModalUtilsState
   );
-  const { openModal, closeModal } = useModal();
+  const { switchModal, closeModal } = useModal();
   const { openBannedMemberSection } = useRightSectionHandler();
 
   return (
@@ -30,20 +30,14 @@ const MeatballMoadal = () => {
         {!meatballModalUtils.isMine && (
           <ButtonStyled
             $color={"red"}
-            onClick={() => {
-              closeModal(ModalType.MEATBALL);
-              openModal(ModalType.BAN);
-            }}
+            onClick={() => switchModal(ModalType.MEATBALL, ModalType.BAN)}
           >
             차단
           </ButtonStyled>
         )}
         {!meatballModalUtils.isMine && (
           <ButtonStyled
-            onClick={() => {
-              closeModal(ModalType.MEATBALL);
-              openModal(ModalType.REPORT);
-            }}
+            onClick={() => switchModal(ModalType.MEATBALL, ModalType.REPORT)}
           >
             신고
           </ButtonStyled>
@@ -52,10 +46,7 @@ const MeatballMoadal = () => {
           meatballModalUtils.component !== "profile" && (
             <ButtonStyled
               $color={"red"}
-              onClick={() => {
-                closeModal(ModalType.MEATBALL);
-                openModal(ModalType.DELETE);
-              }}
+              onClick={() => switchModal(ModalType.MEATBALL, ModalType.DELETE)}
             >
               삭제
             </ButtonStyled>
@@ -63,10 +54,9 @@ const MeatballMoadal = () => {
         {meatballModalUtils.isMine &&
           meatballModalUtils.component === "profile" && (
             <ButtonStyled
-              onClick={() => {
-                closeModal(ModalType.MEATBALL);
-                openModal(ModalType.PROFILEEDIT);
-              }}
+              onClick={() =>
+                switchModal(ModalType.MEATBALL, ModalType.PROFILEEDIT)
+              }
             >
               프로필 수정
             </ButtonStyled>
@@ -110,6 +100,9 @@ const WrapperStyled = styled.div`
   }
   button:last-child {
     border: none;
+    @media screen and (display-mode: standalone) {
+      margin-bottom: 40px;
+    }
   }
 `;
 

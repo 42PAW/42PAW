@@ -90,4 +90,13 @@ export const jp = {
   categoryChangedToast: "動物カテゴリが変更されました。",
   demandFirstComment: "この投稿への最初のコメントをお願いします。",
   enterComment: "コメントを入力してください。",
+  posting: "投稿",
+  demandSearchInput: "検索内容を入力してください。",
+  nicknameMinimumCharacter: "ニックネームは少なくとも3文字必要です。",
+  nicknameExcludeSpace: "ニックネームにはスペースを含めることはできません。",
+  nicknameInvalidCharacter: "無効な文字が含まれています。",
+  nicknameAlreadyUsed: "ニックネームはすでに使用中です。",
+  belowFiveImages: "最大5枚の画像のみアップロードできます。",
+  uploadComplete: "アップロード完了",
+  noMorePosts: "もう投稿はありません。",
 };

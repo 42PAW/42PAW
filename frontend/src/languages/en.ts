@@ -90,4 +90,13 @@ export const en = {
   categoryChangedToast: "Animal category has been changed.",
   demandFirstComment: "Please be the first to comment on this post.",
   enterComment: "Enter your comment.",
+  posting: "Post",
+  demandSearchInput: "Please enter search content.",
+  nicknameMinimumCharacter: "Nickname must be at least 3 characters long.",
+  nicknameExcludeSpace: "No spaces are allowed in the nickname.",
+  nicknameInvalidCharacter: "Invalid characters are included.",
+  nicknameAlreadyUsed: "Nickname is already in use.",
+  belowFiveImages: "Only up to 5 images can be uploaded.",
+  uploadComplete: "Upload complete",
+  noMorePosts: "No more posts exist.",
 };

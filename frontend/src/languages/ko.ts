@@ -90,4 +90,13 @@ export const ko = {
   categoryChangedToast: "동물 카테고리가 변경되었습니다",
   demandFirstComment: "이 게시글의 첫번째 댓글이 되어주세요",
   enterComment: "댓글을 입력하세요",
+  posting: "게시",
+  demandSearchInput: "검색 내용을 입력해주세요.",
+  nicknameMinimumCharacter: "닉네임은 3글자 이상이어야 합니다.",
+  nicknameExcludeSpace: "닉네임에 띄어쓰기는 포함될 수 없습니다.",
+  nicknameInvalidCharacter: "유효하지 않은 문자가 포함돼 있습니다.",
+  nicknameAlreadyUsed: "이미 사용 중인 닉네임입니다.",
+  belowFiveImages: "5개 이하의 이미지만 업로드 가능합니다.",
+  uploadComplete: "업로드 완료",
+  noMorePosts: "더 이상 게시물이 존재하지 않습니다.",
 };

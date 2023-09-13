@@ -94,4 +94,14 @@ export const ger = {
   demandFirstComment:
     "Bitte seien Sie der erste, der diesen Beitrag kommentiert.",
   enterComment: "Geben Sie Ihren Kommentar ein.",
+  posting: "Beitrag",
+  demandSearchInput: "Bitte geben Sie den Suchinhalt ein.",
+  nicknameMinimumCharacter:
+    "Der Benutzername muss mindestens 3 Zeichen lang sein.",
+  nicknameExcludeSpace: "Im Benutzernamen sind keine Leerzeichen erlaubt.",
+  nicknameInvalidCharacter: "Ungültige Zeichen sind enthalten.",
+  nicknameAlreadyUsed: "Der Benutzername ist bereits in Verwendung.",
+  belowFiveImages: "Es können nur bis zu 5 Bilder hochgeladen werden.",
+  uploadComplete: "Hochladen abgeschlossen",
+  noMorePosts: "Es gibt keine weiteren Beiträge.",
 };

@@ -93,4 +93,14 @@ export const fr = {
   categoryChangedToast: "La catégorie d'animaux a été modifiée.",
   demandFirstComment: "Soyez le premier à commenter cette publication.",
   enterComment: "Entrez votre commentaire.",
+  posting: "Poster",
+  demandSearchInput: "Veuillez entrer le contenu de la recherche.",
+  nicknameMinimumCharacter:
+    "Le pseudonyme doit comporter au moins 3 caractères.",
+  nicknameExcludeSpace: "Les espaces ne sont pas autorisés dans le pseudonyme.",
+  nicknameInvalidCharacter: "Des caractères non valides sont inclus.",
+  nicknameAlreadyUsed: "Le pseudonyme est déjà en cours d'utilisation.",
+  belowFiveImages: "Seules jusqu'à 5 images peuvent être téléchargées.",
+  uploadComplete: "Téléchargement terminé",
+  noMorePosts: "Aucun autre message n'existe.",
 };

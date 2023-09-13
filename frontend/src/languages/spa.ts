@@ -93,4 +93,13 @@ export const spa = {
   categoryChangedToast: "La categoría de animales ha sido cambiada.",
   demandFirstComment: "Por favor, sé el primero en comentar esta publicación.",
   enterComment: "Introduce tu comentario.",
+  posting: "Publicar",
+  demandSearchInput: "Por favor, ingrese el contenido de la búsqueda.",
+  nicknameMinimumCharacter: "El apodo debe tener al menos 3 caracteres.",
+  nicknameExcludeSpace: "No se permiten espacios en el apodo.",
+  nicknameInvalidCharacter: "Se incluyen caracteres no válidos.",
+  nicknameAlreadyUsed: "El apodo ya está en uso.",
+  belowFiveImages: "Solo se pueden subir hasta 5 imágenes.",
+  uploadComplete: "Carga completa",
+  noMorePosts: "No existen más publicaciones.",
 };

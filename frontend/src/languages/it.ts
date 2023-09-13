@@ -90,4 +90,13 @@ export const it = {
   categoryChangedToast: "La categoria degli animali è stata modificata.",
   demandFirstComment: "Sii il primo a commentare questo post.",
   enterComment: "Inserisci il tuo commento.",
+  posting: "Pubblica",
+  demandSearchInput: "Inserisci il contenuto della ricerca.",
+  nicknameMinimumCharacter: "Il nickname deve contenere almeno 3 caratteri.",
+  nicknameExcludeSpace: "Nel nickname non sono ammessi spazi.",
+  nicknameInvalidCharacter: "Il nickname contiene caratteri non validi.",
+  nicknameAlreadyUsed: "Il nickname è già in uso.",
+  belowFiveImages: "È possibile caricare al massimo 5 immagini.",
+  uploadComplete: "Caricamento completato",
+  noMorePosts: "Non ci sono più post disponibili.",
 };

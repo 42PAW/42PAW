@@ -2,7 +2,7 @@ import { useRecoilState } from "recoil";
 import { styled } from "styled-components";
 import ModalLayout from "@/components/modals/ModalLayout";
 import { ModalType } from "@/types/enum/modal.enum";
-import { currentOpenModalState, languageState } from "@/recoil/atom";
+import { currentOpenModalState } from "@/recoil/atom";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
 import { meatballModalUtilsState } from "../MeatballButton";
 import { IMeatballMdoalUtils } from "../MeatballButton";
@@ -10,7 +10,6 @@ import useModal from "@/hooks/useModal";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 
 const MeatballMoadal = () => {
-  const [language] = useRecoilState<any>(languageState);
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
@@ -33,14 +32,14 @@ const MeatballMoadal = () => {
             $color={"red"}
             onClick={() => switchModal(ModalType.MEATBALL, ModalType.BAN)}
           >
-            {language.ban}
+            차단
           </ButtonStyled>
         )}
         {!meatballModalUtils.isMine && (
           <ButtonStyled
             onClick={() => switchModal(ModalType.MEATBALL, ModalType.REPORT)}
           >
-            {language.report}
+            신고
           </ButtonStyled>
         )}
         {meatballModalUtils.isMine &&
@@ -49,7 +48,7 @@ const MeatballMoadal = () => {
               $color={"red"}
               onClick={() => switchModal(ModalType.MEATBALL, ModalType.DELETE)}
             >
-              {language.delete}
+              삭제
             </ButtonStyled>
           )}
         {meatballModalUtils.isMine &&
@@ -59,7 +58,7 @@ const MeatballMoadal = () => {
                 switchModal(ModalType.MEATBALL, ModalType.PROFILEEDIT)
               }
             >
-              {language.editProfile}
+              프로필 수정
             </ButtonStyled>
           )}
         {meatballModalUtils.isMine &&
@@ -71,7 +70,7 @@ const MeatballMoadal = () => {
                 openBannedMemberSection();
               }}
             >
-              {language.blockList}
+              차단 목록
             </ButtonStyled>
           )}
         <ButtonStyled
@@ -79,7 +78,7 @@ const MeatballMoadal = () => {
             closeModal(ModalType.MEATBALL);
           }}
         >
-          {language.close}
+          닫기
         </ButtonStyled>
       </WrapperStyled>
     </ModalLayout>

@@ -5,7 +5,7 @@ import ModalLayout from "@/components/modals//ModalLayout";
 import ReportCategoryOption from "@/components/modals/ReportModal/ReportCategoryOption";
 import { ReportReason } from "@/types/enum/report.enum";
 import { ModalType } from "@/types/enum/modal.enum";
-import { currentOpenModalState, languageState } from "@/recoil/atom";
+import { currentOpenModalState } from "@/recoil/atom";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
 import useToaster from "@/hooks/useToaster";
 import { axiosReport } from "@/api/axios/axios.custom";
@@ -52,7 +52,6 @@ const reportOptions = [
 ];
 
 const ReportModal: React.FC = () => {
-  const [language] = useRecoilState<any>(languageState);
   const [meatballModalUtils] = useRecoilState<IMeatballMdoalUtils>(
     meatballModalUtilsState
   );
@@ -88,8 +87,7 @@ const ReportModal: React.FC = () => {
 
   const handleSubmitReport = async () => {
     if (!selectedCategory) {
-      const selectReportReasonMsg = language.selectReportReason;
-      popToast(selectReportReasonMsg, "N");
+      popToast("신고 사유를 선택해주세요.", "N");
       return;
     }
     await closeModal(ModalType.REPORT);
@@ -100,8 +98,7 @@ const ReportModal: React.FC = () => {
       reportUserInfo.boardId,
       reportUserInfo.commentId
     );
-    const reportSubmittedMsg = language.reportSubmitted;
-    popToast(reportSubmittedMsg, "P");
+    popToast("신고가 접수됐습니다.", "P");
   };
 
   const handleContent = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,7 +111,7 @@ const ReportModal: React.FC = () => {
       isOpen={currentOpenModal.reportModal}
     >
       <WrapperStyled>
-        <h1>{language.reportTile}</h1>
+        <h1>신고하기</h1>
         <CategoryContatinerStyled>
           {reportOptions.map((option) => (
             <ReportCategoryOption
@@ -127,12 +124,12 @@ const ReportModal: React.FC = () => {
           ))}
         </CategoryContatinerStyled>
         <EtcInputStyled
-          placeholder={language.enterReasonWithin50Characters}
+          placeholder="사유를 적어주세요(50자 이내)"
           value={content}
           maxLength={50}
           onChange={handleContent}
         />
-        <button onClick={handleSubmitReport}>{language.submit}</button>
+        <button onClick={handleSubmitReport}>제출</button>
       </WrapperStyled>
     </ModalLayout>
   );

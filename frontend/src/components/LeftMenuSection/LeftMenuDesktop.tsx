@@ -4,8 +4,8 @@ import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import SettingButton from "@/components/SettingButton";
 import { LeftMenuProps } from "./LeftMenuSection";
 
-import { useSetRecoilState, useRecoilState } from "recoil";
-import { currentMemberIdState, languageState } from "@/recoil/atom";
+import { useSetRecoilState } from "recoil";
+import { currentMemberIdState } from "@/recoil/atom";
 
 const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
   handleLogin,

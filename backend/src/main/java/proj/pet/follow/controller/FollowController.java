@@ -1,5 +1,6 @@
 package proj.pet.follow.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import proj.pet.auth.domain.AuthGuard;
@@ -29,7 +30,7 @@ public class FollowController {
 	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void createFollow(
 			@UserSession UserSessionDto userSessionDto,
-			@RequestBody FollowRequestDto followRequestDto) {
+			@Valid @RequestBody FollowRequestDto followRequestDto) {
 		followFacadeService.createFollow(userSessionDto, followRequestDto);
 	}
 

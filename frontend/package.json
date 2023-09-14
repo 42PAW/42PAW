@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "deploy": "npm run build && aws s3 sync ./dist s3://42paw-front-deploy --profile=mingkang && aws cloudfront create-invalidation --profile=mingkang --distribution-id E3G4X4QI6AZ8J1 --paths '/*'"
+    "deploy": "npm run build && aws s3 sync ./dist s3://42paw-front-deploy --profile=hyungnoh && aws cloudfront create-invalidation --profile=hyungnoh --distribution-id E3G4X4QI6AZ8J1 --paths '/*'"
   },
   "dependencies": {
     "@react-spring/web": "^9.7.3",

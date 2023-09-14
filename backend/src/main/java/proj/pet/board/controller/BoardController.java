@@ -72,7 +72,6 @@ public class BoardController {
 	public void createBoard(
 			@UserSession UserSessionDto userSessionDto,
 			@Valid @ModelAttribute BoardCreateRequestDto boardCreateRequestDto) {
-		System.out.println("boardCreateRequestDto = " + boardCreateRequestDto);
 		boardFacadeService.createBoard(userSessionDto,
 				boardCreateRequestDto.getMediaDataList(),
 				boardCreateRequestDto.getCategoryList(),

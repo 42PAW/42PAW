@@ -93,7 +93,6 @@ const MainAreaStyled = styled.main<{
   height: 100%;
   min-height: 800px;
   width: 600px;
-  /* width: ${(props) => (props.$isProfilePage ? `600px` : "600px")}; */
 `;
 
 export default Layout;

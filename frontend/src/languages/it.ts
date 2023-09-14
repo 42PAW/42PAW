@@ -15,6 +15,7 @@ export const it = {
   logout: "Esci",
   confirm: "Conferma",
   cancel: "Annulla",
+  follow: "Segui",
   followers: "Seguaci",
   following: "Seguiti",
   close: "Chiudi",

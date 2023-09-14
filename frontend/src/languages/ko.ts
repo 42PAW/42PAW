@@ -15,6 +15,7 @@ export const ko = {
   logout: "로그아웃",
   confirm: "확인",
   cancel: "취소",
+  follow: "팔로우",
   followers: "팔로워",
   following: "팔로잉",
   close: "닫기",

@@ -15,6 +15,7 @@ export const pt = {
   logout: "Sair",
   confirm: "Confirmar",
   cancel: "Cancelar",
+  follow: "Seguir",
   followers: "Seguidores",
   following: "Seguindo",
   close: "Fechar",

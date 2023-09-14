@@ -15,6 +15,7 @@ export const jp = {
   logout: "ログアウト",
   confirm: "確認",
   cancel: "キャンセル",
+  follow: "フォローする",
   followers: "フォロワー",
   following: "フォロー中",
   close: "閉じる",

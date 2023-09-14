@@ -214,7 +214,7 @@ const BoardTemplate = (board: BoardTemplateProps) => {
                 </div>
               </PreviewCommentStyled>
             ) : (
-              <NoCommentStyled>댓글이 없습니다.</NoCommentStyled>
+              <NoCommentStyled>{language.noComments}</NoCommentStyled>
             )}
           </BoardContentContainerStyled>
         </BoardBodyStyled>

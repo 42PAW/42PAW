@@ -15,6 +15,7 @@ export const spa = {
   logout: "Cerrar sesión",
   confirm: "Confirmar",
   cancel: "Cancelar",
+  follow: "Seguir",
   followers: "Seguidores",
   following: "Siguiendo",
   close: "Cerrar",

@@ -15,6 +15,7 @@ export const fr = {
   logout: "Se déconnecter",
   confirm: "Confirmer",
   cancel: "Annuler",
+  follow: "Suivre",
   followers: "Abonnés",
   following: "Abonnements",
   close: "Fermer",

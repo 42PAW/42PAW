@@ -15,6 +15,7 @@ export const ger = {
   logout: "Abmelden",
   confirm: "Bestätigen",
   cancel: "Abbrechen",
+  follow: "Folgen",
   followers: "Follower",
   following: "Abonnements",
   close: "Schließen",

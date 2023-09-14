@@ -7,7 +7,7 @@ import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
 import { useQuery } from "@tanstack/react-query";
 import useFetch from "@/hooks/useFetch";
 import { userInfoState } from "@/recoil/atom";
-import { currentMemberIdState } from "@/recoil/atom";
+import { currentMemberIdState, languageState } from "@/recoil/atom";
 import { ProfileInfoDTO, UserInfoDTO } from "@/types/dto/member.dto";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import useNavigateCustom from "@/hooks/useNavigateCustom";
@@ -19,6 +19,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import MeatballButton from "@/components/MeatballButton";
 
 const ProfileCardModal = () => {
+  const [language] = useRecoilState<any>(languageState);
   const queryClient = useQueryClient();
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
@@ -93,22 +94,24 @@ const ProfileCardModal = () => {
           <StatementStyled>{profileData.statement}</StatementStyled>
           <CardInfoStyled>
             <InfoItemStyled>
-              게시물
+              {language.posts}
               <div>{profileData.boardCount}</div>
             </InfoItemStyled>
             <InfoItemStyled>
-              팔로워
+              {language.followers}
               <div>{profileData.followerCount}</div>
             </InfoItemStyled>
             <InfoItemStyled>
-              팔로잉
+              {language.following}
               <div>{profileData.followingCount}</div>
             </InfoItemStyled>
           </CardInfoStyled>
           <ButtonContainerStyled>
             {userInfo?.memberId !== currentMemberId ? (
               <>
-                <ButtonStyled onClick={toProfile}>프로필</ButtonStyled>
+                <ButtonStyled onClick={toProfile}>
+                  {language.profile}
+                </ButtonStyled>
                 <FollowTypeButton
                   memberId={currentMemberId as number}
                   status={profileData.followType}
@@ -122,7 +125,7 @@ const ProfileCardModal = () => {
               </>
             ) : (
               <MyProfileButtonStyled onClick={toMyProfile}>
-                내 프로필
+                {language.myProfile}
               </MyProfileButtonStyled>
             )}
           </ButtonContainerStyled>

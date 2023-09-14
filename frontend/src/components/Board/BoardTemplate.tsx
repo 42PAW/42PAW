@@ -74,8 +74,8 @@ const BoardTemplate = (board: BoardTemplateProps) => {
   const countryEmoji = useCountryEmoji(country as Country);
   const parsedDate = parseDate(createdAt);
   const parsedPreviewComment =
-    previewComment && previewComment.length > 15
-      ? previewComment.substring(0, 15) + ".."
+    previewComment && previewComment.length > 10
+      ? previewComment.substring(0, 10) + ".."
       : previewComment;
 
   useLayoutEffect(() => {

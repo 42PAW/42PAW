@@ -10,14 +10,13 @@ import useToaster from "@/hooks/useToaster";
 import { axiosDeleteBoard, axiosDeleteComment } from "@/api/axios/axios.custom";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { IBoardInfo } from "@/types/interface/board.interface";
-import { boardCategoryState, languageState } from "@/recoil/atom";
+import { boardCategoryState } from "@/recoil/atom";
 import { Board } from "@/types/enum/board.category.enum";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
 import { IMeatballMdoalUtils } from "@/components/MeatballButton";
 import { meatballModalUtilsState } from "@/components/MeatballButton";
 
 const DeleteModal = () => {
-  const [language] = useRecoilState<any>(languageState);
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
@@ -31,14 +30,12 @@ const DeleteModal = () => {
   const { popToast } = useToaster();
 
   const deleteContent = async () => {
-    const postDeletedCompletionMsg = language.postDeletedComplete;
-
     if (meatballModealUtils.commentId)
       await axiosDeleteComment(meatballModealUtils.commentId);
     else if (meatballModealUtils.boardId)
       await axiosDeleteBoard(meatballModealUtils.boardId);
     closeModal(ModalType.DELETE);
-    popToast(postDeletedCompletionMsg, "P");
+    popToast("해당 글이 삭제되었습니다.", "P");
   };
 
   const commentMutation = useMutation(deleteContent, {
@@ -106,19 +103,15 @@ const DeleteModal = () => {
       <WrapperStyled>
         {meatballModealUtils.commentId ? (
           <>
-            <h1>{language.commentDeleted}</h1>
-            <ContentStyled>{language.deleteCommentConfirmation}</ContentStyled>
-            <button onClick={() => commentMutation.mutate()}>
-              {language.deleted}
-            </button>
+            <h1>댓글 삭제</h1>
+            <ContentStyled>해당 댓글을 삭제하시겠습니까?</ContentStyled>
+            <button onClick={() => commentMutation.mutate()}>삭제</button>
           </>
         ) : (
           <>
-            <h1>{language.postDeleted}</h1>
-            <ContentStyled>{language.deletePostConfirmation}</ContentStyled>
-            <button onClick={() => boardMutation.mutate()}>
-              {language.delete}
-            </button>
+            <h1>게시물 삭제</h1>
+            <ContentStyled>해당 게시물을 삭제하시겠습니까?</ContentStyled>
+            <button onClick={() => boardMutation.mutate()}>삭제</button>
           </>
         )}
       </WrapperStyled>

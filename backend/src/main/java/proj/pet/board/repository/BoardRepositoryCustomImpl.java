@@ -137,7 +137,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 		return queryFactory.select(board.count())
 				.from(board)
 				.where(board.member.id.eq(memberId)
-						.and(board.member.isNull())
+						.and(board.member.deletedAt.isNull())
 						.and(board.deletedAt.isNull()))
 				.fetchFirst();
 	}

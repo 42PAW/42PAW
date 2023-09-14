@@ -27,7 +27,7 @@ const ProfilePage = () => {
   useEffect(() => {
     setBoardCategory(Board.OTHER);
     setLoading(true);
-    debounce("profileLoading", () => setLoading(false), 400);
+    debounce("profileLoading", () => setLoading(false), 200);
   }, []); // 빈 배열을 넣어 마운트 시 한 번만 실행되도록 함
 
   const boardsQuery = useQuery<IBoardInfo[]>({
@@ -60,6 +60,10 @@ const ProfilePage = () => {
 };
 
 const WrapperStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
   width: 100%;
 `;

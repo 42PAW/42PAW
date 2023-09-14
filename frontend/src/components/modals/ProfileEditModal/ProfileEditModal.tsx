@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import ModalLayout from "@/components/modals/ModalLayout";
 import { ModalType } from "@/types/enum/modal.enum";
-import { currentOpenModalState, languageState } from "@/recoil/atom";
+import { currentOpenModalState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 import useModal from "../../../hooks/useModal";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
@@ -17,7 +17,6 @@ import useFetch from "@/hooks/useFetch";
 import processImage from "@/components/processImage";
 
 const ProfileEditModal = () => {
-  const [language] = useRecoilState<any>(languageState);
   const queryClient = useQueryClient();
   const prevProfileInfo = queryClient.getQueryData<ProfileInfoDTO | undefined>([
     "myProfile",
@@ -76,8 +75,7 @@ const ProfileEditModal = () => {
   const onChangeProfileInfo = async () => {
     try {
       if (isWrong === true) {
-        const tryAgainLaterMsg = language.tryAgainLater;
-        popToast(tryAgainLaterMsg, "N");
+        popToast("잠시 후에 다시 시도해주세요.", "N");
         return;
       }
       if (profileInfo.memberName !== prevProfileInfo?.memberName) {
@@ -101,8 +99,7 @@ const ProfileEditModal = () => {
           profileInfo
         ); // 기다림
         if (mutationResult) {
-          const editCompleteMsg = language.editComplete;
-          popToast(editCompleteMsg, "P");
+          popToast("성공적으로 수정하였습니다.", "P");
           closeModal(ModalType.PROFILEEDIT);
         }
       } catch (error: any) {
@@ -182,7 +179,7 @@ const ProfileEditModal = () => {
         />
         <MainAreaStyled>
           <EditImageStyled>
-            <label htmlFor="uploadPhoto">{language.uploadImage}</label>
+            <label htmlFor="uploadPhoto">이미지 업로드</label>
             <input
               type="file"
               accept="image/*"
@@ -190,7 +187,7 @@ const ProfileEditModal = () => {
               onChange={handleImageChange}
               style={{ display: "none" }}
             />
-            <label htmlFor="profileImageReset">{language.removeImage}</label>
+            <label htmlFor="profileImageReset">이미지 제거</label>
             <input
               type="button"
               accept="image/*"
@@ -200,10 +197,10 @@ const ProfileEditModal = () => {
             />
           </EditImageStyled>
           <EditInfoStyled>
-            <span>{language.name}</span>
+            <span>이름</span>
             <input
               ref={nameInputRef}
-              placeholder={language.upTo10Characters}
+              placeholder="최대 10자 이내"
               name="name"
               type="text"
               value={profileInfo.memberName!}
@@ -218,7 +215,7 @@ const ProfileEditModal = () => {
               ref={statementInputRef}
               type="text"
               name="statement"
-              placeholder={language.upTo50Characters} // 국가에 따라 언어 변경
+              placeholder="최대 50자 이내" // 국가에 따라 언어 변경
               value={profileInfo.statement}
               maxLength={50}
               onChange={(e) => handleStatementChange(e)}
@@ -226,9 +223,9 @@ const ProfileEditModal = () => {
             />
           </EditInfoStyled>
           <ButtonContainerStyled>
-            <button onClick={onChangeProfileInfo}>{language.complete}</button>
+            <button onClick={onChangeProfileInfo}>완료</button>
             <button onClick={() => closeModal(ModalType.PROFILEEDIT)}>
-              {language.cancel}
+              취소
             </button>
           </ButtonContainerStyled>
         </MainAreaStyled>

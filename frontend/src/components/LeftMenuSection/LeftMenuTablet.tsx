@@ -44,6 +44,7 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
           </SettingButton>
         </SettingButtonContainerStyled>
       </BannerStyled>
+      <BannerDummyStyled>.</BannerDummyStyled>
       <MenuStyled>
         <nav>
           <MenuListStyled>
@@ -78,21 +79,29 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
 
 const BannerStyled = styled.div`
   display: flex;
+  position: fixed;
   justify-content: space-between;
   align-items: center;
   width: 100vw;
   height: 45px;
-  padding-bottom: 2px;
-  border-bottom: 1px solid var(--transparent);
-  background-color: var(--transparent);
+  border-bottom: 0.5px solid var(--transparent);
+  background-color: #c1c2e1f9;
   transition: transform 0.1s ease-in-out, margin-top 0.2s ease;
   line-height: 15px;
+  z-index: 3;
 `;
 
 const BannerBufferStyled = styled.div`
   color: transparent;
   width: 36px;
   aspect-ratio: 1 / 1;
+`;
+
+const BannerDummyStyled = styled.div`
+  color: transparent;
+  height: 45px;
+  width: 100vw;
+  border-bottom: 0.5px solid var(--transparent);
 `;
 
 const BannerLogoStyled = styled.div`

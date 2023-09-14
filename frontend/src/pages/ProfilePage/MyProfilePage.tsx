@@ -31,7 +31,7 @@ const MyProfilePage = () => {
   useEffect(() => {
     setBoardCategory(Board.MINE);
     setLoading(true);
-    debounce("myProfileLoading", () => setLoading(false), 400);
+    debounce("myProfileLoading", () => setLoading(false), 200);
   }, []); // 컴포넌트가 마운트될 때 한 번만 실행
 
   const boardsQuery = useQuery<IBoardInfo[]>({
@@ -68,6 +68,10 @@ const MyProfilePage = () => {
 };
 
 const WrapperStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
   width: 100%;
 `;

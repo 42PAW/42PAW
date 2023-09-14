@@ -4,6 +4,8 @@ import { Section, SectionType } from "@/pages/SignUpPage/SignUpPage";
 import { SignUpInfoDTO } from "@/types/dto/member.dto";
 import useToaster from "@/hooks/useToaster";
 import processImage from "@/components/processImage";
+import { languageState } from "@/recoil/atom";
+import { useRecoilState } from "recoil";
 
 /**
  * @registerData.memberName 유저가 설정한 닉네임
@@ -21,6 +23,7 @@ const ProfileCard = ({
   setRegisterData,
   step,
 }: IProfileCardProps) => {
+  const [language] = useRecoilState<any>(languageState);
   const [imagePreview, setImagePreview] = useState<string>("");
   const { popToast } = useToaster();
 
@@ -49,7 +52,9 @@ const ProfileCard = ({
         </ProfileCardEmptyImageStyled>
         <ProfileCardFormStyled>
           {step === Section.ProfileImage ? (
-            <label htmlFor="profileImage">프로필 사진 변경</label>
+            <label htmlFor="profileImage">
+              {language.changeProfilePicture}
+            </label>
           ) : null}
           <input
             type="file"

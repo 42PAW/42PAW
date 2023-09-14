@@ -99,4 +99,7 @@ export const it = {
   belowFiveImages: "È possibile caricare al massimo 5 immagini.",
   uploadComplete: "Caricamento completato",
   noMorePosts: "Non ci sono più post disponibili.",
+  loginDemand: "L'accesso è richiesto per questo servizio.",
+  uploadImageBrief: "Carica immagine",
+  deleteImageBrief: "Elimina immagine",
 };

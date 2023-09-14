@@ -99,4 +99,7 @@ export const jp = {
   belowFiveImages: "最大5枚の画像のみアップロードできます。",
   uploadComplete: "アップロード完了",
   noMorePosts: "もう投稿はありません。",
+  loginDemand: "このサービスにはログインが必要です。",
+  uploadImageBrief: "画像をアップロード",
+  deleteImageBrief: "画像を削除",
 };

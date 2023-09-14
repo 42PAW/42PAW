@@ -5,7 +5,7 @@ import ModalLayout from "@/components/modals//ModalLayout";
 import ReportCategoryOption from "@/components/modals/ReportModal/ReportCategoryOption";
 import { ReportReason } from "@/types/enum/report.enum";
 import { ModalType } from "@/types/enum/modal.enum";
-import { currentOpenModalState } from "@/recoil/atom";
+import { currentOpenModalState, languageState } from "@/recoil/atom";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
 import useToaster from "@/hooks/useToaster";
 import { axiosReport } from "@/api/axios/axios.custom";
@@ -16,42 +16,42 @@ import {
 import { ReportDTO } from "@/types/dto/member.dto";
 import useModal from "@/hooks/useModal";
 
-const reportOptions = [
-  {
-    value: ReportReason.WRONG_ANIMAL_CATEGORY,
-    label: "잘못된 동물 카테고리",
-  },
-  {
-    value: ReportReason.INSULTS,
-    label: "욕설 및 비방",
-  },
-  {
-    value: ReportReason.AD_SPAM,
-    label: "스팸 및 광고",
-  },
-  {
-    value: ReportReason.INAPPROPRIATE_NICKNAME,
-    label: "부적절한 닉네임",
-  },
-  {
-    value: ReportReason.SEXUAL,
-    label: "음란물",
-  },
-  {
-    value: ReportReason.VIOLENCE,
-    label: "폭력적인 글",
-  },
-  {
-    value: ReportReason.IRRELEVANT,
-    label: "동물과 관련없는 글",
-  },
-  {
-    value: ReportReason.ETC,
-    label: "기타",
-  },
-];
-
 const ReportModal: React.FC = () => {
+  const [language] = useRecoilState<any>(languageState);
+  const reportOptions = [
+    {
+      value: ReportReason.WRONG_ANIMAL_CATEGORY,
+      label: language.incorrectAnimalCategory,
+    },
+    {
+      value: ReportReason.INSULTS,
+      label: language.profanityHarrassment,
+    },
+    {
+      value: ReportReason.AD_SPAM,
+      label: language.spamAdvertising,
+    },
+    {
+      value: ReportReason.INAPPROPRIATE_NICKNAME,
+      label: language.inappropriateUsername,
+    },
+    {
+      value: ReportReason.SEXUAL,
+      label: language.explicitContent,
+    },
+    {
+      value: ReportReason.VIOLENCE,
+      label: language.violentContent,
+    },
+    {
+      value: ReportReason.IRRELEVANT,
+      label: language.irrelevantToAnimals,
+    },
+    {
+      value: ReportReason.ETC,
+      label: language.etc,
+    },
+  ];
   const [meatballModalUtils] = useRecoilState<IMeatballMdoalUtils>(
     meatballModalUtilsState
   );
@@ -87,7 +87,8 @@ const ReportModal: React.FC = () => {
 
   const handleSubmitReport = async () => {
     if (!selectedCategory) {
-      popToast("신고 사유를 선택해주세요.", "N");
+      const selectReportReasonMsg = language.selectReportReason;
+      popToast(selectReportReasonMsg, "N");
       return;
     }
     await closeModal(ModalType.REPORT);
@@ -98,7 +99,8 @@ const ReportModal: React.FC = () => {
       reportUserInfo.boardId,
       reportUserInfo.commentId
     );
-    popToast("신고가 접수됐습니다.", "P");
+    const reportSubmittedMsg = language.reportSubmitted;
+    popToast(reportSubmittedMsg, "P");
   };
 
   const handleContent = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +113,7 @@ const ReportModal: React.FC = () => {
       isOpen={currentOpenModal.reportModal}
     >
       <WrapperStyled>
-        <h1>신고하기</h1>
+        <h1>{language.reportTitle}</h1>
         <CategoryContatinerStyled>
           {reportOptions.map((option) => (
             <ReportCategoryOption
@@ -124,12 +126,12 @@ const ReportModal: React.FC = () => {
           ))}
         </CategoryContatinerStyled>
         <EtcInputStyled
-          placeholder="사유를 적어주세요(50자 이내)"
+          placeholder={language.enterReasonWithin50Characters}
           value={content}
           maxLength={50}
           onChange={handleContent}
         />
-        <button onClick={handleSubmitReport}>제출</button>
+        <button onClick={handleSubmitReport}>{language.submit}</button>
       </WrapperStyled>
     </ModalLayout>
   );

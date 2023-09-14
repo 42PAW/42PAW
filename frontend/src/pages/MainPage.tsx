@@ -14,13 +14,14 @@ import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation"
 import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTemplate";
 import useDebounce from "@/hooks/useDebounce";
 import { useRef } from "react";
-import { boardsLengthState } from "@/recoil/atom";
+import { boardsLengthState, languageState } from "@/recoil/atom";
 import { buttonToggledState } from "@/components/BoardSortToggle";
 import { logoClickObserverState } from "@/recoil/atom";
 
 const MainPage = () => {
   //useInview의 ref값을 참조하는 요소에 대한 root 참조값
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const [language] = useRecoilState<any>(languageState);
   const [loading, setLoading] = useState(true);
   const setButtonToggled = useSetRecoilState(buttonToggledState);
   const [boardsLength] = useRecoilState<number>(boardsLengthState);
@@ -86,7 +87,7 @@ const MainPage = () => {
   if (data?.pages[0].length === 0) {
     return (
       <WrapperStyled $boardExists={false}>
-        <NoBoardsStyled>게시물이 존재하지 않습니다</NoBoardsStyled>
+        <NoBoardsStyled>{language.noPostsExist}</NoBoardsStyled>
       </WrapperStyled>
     );
   }
@@ -126,7 +127,7 @@ const MainPage = () => {
         </BoardsEndStyled>
       )}
       {!hasNextPage && (
-        <BoardsEndStyled>더 이상 게시물이 존재하지 않습니다.</BoardsEndStyled>
+        <BoardsEndStyled>{language.noMorePosts}</BoardsEndStyled>
       )}
     </WrapperStyled>
   );

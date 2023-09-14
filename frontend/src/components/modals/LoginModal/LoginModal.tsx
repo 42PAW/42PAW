@@ -2,10 +2,11 @@ import { useRecoilState } from "recoil";
 import { styled } from "styled-components";
 import ModalLayout from "@/components/modals/ModalLayout";
 import { ModalType } from "@/types/enum/modal.enum";
-import { currentOpenModalState } from "@/recoil/atom";
+import { currentOpenModalState, languageState } from "@/recoil/atom";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
 
 const LoginModal: React.FC = () => {
+  const [language] = useRecoilState<any>(languageState);
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
@@ -22,8 +23,8 @@ const LoginModal: React.FC = () => {
     >
       <WrapperStyled>
         <h1>🐶</h1>
-        <ContentStyled>로그인이 필요한 서비스입니다.</ContentStyled>
-        <button onClick={redirectLogin}>로그인</button>
+        <ContentStyled>{language.loginDemand}</ContentStyled>
+        <button onClick={redirectLogin}>{language.login}</button>
       </WrapperStyled>
     </ModalLayout>
   );

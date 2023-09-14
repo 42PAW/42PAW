@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { useInView } from "react-intersection-observer";
 import BoardTemplate from "@/components/Board/BoardTemplate";
-import { currentProfileBoardIdState } from "@/recoil/atom";
+import { currentProfileBoardIdState, languageState } from "@/recoil/atom";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { boardCategoryState } from "@/recoil/atom";
@@ -16,6 +16,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import useDebounce from "@/hooks/useDebounce";
 
 const MyProfileBoardsPage = () => {
+  const [language] = useRecoilState<any>(languageState);
   const { debounce } = useDebounce();
   const [loading, setLoading] = useState(true);
   const location = useLocation();
@@ -103,7 +104,7 @@ const MyProfileBoardsPage = () => {
         </FetchObserverStyled>
       )}
       {!hasNextPage && (
-        <BoardsEndStyled>더 이상 게시물이 존재하지 않습니다.</BoardsEndStyled>
+        <BoardsEndStyled>{language.noMorePosts}</BoardsEndStyled>
       )}
     </WrapperStyled>
   );

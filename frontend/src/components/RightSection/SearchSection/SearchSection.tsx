@@ -9,10 +9,11 @@ import { axiosGetSearchResults } from "@/api/axios/axios.custom";
 import useDebounce from "@/hooks/useDebounce";
 import useToaster from "@/hooks/useToaster";
 import LoadingDotsAnimation from "@/components/loading/LoadingDotsAnimation";
-import { userInfoState } from "@/recoil/atom";
+import { userInfoState, languageState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 
 const SearchSection = () => {
+  const [language] = useRecoilState<any>(languageState);
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [isInput, setIsInput] = useState(false);
   const [searchInput, setSearchInput] = useState<string>("");
@@ -65,7 +66,8 @@ const SearchSection = () => {
   const handleInputState = () => {
     if (isInput) return;
     if (searchInput == "") {
-      popToast("검색 내용을 입력해주세요.", "N");
+      const demandSearchInputMsg = language.demandSearchInput;
+      popToast(demandSearchInputMsg, "N");
       setIsInput(true);
       debounce("noSearchInput", () => setIsInput(false), 1000);
     }
@@ -85,7 +87,7 @@ const SearchSection = () => {
       <SearchBarStyled $isInput={isInput}>
         <input
           type="text"
-          placeholder="아이디를 입력해주세요"
+          placeholder={language.enterUsername}
           value={searchInput}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
@@ -117,9 +119,9 @@ const SearchSection = () => {
                 <LoadingDotsAnimation />
               </div>
             ) : searchInput === "" ? (
-              <div>인트라 혹은 닉네임을 입력해주세요</div>
+              <div>{language.enterIntranameOrNickname}</div>
             ) : (
-              <div>검색 결과가 없습니다</div>
+              <div>{language.noSearchResults}</div>
             )}
           </NoSearchMessageStyled>
         )}

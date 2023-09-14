@@ -6,19 +6,23 @@ import AnimalButtonContainer from "@/components/AnimalButtonContainer";
 import RevertButton from "@/pages/SignUpPage/components/RevertButton";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 import useToaster from "@/hooks/useToaster";
+import { languageState } from "@/recoil/atom";
+import { useRecoilState } from "recoil";
 
 const AnimalFilterSection: React.FC<SectionProps> = ({
   registerData,
   setRegisterData,
   setStep,
 }) => {
+  const [language] = useRecoilState<any>(languageState);
   const [isFading, setIsFading] = useState<boolean>(true);
   const [categoryList, setCategoryList] = useState<AnimalSpecies[]>([]);
   const { popToast } = useToaster();
 
   const handleOnClick = () => {
     if (categoryList.length === 0) {
-      popToast("카테고리를 선택해주세요.", "N");
+      const selectCategoryMsg = language.SelectCategory;
+      popToast(selectCategoryMsg, "N");
       return;
     }
     setRegisterData({ ...registerData, categoryFilters: [...categoryList] });
@@ -42,7 +46,8 @@ const AnimalFilterSection: React.FC<SectionProps> = ({
         setIsFading={setIsFading}
       />
       <h1>
-        만나고 싶은 동물 친구들을 <br /> 선택해 주세요
+        {language.selectAnimalFriends}
+        {/* TODO: put an apprioriate newline */}
       </h1>
       <ButtonZoneStyled>
         <AnimalButtonContainer

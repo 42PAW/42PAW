@@ -104,4 +104,7 @@ export const ger = {
   belowFiveImages: "Es können nur bis zu 5 Bilder hochgeladen werden.",
   uploadComplete: "Hochladen abgeschlossen",
   noMorePosts: "Es gibt keine weiteren Beiträge.",
+  loginDemand: "Für diesen Dienst ist eine Anmeldung erforderlich.",
+  uploadImageBrief: "Bild hochladen",
+  deleteImageBrief: "Bild löschen",
 };

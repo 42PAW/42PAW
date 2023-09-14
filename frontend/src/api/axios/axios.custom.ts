@@ -237,7 +237,6 @@ export const axiosGetBoardComments = async (
           params: { size: size, page: page },
         }
       );
-      console.log("result: " + response.data.result);
       return response.data.result;
     }
     const response = await axios.get(

@@ -4,8 +4,8 @@ import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import SettingButton from "@/components/SettingButton";
 import { LeftMenuProps } from "./LeftMenuSection";
 
-import { useSetRecoilState } from "recoil";
-import { currentMemberIdState } from "@/recoil/atom";
+import { useSetRecoilState, useRecoilState } from "recoil";
+import { currentMemberIdState, languageState } from "@/recoil/atom";
 
 const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
   handleLogin,
@@ -53,7 +53,9 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
             {language.logout}
           </LoginButtonStyled>
         ) : (
-          <LoginButtonStyled onClick={handleLogin}>로그인</LoginButtonStyled>
+          <LoginButtonStyled onClick={handleLogin}>
+            {language.login}
+          </LoginButtonStyled>
         )}
       </LeftMenuStyled>
       <SettingButtonContainerStyled>

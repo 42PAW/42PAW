@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import proj.pet.auth.domain.AuthGuard;
 import proj.pet.auth.domain.AuthLevel;
-import proj.pet.comment.dto.CommentRequestDto;
+import proj.pet.comment.dto.CommentCreateRequestDto;
 import proj.pet.comment.dto.CommentResponseDto;
 import proj.pet.comment.service.CommentFacadeService;
 import proj.pet.member.domain.UserSession;
@@ -35,8 +35,8 @@ public class CommentController {
 	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void createComment(
 			@UserSession UserSessionDto userSessionDto,
-			@RequestBody CommentRequestDto commentRequestDto) {
-		commentFacadeService.createComment(userSessionDto, commentRequestDto);
+			@RequestBody CommentCreateRequestDto commentCreateRequestDto) {
+		commentFacadeService.createComment(userSessionDto, commentCreateRequestDto);
 	}
 
 	@DeleteMapping("/{commentId}")

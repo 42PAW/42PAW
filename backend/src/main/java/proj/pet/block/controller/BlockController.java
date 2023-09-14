@@ -1,5 +1,6 @@
 package proj.pet.block.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import proj.pet.auth.domain.AuthGuard;
@@ -23,7 +24,7 @@ public class BlockController {
 	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void createBlock(
 			@UserSession UserSessionDto userSessionDto,
-			@RequestBody BlockRequestDto blockRequestDto) {
+			@Valid @RequestBody BlockRequestDto blockRequestDto) {
 		blockFacadeService.createBlock(userSessionDto, blockRequestDto);
 	}
 

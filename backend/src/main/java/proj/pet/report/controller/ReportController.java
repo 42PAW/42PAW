@@ -1,5 +1,6 @@
 package proj.pet.report.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,7 @@ public class ReportController {
 	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void createReport(
 			@UserSession UserSessionDto userSessionDto,
-			@RequestBody ReportRequestDto reportRequestDto) {
+			@Valid @RequestBody ReportRequestDto reportRequestDto) {
 		reportFacadeService.createReport(userSessionDto, reportRequestDto);
 	}
 }

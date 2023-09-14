@@ -1,5 +1,6 @@
 package proj.pet.scrap.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class ScrapController {
 	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void createScrap(
 			@UserSession UserSessionDto userSessionDto,
-			@RequestBody ScrapCreateRequestDto scrapCreateRequestDto
+			@Valid @RequestBody ScrapCreateRequestDto scrapCreateRequestDto
 	) {
 		scrapFacadeService.createScrap(userSessionDto, scrapCreateRequestDto);
 	}

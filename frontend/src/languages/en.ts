@@ -99,4 +99,7 @@ export const en = {
   belowFiveImages: "Only up to 5 images can be uploaded.",
   uploadComplete: "Upload complete",
   noMorePosts: "No more posts exist.",
+  loginDemand: "Login is required for this service.",
+  uploadImageBrief: "Upload Image",
+  deleteImageBrief: "Delete Image",
 };

@@ -99,4 +99,7 @@ export const ko = {
   belowFiveImages: "5개 이하의 이미지만 업로드 가능합니다.",
   uploadComplete: "업로드 완료",
   noMorePosts: "더 이상 게시물이 존재하지 않습니다.",
+  loginDemand: "로그인이 필요한 서비스입니다.",
+  uploadImageBrief: "이미지 업로드",
+  deleteImageBrief: "이미지 제거",
 };

@@ -102,4 +102,7 @@ export const spa = {
   belowFiveImages: "Solo se pueden subir hasta 5 imágenes.",
   uploadComplete: "Carga completa",
   noMorePosts: "No existen más publicaciones.",
+  loginDemand: "Es necesario iniciar sesión para este servicio.",
+  uploadImageBrief: "Subir imagen",
+  deleteImageBrief: "Eliminar imagen",
 };

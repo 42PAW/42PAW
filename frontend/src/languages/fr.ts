@@ -103,4 +103,7 @@ export const fr = {
   belowFiveImages: "Seules jusqu'à 5 images peuvent être téléchargées.",
   uploadComplete: "Téléchargement terminé",
   noMorePosts: "Aucun autre message n'existe.",
+  loginDemand: "La connexion est nécessaire pour ce service.",
+  uploadImageBrief: "Télécharger une image",
+  deleteImageBrief: "Supprimer une image",
 };

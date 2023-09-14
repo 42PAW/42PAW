@@ -16,44 +16,42 @@ import {
 import { ReportDTO } from "@/types/dto/member.dto";
 import useModal from "@/hooks/useModal";
 
-const [language] = useRecoilState<any>(languageState);
-
-const reportOptions = [
-  {
-    value: ReportReason.WRONG_ANIMAL_CATEGORY,
-    label: language.incorrectAnimalCategory,
-  },
-  {
-    value: ReportReason.INSULTS,
-    label: language.profanityHarrassment,
-  },
-  {
-    value: ReportReason.AD_SPAM,
-    label: language.spamAdvertising,
-  },
-  {
-    value: ReportReason.INAPPROPRIATE_NICKNAME,
-    label: language.inappropriateUsername,
-  },
-  {
-    value: ReportReason.SEXUAL,
-    label: language.explicitContent,
-  },
-  {
-    value: ReportReason.VIOLENCE,
-    label: language.violentContent,
-  },
-  {
-    value: ReportReason.IRRELEVANT,
-    label: language.irrelevantToAnimals,
-  },
-  {
-    value: ReportReason.ETC,
-    label: language.etc,
-  },
-];
-
 const ReportModal: React.FC = () => {
+  const [language] = useRecoilState<any>(languageState);
+  const reportOptions = [
+    {
+      value: ReportReason.WRONG_ANIMAL_CATEGORY,
+      label: language.incorrectAnimalCategory,
+    },
+    {
+      value: ReportReason.INSULTS,
+      label: language.profanityHarrassment,
+    },
+    {
+      value: ReportReason.AD_SPAM,
+      label: language.spamAdvertising,
+    },
+    {
+      value: ReportReason.INAPPROPRIATE_NICKNAME,
+      label: language.inappropriateUsername,
+    },
+    {
+      value: ReportReason.SEXUAL,
+      label: language.explicitContent,
+    },
+    {
+      value: ReportReason.VIOLENCE,
+      label: language.violentContent,
+    },
+    {
+      value: ReportReason.IRRELEVANT,
+      label: language.irrelevantToAnimals,
+    },
+    {
+      value: ReportReason.ETC,
+      label: language.etc,
+    },
+  ];
   const [meatballModalUtils] = useRecoilState<IMeatballMdoalUtils>(
     meatballModalUtilsState
   );

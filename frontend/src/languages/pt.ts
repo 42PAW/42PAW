@@ -100,4 +100,7 @@ export const pt = {
   belowFiveImages: "Apenas até 5 imagens podem ser enviadas.",
   uploadComplete: "Upload concluído",
   noMorePosts: "Não existem mais publicações.",
+  loginDemand: "O login é necessário para este serviço.",
+  uploadImageBrief: "Carregar imagem",
+  deleteImageBrief: "Excluir imagem",
 };

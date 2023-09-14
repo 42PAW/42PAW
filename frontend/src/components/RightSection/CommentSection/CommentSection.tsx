@@ -124,14 +124,14 @@ const CommentSection = () => {
           ))
         ) : (
           <NoCommentMessageStyled>
-            이 게시글의 첫번째 댓글이 되어주세요
+            {language.demandFirstComment}
           </NoCommentMessageStyled>
         )}
       </CommentItemWrapperStyled>
       <CommentInputContainerStyled>
         <input
           value={comment}
-          placeholder="댓글을 입력해주세요"
+          placeholder={language.enterComment}
           maxLength={50}
           onChange={handleOnchange}
           onKeyDown={handleKeyDown}

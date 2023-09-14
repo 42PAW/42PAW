@@ -1,5 +1,6 @@
 package proj.pet.block.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,5 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BlockRequestDto {
 
+	@NotNull
 	private Long blockMemberId;
 }

@@ -25,7 +25,7 @@ const ReportModal: React.FC = () => {
     },
     {
       value: ReportReason.INSULTS,
-      label: language.profanityHarrassment,
+      label: language.profanityHarassment,
     },
     {
       value: ReportReason.AD_SPAM,

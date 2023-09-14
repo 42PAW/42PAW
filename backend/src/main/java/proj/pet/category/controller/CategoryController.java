@@ -1,11 +1,8 @@
 package proj.pet.category.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import proj.pet.auth.domain.AuthGuard;
 import proj.pet.auth.domain.AuthLevel;
 import proj.pet.category.dto.CategoryResponseDto;
@@ -30,7 +27,7 @@ public class CategoryController {
 	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void updateMyCategories(
 			@UserSession UserSessionDto userSessionDto,
-			@RequestBody CategoryUpdateRequestDto categoryUpdateRequestDto
+			@Valid @RequestBody CategoryUpdateRequestDto categoryUpdateRequestDto
 	) {
 		categoryFacadeService.updateMyCategories(userSessionDto, categoryUpdateRequestDto);
 	}

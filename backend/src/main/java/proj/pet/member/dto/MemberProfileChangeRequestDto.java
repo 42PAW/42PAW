@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @ToString
 public class MemberProfileChangeRequestDto {
-
 	private String memberName;
 	private MultipartFile profileImage;
 	private String statement;

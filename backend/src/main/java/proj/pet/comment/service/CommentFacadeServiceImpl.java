@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import proj.pet.comment.dto.CommentRequestDto;
+import proj.pet.comment.dto.CommentCreateRequestDto;
 import proj.pet.comment.dto.CommentResponseDto;
 import proj.pet.member.dto.UserSessionDto;
 
@@ -25,8 +25,8 @@ public class CommentFacadeServiceImpl implements CommentFacadeService {
 
 	@Transactional
 	@Override
-	public void createComment(UserSessionDto userSessionDto, CommentRequestDto commentRequestDto) {
-		commentService.addCommentToBoard(userSessionDto.getMemberId(), commentRequestDto.getBoardId(), commentRequestDto.getContent(), LocalDateTime.now());
+	public void createComment(UserSessionDto userSessionDto, CommentCreateRequestDto commentCreateRequestDto) {
+		commentService.addCommentToBoard(userSessionDto.getMemberId(), commentCreateRequestDto.getBoardId(), commentCreateRequestDto.getContent(), LocalDateTime.now());
 
 	}
 

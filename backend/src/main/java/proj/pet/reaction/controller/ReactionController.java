@@ -1,5 +1,6 @@
 package proj.pet.reaction.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import proj.pet.auth.domain.AuthGuard;
@@ -20,7 +21,7 @@ public class ReactionController {
 	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void createReaction(
 			@UserSession UserSessionDto userSessionDto,
-			@RequestBody ReactionRequestDto reactionRequestDto) {
+			@Valid @RequestBody ReactionRequestDto reactionRequestDto) {
 		reactionFacadeService.createReaction(userSessionDto, reactionRequestDto);
 	}
 

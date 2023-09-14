@@ -15,6 +15,7 @@ const SettingButton: React.FC<props> = ({ children }) => {
   const [isToggled, setIsToggled] = useState<boolean>(false);
   const { openModal } = useModal();
   const { openAnimalFilterSection } = useRightSectionHandler();
+  const url = "https://forms.gle/KSS5gPCTMs8DQLvU8";
 
   const handleToggle = (state: string) => {
     if (state === "ON") {
@@ -45,6 +46,15 @@ const SettingButton: React.FC<props> = ({ children }) => {
               <MenuItemStyled>{children}</MenuItemStyled>
             </MenuItemWrapperStyled>
           )}
+          <MenuItemWrapperStyled>
+            <MenuItemStyled
+              onClick={() => {
+                window.open(url);
+              }}
+            >
+              <img src="/assets/reporting.png" />
+            </MenuItemStyled>
+          </MenuItemWrapperStyled>
           <MenuItemWrapperStyled>
             <MenuItemStyled onClick={() => openModal(ModalType.LANGUAGE)}>
               <img src="/assets/globalW.png" />

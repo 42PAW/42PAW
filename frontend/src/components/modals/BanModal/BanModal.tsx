@@ -7,12 +7,13 @@ import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
 import useModal from "@/hooks/useModal";
 import useToaster from "@/hooks/useToaster";
 import { axiosBlockUser } from "@/api/axios/axios.custom";
-import { callbackStoreState } from "@/recoil/atom";
+import { callbackStoreState, languageState } from "@/recoil/atom";
 import { followType } from "@/types/enum/followType.enum";
 import { IMeatballMdoalUtils } from "@/components/MeatballButton";
 import { meatballModalUtilsState } from "@/components/MeatballButton";
 
 const BanModal: React.FC = () => {
+  const [language] = useRecoilState<any>(languageState);
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
@@ -28,7 +29,8 @@ const BanModal: React.FC = () => {
     //이미 차단된 유저 차단 시도 시
     console.log(meatballModealUtils);
     if (meatballModealUtils.followStatus == followType.BLOCK) {
-      popToast("이미 차단된 유저입니다.", "N");
+      const alreadyBannedMsg = language.alreadyBanned;
+      popToast(alreadyBannedMsg, "N");
       return;
     }
     await axiosBlockUser(meatballModealUtils.memberId as number);
@@ -43,11 +45,11 @@ const BanModal: React.FC = () => {
   return (
     <ModalLayout modalName={ModalType.BAN} isOpen={currentOpenModal.banModal}>
       <WrapperStyled>
-        <h1>차단하기</h1>
+        <h1>{language.blockUserTitle}</h1>
         <ContentStyled>
-          {meatballModealUtils.memberName} 님을 차단하시겠습니까?
+          {meatballModealUtils.memberName} {language.blockUserConfirmation}
         </ContentStyled>
-        <button onClick={handleOnClick}>차단</button>
+        <button onClick={handleOnClick}>{language.ban}</button>
       </WrapperStyled>
     </ModalLayout>
   );

@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { FollowerDTO, UserInfoDTO } from "@/types/dto/member.dto.ts";
 import SearchItem from "@/components/RightSection/SearchSection/SearchItem";
-import { userInfoState } from "@/recoil/atom";
+import { userInfoState, languageState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 import useFetch from "@/hooks/useFetch";
 import { useQuery } from "@tanstack/react-query";
@@ -9,6 +9,7 @@ import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import { useParams } from "react-router-dom";
 
 const FollowerSection = () => {
+  const [language] = useRecoilState<any>(languageState);
   const { memberId } = useParams<{ memberId: string }>();
   const { fetchFollowerList } = useFetch(Number(memberId));
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
@@ -46,7 +47,7 @@ const FollowerSection = () => {
             />
           ))
         ) : (
-          <NoSearchMessageStyled>팔로워가 없습니다.</NoSearchMessageStyled>
+          <NoSearchMessageStyled>{language.noFollowers}</NoSearchMessageStyled>
         )}
       </FollowerItemWrapperStyled>
     </WrapperStyled>

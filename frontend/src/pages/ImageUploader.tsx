@@ -13,9 +13,12 @@ import {
 import "react-advanced-cropper/dist/style.css";
 import heic2any from "heic2any";
 import imageCompression from "browser-image-compression";
+import { languageState } from "@/recoil/atom";
+import { useRecoilState } from "recoil";
 
 const ImageUploader = () => {
   const cropperRef = useRef<FixedCropperRef>(null);
+  const [language] = useRecoilState<any>(languageState);
   const [categoryList, setCategoryList] = useState<AnimalSpecies[]>([]);
   const [uploadFiles, setUploadFiles] = useState<Blob[]>([]);
   const [uploadDefaultFiles, setUploadDefaultFiles] = useState<Blob[]>([]);
@@ -117,7 +120,8 @@ const ImageUploader = () => {
     let selectedFiles = Array.from(fileList);
 
     if (uploadFiles.length + selectedFiles.length > 5) {
-      popToast("5개 이하의 이미지만 업로드 가능합니다.", "N");
+      const belowFiveImagesMsg = language.belowFiveImages;
+      popToast(belowFiveImagesMsg, "N");
       return;
     }
 
@@ -193,11 +197,13 @@ const ImageUploader = () => {
   // upload the board & send axios request
   const upload = async () => {
     if (uploadFiles.length === 0) {
-      popToast("이미지를 업로드해주세요.", "N");
+      const uploadImagesMsg = language.uploadImage;
+      popToast(uploadImagesMsg, "N");
       return;
     }
     if (categoryList.length === 0) {
-      popToast("카테고리를 선택해주세요.", "N");
+      const selectCategoryMsg = language.selectCategory;
+      popToast(selectCategoryMsg, "N");
       return;
     }
     try {
@@ -207,7 +213,8 @@ const ImageUploader = () => {
         categoryList: categoryList,
         content: caption,
       });
-      popToast("업로드 완료!", "P");
+      const uploadCompleteMsg = language.uploadComplete;
+      popToast(uploadCompleteMsg, "P");
       goHome();
     } catch (error) {
       throw error;
@@ -293,7 +300,7 @@ const ImageUploader = () => {
         ))}
       {uploadFiles.length === 0 && (
         <UploadMainPreviewWrapperStyled>
-          <UploadDemandStyled>이미지를 업로드해주세요!</UploadDemandStyled>
+          <UploadDemandStyled>{language.uploadImage}</UploadDemandStyled>
           <UploadMainPreviewStyled
             type="file"
             accept="image/*"
@@ -306,7 +313,7 @@ const ImageUploader = () => {
       <CaptionBoxStyled>
         <textarea
           id="expanding-input"
-          placeholder="캡션을 입력하세요"
+          placeholder={language.enterCaption}
           value={caption}
           onChange={captionChange}
         />
@@ -321,8 +328,12 @@ const ImageUploader = () => {
         />
       </CategoryButtonStyled>
       <ButtonDivStyled>
-        <UploadbuttonStyled onClick={upload}>확인</UploadbuttonStyled>
-        <CancelbuttonStyled onClick={goHome}>취소</CancelbuttonStyled>
+        <UploadbuttonStyled onClick={upload}>
+          {language.confirm}
+        </UploadbuttonStyled>
+        <CancelbuttonStyled onClick={goHome}>
+          {language.cancel}
+        </CancelbuttonStyled>
       </ButtonDivStyled>
     </WrapperStyled>
   );
@@ -434,12 +445,14 @@ const DivisionLineStyled = styled.div`
 const CaptionBoxStyled = styled.div`
   display: flex;
   align-items: start;
-  width: 60%;
+  width: 58%;
   height: 4%;
   margin-top: 10px;
   margin-bottom: 10px;
   textarea {
     display: flex;
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: bolder;
     width: 100%;
     height: 70%
     border: none;
@@ -455,6 +468,7 @@ const CaptionBoxStyled = styled.div`
     text-overflow: clip;
     &::placeholder {
       color: var(--white);
+      opacity: 0.7;
     }
 `;
 
@@ -529,7 +543,7 @@ const FixedCropperStyled = styled(FixedCropper)`
 
 const CropperUtilsStyled = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   width: 55%;
   height: 20px;
   margin-top: 5px;
@@ -541,7 +555,6 @@ const TodayDateStyled = styled.div`
   justify-content: center;
   align-items: center;
   height: 20px;
-  margin-right: 50%;
   font-size: 10px;
   color: var(--white);
   justify-content: flex-start;

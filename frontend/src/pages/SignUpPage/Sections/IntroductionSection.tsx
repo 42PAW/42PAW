@@ -3,12 +3,15 @@ import { styled } from "styled-components";
 import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
 import { Section } from "@/pages/SignUpPage/SignUpPage";
 import RevertButton from "@/pages/SignUpPage/components/RevertButton";
+import { languageState } from "@/recoil/atom";
+import { useRecoilState } from "recoil";
 
 const IntroductionSection: React.FC<SectionProps> = ({
   registerData,
   setRegisterData,
   setStep,
 }) => {
+  const [language] = useRecoilState<any>(languageState);
   const [isFading, setIsFading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -35,7 +38,8 @@ const IntroductionSection: React.FC<SectionProps> = ({
   return (
     <WrapperStyled $isFading={isFading}>
       <h1>
-        자신을 표현할 수 있는 <br /> 소개를 적어 주세요
+        {language.writeIntroduction}
+        {/* TODO: put an apprioriate newline */}
       </h1>
       <RevertButton
         setStep={setStep}
@@ -44,7 +48,7 @@ const IntroductionSection: React.FC<SectionProps> = ({
       />
       <InputContainer>
         <input
-          placeholder="최대 50자 이내" // 국가에 따라 언어 변경
+          placeholder={language.upTo50Characters} // 국가에 따라 언어 변경
           value={registerData.statement}
           onChange={handleOnChange}
           maxLength={50}

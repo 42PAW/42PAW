@@ -11,7 +11,7 @@ import { IBoardInfo } from "@/types/interface/board.interface";
 import useFetch from "@/hooks/useFetch";
 import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
-import { boardCategoryState } from "@/recoil/atom";
+import { boardCategoryState, languageState } from "@/recoil/atom";
 import useDebounce from "@/hooks/useDebounce";
 
 const isOnlyWhitespace = (str: string) => {
@@ -19,6 +19,7 @@ const isOnlyWhitespace = (str: string) => {
 };
 
 const CommentSection = () => {
+  const [language] = useRecoilState<any>(languageState);
   const [loading, setLoading] = useState(true);
   const { debounce } = useDebounce();
   const { fetchComments } = useFetch();
@@ -135,7 +136,9 @@ const CommentSection = () => {
           onChange={handleOnchange}
           onKeyDown={handleKeyDown}
         />
-        <button onClick={() => commentMutation.mutate()}>게시</button>
+        <button onClick={() => commentMutation.mutate()}>
+          {language.posting}
+        </button>
       </CommentInputContainerStyled>
     </WrapperStyled>
   );

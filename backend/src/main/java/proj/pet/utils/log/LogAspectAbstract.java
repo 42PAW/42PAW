@@ -1,29 +1,17 @@
-package proj.pet.utils.domain;
+package proj.pet.utils.log;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.core.ParameterNameDiscoverer;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
-import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.core.DefaultParameterNameDiscoverer;
-import org.springframework.stereotype.Component;
 
-@Component
-@Aspect
-@Slf4j
-public class ControllerLog {
-
-	private final DefaultParameterNameDiscoverer discoverer = new DefaultParameterNameDiscoverer();
-
-	@Pointcut("execution(* proj.pet..*Controller.*(..))")
-	public void logging() {
-	}
-
-	@Before("logging()")
-	public void log(JoinPoint joinPoint) {
+public abstract class LogAspectAbstract {
+	private final ParameterNameDiscoverer discoverer = new DefaultParameterNameDiscoverer();
+	
+	protected String getLog(JoinPoint joinPoint) {
 		Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
 		String className = joinPoint.getTarget().getClass().getName();
 		String methodName = method.getName();
@@ -42,7 +30,6 @@ public class ControllerLog {
 		if (args.length > 0) {
 			sb.setLength(sb.length() - 1);
 		}
-
-		log.info(sb.toString());
+		return sb.toString();
 	}
 }

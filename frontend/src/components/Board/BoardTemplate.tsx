@@ -372,7 +372,7 @@ const ContentStyled = styled.div`
 const PreviewCommentStyled = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 3%;
+  margin-top: 2%;
   font-size: 100%;
   div:nth-child(1) {
     margin-right: 1%;

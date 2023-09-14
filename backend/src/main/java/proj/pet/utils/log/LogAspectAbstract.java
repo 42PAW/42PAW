@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public abstract class LogAspectAbstract {
 	private final ParameterNameDiscoverer discoverer = new DefaultParameterNameDiscoverer();
-	
+
 	protected String getLog(JoinPoint joinPoint) {
 		Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
 		String className = joinPoint.getTarget().getClass().getName();
@@ -24,7 +24,8 @@ public abstract class LogAspectAbstract {
 		if (Objects.nonNull(parameterNames)) {
 			for (int i = 0; i < args.length; i++) {
 				sb.append("{").append(parameterNames[i]).append("=");
-				sb.append(args[i].toString()).append("}&");
+				if (args[i] != null)
+					sb.append(args[i].toString()).append("}&");
 			}
 		}
 		if (args.length > 0) {

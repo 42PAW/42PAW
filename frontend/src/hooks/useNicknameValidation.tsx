@@ -1,7 +1,7 @@
 import useToaster from "./useToaster";
 import { axiosCheckNicknameValid } from "@/api/axios/axios.custom";
 import { languageState } from "@/recoil/atom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 
 const hasWhitespace = (str: string) => {
   return str.indexOf(" ") >= 0;
@@ -21,7 +21,7 @@ const useNicknameValidation = () => {
    * @param {string} nickname - 유효성을 검사할 닉네임.
    */
   const nicknameValidation = async (nickname: string) => {
-    const [language] = useRecoilValue<any>(languageState);
+    const [language] = useRecoilState<any>(languageState);
 
     if (
       nickname.length < 3 ||

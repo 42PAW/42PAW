@@ -6,10 +6,10 @@ import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useQueryClient } from "@tanstack/react-query";
 import MeatballButton from "@/components/MeatballButton";
 import { languageState } from "@/recoil/atom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 
 const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
-  const [language] = useRecoilValue<any>(languageState);
+  const [language] = useRecoilState<any>(languageState);
 
   const { openFollowerSection, openFollowingSection } =
     useRightSectionHandler();

@@ -4,10 +4,10 @@ import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
 import { Section } from "@/pages/SignUpPage/SignUpPage";
 import RevertButton from "@/pages/SignUpPage/components/RevertButton";
 import { languageState } from "@/recoil/atom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 
 const ProfileImageSection: React.FC<SectionProps> = ({ setStep }) => {
-  const [language] = useRecoilValue<any>(languageState);
+  const [language] = useRecoilState<any>(languageState);
   const [isFading, setIsFading] = useState<boolean>(true);
 
   const handleOnClick = () => {

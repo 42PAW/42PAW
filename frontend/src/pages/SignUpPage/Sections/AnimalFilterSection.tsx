@@ -7,14 +7,14 @@ import RevertButton from "@/pages/SignUpPage/components/RevertButton";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 import useToaster from "@/hooks/useToaster";
 import { languageState } from "@/recoil/atom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 
 const AnimalFilterSection: React.FC<SectionProps> = ({
   registerData,
   setRegisterData,
   setStep,
 }) => {
-  const [language] = useRecoilValue<any>(languageState);
+  const [language] = useRecoilState<any>(languageState);
   const [isFading, setIsFading] = useState<boolean>(true);
   const [categoryList, setCategoryList] = useState<AnimalSpecies[]>([]);
   const { popToast } = useToaster();

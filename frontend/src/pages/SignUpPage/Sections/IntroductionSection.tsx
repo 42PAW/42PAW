@@ -4,14 +4,14 @@ import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
 import { Section } from "@/pages/SignUpPage/SignUpPage";
 import RevertButton from "@/pages/SignUpPage/components/RevertButton";
 import { languageState } from "@/recoil/atom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 
 const IntroductionSection: React.FC<SectionProps> = ({
   registerData,
   setRegisterData,
   setStep,
 }) => {
-  const [language] = useRecoilValue<any>(languageState);
+  const [language] = useRecoilState<any>(languageState);
   const [isFading, setIsFading] = useState<boolean>(true);
 
   useEffect(() => {

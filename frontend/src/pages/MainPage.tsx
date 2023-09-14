@@ -21,7 +21,7 @@ import { logoClickObserverState } from "@/recoil/atom";
 const MainPage = () => {
   //useInview의 ref값을 참조하는 요소에 대한 root 참조값
   const rootRef = useRef<HTMLDivElement | null>(null);
-  const [language] = useRecoilValue<any>(languageState);
+  const [language] = useRecoilState<any>(languageState);
   const [loading, setLoading] = useState(true);
   const setButtonToggled = useSetRecoilState(buttonToggledState);
   const [boardsLength] = useRecoilState<number>(boardsLengthState);

@@ -5,10 +5,10 @@ import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
 import { useEffect } from "react";
 import { axiosSignUp } from "@/api/axios/axios.custom";
 import { languageState } from "@/recoil/atom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 
 const SuccessSection: React.FC<SectionProps> = ({ registerData }) => {
-  const [language] = useRecoilValue<any>(languageState);
+  const [language] = useRecoilState<any>(languageState);
   const navigator = useNavigate();
 
   createConfetti({

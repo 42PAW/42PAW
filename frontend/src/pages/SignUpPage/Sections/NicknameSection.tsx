@@ -6,14 +6,14 @@ import useToaster from "@/hooks/useToaster";
 import useDebounce from "@/hooks/useDebounce";
 import useNicknameValidation from "@/hooks/useNicknameValidation";
 import { languageState } from "@/recoil/atom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 
 const NicknameSection: React.FC<SectionProps> = ({
   registerData,
   setRegisterData,
   setStep,
 }) => {
-  const [language] = useRecoilValue<any>(languageState);
+  const [language] = useRecoilState<any>(languageState);
   const [isWrong, setIsWrong] = useState<boolean>(false);
   const [isFading, setIsFading] = useState<boolean>(true);
   const { nicknameValidation } = useNicknameValidation();

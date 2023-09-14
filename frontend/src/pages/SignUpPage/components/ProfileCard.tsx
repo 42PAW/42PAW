@@ -5,7 +5,7 @@ import { SignUpInfoDTO } from "@/types/dto/member.dto";
 import useToaster from "@/hooks/useToaster";
 import processImage from "@/components/processImage";
 import { languageState } from "@/recoil/atom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 
 /**
  * @registerData.memberName 유저가 설정한 닉네임
@@ -23,7 +23,7 @@ const ProfileCard = ({
   setRegisterData,
   step,
 }: IProfileCardProps) => {
-  const [language] = useRecoilValue<any>(languageState);
+  const [language] = useRecoilState<any>(languageState);
   const [imagePreview, setImagePreview] = useState<string>("");
   const { popToast } = useToaster();
 

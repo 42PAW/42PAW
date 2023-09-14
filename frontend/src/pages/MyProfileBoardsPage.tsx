@@ -14,10 +14,9 @@ import SkeletonBoardTemplate from "@/components/skeletonView/SkeletonBoardTempla
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import { useNavigate, useLocation } from "react-router-dom";
 import useDebounce from "@/hooks/useDebounce";
-import { useRecoilValue } from "recoil";
 
 const MyProfileBoardsPage = () => {
-  const [language] = useRecoilValue<any>(languageState);
+  const [language] = useRecoilState<any>(languageState);
   const { debounce } = useDebounce();
   const [loading, setLoading] = useState(true);
   const location = useLocation();

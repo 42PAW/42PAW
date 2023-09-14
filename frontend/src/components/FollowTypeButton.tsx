@@ -5,7 +5,7 @@ import { styled } from "styled-components";
 import { followType } from "@/types/enum/followType.enum";
 import LoadingDotsAnimation from "@/components/loading/LoadingDotsAnimation";
 import useDebounce from "@/hooks/useDebounce";
-import { callbackStoreState } from "@/recoil/atom";
+import { callbackStoreState, languageState } from "@/recoil/atom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
@@ -28,6 +28,12 @@ const FollowTypeButton = ({
   callback,
   size,
 }: FollowTypeButtonsProps) => {
+  const [language] = useRecoilState<any>(languageState);
+  const buttonTextByStatus = {
+    [followType.NONE]: language.follow,
+    [followType.FOLLOWING]: language.following,
+    [followType.BLOCK]: language.blocked,
+  };
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [callbackStore] = useRecoilState<Function[]>(callbackStoreState);
   const { debounce } = useDebounce();
@@ -84,12 +90,6 @@ const FollowTypeButton = ({
       )}
     </ButtonStyled>
   );
-};
-
-const buttonTextByStatus = {
-  [followType.NONE]: " 팔로우",
-  [followType.FOLLOWING]: "팔로잉",
-  [followType.BLOCK]: "차단됨",
 };
 
 const ButtonStyled = styled.button<{

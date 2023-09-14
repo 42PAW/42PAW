@@ -51,7 +51,7 @@ const ProfilePage = () => {
   return (
     <WrapperStyled>
       <ProfileTemplate
-        userInfo={profileQuery.data || null}
+        profileInfo={profileQuery.data || null}
         boards={boardsQuery.data || null}
         memberId={Number(memberId)}
       />

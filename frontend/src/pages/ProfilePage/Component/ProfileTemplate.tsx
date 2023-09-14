@@ -8,7 +8,7 @@ import FollowTypeButton from "@/components/FollowTypeButton";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface ProfileTemplateProps {
-  userInfo: ProfileInfoDTO | null; // userInfo를 props로 받음
+  profileInfo: ProfileInfoDTO | null; // profileInfo를 props로 받음
   boards: IBoardInfo[] | null;
   tabState?: Board;
   onTabChange?: (newTabState: Board) => void;
@@ -16,7 +16,7 @@ interface ProfileTemplateProps {
 }
 
 const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
-  userInfo,
+  profileInfo,
   boards,
   tabState,
   onTabChange,
@@ -25,12 +25,12 @@ const ProfileTemplate: React.FC<ProfileTemplateProps> = ({
   const queryClient = useQueryClient();
   return (
     <ProfileWrapperStyled>
-      <ProfileInfoComponent userInfo={userInfo} memberId={memberId} />
-      {memberId !== 0 && memberId && userInfo && (
+      <ProfileInfoComponent profileInfo={profileInfo} memberId={memberId} />
+      {memberId !== 0 && memberId && profileInfo && (
         <FollowButtonStyled>
           <FollowTypeButton
             memberId={memberId}
-            status={userInfo.followType}
+            status={profileInfo.followType}
             callback={() => {
               queryClient.invalidateQueries(["profile", memberId]);
             }}

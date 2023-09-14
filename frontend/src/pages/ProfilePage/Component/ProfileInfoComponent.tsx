@@ -6,7 +6,7 @@ import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { useQueryClient } from "@tanstack/react-query";
 import MeatballButton from "@/components/MeatballButton";
 
-const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
+const CountInfo = ({ profileInfo }: { profileInfo: ProfileInfoDTO }) => {
   const { openFollowerSection, openFollowingSection } =
     useRightSectionHandler();
 
@@ -22,57 +22,57 @@ const CountInfo = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
     <CountInfoStyled>
       <li>
         <div>게시물</div>
-        <span>{userInfo.boardCount}</span>
+        <span>{profileInfo.boardCount}</span>
       </li>
       <li onClick={handleFollowerClick}>
         <div>팔로워</div>
-        <span>{userInfo.followerCount}</span>
+        <span>{profileInfo.followerCount}</span>
       </li>
       <li onClick={handleFollowingClick}>
         <div>팔로잉</div>
-        <span>{userInfo.followingCount}</span>
+        <span>{profileInfo.followingCount}</span>
       </li>
     </CountInfoStyled>
   );
 };
 
-const UserInfoItems = ({ userInfo }: { userInfo: ProfileInfoDTO }) => {
-  const countryEmoji = useCountryEmoji(userInfo.country as Country);
+const UserInfoItems = ({ profileInfo }: { profileInfo: ProfileInfoDTO }) => {
+  const countryEmoji = useCountryEmoji(profileInfo.country as Country);
 
   return (
-    <UserInfoStyled>
-      <div className="memberName">{userInfo.memberName}</div>
-      <div className="intraName">{userInfo.intraName}</div>
+    <ProfileInfoStyled>
+      <div className="memberName">{profileInfo.memberName}</div>
+      <div className="intraName">{profileInfo.intraName}</div>
       <div className="country">
-        {countryEmoji} {userInfo.campus}
+        {countryEmoji} {profileInfo.campus}
       </div>
-    </UserInfoStyled>
+    </ProfileInfoStyled>
   );
 };
 
 const ProfileInfoComponent: React.FC<{
-  userInfo: ProfileInfoDTO | null;
+  profileInfo: ProfileInfoDTO | null;
   memberId: number;
-}> = ({ userInfo, memberId }) => {
+}> = ({ profileInfo, memberId }) => {
   const queryClient = useQueryClient();
-  if (!userInfo) return <div>No user information available.</div>;
+  if (!profileInfo) return <div>No user information available.</div>;
 
   return (
     <ProfileHeaderStyled>
       <img
         className="profileImage"
         alt="Profile image"
-        src={userInfo.profileImageUrl || "/assets/userW.png"}
+        src={profileInfo.profileImageUrl || "/assets/userW.png"}
       />
       <div className="content-wrapper">
-        <UserInfoItems userInfo={userInfo} />
-        <CaptionSectionStyled>{userInfo.statement}</CaptionSectionStyled>
-        <CountInfo userInfo={userInfo} />
+        <UserInfoItems profileInfo={profileInfo} />
+        <CaptionSectionStyled>{profileInfo.statement}</CaptionSectionStyled>
+        <CountInfo profileInfo={profileInfo} />
       </div>
       <MeatballButtonContainerStyled>
         <MeatballButton
           memberId={memberId}
-          memberName={userInfo.memberName}
+          memberName={profileInfo.memberName}
           callback={() => {
             queryClient.invalidateQueries(["profile", memberId]);
           }}
@@ -83,7 +83,7 @@ const ProfileInfoComponent: React.FC<{
   );
 };
 
-const UserInfoStyled = styled.div`
+const ProfileInfoStyled = styled.div`
   margin-top: 10px;
   font-weight: 500;
 

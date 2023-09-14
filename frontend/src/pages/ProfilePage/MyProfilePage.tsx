@@ -57,7 +57,7 @@ const MyProfilePage = () => {
   return (
     <WrapperStyled>
       <ProfileTemplate
-        userInfo={profileQuery.data || null}
+        profileInfo={profileQuery.data || null}
         boards={boardsQuery.data || null}
         tabState={boardCategory}
         onTabChange={handleTabState}

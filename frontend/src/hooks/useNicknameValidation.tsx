@@ -20,9 +20,8 @@ const useNicknameValidation = () => {
    * 유효성 검사 후 boolean 값 반환. true : 유효.
    * @param {string} nickname - 유효성을 검사할 닉네임.
    */
+  const [language] = useRecoilState<any>(languageState);
   const nicknameValidation = async (nickname: string) => {
-    const [language] = useRecoilState<any>(languageState);
-
     if (
       nickname.length < 3 ||
       hasWhitespace(nickname) ||

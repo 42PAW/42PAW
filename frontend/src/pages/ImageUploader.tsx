@@ -18,6 +18,7 @@ import { useRecoilState } from "recoil";
 
 const ImageUploader = () => {
   const cropperRef = useRef<FixedCropperRef>(null);
+  const [filesUploaded, setFilesUploaded] = useState<boolean>(false);
   const [language] = useRecoilState<any>(languageState);
   const [categoryList, setCategoryList] = useState<AnimalSpecies[]>([]);
   const [uploadFiles, setUploadFiles] = useState<Blob[]>([]);
@@ -40,7 +41,7 @@ const ImageUploader = () => {
     setUploadFiles(resetFiles);
   };
 
-  const cropImage = (index: number) => {
+  const cropImage = (index: number, flag: boolean) => {
     const canvas = cropperRef.current?.getCanvas() as HTMLCanvasElement;
     if (canvas) {
       const ctx = canvas.getContext("2d");
@@ -62,10 +63,11 @@ const ImageUploader = () => {
             const newUploadFiles = [...uploadFiles];
             newUploadFiles[index] = webpFile;
             setUploadFiles(newUploadFiles);
-
-            const newUrlList = [...urlList];
-            newUrlList[index] = URL.createObjectURL(webpFile);
-            setUrlList(newUrlList);
+            if (flag === true) {
+              const newUrlList = [...urlList];
+              newUrlList[index] = URL.createObjectURL(webpFile);
+              setUrlList(newUrlList);
+            }
           }
         }, "image/webp");
       };
@@ -76,7 +78,7 @@ const ImageUploader = () => {
     if (index === selectedPreviewIndex) {
       return;
     }
-    cropImage(selectedPreviewIndex);
+    cropImage(selectedPreviewIndex, true);
     setSelectedPreviewIndex(index);
   };
 
@@ -180,6 +182,11 @@ const ImageUploader = () => {
     ) as Blob[];
 
     setUploadFiles([...uploadFiles, ...validConvertedFiles]);
+
+    uploadFiles.forEach((_, index) => {
+      cropImage(index, false);
+    });
+
     setUploadDefaultFiles([...uploadDefaultFiles, ...validConvertedFiles]);
 
     const webpDataURLs = validConvertedFiles.map((file: Blob) =>
@@ -207,15 +214,15 @@ const ImageUploader = () => {
       return;
     }
     try {
-      await cropImage(selectedPreviewIndex);
       await axiosCreateBoard({
         mediaDataList: uploadFiles,
         categoryList: categoryList,
         content: caption,
       });
       const uploadCompleteMsg = language.uploadComplete;
-      popToast(uploadCompleteMsg, "P");
-      goHome();
+      await popToast(uploadCompleteMsg, "P");
+      await setFilesUploaded(true);
+      await goHome();
     } catch (error) {
       throw error;
     }
@@ -278,8 +285,8 @@ const ImageUploader = () => {
                     grid: true,
                   }}
                   stencilSize={{
-                    width: 350,
-                    height: 350,
+                    width: 400,
+                    height: 400,
                   }}
                   imageRestriction={ImageRestriction.stencil}
                 />
@@ -300,8 +307,11 @@ const ImageUploader = () => {
         ))}
       {uploadFiles.length === 0 && (
         <UploadMainPreviewWrapperStyled>
-          <UploadDemandStyled>{language.uploadImage}</UploadDemandStyled>
+          <UploadDemandStyled htmlFor="imageUploader">
+            {language.uploadImage}
+          </UploadDemandStyled>
           <UploadMainPreviewStyled
+            id="imageUploader"
             type="file"
             accept="image/*"
             onChange={handleImageChange}
@@ -328,7 +338,7 @@ const ImageUploader = () => {
         />
       </CategoryButtonStyled>
       <ButtonDivStyled>
-        <UploadbuttonStyled onClick={upload}>
+        <UploadbuttonStyled onClick={upload} disabled={filesUploaded}>
           {language.confirm}
         </UploadbuttonStyled>
         <CancelbuttonStyled onClick={goHome}>
@@ -345,15 +355,13 @@ const WrapperStyled = styled.div`
   justify-content: flex-start;
   align-items: center;
   width: 500px;
-  height: 100%;
-  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
 `;
 
 const SmallPreviewStyled = styled.div`
   display: flex;
   justify-content: flex-start;
   width: 55%;
+  height: 48px;
   border-radius: 10px;
   margin-top: 2%;
 `;
@@ -368,7 +376,6 @@ const SmallPreviewUnitStyled = styled.div`
   background-color: var(--transparent);
   border: 4px solid var(--white);
   border-radius: 10px;
-  overflow: hidden;
 `;
 
 const DeleteButtonStyled = styled.button`
@@ -394,6 +401,7 @@ const SmallUploadButtonWrapperStyled = styled.div`
   height: 48px;
   justify-content: center;
   align-items: center;
+  box-shadow: 2px 2px 2px var(--grey);
 `;
 
 const SmallUploadButton = styled.input`
@@ -404,33 +412,37 @@ const SmallUploadButton = styled.input`
 `;
 
 const UploadMainPreviewWrapperStyled = styled.div`
-  width: 55%;
-  height: 285px;
+  display: flex;
   justify-content: center;
   align-items: center;
+  width: 55%;
+  height: 285px;
   color: var(--white);
   border-radius: 5px;
   border: 5px solid var(--white);
   margin-top: 10px;
   margin-bottom: 10px;
   cursor: pointer;
+  box-shadow: 2px 2px 2px var(--grey);
 `;
 
 const UploadMainPreviewStyled = styled.input`
+  display: flex;
   opacity: 0;
   width: 100%;
-  height: 93%;
+  height: 100%;
   cursor: pointer;
 `;
 
-const UploadDemandStyled = styled.div`
+const UploadDemandStyled = styled.label`
   display: flex;
+  width: 100%;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%
   color: var(--white);
   font-size: 1.3rem;
+  &:hover {
+  }
 `;
 
 const DivisionLineStyled = styled.div`
@@ -446,7 +458,7 @@ const CaptionBoxStyled = styled.div`
   display: flex;
   align-items: start;
   width: 58%;
-  height: 4%;
+  min-height: 4%;
   margin-top: 10px;
   margin-bottom: 10px;
   textarea {
@@ -486,6 +498,7 @@ const ButtonDivStyled = styled.div`
   display: flex;
   width: 80%;
   justify-content: center;
+  align-items: center;
   margin-top: 5px;
 `;
 
@@ -533,11 +546,11 @@ const FixedCropperStyled = styled(FixedCropper)`
   justify-content: center;
   align-items: center;
   background-color: var(--transparent);
-  overflow: auto;
-  width: 55%;
-  height: 285px;
+  width: 53%;
+  height: same-as-width;
   border-radius: 5px;
   border: 5px solid var(--white);
+  box-shadow: 2px 2px 2px var(--grey);
   margin-top: 5px;
 `;
 

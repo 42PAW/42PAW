@@ -78,14 +78,15 @@ export const spa = {
   selectAPhoto: "Selecciona una foto",
   changeProfilePicture: "Cambiar foto de perfil",
   writeIntroduction: "Escribe una introducción que te represente",
+  selectAnimalCategory: "Seleccione una categoría de animales, por favor",
   welcome: "¡Bienvenido!",
   postDeleted: "Esta publicación ha sido eliminada",
-  postDeletedCompletion: "Eliminación de publicación",
+  deletePost: "Eliminación de publicación",
   alreadyBlocked: "Este usuario ya está bloqueado",
   commentDeleted: "Comentario eliminado",
   deleteCommentConfirmation:
     "¿Estás seguro de que quieres eliminar este comentario?",
-  deletePostConfirmation:
+  postDeletedConfirmation:
     "¿Estás seguro de que quieres eliminar esta publicación?",
   profile: "Perfil",
   myProfile: "Mi perfil",

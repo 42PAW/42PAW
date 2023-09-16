@@ -113,8 +113,8 @@ const DeleteModal = () => {
           </>
         ) : (
           <>
-            <h1>{language.postDeleted}</h1>
-            <ContentStyled>{language.deletePostConfirmation}</ContentStyled>
+            <h1>{language.deletePost}</h1>
+            <ContentStyled>{language.postDeletedConfirmation}</ContentStyled>
             <button onClick={() => boardMutation.mutate()}>
               {language.delete}
             </button>

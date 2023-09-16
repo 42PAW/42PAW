@@ -78,14 +78,15 @@ export const fr = {
   selectAPhoto: "Sélectionnez une photo",
   changeProfilePicture: "Changer la photo de profil",
   writeIntroduction: "Rédigez une introduction qui vous représente",
+  selectAnimalCategory: "Veuillez sélectionner une catégorie d'animaux",
   welcome: "Bienvenue !",
   postDeleted: "Cette publication a été supprimée",
-  postDeletedCompletion: "Suppression de la publication",
+  deletePost: "Suppression de la publication",
   alreadyBlocked: "Cet utilisateur est déjà bloqué",
   commentDeleted: "Commentaire supprimé",
   deleteCommentConfirmation:
     "Êtes-vous sûr de vouloir supprimer ce commentaire ?",
-  deletePostConfirmation:
+  postDeletedConfirmation:
     "Êtes-vous sûr de vouloir supprimer cette publication ?",
   profile: "Profil",
   myProfile: "Mon profil",

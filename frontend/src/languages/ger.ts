@@ -78,14 +78,15 @@ export const ger = {
   selectAPhoto: "Foto auswählen",
   changeProfilePicture: "Profilbild ändern",
   writeIntroduction: "Schreiben Sie eine Einführung, die Sie repräsentiert",
+  selectAnimalCategory: "Bitte wählen Sie eine Tierkategorie aus",
   welcome: "Willkommen!",
   postDeleted: "Dieser Beitrag wurde gelöscht",
-  postDeletedCompletion: "Beitrag gelöscht",
+  deletePost: "Beitrag gelöscht",
   alreadyBlocked: "Dieser Benutzer ist bereits gesperrt",
   commentDeleted: "Kommentar gelöscht",
   deleteCommentConfirmation:
     "Sind Sie sicher, dass Sie diesen Kommentar löschen möchten?",
-  deletePostConfirmation:
+  postDeletedConfirmation:
     "Sind Sie sicher, dass Sie diesen Beitrag löschen möchten?",
   profile: "Profil",
   myProfile: "Mein Profil",

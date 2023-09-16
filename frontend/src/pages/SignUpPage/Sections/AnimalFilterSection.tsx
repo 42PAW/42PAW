@@ -46,7 +46,7 @@ const AnimalFilterSection: React.FC<SectionProps> = ({
         setIsFading={setIsFading}
       />
       <h1>
-        {language.selectAnimalFriends}
+        {language.selectAnimalCategory}
         {/* TODO: put an apprioriate newline */}
       </h1>
       <ButtonZoneStyled>

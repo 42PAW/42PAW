@@ -15,6 +15,7 @@ import heic2any from "heic2any";
 import imageCompression from "browser-image-compression";
 import { languageState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
+import useNavigateCustom from "@/hooks/useNavigateCustom";
 
 const ImageUploader = () => {
   const cropperRef = useRef<FixedCropperRef>(null);
@@ -30,6 +31,7 @@ const ImageUploader = () => {
 
   const { popToast } = useToaster();
   const { parseDate } = useParseDate();
+  const { moveToMain } = useNavigateCustom();
 
   const resetImage = (index: number) => {
     const newUrlList = [...urlList];
@@ -230,7 +232,7 @@ const ImageUploader = () => {
 
   // go home if u click cancel button
   const goHome = () => {
-    window.location.href = "/";
+    moveToMain();
     setUploadFiles([]);
     setCategoryList([]);
     setUrlList([]);
@@ -307,6 +309,14 @@ const ImageUploader = () => {
         ))}
       {uploadFiles.length === 0 && (
         <UploadMainPreviewWrapperStyled>
+          <UploadMainPreviewStyled
+            id="imageUploader"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            multiple
+          />
+
           <UploadDemandStyled htmlFor="imageUploader">
             {language.uploadImage}
           </UploadDemandStyled>
@@ -393,6 +403,7 @@ const DeleteButtonStyled = styled.button`
 `;
 
 const SmallUploadButtonWrapperStyled = styled.div`
+  display: flex;
   background-image: url("/assets/upload.png");
   background-size: cover;
   border-radius: 10px;
@@ -405,6 +416,7 @@ const SmallUploadButtonWrapperStyled = styled.div`
 `;
 
 const SmallUploadButton = styled.input`
+  display: flex;
   opacity: 0;
   width: 100%;
   height: 100%;
@@ -413,6 +425,7 @@ const SmallUploadButton = styled.input`
 
 const UploadMainPreviewWrapperStyled = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 55%;
@@ -486,7 +499,8 @@ const CaptionBoxStyled = styled.div`
 
 const CategoryButtonStyled = styled.div`
   display: flex;
-  width: 75%;
+  width: 80%;
+  height: 80px;
   justify-content: center;
   align-items: center;
   background-color: var(--transparent);
@@ -497,9 +511,11 @@ const CategoryButtonStyled = styled.div`
 const ButtonDivStyled = styled.div`
   display: flex;
   width: 80%;
+  height: 30px;
   justify-content: center;
   align-items: center;
   margin-top: 5px;
+  margin-bottom: 5px;
 `;
 
 const UploadbuttonStyled = styled.button`
@@ -547,7 +563,7 @@ const FixedCropperStyled = styled(FixedCropper)`
   align-items: center;
   background-color: var(--transparent);
   width: 53%;
-  height: same-as-width;
+  max-height: 295px;
   border-radius: 5px;
   border: 5px solid var(--white);
   box-shadow: 2px 2px 2px var(--grey);

@@ -11,7 +11,7 @@ const UploadPage = () => {
 
 const WrapperStyled = styled.div`
   height: 100vh;
-  overflow: scroll;
+  overflow-y: scroll;
 `;
 
 export default UploadPage;

@@ -11,8 +11,11 @@ import Toaster from "@/components/toast/Toaster";
 import { SignUpInfoDTO } from "@/types/dto/member.dto";
 import { getCookie } from "@/api/cookie/cookies";
 import jwtDecode from "jwt-decode";
+import useTranslator from "@/hooks/useTranslator";
+import { Language } from "@/types/enum/language.enum";
 
 const token = getCookie("access_token");
+const localLanguage = localStorage.getItem("language");
 
 interface IToken {
   campus: string;
@@ -52,6 +55,7 @@ const SignUpPage = () => {
   });
   const [step, setStep] = useState<SectionType>(Section.Nickname);
   const navigator = useNavigate();
+  const { translator } = useTranslator();
 
   useEffect(() => {
     if (!token) {
@@ -67,6 +71,7 @@ const SignUpPage = () => {
         navigator("/");
       }
     }
+    if (localLanguage) translator(localLanguage as Language);
   }, []);
 
   return (

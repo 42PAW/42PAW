@@ -93,7 +93,10 @@ const AnimalButtonContainerStyled = styled.div<{
 }>`
   z-index: 2;
   display: grid;
-  grid-template-columns: repeat(${(props) => props.$columns}, 120px);
+  grid-template-columns: repeat(
+    ${(props) => props.$columns},
+    minmax(120px, 1fr)
+  );
   grid-auto-rows: ${(props) => `${props.$buttonRow}px`}; //default: 50px
   grid-row-gap: 15px; //default: 15px
   grid-column-gap: 15px; //default: 15px

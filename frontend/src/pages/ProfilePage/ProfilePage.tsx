@@ -4,7 +4,7 @@ import useFetch from "@/hooks/useFetch";
 import { useQuery } from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import { Board } from "@/types/enum/board.category.enum";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { boardCategoryState } from "@/recoil/atom";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import { useParams } from "react-router-dom";
@@ -20,9 +20,7 @@ const ProfilePage = () => {
     queryKey: ["profile", Number(memberId)],
     queryFn: fetchProfile,
   });
-  // const { fetchBoards } = useFetch();
-  const [boardCategory, setBoardCategory] =
-    useRecoilState<Board>(boardCategoryState);
+  const setBoardCategory = useSetRecoilState<Board>(boardCategoryState);
 
   useEffect(() => {
     setBoardCategory(Board.OTHER);
@@ -31,7 +29,7 @@ const ProfilePage = () => {
   }, []); // 빈 배열을 넣어 마운트 시 한 번만 실행되도록 함
 
   const boardsQuery = useQuery<IBoardInfo[]>({
-    queryKey: ["profileBoards", boardCategory], // 여기서 boardCategory를 그냥 Board.MINE하는게?
+    queryKey: ["profileBoards", Board.OTHER, memberId], // 여기서 boardCategory를 그냥 Board.MINE하는게?
     queryFn: () => {
       return fetchBoards(0);
     }, // page는 0으로 고정(일단?)

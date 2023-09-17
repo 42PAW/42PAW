@@ -355,6 +355,7 @@ const ImageUploader = () => {
           {language.cancel}
         </CancelbuttonStyled>
       </ButtonDivStyled>
+      <ScrollMarginStyled />
     </WrapperStyled>
   );
 };
@@ -554,6 +555,12 @@ const CancelbuttonStyled = styled.button`
   &:hover {
     opacity: 0.5;
   }
+`;
+
+const ScrollMarginStyled = styled.div`
+  display: flex;
+  width: 100%;
+  height: 120px;
 `;
 
 // Cropper

@@ -15,6 +15,7 @@ import useNicknameValidation from "@/hooks/useNicknameValidation";
 import useDebounce from "@/hooks/useDebounce";
 import useFetch from "@/hooks/useFetch";
 import processImage from "@/components/processImage";
+import LoadingDotsAnimation from "@/components/loading/LoadingDotsAnimation";
 
 const ProfileEditModal = () => {
   const [language] = useRecoilState<any>(languageState);
@@ -33,6 +34,7 @@ const ProfileEditModal = () => {
   const { fetchMyInfo } = useFetch();
   const nameInputRef = useRef<HTMLInputElement | null>(null); // name input 요소에 대한 ref
   const statementInputRef = useRef<HTMLInputElement | null>(null); // statement input 요소에 대한 ref
+  const [isLoading, setIsLoading] = useState(false);
 
   const [profileInfo, setProfileInfo] = useState<IChangeProfileInfo>({
     memberName: prevProfileInfo?.memberName!,
@@ -132,13 +134,17 @@ const ProfileEditModal = () => {
   );
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    setIsLoading(true);
     const file = e.target.files?.[0];
     if (file) {
       if (
         await processImage(file, profileInfo, setProfileInfo, setImagePreview)
       ) {
-        popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
+        setIsLoading(false);
+        popToast("이미지 용량을 초과했습니다.", "N");
         return;
+      } else {
+        setIsLoading(false);
       }
     }
   };
@@ -179,7 +185,13 @@ const ProfileEditModal = () => {
         </LogoStyled>
         <ProfileImageStyled
           src={imagePreview ? imagePreview : "/assets/userG.png"}
+          $isLoading={isLoading}
         />
+        {isLoading && (
+          <LoadingStyled>
+            <LoadingDotsAnimation />
+          </LoadingStyled>
+        )}
         <MainAreaStyled>
           <EditImageStyled>
             <label htmlFor="uploadPhoto">{language.uploadImageBrief}</label>
@@ -239,6 +251,13 @@ const ProfileEditModal = () => {
   );
 };
 
+const LoadingStyled = styled.div`
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
 const WrapperStyled = styled.div`
   overflow: hidden;
   position: relative;
@@ -262,11 +281,12 @@ const LogoStyled = styled.div`
   }
 `;
 
-const ProfileImageStyled = styled.img`
+const ProfileImageStyled = styled.img<{ $isLoading: boolean }>`
   width: 110%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 0;
+  filter: ${(props) => (props.$isLoading ? "brightness(70%)" : "none")};
 `;
 
 const MainAreaStyled = styled.div`

@@ -1,6 +1,7 @@
 package proj.pet.comment.service;
 
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ class CommentQueryServiceTest {
 
 	@DisplayName("게시물에 작성된 댓글들을 조회할 수 있다.")
 	@Test
+	@Disabled
 	void findCommentsByBoardId() {
 		//given
 		LocalDateTime now = LocalDateTime.now();

@@ -8,6 +8,7 @@ import proj.pet.testutil.testdouble.TestEntity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.UUID;
 
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
@@ -49,7 +50,15 @@ public class TestMember implements TestEntity<Member, Long> {
 	private final LocalDateTime createdAt = DEFAULT_TIME;
 
 	public static Member asDefaultEntity() {
-		return TestMember.builder().build().asEntity();
+		return TestMember.builder()
+				.oauthId(createRandomNameBy(8))
+				.oauthName(createRandomNameBy(8))
+				.nickname(createRandomNameBy(10))
+				.build().asEntity();
+	}
+
+	private static String createRandomNameBy(int length) {
+		return UUID.randomUUID().toString().substring(0, length);
 	}
 
 	@Override

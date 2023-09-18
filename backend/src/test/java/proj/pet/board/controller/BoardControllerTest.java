@@ -66,9 +66,7 @@ class BoardControllerTest extends E2ETest {
 		animalCategories = persistHelper.persistAndReturn(
 				TestAnimalCategory.getAllSpeciesAsCategories());
 		author = TestMember.asDefaultEntity();
-		loginUser = TestMember.builder()
-				.oauthName("loginUser")
-				.build().asEntity();
+		loginUser = TestMember.asDefaultEntity();
 	}
 
 	private String randomString() {
@@ -132,8 +130,8 @@ class BoardControllerTest extends E2ETest {
 					.andDo(print())
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("totalLength").value(2))
-					.andExpect(jsonPath("result[0].content").value(TestBoard.DEFAULT_CONTENT))
-					.andExpect(jsonPath("result[0].memberName").value(TestMember.DEFAULT_NICKNAME))
+					.andExpect(jsonPath("result[0].content").value(board1.getContent()))
+					.andExpect(jsonPath("result[0].memberName").value(author.getNickname()))
 					.andExpect(jsonPath("result[0].reacted").value(true))
 					.andExpect(jsonPath("result[0].scrapped").value(false))
 					.andExpect(jsonPath("result[1].scrapped").value(true))
@@ -172,8 +170,8 @@ class BoardControllerTest extends E2ETest {
 					.andDo(print())
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("totalLength").value(2))
-					.andExpect(jsonPath("result[0].content").value(TestBoard.DEFAULT_CONTENT))
-					.andExpect(jsonPath("result[0].memberName").value(TestMember.DEFAULT_NICKNAME))
+					.andExpect(jsonPath("result[0].content").value(board1.getContent()))
+					.andExpect(jsonPath("result[0].memberName").value(author.getNickname()))
 					.andExpect(jsonPath("result[0].reacted").value(false))
 					.andExpect(jsonPath("result[0].scrapped").value(false))
 					.andExpect(jsonPath("result[1].scrapped").value(false));
@@ -191,9 +189,9 @@ class BoardControllerTest extends E2ETest {
 
 		private final String PATH = "/v1/boards/hot";
 		private final LocalDateTime now = LocalDateTime.now();
-		private final Member randomMember1 = TestMember.builder().build().asEntity();
-		private final Member randomMember2 = TestMember.builder().build().asEntity();
-		private final Member randomMember3 = TestMember.builder().build().asEntity();
+		private final Member randomMember1 = TestMember.asDefaultEntity();
+		private final Member randomMember2 = TestMember.asDefaultEntity();
+		private final Member randomMember3 = TestMember.asDefaultEntity();
 
 		@Test
 		@DisplayName("사용자는 인기 게시글을 조회할 수 있다. 좋아요 순, 그리고 최신 순으로 정렬된다.")
@@ -256,9 +254,9 @@ class BoardControllerTest extends E2ETest {
 							board3.getId().intValue())))
 					.andExpect(jsonPath("result.[*].content").value(
 							Matchers.not(Matchers.hasItem(notHotContent))))
-					.andExpect(jsonPath("result.[0].content").value(TestBoard.DEFAULT_CONTENT))
+					.andExpect(jsonPath("result.[0].content").value(board1.getContent()))
 					.andExpect(
-							jsonPath("result.[0].memberName").value(TestMember.DEFAULT_NICKNAME));
+							jsonPath("result.[0].memberName").value(author.getNickname()));
 		}
 	}
 
@@ -268,18 +266,10 @@ class BoardControllerTest extends E2ETest {
 
 		private final String PATH = "/v1/boards/members/";
 		private final LocalDateTime now = LocalDateTime.now();
-		private final Member loginUser = TestMember.builder()
-				.oauthName(randomString())
-				.build().asEntity();
-		private final Member specifiedMember = TestMember.builder()
-				.oauthName(randomString())
-				.build().asEntity();
-		private final Member randomMember1 = TestMember.builder()
-				.oauthName(randomString())
-				.build().asEntity();
-		private final Member randomMember2 = TestMember.builder()
-				.oauthName(randomString())
-				.build().asEntity();
+		private final Member loginUser = TestMember.asDefaultEntity();
+		private final Member specifiedMember = TestMember.asDefaultEntity();
+		private final Member randomMember1 = TestMember.asDefaultEntity();
+		private final Member randomMember2 = TestMember.asDefaultEntity();
 
 		@Test
 		@DisplayName("특정 멤버의 게시글 목록을 조회할 수 있다.")
@@ -323,18 +313,10 @@ class BoardControllerTest extends E2ETest {
 
 		private final String PATH = "/v1/boards/followings";
 		private final LocalDateTime now = LocalDateTime.now();
-		private final Member loginUser = TestMember.builder()
-				.oauthName(randomString())
-				.build().asEntity();
-		private final Member followingMember1 = TestMember.builder()
-				.oauthName(randomString())
-				.build().asEntity();
-		private final Member followingMember2 = TestMember.builder()
-				.oauthName(randomString())
-				.build().asEntity();
-		private final Member randomMember2 = TestMember.builder()
-				.oauthName(randomString())
-				.build().asEntity();
+		private final Member loginUser = TestMember.asDefaultEntity();
+		private final Member followingMember1 = TestMember.asDefaultEntity();
+		private final Member followingMember2 = TestMember.asDefaultEntity();
+		private final Member randomMember2 = TestMember.asDefaultEntity();
 
 		@Test
 		@DisplayName("팔로잉한 멤버의 게시글 목록을 조회할 수 있다.")

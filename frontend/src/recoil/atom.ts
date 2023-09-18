@@ -35,7 +35,7 @@ export const followingBoardsState = atom<BoardsInfoDTO>({
 /**MainPage에서 게시물 정렬하는 방식(default, trending, following)을 기억하는 state*/
 export const boardCategoryState = atom<Board>({
   key: "boardCategory",
-  default: Board.DEFAULT,
+  default: Board.NONE,
 });
 
 /**현재 게시물의 댓글 목록*/

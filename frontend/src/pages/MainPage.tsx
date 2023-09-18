@@ -39,14 +39,15 @@ const MainPage = () => {
   const { data, fetchNextPage, hasNextPage, isError, isLoading } =
     useInfiniteQuery(
       ["boards", boardCategory],
-      ({ pageParam = 0 }) => fetchBoards(pageParam),
+      ({ pageParam = 0 }) => fetchBoards(boardCategory, pageParam),
       {
         getNextPageParam: (lastPage, allPages) => {
           if (!lastPage || lastPage.length === 0) return undefined;
           return allPages.length;
         },
-        refetchOnMount: false,
+        refetchOnMount: true,
         refetchOnWindowFocus: false,
+        staleTime: Infinity,
       }
     );
 

@@ -13,6 +13,7 @@ const useNavigateCustom = () => {
   const navigator = useNavigate();
 
   const moveToMain = () => {
+    setBoard(Board.DEFAULT);
     setIsRightSectionOpened(false);
     navigator("/");
   };

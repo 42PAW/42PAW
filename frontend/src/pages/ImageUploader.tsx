@@ -57,18 +57,18 @@ const ImageUploader = () => {
         ctx?.drawImage(img, 0, 0);
 
         // Convert the canvas to a Blob in WebP format
-        canvas.toBlob((webpBlob) => {
+        canvas.toBlob(async (webpBlob) => {
           if (webpBlob) {
             const webpFile = new File([webpBlob], "image.webp", {
               type: "image/webp",
             });
-            const newUploadFiles = [...uploadFiles];
+            let newUploadFiles = [...uploadFiles];
             newUploadFiles[index] = webpFile;
-            setUploadFiles(newUploadFiles);
+            await setUploadFiles(newUploadFiles);
             if (flag === true) {
-              const newUrlList = [...urlList];
+              let newUrlList = [...urlList];
               newUrlList[index] = URL.createObjectURL(webpFile);
-              setUrlList(newUrlList);
+              await setUrlList(newUrlList);
             }
           }
         }, "image/webp");
@@ -184,11 +184,6 @@ const ImageUploader = () => {
     ) as Blob[];
 
     setUploadFiles([...uploadFiles, ...validConvertedFiles]);
-
-    uploadFiles.forEach((_, index) => {
-      cropImage(index, false);
-    });
-
     setUploadDefaultFiles([...uploadDefaultFiles, ...validConvertedFiles]);
 
     const webpDataURLs = validConvertedFiles.map((file: Blob) =>
@@ -215,7 +210,9 @@ const ImageUploader = () => {
       popToast(selectCategoryMsg, "N");
       return;
     }
+
     try {
+      await cropImage(selectedPreviewIndex, false);
       await axiosCreateBoard({
         mediaDataList: uploadFiles,
         categoryList: categoryList,
@@ -287,8 +284,8 @@ const ImageUploader = () => {
                     grid: true,
                   }}
                   stencilSize={{
-                    width: 400,
-                    height: 400,
+                    width: 1500,
+                    height: 1500,
                   }}
                   imageRestriction={ImageRestriction.stencil}
                 />
@@ -387,6 +384,7 @@ const SmallPreviewUnitStyled = styled.div`
   background-color: var(--transparent);
   border: 4px solid var(--white);
   border-radius: 10px;
+  overflow: hidden;
 `;
 
 const DeleteButtonStyled = styled.button`
@@ -570,6 +568,7 @@ const FixedCropperStyled = styled(FixedCropper)`
   align-items: center;
   background-color: var(--transparent);
   width: 53%;
+  min-height: 285px;
   max-height: 295px;
   border-radius: 5px;
   border: 5px solid var(--white);

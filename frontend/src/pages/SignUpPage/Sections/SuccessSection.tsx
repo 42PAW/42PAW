@@ -17,14 +17,13 @@ const SuccessSection: React.FC<SectionProps> = ({ registerData }) => {
     origin: { x: 0.5, y: 0.5 },
   });
 
-  const signUpComplete = async () => {
-    axiosSignUp(registerData);
-    setTimeout(() => {
-      navigator("/");
-    }, 2000);
-  };
-
   useEffect(() => {
+    const signUpComplete = async () => {
+      axiosSignUp(registerData);
+      setTimeout(() => {
+        navigator("/");
+      }, 2000);
+    };
     signUpComplete();
   }, []);
 

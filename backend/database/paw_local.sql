@@ -3,19 +3,21 @@ create table member
 (
     id                  bigint auto_increment
         primary key,
-    oauth_type          varchar(32)                                                                                                                                                                                                                                                                                                               not null,
-    oauth_id            varchar(255)                                                                                                                                                                                                                                                                                                                               not null,
-    oauth_name          varchar(255)                                                                                                                                                                                                                                                                                                                               null,
-    nickname            varchar(12)                                                                                                                                                                                                                                                                                                                                not null,
-    nickname_updated_at datetime(6)                                                                                                                                                                                                                                                                                                                                not null,
-    country             varchar(32)                                                                                                                                                                                                                                                                                                                                not null,
-    campus              varchar(32)                                                                                                                                                                                                                                                                                                                                not null,
-    language            varchar(32)                                                                                                                                                                                                                                                           not null,
-    statement           varchar(30)                                                                                                                                                                                                                                                                                                                                null,
-    profile_image_url   varchar(255)                                                                                                                                                                                                                                                                                                                               null,
-    role                varchar(32)                                                                                                                                                                                                                                                                                                                     not null,
-    created_at          datetime(6)                                                                                                                                                                                                                                                                                                                                not null,
-    deleted_at          datetime(6)                                                                                                                                                                                                                                                                                                                                null
+    oauth_type          varchar(32)  not null,
+    oauth_id            varchar(255) not null,
+    oauth_name          varchar(255) null,
+    nickname            varchar(12)  not null,
+    nickname_updated_at datetime(6)  not null,
+    country             varchar(32)  not null,
+    campus              varchar(32)  not null,
+    language            varchar(32)  not null,
+    statement           varchar(30)  null,
+    profile_image_url   varchar(255) null,
+    role                varchar(32)  not null,
+    created_at          datetime(6)  not null,
+    deleted_at          datetime(6)  null,
+    unique key member_nickname_unique_key (nickname),
+    unique key member_oauth_type_oauth_id_unique_key (oauth_type, oauth_id)
 );
 -- auto-generated definition
 create table animal_category

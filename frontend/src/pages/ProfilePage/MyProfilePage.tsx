@@ -14,15 +14,24 @@ import styled from "styled-components";
 const MyProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const { debounce } = useDebounce();
-  const { fetchProfile } = useFetch();
+  const { fetchProfile, fetchBoards } = useFetch();
   const navigator = useNavigate();
+  const [boardCategory, setBoardCategory] =
+    useRecoilState<Board>(boardCategoryState);
   const profileQuery = useQuery({
     queryKey: ["myProfile"],
     queryFn: fetchProfile,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
-  const { fetchBoards } = useFetch();
-  const [boardCategory, setBoardCategory] =
-    useRecoilState<Board>(boardCategoryState);
+  const boardsQuery = useQuery<IBoardInfo[]>({
+    queryKey: ["profileBoards", boardCategory], // 여기서 boardCategory를 그냥 Board.MINE하는게?
+    queryFn: () => fetchBoards(boardCategory, 0),
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    staleTime: boardCategory === Board.MINE ? Infinity : 0,
+  });
 
   const handleTabState = (newTabState: Board) => {
     setBoardCategory(newTabState);
@@ -33,12 +42,6 @@ const MyProfilePage = () => {
     setLoading(true);
     debounce("myProfileLoading", () => setLoading(false), 200);
   }, []); // 컴포넌트가 마운트될 때 한 번만 실행
-
-  const boardsQuery = useQuery<IBoardInfo[]>({
-    queryKey: ["profileBoards", boardCategory], // 여기서 boardCategory를 그냥 Board.MINE하는게?
-    queryFn: () => fetchBoards(0),
-    keepPreviousData: true,
-  });
 
   const isLoading = loading || profileQuery.isLoading || boardsQuery.isLoading;
   const isError = profileQuery.isError || boardsQuery.isError;

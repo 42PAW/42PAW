@@ -28,12 +28,15 @@ const MyProfileBoardsPage = () => {
   const { data, fetchNextPage, hasNextPage, isError, isLoading } =
     useInfiniteQuery(
       ["boards", boardCategory],
-      ({ pageParam = 0 }) => fetchBoards(pageParam),
+      ({ pageParam = 0 }) => fetchBoards(Board.MINE, pageParam),
       {
         getNextPageParam: (lastPage, allPages) => {
           if (!lastPage || lastPage.length === 0) return undefined;
           return allPages.length;
         },
+        refetchOnMount: true,
+        refetchOnWindowFocus: false,
+        staleTime: Infinity,
       }
     );
   const [currentProfileBoardId] = useRecoilState(currentProfileBoardIdState);

@@ -45,6 +45,8 @@ const MainPage = () => {
           if (!lastPage || lastPage.length === 0) return undefined;
           return allPages.length;
         },
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
       }
     );
 

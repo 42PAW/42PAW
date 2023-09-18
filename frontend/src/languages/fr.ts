@@ -79,7 +79,7 @@ export const fr = {
   changeProfilePicture: "Changer la photo de profil",
   writeIntroduction: "Rédigez une introduction qui vous représente",
   selectAnimalCategory: "Veuillez sélectionner une catégorie d'animaux",
-  welcome: "Bienvenue !",
+  welcome: "Bienvenue!",
   postDeleted: "Cette publication a été supprimée",
   deletePost: "Suppression de la publication",
   alreadyBlocked: "Cet utilisateur est déjà bloqué",

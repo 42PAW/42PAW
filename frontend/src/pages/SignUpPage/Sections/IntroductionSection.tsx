@@ -15,6 +15,7 @@ const IntroductionSection: React.FC<SectionProps> = ({
   const [isFading, setIsFading] = useState<boolean>(true);
 
   useEffect(() => {
+    console.log(registerData);
     setTimeout(() => {
       setIsFading(false);
     }, 200);

@@ -15,9 +15,11 @@ import heic2any from "heic2any";
 import imageCompression from "browser-image-compression";
 import { languageState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
+import useNavigateCustom from "@/hooks/useNavigateCustom";
 
 const ImageUploader = () => {
   const cropperRef = useRef<FixedCropperRef>(null);
+  const [filesUploaded, setFilesUploaded] = useState<boolean>(false);
   const [language] = useRecoilState<any>(languageState);
   const [categoryList, setCategoryList] = useState<AnimalSpecies[]>([]);
   const [uploadFiles, setUploadFiles] = useState<Blob[]>([]);
@@ -29,6 +31,7 @@ const ImageUploader = () => {
 
   const { popToast } = useToaster();
   const { parseDate } = useParseDate();
+  const { moveToMain } = useNavigateCustom();
 
   const resetImage = (index: number) => {
     const newUrlList = [...urlList];
@@ -40,7 +43,7 @@ const ImageUploader = () => {
     setUploadFiles(resetFiles);
   };
 
-  const cropImage = (index: number) => {
+  const cropImage = (index: number, flag: boolean) => {
     const canvas = cropperRef.current?.getCanvas() as HTMLCanvasElement;
     if (canvas) {
       const ctx = canvas.getContext("2d");
@@ -54,18 +57,19 @@ const ImageUploader = () => {
         ctx?.drawImage(img, 0, 0);
 
         // Convert the canvas to a Blob in WebP format
-        canvas.toBlob((webpBlob) => {
+        canvas.toBlob(async (webpBlob) => {
           if (webpBlob) {
             const webpFile = new File([webpBlob], "image.webp", {
               type: "image/webp",
             });
-            const newUploadFiles = [...uploadFiles];
+            let newUploadFiles = [...uploadFiles];
             newUploadFiles[index] = webpFile;
-            setUploadFiles(newUploadFiles);
-
-            const newUrlList = [...urlList];
-            newUrlList[index] = URL.createObjectURL(webpFile);
-            setUrlList(newUrlList);
+            await setUploadFiles(newUploadFiles);
+            if (flag === true) {
+              let newUrlList = [...urlList];
+              newUrlList[index] = URL.createObjectURL(webpFile);
+              await setUrlList(newUrlList);
+            }
           }
         }, "image/webp");
       };
@@ -76,7 +80,7 @@ const ImageUploader = () => {
     if (index === selectedPreviewIndex) {
       return;
     }
-    cropImage(selectedPreviewIndex);
+    cropImage(selectedPreviewIndex, true);
     setSelectedPreviewIndex(index);
   };
 
@@ -206,16 +210,18 @@ const ImageUploader = () => {
       popToast(selectCategoryMsg, "N");
       return;
     }
+
     try {
-      await cropImage(selectedPreviewIndex);
+      await cropImage(selectedPreviewIndex, false);
       await axiosCreateBoard({
         mediaDataList: uploadFiles,
         categoryList: categoryList,
         content: caption,
       });
       const uploadCompleteMsg = language.uploadComplete;
-      popToast(uploadCompleteMsg, "P");
-      goHome();
+      await popToast(uploadCompleteMsg, "P");
+      await setFilesUploaded(true);
+      await goHome();
     } catch (error) {
       throw error;
     }
@@ -223,7 +229,7 @@ const ImageUploader = () => {
 
   // go home if u click cancel button
   const goHome = () => {
-    window.location.href = "/";
+    moveToMain();
     setUploadFiles([]);
     setCategoryList([]);
     setUrlList([]);
@@ -278,8 +284,8 @@ const ImageUploader = () => {
                     grid: true,
                   }}
                   stencilSize={{
-                    width: 350,
-                    height: 350,
+                    width: 1500,
+                    height: 1500,
                   }}
                   imageRestriction={ImageRestriction.stencil}
                 />
@@ -300,8 +306,19 @@ const ImageUploader = () => {
         ))}
       {uploadFiles.length === 0 && (
         <UploadMainPreviewWrapperStyled>
-          <UploadDemandStyled>{language.uploadImage}</UploadDemandStyled>
           <UploadMainPreviewStyled
+            id="imageUploader"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            multiple
+          />
+
+          <UploadDemandStyled htmlFor="imageUploader">
+            {language.uploadImage}
+          </UploadDemandStyled>
+          <UploadMainPreviewStyled
+            id="imageUploader"
             type="file"
             accept="image/*"
             onChange={handleImageChange}
@@ -328,13 +345,14 @@ const ImageUploader = () => {
         />
       </CategoryButtonStyled>
       <ButtonDivStyled>
-        <UploadbuttonStyled onClick={upload}>
+        <UploadbuttonStyled onClick={upload} disabled={filesUploaded}>
           {language.confirm}
         </UploadbuttonStyled>
         <CancelbuttonStyled onClick={goHome}>
           {language.cancel}
         </CancelbuttonStyled>
       </ButtonDivStyled>
+      <ScrollMarginStyled />
     </WrapperStyled>
   );
 };
@@ -345,15 +363,13 @@ const WrapperStyled = styled.div`
   justify-content: flex-start;
   align-items: center;
   width: 500px;
-  height: 100%;
-  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
 `;
 
 const SmallPreviewStyled = styled.div`
   display: flex;
   justify-content: flex-start;
   width: 55%;
+  height: 48px;
   border-radius: 10px;
   margin-top: 2%;
 `;
@@ -386,6 +402,7 @@ const DeleteButtonStyled = styled.button`
 `;
 
 const SmallUploadButtonWrapperStyled = styled.div`
+  display: flex;
   background-image: url("/assets/upload.png");
   background-size: cover;
   border-radius: 10px;
@@ -394,9 +411,11 @@ const SmallUploadButtonWrapperStyled = styled.div`
   height: 48px;
   justify-content: center;
   align-items: center;
+  box-shadow: 2px 2px 2px var(--grey);
 `;
 
 const SmallUploadButton = styled.input`
+  display: flex;
   opacity: 0;
   width: 100%;
   height: 100%;
@@ -404,33 +423,38 @@ const SmallUploadButton = styled.input`
 `;
 
 const UploadMainPreviewWrapperStyled = styled.div`
-  width: 55%;
-  height: 285px;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 55%;
+  height: 285px;
   color: var(--white);
   border-radius: 5px;
   border: 5px solid var(--white);
   margin-top: 10px;
   margin-bottom: 10px;
   cursor: pointer;
+  box-shadow: 2px 2px 2px var(--grey);
 `;
 
 const UploadMainPreviewStyled = styled.input`
+  display: flex;
   opacity: 0;
   width: 100%;
-  height: 93%;
+  height: 100%;
   cursor: pointer;
 `;
 
-const UploadDemandStyled = styled.div`
+const UploadDemandStyled = styled.label`
   display: flex;
+  width: 100%;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%
   color: var(--white);
   font-size: 1.3rem;
+  &:hover {
+  }
 `;
 
 const DivisionLineStyled = styled.div`
@@ -446,7 +470,7 @@ const CaptionBoxStyled = styled.div`
   display: flex;
   align-items: start;
   width: 58%;
-  height: 4%;
+  min-height: 4%;
   margin-top: 10px;
   margin-bottom: 10px;
   textarea {
@@ -474,7 +498,8 @@ const CaptionBoxStyled = styled.div`
 
 const CategoryButtonStyled = styled.div`
   display: flex;
-  width: 75%;
+  width: 80%;
+  height: 80px;
   justify-content: center;
   align-items: center;
   background-color: var(--transparent);
@@ -485,8 +510,11 @@ const CategoryButtonStyled = styled.div`
 const ButtonDivStyled = styled.div`
   display: flex;
   width: 80%;
+  height: 30px;
   justify-content: center;
+  align-items: center;
   margin-top: 5px;
+  margin-bottom: 5px;
 `;
 
 const UploadbuttonStyled = styled.button`
@@ -527,17 +555,24 @@ const CancelbuttonStyled = styled.button`
   }
 `;
 
+const ScrollMarginStyled = styled.div`
+  display: flex;
+  width: 100%;
+  height: 120px;
+`;
+
 // Cropper
 const FixedCropperStyled = styled(FixedCropper)`
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--transparent);
-  overflow: auto;
-  width: 55%;
-  height: 285px;
+  width: 53%;
+  min-height: 285px;
+  max-height: 295px;
   border-radius: 5px;
   border: 5px solid var(--white);
+  box-shadow: 2px 2px 2px var(--grey);
   margin-top: 5px;
 `;
 

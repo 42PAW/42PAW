@@ -21,7 +21,7 @@ public class OauthProfile implements Validatable {
 	@Enumerated(EnumType.STRING)
 	private OauthType type;
 
-	@Column(name = "OAUTH_ID", nullable = false)
+	@Column(name = "OAUTH_ID", nullable = false, unique = true)
 	private String id;
 
 	@Column(name = "OAUTH_NAME")

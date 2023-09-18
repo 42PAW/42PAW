@@ -3,19 +3,21 @@ create table member
 (
     id                  bigint auto_increment
         primary key,
-    oauth_type          varchar(32)                                                                                                                                                                                                                                                                                                               not null,
-    oauth_id            varchar(255)                                                                                                                                                                                                                                                                                                                               not null,
-    oauth_name          varchar(255)                                                                                                                                                                                                                                                                                                                               null,
-    nickname            varchar(12)                                                                                                                                                                                                                                                                                                                                not null,
-    nickname_updated_at datetime(6)                                                                                                                                                                                                                                                                                                                                not null,
-    country             varchar(32)                                                                                                                                                                                                                                                                                                                                not null,
-    campus              varchar(32)                                                                                                                                                                                                                                                                                                                                not null,
-    language            varchar(32)                                                                                                                                                                                                                                                           not null,
-    statement           varchar(30)                                                                                                                                                                                                                                                                                                                                null,
-    profile_image_url   varchar(255)                                                                                                                                                                                                                                                                                                                               null,
-    role                varchar(32)                                                                                                                                                                                                                                                                                                                     not null,
-    created_at          datetime(6)                                                                                                                                                                                                                                                                                                                                not null,
-    deleted_at          datetime(6)                                                                                                                                                                                                                                                                                                                                null
+    oauth_type          varchar(32)  not null,
+    oauth_id            varchar(255) not null,
+    oauth_name          varchar(255) null,
+    nickname            varchar(12)  not null,
+    nickname_updated_at datetime(6)  not null,
+    country             varchar(32)  not null,
+    campus              varchar(32)  not null,
+    language            varchar(32)  not null,
+    statement           varchar(30)  null,
+    profile_image_url   varchar(255) null,
+    role                varchar(32)  not null,
+    created_at          datetime(6)  not null,
+    deleted_at          datetime(6)  null,
+    unique key member_nickname_unique_key (nickname),
+    unique key member_oauth_type_oauth_id_unique_key (oauth_type, oauth_id)
 );
 -- auto-generated definition
 create table animal_category
@@ -156,18 +158,18 @@ create table scrap
 );
 
 INSERT INTO member
-(oauth_type, oauth_id, oauth_name, country, language, profile_image_url, nickname, nickname_updated_at, statement, role, created_at, deleted_at)
+(oauth_type, oauth_id, oauth_name, country, campus, language, profile_image_url, nickname, nickname_updated_at, statement, role, created_at, deleted_at)
 VALUES
-    ('FORTY_TWO', '1', 'sanan', 'KOREA', 'KOREAN', 'PROFILE_IMAGE_URL1', '하루애비', '2023-01-01 00:00:00', '멀보노', 'USER', '2023-01-01 00:00:00', NULL),
-    ('FORTY_TWO', '2', 'mingkang', 'USA', 'ENGLISH', 'PROFILE_IMAGE_URL2', '아롱오빠', '2023-02-01 00:00:00', '감귤 사실분', 'USER', '2023-02-01 00:00:00', NULL),
-    ('FORTY_TWO', '3', 'jpark2', 'JAPAN', 'JAPANESE', 'PROFILE_IMAGE_URL3', '꼬비덕후', '2023-03-01 00:00:00', '내가 국힙원탑', 'USER', '2023-03-01 00:00:00', NULL),
-    ('FORTY_TWO', '4', 'hyungnoh', 'FRANCE', 'FRENCH', 'PROFILE_IMAGE_URL3', '오덕십덕', '2023-03-01 00:00:00', '강아지가 세상을 구한다 어쩌구', 'USER', '2023-03-01 00:00:00', NULL),
-    ('FORTY_TWO', '5', 'joon-lee', 'KOREA', 'ITALIAN', 'PROFILE_IMAGE_URL3', '준준준준준준준준준준', '2023-03-01 00:00:00', '함 뜨실?', 'USER', '2023-03-01 00:00:00', NULL),
-    ('FORTY_TWO', '6', 'dongglee', 'KOREA', 'KOREAN', 'PROFILE_IMAGE_URL1', '동글동글동그리', '2023-01-01 00:00:00', '동그랗다', 'USER', '2023-01-01 00:00:00', NULL),
-    ('FORTY_TWO', '7', 'yooh', 'KOREA', 'KOREAN', 'PROFILE_IMAGE_URL1', '42최강의남자', '2023-01-01 00:00:00', '3대 500 이하 말걸기 금지', 'USER', '2023-01-01 00:00:00', NULL),
-    ('FORTY_TWO', '8', 'sunwsong', 'KOREA', 'KOREAN', 'PROFILE_IMAGE_URL1', '알고리즘머신', '2023-01-01 00:00:00', '하기싫으면 안하면 된다', 'USER', '2023-01-01 00:00:00', NULL),
-    ('FORTY_TWO', '9', 'seonghyu', 'KOREA', 'KOREAN', 'PROFILE_IMAGE_URL1', '성뢰딩거', '2023-01-01 00:00:00', '있을 수도, 없을 수도 있다', 'USER', '2023-01-01 00:00:00', NULL),
-    ('FORTY_TWO', '10', 'jdoh', 'KOREA', 'KOREAN', 'PROFILE_IMAGE_URL1', '이과생의정석', '2023-01-01 00:00:00', '철권은 못 참지', 'USER', '2023-01-01 00:00:00', NULL);
+    ('FORTY_TWO', '1', 'sanan', 'KOREA', 'SEOUL', 'KOREAN', 'PROFILE_IMAGE_URL1', '하루애비', '2023-01-01 00:00:00', '멀보노', 'USER', '2023-01-01 00:00:00', NULL),
+    ('FORTY_TWO', '2', 'mingkang', 'USA', 'SEOUL', 'ENGLISH', 'PROFILE_IMAGE_URL2', '아롱오빠', '2023-02-01 00:00:00', '감귤 사실분', 'USER', '2023-02-01 00:00:00', NULL),
+    ('FORTY_TWO', '3', 'jpark2', 'JAPAN', 'SEOUL', 'JAPANESE', 'PROFILE_IMAGE_URL3', '꼬비덕후', '2023-03-01 00:00:00', '내가 국힙원탑', 'USER', '2023-03-01 00:00:00', NULL),
+    ('FORTY_TWO', '4', 'hyungnoh', 'FRANCE', 'SEOUL', 'FRENCH', 'PROFILE_IMAGE_URL3', '오덕십덕', '2023-03-01 00:00:00', '강아지가 세상을 구한다 어쩌구', 'USER', '2023-03-01 00:00:00', NULL),
+    ('FORTY_TWO', '5', 'joon-lee', 'KOREA', 'SEOUL', 'ITALIAN', 'PROFILE_IMAGE_URL3', '준준준준준준준준준준', '2023-03-01 00:00:00', '함 뜨실?', 'USER', '2023-03-01 00:00:00', NULL),
+    ('FORTY_TWO', '6', 'dongglee', 'KOREA', 'SEOUL', 'KOREAN', 'PROFILE_IMAGE_URL1', '동글동글동그리', '2023-01-01 00:00:00', '동그랗다', 'USER', '2023-01-01 00:00:00', NULL),
+    ('FORTY_TWO', '7', 'yooh', 'KOREA', 'SEOUL', 'KOREAN', 'PROFILE_IMAGE_URL1', '42최강의남자', '2023-01-01 00:00:00', '3대 500 이하 말걸기 금지', 'USER', '2023-01-01 00:00:00', NULL),
+    ('FORTY_TWO', '8', 'sunwsong', 'KOREA', 'SEOUL', 'KOREAN', 'PROFILE_IMAGE_URL1', '알고리즘머신', '2023-01-01 00:00:00', '하기싫으면 안하면 된다', 'USER', '2023-01-01 00:00:00', NULL),
+    ('FORTY_TWO', '9', 'seonghyu', 'KOREA', 'SEOUL', 'KOREAN', 'PROFILE_IMAGE_URL1', '성뢰딩거', '2023-01-01 00:00:00', '있을 수도, 없을 수도 있다', 'USER', '2023-01-01 00:00:00', NULL),
+    ('FORTY_TWO', '10', 'jdoh', 'KOREA', 'SEOUL', 'KOREAN', 'PROFILE_IMAGE_URL1', '이과생의정석', '2023-01-01 00:00:00', '철권은 못 참지', 'USER', '2023-01-01 00:00:00', NULL);
 
 INSERT INTO animal_category
 (species)

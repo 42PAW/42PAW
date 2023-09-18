@@ -76,7 +76,7 @@ public class Member extends IdentityDomain implements Validatable {
 	private Language language;
 	@Column(name = "PROFILE_IMAGE_URL")
 	private String profileImageUrl = null;
-	@Column(name = "NICKNAME", nullable = false, length = 12)
+	@Column(name = "NICKNAME", nullable = false, length = 12, unique = true)
 	private String nickname;
 	@Column(name = "NICKNAME_UPDATED_AT", nullable = false)
 	private LocalDateTime nicknameUpdatedAt;

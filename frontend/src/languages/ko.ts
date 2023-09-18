@@ -77,7 +77,7 @@ export const ko = {
   selectAPhoto: "사진을 선택해주세요",
   changeProfilePicture: "프로필 사진 변경",
   writeIntroduction: "자신을 표현할 수 있는 소개를 적어주세요",
-  selectAnimalCategory: "동물 카테고리를 선택해주세요.",
+  selectAnimalCategory: "동물 카테고리를 선택해주세요",
   welcome: "환영합니다!",
   postDeleted: "해당 글이 삭제되었습니다",
   deletePost: "게시물 삭제",

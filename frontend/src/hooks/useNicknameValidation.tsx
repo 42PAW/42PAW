@@ -28,21 +28,17 @@ const useNicknameValidation = () => {
       hasSpecialLetter(nickname)
     ) {
       if (nickname.length < 3) {
-        const nicknameMinimumCharacterMsg = language.NicknameMinimumCharacter;
-        popToast(nicknameMinimumCharacterMsg, "N");
+        popToast(language.nicknameMinimumCharacter, "N");
       } else if (hasWhitespace(nickname)) {
-        const nicknameExcludeSpaceMsg = language.NicknameExcludeSpace;
-        popToast(nicknameExcludeSpaceMsg, "N");
+        popToast(language.nicknameExcludeSpace, "N");
       } else if (hasSpecialLetter(nickname)) {
-        const nicknameInvalidCharacterMsg = language.NicknameInvalidCharacter;
-        popToast(nicknameInvalidCharacterMsg, "N");
+        popToast(language.nicknameInvalidCharacter, "N");
       }
       return false;
     }
     const isMembernameValid = await axiosCheckNicknameValid(nickname);
     if (!isMembernameValid) {
-      const nicknameAlreadyUsedMsg = language.NicknameAlreadyUsed;
-      popToast(nicknameAlreadyUsedMsg, "N");
+      popToast(language.nicknameAlreadyUsed, "N");
       return false;
     }
     return true;

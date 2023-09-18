@@ -124,7 +124,7 @@ const SettingButtonContainerStyled = styled.div`
 `;
 
 const MenuStyled = styled.div`
-  z-index: 1;
+  z-index: 3;
   position: fixed;
   display: flex;
   border-top: 1px solid var(--transparent);

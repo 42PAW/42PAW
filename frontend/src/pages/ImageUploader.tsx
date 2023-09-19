@@ -511,6 +511,7 @@ const CaptionBoxStyled = styled.div`
       color: var(--white);
       opacity: 0.7;
     }
+  }
 `;
 
 const CategoryButtonStyled = styled.div`

@@ -10,7 +10,10 @@ import LanguageModal from "@/components/modals/LanguageModal/LanguageModal";
 import LoginModal from "./LoginModal/LoginModal";
 import MeatballMoadal from "./MeatballModal";
 import instance from "@/api/axios/axios.instance";
-import { STATUS_401_UNAUTHORIZED } from "@/types/constants/StatusCode";
+import {
+  STATUS_401_UNAUTHORIZED,
+  STATUS_404_NOT_FOUND,
+} from "@/types/constants/StatusCode";
 import useModal from "@/hooks/useModal";
 import { ModalType } from "@/types/enum/modal.enum";
 
@@ -25,7 +28,10 @@ const ModalContainer = () => {
       return response;
     },
     (error) => {
-      if (error.response?.status === STATUS_401_UNAUTHORIZED) {
+      if (
+        error.response?.status === STATUS_401_UNAUTHORIZED ||
+        error.response?.status === STATUS_404_NOT_FOUND
+      ) {
         openModal(ModalType.LOGIN);
       }
       return Promise.reject(error);

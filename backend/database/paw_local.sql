@@ -46,14 +46,12 @@ create table board
         foreign key (member_id) references member (id)
 );
 -- auto-generated definition
--- auto-generated definition
 create table board_category_filter
 (
-    species  tinyint not null
-        check (`species` between 0 and 8),
-    board_id bigint  not null,
     id       bigint auto_increment
         primary key,
+    board_id bigint  not null,
+    species  varchar(32) not null,
     constraint FKcu3sldeix5qovcuc3ehsb6h0t
         foreign key (board_id) references board (id)
 );
@@ -99,11 +97,10 @@ create table follow
 -- auto-generated definition
 create table member_category_filter
 (
-    species   tinyint not null
-        check (`species` between 0 and 8),
     id        bigint auto_increment
         primary key,
     member_id bigint  not null,
+    species  varchar(32) not null,
     constraint FKeuge8jdgtsfm24ssp1x0ewotd
         foreign key (member_id) references member (id)
 );

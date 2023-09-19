@@ -56,6 +56,7 @@ const SignUpPage = () => {
   const [step, setStep] = useState<SectionType>(Section.Nickname);
   const navigator = useNavigate();
   const { translator } = useTranslator();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -84,11 +85,7 @@ const SignUpPage = () => {
         />
       )}
       {step === Section.ProfileImage && (
-        <ProfileImageSection
-          registerData={registerData}
-          setRegisterData={setRegisterData}
-          setStep={setStep}
-        />
+        <ProfileImageSection setStep={setStep} isLoading={isLoading} />
       )}
       {step === Section.Introduction && (
         <IntroductionSection
@@ -116,6 +113,8 @@ const SignUpPage = () => {
           registerData={registerData}
           setRegisterData={setRegisterData}
           step={step}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
         />
       </ProfileCardContainerStyled>
       <Toaster />

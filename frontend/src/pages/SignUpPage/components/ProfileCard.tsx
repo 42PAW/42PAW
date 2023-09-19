@@ -6,6 +6,7 @@ import useToaster from "@/hooks/useToaster";
 import processImage from "@/components/processImage";
 import { languageState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
+import LoadingDotsAnimation from "@/components/loading/LoadingDotsAnimation";
 
 /**
  * @registerData.memberName 유저가 설정한 닉네임
@@ -16,39 +17,54 @@ interface IProfileCardProps {
   registerData: SignUpInfoDTO;
   setRegisterData: React.Dispatch<React.SetStateAction<SignUpInfoDTO>>;
   step: SectionType;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ProfileCard = ({
   registerData,
   setRegisterData,
   step,
+  isLoading,
+  setIsLoading,
 }: IProfileCardProps) => {
   const [language] = useRecoilState<any>(languageState);
   const [imagePreview, setImagePreview] = useState<string>("");
   const { popToast } = useToaster();
+  // const [isLoading, setIsLoading] = useState(false);
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    setIsLoading(true);
     const file = e.target.files?.[0];
     if (file) {
       if (
         await processImage(file, registerData, setRegisterData, setImagePreview)
       ) {
         popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
-        return;
       }
     }
+    setIsLoading(false);
   };
 
   return (
     <>
-      <ProfileCardStyled>
+      <ProfileCardStyled
+        $imageUploadEnabled={isLoading || step != Section.ProfileImage}
+      >
         <ProfileCardNicknameStyled>
           {registerData.memberName}
         </ProfileCardNicknameStyled>
         <ProfileCardEmptyImageStyled>
-          <LabelStyled htmlFor="profileImage">
-            <img src={imagePreview ? imagePreview : "/assets/userG.png"} />
-          </LabelStyled>
+          <LabelWrapper>
+            <LabelStyled htmlFor="profileImage" $isLoading={isLoading}>
+              <img src={imagePreview ? imagePreview : "/assets/userG.png"} />
+              {isLoading && (
+                <LoadingStyled>
+                  <LoadingDotsAnimation />
+                </LoadingStyled>
+              )}
+            </LabelStyled>
+          </LabelWrapper>
         </ProfileCardEmptyImageStyled>
         <ProfileCardFormStyled>
           {step === Section.ProfileImage ? (
@@ -71,7 +87,15 @@ const ProfileCard = ({
   );
 };
 
-const ProfileCardStyled = styled.div`
+const LoadingStyled = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+`;
+
+const ProfileCardStyled = styled.div<{ $imageUploadEnabled: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -80,6 +104,9 @@ const ProfileCardStyled = styled.div`
   border-radius: 30px;
   background-color: var(--white);
   box-shadow: var(--default-shadow);
+  label {
+    pointer-events: ${(props) => props.$imageUploadEnabled && "none"};
+  }
 `;
 
 const ProfileCardNicknameStyled = styled.div`
@@ -119,14 +146,32 @@ const ProfileCardFormStyled = styled.form`
   }
 `;
 
-const LabelStyled = styled.label`
-  cursor: pointer;
+const LabelWrapper = styled.div`
+  position: relative;
   width: 150px;
   height: 150px;
   aspect-ratio: 1 / 1;
+`;
+
+const LabelStyled = styled.label<{ $isLoading: boolean }>`
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
   img {
     width: 100%;
     height: 100%;
+    filter: ${(props) => (props.$isLoading ? "brightness(70%)" : "none")};
+  }
+
+  /* loadingDotsAnimation의 스타일 */
+  ${LoadingStyled} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2; /* loadingDotsAnimation을 이미지 위에 올립니다. */
   }
 `;
 

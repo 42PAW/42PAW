@@ -1,23 +1,5 @@
 package proj.pet.board.service;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.InstanceOfAssertFactories.type;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static proj.pet.exception.ExceptionStatus.ALREADY_DELETED_BOARD;
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_BOARD;
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
-import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -29,10 +11,8 @@ import proj.pet.board.domain.BoardMedia;
 import proj.pet.board.domain.BoardMediaManager;
 import proj.pet.board.repository.BoardMediaRepository;
 import proj.pet.board.repository.BoardRepository;
-import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.BoardCategoryFilter;
 import proj.pet.category.domain.Species;
-import proj.pet.category.repository.AnimalCategoryRepository;
 import proj.pet.category.repository.BoardCategoryFilterRepository;
 import proj.pet.comment.domain.Comment;
 import proj.pet.comment.repository.CommentRepository;
@@ -43,11 +23,25 @@ import proj.pet.member.repository.MemberRepository;
 import proj.pet.testutil.test.UnitTest;
 import proj.pet.testutil.testdouble.board.TestBoard;
 import proj.pet.testutil.testdouble.board.TestBoardMedia;
-import proj.pet.testutil.testdouble.category.TestAnimalCategory;
 import proj.pet.testutil.testdouble.category.TestBoardCategoryFilter;
 import proj.pet.testutil.testdouble.comment.TestComment;
 import proj.pet.testutil.testdouble.member.TestMember;
-import proj.pet.utils.domain.ConsumptionCompositeKey;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.InstanceOfAssertFactories.type;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static proj.pet.exception.ExceptionStatus.*;
 
 public class BoardServiceImplTest extends UnitTest {
 
@@ -64,8 +58,6 @@ public class BoardServiceImplTest extends UnitTest {
 	private BoardMediaManager boardMediaManager;
 	@Mock
 	private BoardMediaRepository boardMediaRepository;
-	@Mock
-	private AnimalCategoryRepository animalCategoryRepository;
 	@Mock
 	private CommentRepository commentRepository;
 
@@ -90,16 +82,11 @@ public class BoardServiceImplTest extends UnitTest {
 				stubMultipartFile());
 		private final String givenContent = "content";
 		private final LocalDateTime now = LocalDateTime.now();
-		private final List<AnimalCategory> stubbedAnimalCategories = List.of(
-				TestAnimalCategory.builder()
-						.build().asMockEntity(IGNORE_ID),
-				TestAnimalCategory.builder()
-						.build().asMockEntity(IGNORE_ID));
 		private final List<BoardCategoryFilter> stubbedBoardCategoryFilters = List.of(
 				TestBoardCategoryFilter.builder()
-						.build().asMockEntity(ConsumptionCompositeKey.of(IGNORE_ID, IGNORE_ID)),
+						.build().asMockEntity(IGNORE_ID),
 				TestBoardCategoryFilter.builder()
-						.build().asMockEntity(ConsumptionCompositeKey.of(IGNORE_ID, IGNORE_ID)));
+						.build().asMockEntity(IGNORE_ID));
 		private final List<BoardMedia> stubbedBoardMedias = List.of(
 				TestBoardMedia.builder()
 						.build().asMockEntity(IGNORE_ID),
@@ -114,8 +101,6 @@ public class BoardServiceImplTest extends UnitTest {
 			Member member = TestMember.builder().build().asMockEntity(existMemberId);
 			given(memberRepository.findById(existMemberId)).willReturn(Optional.of(member));
 			given(boardRepository.save(any(Board.class))).willReturn(stubbedBoard);
-			given(animalCategoryRepository.findBySpeciesIn(givenSpecies)).willReturn(
-					stubbedAnimalCategories);
 			given(boardCategoryFilterRepository.saveAll(anyList())).willReturn(
 					stubbedBoardCategoryFilters);
 			given(boardMediaManager.uploadMedia(any(MultipartFile.class),
@@ -166,9 +151,9 @@ public class BoardServiceImplTest extends UnitTest {
 		private final Long boardId = IGNORE_ID;
 		private final List<BoardCategoryFilter> stubbedBoardCategoryFilters = List.of(
 				TestBoardCategoryFilter.builder()
-						.build().asMockEntity(ConsumptionCompositeKey.of(IGNORE_ID, IGNORE_ID)),
+						.build().asMockEntity(IGNORE_ID),
 				TestBoardCategoryFilter.builder()
-						.build().asMockEntity(ConsumptionCompositeKey.of(IGNORE_ID, IGNORE_ID)));
+						.build().asMockEntity(IGNORE_ID));
 		private final List<BoardMedia> stubbedBoardMedias = List.of(
 				TestBoardMedia.builder()
 						.build().asMockEntity(IGNORE_ID),

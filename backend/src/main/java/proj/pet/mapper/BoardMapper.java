@@ -13,7 +13,6 @@ import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardViewMapDto;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.category.domain.Species;
-import proj.pet.follow.domain.FollowType;
 import proj.pet.member.domain.Member;
 
 @Mapper(componentModel = "spring")
@@ -30,10 +29,8 @@ public interface BoardMapper {
 	@Mapping(target = "intraName", source = "member.oauthProfile.name")
 	@Mapping(target = "createdAt", source = "board.createdAt")
 	BoardInfoDto toBoardInfoDto(
-			Board board, Member member,
-			List<String> images, List<Species> categories,
-			boolean scrapped, boolean reacted, FollowType followType,
-			int reactionCount, int commentCount,
+			Board board, Member member, List<String> images, List<Species> categories,
+			boolean scrapped, boolean reacted, int reactionCount, int commentCount,
 			String previewCommentUser, String previewComment);
 
 	@Mapping(target = "boardId", source = "board.id")

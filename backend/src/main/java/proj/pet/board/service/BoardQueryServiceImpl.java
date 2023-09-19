@@ -1,6 +1,7 @@
 package proj.pet.board.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -17,10 +18,10 @@ import proj.pet.board.dto.BoardViewMapDto;
 import proj.pet.board.dto.BoardViewSubDto;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.board.repository.BoardRepository;
-import proj.pet.category.repository.AnimalCategoryRepository;
+import proj.pet.category.domain.MemberCategoryFilter;
+import proj.pet.category.domain.Species;
 import proj.pet.category.repository.MemberCategoryFilterRepository;
 import proj.pet.comment.domain.Comment;
-import proj.pet.follow.domain.FollowType;
 import proj.pet.follow.repository.FollowRepository;
 import proj.pet.mapper.BoardMapper;
 import proj.pet.reaction.domain.Reaction;
@@ -37,7 +38,6 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	private final FollowRepository followRepository;
 	private final BlockRepository blockRepository;
 	private final MemberCategoryFilterRepository memberCategoryFilterRepository;
-	private final AnimalCategoryRepository animalCategoryRepository;
 
 	/**
 	 * 찾아온 게시글들의 Page에서 차단 유저와 카테고리 필터로 필터링 후 {@link BoardInfoDto}로 변환하여 리스트로 반환한다.
@@ -47,18 +47,16 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 * @param boardPages  변환할 게시글
 	 * @return {@link List<BoardInfoDto>}
 	 */
-	private List<BoardInfoDto> getBoardInfoDtos(Long loginUserId, Page<Board> boardPages) {
+	private List<Board> filteringBoards(Long loginUserId, Page<Board> boardPages) {
 		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
-		List<Long> blockIds = new ArrayList<>();
-//		List<Long> blockIds = blocks.stream().map(block -> block.getTo().getId()).toList();
-//		List<AnimalCategory> animalCategories = (loginUserId == 0) ?
-//				animalCategoryRepository.findAll() :
-//				memberCategoryFilterRepository.findAllByMemberIdWithJoin(loginUserId)
-//						.stream().map(MemberCategoryFilter::getAnimalCategory).toList();
+		List<Long> blockIds = blocks.stream().map(block -> block.getTo().getId()).toList();
+		List<Species> categories = (loginUserId == 0) ?
+				Arrays.stream(Species.values()).toList() :
+				memberCategoryFilterRepository.findAllByMemberIdWithJoin(loginUserId)
+						.stream().map(MemberCategoryFilter::getSpecies).toList();
 		return boardPages.filter(board -> !blockIds.contains(board.getMember().getId()))
-//				.filter(board -> animalCategories.stream().anyMatch(animalCategory ->
-//						board.getCategoriesAsSpecies().contains(animalCategory.getSpecies())))
-				.map(board -> createBoardInfoDto(loginUserId, board)).toList();
+				.filter(board -> categories.stream().anyMatch(category ->
+						board.getCategoriesAsSpecies().contains(category))).toList();
 	}
 
 	/**
@@ -87,16 +85,11 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 				.map(comment -> comment.getMember().getNickname()).orElse(EMPTY_STRING);
 		String previewCommentContent = latestComment
 				.map(Comment::getContent).orElse(EMPTY_STRING);
-		FollowType followType =
-				followRepository.existsByFromIdAndToId(loginUserId, board.getMember().getId())
-						? FollowType.FOLLOWING
-						: FollowType.NONE;
 
 		return boardMapper.toBoardInfoDto(
 				board, board.getMember(),
 				board.findBoardMediaUrls(), board.getCategoriesAsSpecies(),
-				isUserScrapped, isUserReacted, followType,
-				reactionCount, commentCount,
+				isUserScrapped, isUserReacted, reactionCount, commentCount,
 				previewCommentUserName, previewCommentContent);
 	}
 
@@ -114,19 +107,61 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 */
 	@Override
 	public BoardsPaginationDto getMainViewBoards(Long loginUserId, PageRequest pageRequest) {
-		//TODO: QueryDSL로 리팩토링 여부 결정하기
-//		Page<Board> boardPages = boardRepository.getMainViewBoards(pageRequest);
-//		List<BoardInfoDto> result = getBoardInfoDtos(loginUserId, boardPages);
-//		return boardMapper.toBoardsResponseDto(result, boardPages.getTotalElements());
-//		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
-//		List<Long> blockIds = new ArrayList<>();
+		Page<Board> boardPages = boardRepository.getMainViewBoards(pageRequest);
+		List<BoardInfoDto> result = filteringBoards(loginUserId, boardPages).stream()
+				.map(board -> createBoardInfoDto(loginUserId, board)).toList();
+		return boardMapper.toBoardsResponseDto(result, boardPages.getTotalElements());
+	}
+
+	@Override
+	public BoardsPaginationDto getMainViewBoardsRefactoring(
+			Long loginUserId, PageRequest pageRequest) {
 		Page<Board> boardPage = boardRepository.findAll(pageRequest);
-//		List<Board> filteredBoard = boardPage.stream()
-//				.filter(board -> !blockIds.contains(board.getMember().getId()))
-//				.toList();
-		List<Long> boardIds = boardPage.stream().map(Board::getId).toList();
+		List<Board> filteredBoard = filteringBoards(loginUserId, boardPage);
+		List<Long> boardIds = filteredBoard.stream().map(Board::getId).toList();
 		BoardViewSubDto boardViewSubDto =
 				boardRepository.getBoardViewWithBoardIdList(loginUserId, boardIds);
+		List<BoardInfoDto> result = boardMappingToDto(boardIds, boardViewSubDto, boardPage);
+		return boardMapper.toBoardsResponseDto(result, boardPage.getTotalElements());
+	}
+
+	@Override
+	public BoardsPaginationDto getHotBoards(Long loginUserId, PageRequest pageRequest) {
+		Page<Board> boardPages = boardRepository.getHotBoards(pageRequest);
+		List<Board> filteredBoard = filteringBoards(loginUserId, boardPages);
+		List<BoardInfoDto> result = filteredBoard.stream()
+				.map(board -> createBoardInfoDto(loginUserId, board)).toList();
+		return boardMapper.toBoardsResponseDto(result, boardPages.getTotalElements());
+	}
+
+	@Override
+	public BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId,
+			PageRequest pageRequest) {
+		List<BoardInfoDto> result = boardRepository.getMemberBoards(memberId, pageRequest).stream()
+				.map(board -> createBoardInfoDto(loginUserId, board)).toList();
+		return boardMapper.toBoardsResponseDto(result, result.size());
+	}
+
+	@Override
+	public BoardsPaginationDto getScraps(Long loginUserId, PageRequest pageRequest) {
+		Page<Board> scrapBoards = boardRepository.getScrapBoards(loginUserId, pageRequest);
+		List<BoardInfoDto> result =
+				scrapBoards.map(board -> createBoardInfoDto(loginUserId, board)).toList();
+		return boardMapper.toBoardsResponseDto(result, scrapBoards.getTotalElements());
+	}
+
+	@Override
+	public BoardsPaginationDto getFollowingsBoards(Long memberId, PageRequest pageRequest) {
+		Page<Board> followingsBoards = boardRepository.getFollowingsBoards(memberId, pageRequest);
+		List<BoardInfoDto> result = followingsBoards
+				.stream()
+				.map(board -> createBoardInfoDto(memberId, board))
+				.toList();
+		return boardMapper.toBoardsResponseDto(result, followingsBoards.getTotalElements());
+	}
+
+	private List<BoardInfoDto> boardMappingToDto(List<Long> boardIds,
+			BoardViewSubDto boardViewSubDto, Page<Board> boardPage) {
 		Map<Long, BoardViewMapDto> boardViewMap = new HashMap<>();
 		boardIds.forEach(boardId -> boardViewMap.put(boardId, new BoardViewMapDto()));
 		boardViewSubDto.getMediaList().forEach(boardMedia -> {
@@ -171,46 +206,9 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 			}
 			boardViewMapDto.getCategories().add(boardCategoryFilter.getSpecies());
 		});
-		List<BoardInfoDto> result = boardPage.stream().map(board -> {
+		return boardPage.stream().map(board -> {
 			BoardViewMapDto boardViewMapDto = boardViewMap.get(board.getId());
 			return boardMapper.toBoardInfoDto(board, board.getMember(), boardViewMapDto);
 		}).toList();
-		return boardMapper.toBoardsResponseDto(result, boardPage.getTotalElements());
-	}
-
-	// TODO: result.size가 아닌 전체 길이를 가져오도록 수정 및 최적화 필요, 혹시 변할 수도 있으니 아직 함수 중복에 대해서는 리팩터링하지 않았음.
-
-	@Override
-	public BoardsPaginationDto getHotBoards(Long loginUserId, PageRequest pageRequest) {
-		//TODO: QueryDSL로 리팩토링 여부 결정하기
-		Page<Board> boardPages = boardRepository.getHotBoards(pageRequest);
-		List<BoardInfoDto> result = getBoardInfoDtos(loginUserId, boardPages);
-		return boardMapper.toBoardsResponseDto(result, boardPages.getTotalElements());
-	}
-
-	@Override
-	public BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId,
-			PageRequest pageRequest) {
-		List<BoardInfoDto> result = boardRepository.getMemberBoards(memberId, pageRequest).stream()
-				.map(board -> createBoardInfoDto(loginUserId, board)).toList();
-		return boardMapper.toBoardsResponseDto(result, result.size());
-	}
-
-	@Override
-	public BoardsPaginationDto getScraps(Long loginUserId, PageRequest pageRequest) {
-		Page<Board> scrapBoards = boardRepository.getScrapBoards(loginUserId, pageRequest);
-		List<BoardInfoDto> result =
-				scrapBoards.map(board -> createBoardInfoDto(loginUserId, board)).toList();
-		return boardMapper.toBoardsResponseDto(result, scrapBoards.getTotalElements());
-	}
-
-	@Override
-	public BoardsPaginationDto getFollowingsBoards(Long memberId, PageRequest pageRequest) {
-		Page<Board> followingsBoards = boardRepository.getFollowingsBoards(memberId, pageRequest);
-		List<BoardInfoDto> result = followingsBoards
-				.stream()
-				.map(board -> createBoardInfoDto(memberId, board))
-				.toList();
-		return boardMapper.toBoardsResponseDto(result, followingsBoards.getTotalElements());
 	}
 }

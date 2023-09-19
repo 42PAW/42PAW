@@ -7,6 +7,8 @@ public interface BoardQueryService {
 
 	BoardsPaginationDto getMainViewBoards(Long loginUserId, PageRequest pageRequest);
 
+	BoardsPaginationDto getMainViewBoardsRefactoring(Long loginUserId, PageRequest pageRequest);
+
 	BoardsPaginationDto getHotBoards(Long loginUserId, PageRequest pageRequest);
 
 	BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId, PageRequest pageRequest);

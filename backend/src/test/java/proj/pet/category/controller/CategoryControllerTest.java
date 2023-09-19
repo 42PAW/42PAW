@@ -1,19 +1,11 @@
 package proj.pet.category.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.MemberCategoryFilter;
 import proj.pet.category.domain.Species;
 import proj.pet.category.dto.CategoryUpdateRequestDto;
@@ -21,25 +13,29 @@ import proj.pet.member.domain.Member;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.testutil.PersistHelper;
 import proj.pet.testutil.test.E2ETest;
-import proj.pet.testutil.testdouble.category.TestAnimalCategory;
 import proj.pet.testutil.testdouble.category.TestMemberCategoryFilter;
 import proj.pet.testutil.testdouble.member.TestMember;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class CategoryControllerTest extends E2ETest {
 
 	private static final String BEARER = "Bearer ";
 	private static final String JSON_CONTENT_TYPE = "application/json";
+	private final List<Species> categories = List.of(Species.values());
 	private PersistHelper persistHelper;
-
 	private Member loginUser;
 	private Member otherUser;
-
-	private List<AnimalCategory> categories;
 
 	@BeforeEach
 	void setUp() {
 		persistHelper = PersistHelper.start(em);
-		categories = persistHelper.persistAndReturn(TestAnimalCategory.getAllSpeciesAsCategories());
 		loginUser = TestMember.asDefaultEntity();
 		otherUser = TestMember.builder()
 				.oauthName("otherUser")
@@ -81,8 +77,7 @@ class CategoryControllerTest extends E2ETest {
 						List<MemberCategoryFilter> categories = member.getMemberCategoryFilters();
 						assertThat(categories).hasSize(3);
 						assertThat(categories)
-								.extracting(MemberCategoryFilter::getAnimalCategory)
-								.extracting(AnimalCategory::getSpecies)
+								.extracting(MemberCategoryFilter::getSpecies)
 								.containsExactlyInAnyOrder(Species.AMPHIBIAN, Species.BIRD,
 										Species.SMALL_ANIMAL);
 					});

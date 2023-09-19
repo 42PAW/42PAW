@@ -2,10 +2,9 @@ package proj.pet.testutil.testdouble.category;
 
 import lombok.Builder;
 import proj.pet.board.domain.Board;
-import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.BoardCategoryFilter;
+import proj.pet.category.domain.Species;
 import proj.pet.testutil.testdouble.TestEntity;
-import proj.pet.utils.domain.ConsumptionCompositeKey;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -14,13 +13,15 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 
 @Builder
-public class TestBoardCategoryFilter implements TestEntity<BoardCategoryFilter, ConsumptionCompositeKey> {
+public class TestBoardCategoryFilter implements TestEntity<BoardCategoryFilter, Long> {
+	public static final Species DEFAULT_CATEGORY = Species.DOG;
+
 	@Builder.Default
-	private AnimalCategory animalCategory = null;
+	private final Species category = DEFAULT_CATEGORY;
 	@Builder.Default
 	private Board board = null;
 
-	public static List<BoardCategoryFilter> ofMany(Board board, AnimalCategory... categories) {
+	public static List<BoardCategoryFilter> ofMany(Board board, Species... categories) {
 		return Stream.of(categories)
 				.map(category -> BoardCategoryFilter.of(board, category))
 				.toList();
@@ -29,15 +30,15 @@ public class TestBoardCategoryFilter implements TestEntity<BoardCategoryFilter, 
 	@Override public BoardCategoryFilter asEntity() {
 		return BoardCategoryFilter.of(
 				board,
-				animalCategory
+				category
 		);
 	}
 
-	@Override public BoardCategoryFilter asMockEntity(ConsumptionCompositeKey id) {
+	@Override public BoardCategoryFilter asMockEntity(Long id) {
 		BoardCategoryFilter boardCategoryFilter = mock(BoardCategoryFilter.class);
 		lenient().when(boardCategoryFilter.getId()).thenReturn(id);
 		lenient().when(boardCategoryFilter.getBoard()).thenReturn(board);
-		lenient().when(boardCategoryFilter.getAnimalCategory()).thenReturn(animalCategory);
+		lenient().when(boardCategoryFilter.getSpecies()).thenReturn(category);
 		return boardCategoryFilter;
 	}
 }

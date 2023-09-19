@@ -240,7 +240,9 @@ const ProfileEditModal = () => {
             />
           </EditInfoStyled>
           <ButtonContainerStyled>
-            <button onClick={onChangeProfileInfo}>{language.complete}</button>
+            <button onClick={onChangeProfileInfo} disabled={isLoading}>
+              {language.complete}
+            </button>
             <button onClick={() => closeModal(ModalType.PROFILEEDIT)}>
               {language.cancel}
             </button>
@@ -365,17 +367,15 @@ const ButtonContainerStyled = styled.div`
     width: 90px;
     border-radius: 10px;
     border: 1px solid var(--white);
-    &:nth-child(1) {
-      background-color: transparent;
-      color: var(--white);
-    }
-    &:nth-child(2) {
-      background-color: transparent;
-      color: var(--white);
-    }
-    &:hover {
+    background-color: transparent;
+    color: var(--white);
+    &:not(:disabled):hover {
       background-color: var(--white);
       color: var(--pink);
+    }
+    &:disabled {
+      color: var(--transparent2);
+      pointer-events: none;
     }
   }
 `;

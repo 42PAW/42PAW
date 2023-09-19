@@ -8,6 +8,7 @@ import { IToastInfo } from "@/types/interface/toast.interface";
 import Translator from "@/languages/Translator";
 import { UserInfoDTO } from "@/types/dto/member.dto";
 import { IDeleteInfo } from "@/types/interface/option.interface";
+import { IBoardTotalLengthInfo } from "@/types/interface/board.interface";
 
 export const userInfoState = atom<UserInfoDTO | null>({
   key: "userInfo",
@@ -143,4 +144,13 @@ export const boardsLengthState = atom<number>({
 export const logoClickObserverState = atom<number>({
   key: "logoClickObserver",
   default: 0,
+});
+
+export const boardsTotalLengthState = atom<IBoardTotalLengthInfo>({
+  key: "boardsTotalLength",
+  default: {
+    default: Infinity,
+    trending: Infinity,
+    following: Infinity,
+  },
 });

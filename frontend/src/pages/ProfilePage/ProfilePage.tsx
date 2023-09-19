@@ -21,7 +21,6 @@ const ProfilePage = () => {
     queryFn: fetchProfile,
     refetchOnMount: true,
     refetchOnWindowFocus: false,
-    staleTime: Infinity,
   });
   const setBoardCategory = useSetRecoilState<Board>(boardCategoryState);
 
@@ -36,7 +35,6 @@ const ProfilePage = () => {
     queryFn: () => fetchBoards(Board.OTHER, 0),
     refetchOnMount: true,
     refetchOnWindowFocus: false,
-    staleTime: Infinity,
   });
 
   const isLoading = loading || profileQuery.isLoading || boardsQuery.isLoading;

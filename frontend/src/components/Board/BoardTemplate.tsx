@@ -8,12 +8,6 @@ import useModal from "@/hooks/useModal";
 import { ModalType } from "@/types/enum/modal.enum";
 import { languageState } from "@/recoil/atom";
 import { currentBoardIdState, currentMemberIdState } from "@/recoil/atom";
-import {
-  axiosReactComment,
-  axiosUndoReactComment,
-  axiosScrap,
-  axiosUndoScrap,
-} from "@/api/axios/axios.custom";
 import useDebounce from "@/hooks/useDebounce";
 import useParseDate from "@/hooks/useParseDate";
 import { useSpring, animated } from "@react-spring/web";
@@ -21,6 +15,7 @@ import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 import { Country } from "@/types/enum/country.enum";
 import { animateScroll as scroll } from "react-scroll";
 import MeatballButton from "../MeatballButton";
+import BoardTemplateUtils from "./BoardTemplateUtils";
 
 interface BoardTemplateProps extends IBoardInfo {
   scrollIntoView?: boolean;
@@ -59,6 +54,8 @@ const BoardTemplate = (board: BoardTemplateProps) => {
   const setCurrentMemberId = useSetRecoilState<number | null>(
     currentMemberIdState
   );
+  const { scrapMutation, undoScrapMutation, reactMutation, undoReactMutation } =
+    BoardTemplateUtils(boardId);
   const { openCommentSection } = useRightSectionHandler();
   const { openModal } = useModal();
   const { debounce } = useDebounce();
@@ -70,7 +67,6 @@ const BoardTemplate = (board: BoardTemplateProps) => {
     },
     config: { tension: 300, friction: 12 },
   });
-
   const countryEmoji = useCountryEmoji(country as Country);
   const parsedDate = parseDate(createdAt);
   const parsedPreviewComment =
@@ -100,10 +96,8 @@ const BoardTemplate = (board: BoardTemplateProps) => {
 
   const callReactionApi = async () => {
     try {
-      if (!isReactedRender && !lastReaction)
-        await axiosReactComment(boardId, "LIKE");
-      else if (isReactedRender && lastReaction)
-        await axiosUndoReactComment(boardId);
+      if (!isReactedRender && !lastReaction) reactMutation.mutate();
+      else if (isReactedRender && lastReaction) undoReactMutation.mutate();
       setLastReaction(!lastReaction);
     } catch (error) {
       //401 발생 -> 기존 isReactedRender 롤백
@@ -115,10 +109,10 @@ const BoardTemplate = (board: BoardTemplateProps) => {
   const callScrapApi = async () => {
     try {
       if (!isScrappedRender && !lastScrap) {
-        await axiosScrap(boardId);
+        scrapMutation.mutate();
         setLastScrap(!lastScrap);
       } else if (isScrappedRender && lastScrap) {
-        await axiosUndoScrap(boardId);
+        undoScrapMutation.mutate();
         setLastScrap(!lastScrap);
       }
     } catch (error) {

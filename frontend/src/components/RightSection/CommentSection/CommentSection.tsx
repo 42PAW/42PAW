@@ -30,6 +30,8 @@ const CommentSection = () => {
   const { data: comments, isLoading } = useQuery({
     queryKey: ["comments", currentBoardId],
     queryFn: fetchComments,
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
   });
 
   useEffect(() => {
@@ -61,30 +63,38 @@ const CommentSection = () => {
       const newComments: CommentInfoDTO[] | undefined =
         await queryClient.getQueryData(["comments", currentBoardId]);
 
-      await queryClient.setQueryData(
-        ["boards", boardCategory],
-        (prevData: IBoardInfo[] | any) => {
-          if (!prevData) return prevData;
-          if (!newComments) return prevData;
+      const mainBoardCategories = [
+        Board.DEFAULT,
+        Board.TRENDING,
+        Board.FOLLOWING,
+      ];
 
-          const updatedBoards = prevData.pages.map((page: IBoardInfo[]) =>
-            page.map((board: IBoardInfo) => {
-              if (board.boardId === currentBoardId && newComments) {
-                return {
-                  ...board,
-                  previewCommentUser:
-                    newComments[newComments.length - 1].memberName,
-                  previewComment: newComments[newComments.length - 1].comment,
-                  commentCount: newComments.length,
-                };
-              }
-              return board;
-            })
-          );
+      for (let i = 0; i < mainBoardCategories.length; i++) {
+        await queryClient.setQueryData(
+          ["boards", mainBoardCategories[i]],
+          (prevData: IBoardInfo[] | any) => {
+            if (!prevData) return prevData;
+            if (!newComments) return prevData;
 
-          return { ...prevData, pages: updatedBoards };
-        }
-      );
+            const updatedBoards = prevData.pages.map((page: IBoardInfo[]) =>
+              page.map((board: IBoardInfo) => {
+                if (board.boardId === currentBoardId && newComments) {
+                  return {
+                    ...board,
+                    previewCommentUser:
+                      newComments[newComments.length - 1].memberName,
+                    previewComment: newComments[newComments.length - 1].comment,
+                    commentCount: newComments.length,
+                  };
+                }
+                return board;
+              })
+            );
+
+            return { ...prevData, pages: updatedBoards };
+          }
+        );
+      }
       setComment("");
     },
   });

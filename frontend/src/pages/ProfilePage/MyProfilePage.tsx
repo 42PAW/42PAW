@@ -23,14 +23,12 @@ const MyProfilePage = () => {
     queryFn: fetchProfile,
     refetchOnMount: true,
     refetchOnWindowFocus: false,
-    staleTime: Infinity,
   });
   const boardsQuery = useQuery<IBoardInfo[]>({
     queryKey: ["profileBoards", boardCategory], // 여기서 boardCategory를 그냥 Board.MINE하는게?
     queryFn: () => fetchBoards(boardCategory, 0),
     refetchOnMount: true,
     refetchOnWindowFocus: false,
-    staleTime: boardCategory === Board.MINE ? Infinity : 0,
   });
 
   const handleTabState = (newTabState: Board) => {

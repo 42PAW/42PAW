@@ -35,3 +35,9 @@ export interface IBoardInfo {
   createdAt: string;
   followType: followType;
 }
+
+export interface IBoardTotalLengthInfo {
+  default: number;
+  trending: number;
+  following: number;
+}

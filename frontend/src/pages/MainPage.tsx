@@ -1,12 +1,15 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import BoardTemplate from "@/components/Board/BoardTemplate";
-import { boardCategoryState } from "@/recoil/atom";
+import { boardCategoryState, boardsTotalLengthState } from "@/recoil/atom";
 import { Board } from "@/types/enum/board.category.enum";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
 import useFetch from "@/hooks/useFetch";
-import { IBoardInfo } from "@/types/interface/board.interface";
+import {
+  IBoardInfo,
+  IBoardTotalLengthInfo,
+} from "@/types/interface/board.interface";
 import { useNavigate } from "react-router-dom";
 import { LegacyRef, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
@@ -17,14 +20,20 @@ import { useRef } from "react";
 import { boardsLengthState, languageState } from "@/recoil/atom";
 import { buttonToggledState } from "@/components/BoardSortToggle";
 import { logoClickObserverState } from "@/recoil/atom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const MainPage = () => {
   //useInview의 ref값을 참조하는 요소에 대한 root 참조값
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const queryClient = useQueryClient();
   const [language] = useRecoilState<any>(languageState);
   const [loading, setLoading] = useState(true);
   const setButtonToggled = useSetRecoilState(buttonToggledState);
   const [boardsLength] = useRecoilState<number>(boardsLengthState);
+  const [boardsTotalLength] = useRecoilState<IBoardTotalLengthInfo>(
+    boardsTotalLengthState
+  );
+  const resetBoardsTotalLength = useResetRecoilState(boardsTotalLengthState);
   const [boardCategory, setBoardCategory] =
     useRecoilState<Board>(boardCategoryState);
   const [logoClickObserver] = useRecoilState<number>(logoClickObserverState);
@@ -42,7 +51,16 @@ const MainPage = () => {
       ({ pageParam = 0 }) => fetchBoards(boardCategory, pageParam),
       {
         getNextPageParam: (lastPage, allPages) => {
-          if (!lastPage || lastPage.length === 0) return undefined;
+          if (!lastPage) return undefined;
+          if (
+            (boardCategory === Board.DEFAULT &&
+              boardsTotalLength.default <= allPages.length * 20) ||
+            (boardCategory === Board.TRENDING &&
+              boardsTotalLength.trending <= allPages.length * 20) ||
+            (boardCategory === Board.FOLLOWING &&
+              boardsTotalLength.following <= allPages.length * 20)
+          )
+            return undefined;
           return allPages.length;
         },
         refetchOnMount: true,
@@ -54,6 +72,17 @@ const MainPage = () => {
   useEffect(() => {
     setBoardCategory(Board.DEFAULT);
     setButtonToggled(0);
+    return () => {
+      const mainBoardCategories = [
+        Board.DEFAULT,
+        Board.TRENDING,
+        Board.FOLLOWING,
+      ];
+      for (let i = 0; i < mainBoardCategories.length; i++) {
+        queryClient.resetQueries(["boards", mainBoardCategories[i]]);
+      }
+      resetBoardsTotalLength();
+    };
   }, []);
 
   useEffect(() => {

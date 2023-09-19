@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import proj.pet.category.domain.AnimalCategory;
 import proj.pet.member.domain.Member;
 import proj.pet.member.domain.MemberImageManager;
 import proj.pet.member.domain.MemberRole;

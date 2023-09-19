@@ -15,7 +15,6 @@ import proj.pet.board.domain.Board;
 import proj.pet.board.domain.BoardMediaManager;
 import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsPaginationDto;
-import proj.pet.category.domain.AnimalCategory;
 import proj.pet.follow.domain.Follow;
 import proj.pet.member.domain.Member;
 import proj.pet.member.dto.UserSessionDto;

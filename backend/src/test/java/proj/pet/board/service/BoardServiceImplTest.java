@@ -1,23 +1,5 @@
 package proj.pet.board.service;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.InstanceOfAssertFactories.type;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static proj.pet.exception.ExceptionStatus.ALREADY_DELETED_BOARD;
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_BOARD;
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
-import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -29,10 +11,8 @@ import proj.pet.board.domain.BoardMedia;
 import proj.pet.board.domain.BoardMediaManager;
 import proj.pet.board.repository.BoardMediaRepository;
 import proj.pet.board.repository.BoardRepository;
-import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.BoardCategoryFilter;
 import proj.pet.category.domain.Species;
-import proj.pet.category.repository.AnimalCategoryRepository;
 import proj.pet.category.repository.BoardCategoryFilterRepository;
 import proj.pet.comment.domain.Comment;
 import proj.pet.comment.repository.CommentRepository;
@@ -48,6 +28,22 @@ import proj.pet.testutil.testdouble.category.TestBoardCategoryFilter;
 import proj.pet.testutil.testdouble.comment.TestComment;
 import proj.pet.testutil.testdouble.member.TestMember;
 import proj.pet.utils.domain.ConsumptionCompositeKey;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.InstanceOfAssertFactories.type;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static proj.pet.exception.ExceptionStatus.*;
 
 public class BoardServiceImplTest extends UnitTest {
 

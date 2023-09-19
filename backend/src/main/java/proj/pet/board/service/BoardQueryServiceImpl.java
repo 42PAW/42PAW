@@ -9,9 +9,7 @@ import proj.pet.board.domain.Board;
 import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.board.repository.BoardRepository;
-import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.MemberCategoryFilter;
-import proj.pet.category.repository.AnimalCategoryRepository;
 import proj.pet.category.repository.MemberCategoryFilterRepository;
 import proj.pet.comment.domain.Comment;
 import proj.pet.follow.domain.FollowType;
@@ -35,7 +33,6 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	private final FollowRepository followRepository;
 	private final BlockRepository blockRepository;
 	private final MemberCategoryFilterRepository memberCategoryFilterRepository;
-	private final AnimalCategoryRepository animalCategoryRepository;
 
 	/**
 	 * 찾아온 게시글들의 Page에서 차단 유저와 카테고리 필터로 필터링 후 {@link BoardInfoDto}로 변환하여 리스트로 반환한다.

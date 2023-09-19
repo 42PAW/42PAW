@@ -2,7 +2,6 @@ package proj.pet.testutil.testdouble.category;
 
 import lombok.Builder;
 import proj.pet.board.domain.Board;
-import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.BoardCategoryFilter;
 import proj.pet.testutil.testdouble.TestEntity;
 import proj.pet.utils.domain.ConsumptionCompositeKey;

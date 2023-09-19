@@ -1,7 +1,6 @@
 package proj.pet.testutil.testdouble.category;
 
 import lombok.Builder;
-import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.Species;
 import proj.pet.testutil.testdouble.TestEntity;
 

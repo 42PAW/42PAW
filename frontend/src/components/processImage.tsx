@@ -23,81 +23,72 @@ export default async function processImage<T>(
     maxSizeMB: 1,
     maxWidthOrHeight: 2520,
   };
+  console.log("file size: ", file.size); // true
 
   try {
     if (file.type === "image/heic" || file.type === "image/HEIC") {
-      await fetch(URL.createObjectURL(file))
+      // HEIC 이미지를 WebP로 변환
+      const blob = await fetch(URL.createObjectURL(file))
         .then((res) => res.blob())
         .then((blob) => heic2any({ blob, toType: "image/webp" }))
-        .then((conversionResult) => {
-          file = new File(
-            [conversionResult as Blob],
-            file.name.split(".")[0] + ".webp",
-            {
-              type: "image/webp",
-              lastModified: new Date().getTime(),
-            }
-          );
-          console.log(file);
-        })
         .catch((error) => {
           console.log(error);
-          return 1;
+          return null;
         });
+
+      if (blob instanceof Blob) {
+        console.log(blob);
+        file = new File([blob], file.name.split(".")[0] + ".webp", {
+          type: "image/webp",
+          lastModified: new Date().getTime(),
+        });
+      }
     }
 
     const compressedFile = await imageCompression(file, options);
-
-    if (compressedFile.size > 10000000) {
-      console.log("사진 용량은 10MB가 넘어갈 수 없습니다");
+    console.log("compressedFile type: ", compressedFile.type); // true
+    console.log("compressedFile size: ", compressedFile.size); // true
+    if (compressedFile.size > 2097152) {
+      console.log("이미지 용량을 초과했습니다.");
       return 1;
     }
 
-    const imageBitmap = await createImageBitmap(compressedFile);
-    const canvas = document.createElement("canvas");
-    canvas.width = imageBitmap.width;
-    canvas.height = imageBitmap.height;
-    const ctx = canvas.getContext("2d");
+    // const imageBlob = await createImageBlob(compressedFile);
+    const imageBlob = compressedFile.slice(
+      0,
+      compressedFile.size,
+      compressedFile.type
+    );
+    console.log(imageBlob);
 
-    if (ctx) {
-      ctx.drawImage(imageBitmap, 0, 0);
-      canvas.toBlob(async (webpBlob) => {
-        if (webpBlob) {
-          // setProfileInfo 함수의 타입을 검사하고 분기 처리
-          if (isIChangeProfileInfo(profileInfo)) {
-            // MemberProfileChangeRequestDto 타입 처리
-            console.log("profileImageChanged");
-            setProfileInfo({
-              ...profileInfo,
-              imageData: webpBlob,
-              profileImageChanged: true,
-            });
-          } else if (isSignUpInfoDto(profileInfo)) {
-            console.log("SignUpInfoDTO");
-            // SignUpInfoDTO 타입 처리
-            setProfileInfo({
-              ...profileInfo,
-              imageData: webpBlob,
-            });
-          }
-          const webpDataURL = URL.createObjectURL(webpBlob);
-          setImagePreview(webpDataURL);
-        }
-      }, "image/webp");
+    console.log("imageBlob type: ", imageBlob.type); // true
+    console.log("imageBlob size: ", imageBlob.size); // true
+
+    // setProfileInfo 함수의 타입을 검사하고 분기 처리
+    if (isIChangeProfileInfo(profileInfo)) {
+      // MemberProfileChangeRequestDto 타입 처리
+      console.log("profileImageChanged");
+      console.log("type: " + imageBlob.type);
+      console.log("size: " + imageBlob.size);
+      setProfileInfo({
+        ...profileInfo,
+        imageData: imageBlob,
+        profileImageChanged: true,
+      });
+    } else if (isSignUpInfoDto(profileInfo)) {
+      console.log("SignUpInfoDTO");
+      // SignUpInfoDTO 타입 처리
+      setProfileInfo({
+        ...profileInfo,
+        imageData: imageBlob,
+      });
     }
+
+    const webpDataURL = URL.createObjectURL(imageBlob);
+    setImagePreview(webpDataURL);
   } catch (error) {
     console.log(error);
     return 1;
   }
   return 0;
 }
-
-// const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
-//   const file = e.target.files?.[0];
-//   if (file) {
-//     processImage(file);
-//   }
-// };
-
-// 외부에서 사용할 경우
-// processImage 함수를 import한 후 필요한 파일을 전달하여 사용합니다.

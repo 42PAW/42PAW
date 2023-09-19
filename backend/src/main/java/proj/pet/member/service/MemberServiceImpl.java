@@ -18,8 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static proj.pet.exception.ExceptionStatus.NOT_ENOUGH_NICKNAME_CHANGE_PERIOD;
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
+import static proj.pet.exception.ExceptionStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -104,6 +103,8 @@ public class MemberServiceImpl implements MemberService {
 		Member member = memberRepository.findById(userSessionDto.getMemberId())
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		if (memberName != null) {
+			if (!memberName.matches("^[a-z._]+$"))
+				throw new ServiceException(INVALID_ARGUMENT, "닉네임은 10자 이내의 영문 소문자, 숫자, 특수문자(_), (.)만 가능합니다.");
 			LocalDateTime changeableDate = member.getNicknameUpdatedAt().plusDays(30);
 			if (changeableDate.isAfter(LocalDateTime.now())) {
 				throw new ServiceException(NOT_ENOUGH_NICKNAME_CHANGE_PERIOD,

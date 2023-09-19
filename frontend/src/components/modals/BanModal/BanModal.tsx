@@ -27,7 +27,6 @@ const BanModal: React.FC = () => {
   const handleOnClick = async () => {
     await closeModal(ModalType.BAN);
     //이미 차단된 유저 차단 시도 시
-    console.log(meatballModealUtils);
     if (meatballModealUtils.followStatus == followType.BLOCK) {
       const alreadyBannedMsg = language.alreadyBanned;
       popToast(alreadyBannedMsg, "N");

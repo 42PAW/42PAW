@@ -17,17 +17,21 @@ interface IProfileCardProps {
   registerData: SignUpInfoDTO;
   setRegisterData: React.Dispatch<React.SetStateAction<SignUpInfoDTO>>;
   step: SectionType;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ProfileCard = ({
   registerData,
   setRegisterData,
   step,
+  isLoading,
+  setIsLoading,
 }: IProfileCardProps) => {
   const [language] = useRecoilState<any>(languageState);
   const [imagePreview, setImagePreview] = useState<string>("");
   const { popToast } = useToaster();
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     setIsLoading(true);
@@ -44,7 +48,9 @@ const ProfileCard = ({
 
   return (
     <>
-      <ProfileCardStyled>
+      <ProfileCardStyled
+        $imageUploadEnabled={isLoading || step != Section.ProfileImage}
+      >
         <ProfileCardNicknameStyled>
           {registerData.memberName}
         </ProfileCardNicknameStyled>
@@ -89,7 +95,7 @@ const LoadingStyled = styled.div`
   z-index: 1;
 `;
 
-const ProfileCardStyled = styled.div`
+const ProfileCardStyled = styled.div<{ $imageUploadEnabled: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -98,6 +104,9 @@ const ProfileCardStyled = styled.div`
   border-radius: 30px;
   background-color: var(--white);
   box-shadow: var(--default-shadow);
+  label {
+    pointer-events: ${(props) => props.$imageUploadEnabled && "none"};
+  }
 `;
 
 const ProfileCardNicknameStyled = styled.div`
@@ -150,7 +159,6 @@ const LabelStyled = styled.label<{ $isLoading: boolean }>`
   height: 100%;
   display: block;
   position: relative;
-
   img {
     width: 100%;
     height: 100%;

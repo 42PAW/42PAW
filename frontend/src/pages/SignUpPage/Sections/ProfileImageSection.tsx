@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
 import { styled } from "styled-components";
-import { SectionProps } from "@/pages/SignUpPage/SignUpPage";
 import { Section } from "@/pages/SignUpPage/SignUpPage";
 import RevertButton from "@/pages/SignUpPage/components/RevertButton";
 import { languageState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 
-const ProfileImageSection: React.FC<SectionProps> = ({ setStep }) => {
+interface SectionProps {
+  setStep: React.Dispatch<React.SetStateAction<Section>>;
+  isLoading: boolean; // isLoading 추가
+}
+
+const ProfileImageSection: React.FC<SectionProps> = ({
+  setStep,
+  isLoading,
+}) => {
   const [language] = useRecoilState<any>(languageState);
   const [isFading, setIsFading] = useState<boolean>(true);
 
@@ -31,7 +38,7 @@ const ProfileImageSection: React.FC<SectionProps> = ({ setStep }) => {
         setIsFading={setIsFading}
       />
       <h1>{language.selectAPhoto}</h1>
-      <NextButtonStyled onClick={handleOnClick}>
+      <NextButtonStyled onClick={handleOnClick} disabled={isLoading}>
         <img src="/assets/arrowW.png" />
       </NextButtonStyled>
     </WrapperStyled>
@@ -60,13 +67,16 @@ const NextButtonStyled = styled.button`
   margin-left: 10px;
   border: none;
   background-color: transparent;
+  &:disabled {
+    pointer-events: none;
+  }
   img {
     width: 100%;
     opacity: 0.5;
-  }
-  img:hover {
-    opacity: 0.8;
-    transition: opacity 0.5s ease;
+    &:hover {
+      opacity: 0.8;
+      transition: opacity 0.5s ease;
+    }
   }
 `;
 

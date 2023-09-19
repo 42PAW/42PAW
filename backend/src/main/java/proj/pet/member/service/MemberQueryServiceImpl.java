@@ -1,16 +1,12 @@
 package proj.pet.member.service;
 
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
-import static proj.pet.follow.domain.FollowType.NONE;
-
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 import proj.pet.block.repository.BlockRepository;
 import proj.pet.board.repository.BoardRepository;
+import proj.pet.category.domain.MemberCategoryFilter;
 import proj.pet.category.domain.Species;
 import proj.pet.follow.domain.FollowType;
 import proj.pet.follow.repository.FollowRepository;
@@ -18,13 +14,15 @@ import proj.pet.follow.service.FollowQueryService;
 import proj.pet.mapper.MemberMapper;
 import proj.pet.member.domain.Language;
 import proj.pet.member.domain.Member;
-import proj.pet.member.dto.MemberMyInfoResponseDto;
-import proj.pet.member.dto.MemberNicknameValidateResponseDto;
-import proj.pet.member.dto.MemberPreviewResponseDto;
-import proj.pet.member.dto.MemberProfileResponseDto;
-import proj.pet.member.dto.MemberSearchPaginationDto;
+import proj.pet.member.dto.*;
 import proj.pet.member.repository.MemberRepository;
 import proj.pet.utils.annotations.QueryService;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
+import static proj.pet.follow.domain.FollowType.NONE;
 
 @QueryService
 @RequiredArgsConstructor
@@ -66,7 +64,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 		Member member = memberRepository.findById(loginUserId)
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		List<Species> animalCategories = member.getMemberCategoryFilters().stream()
-				.map((categoryFilter -> categoryFilter.getAnimalCategory().getSpecies())).toList();
+				.map((MemberCategoryFilter::getSpecies)).toList();
 		return memberMapper.toMemberMyInfoResponseDto(member, animalCategories);
 	}
 
@@ -129,7 +127,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 	 */
 	@Override
 	public MemberSearchPaginationDto searchMemberByName(Long memberId, String partialName,
-			PageRequest pageable) {
+	                                                    PageRequest pageable) {
 		Page<Member> members = memberRepository.findByNicknameContaining(partialName, pageable);
 		List<MemberPreviewResponseDto> result = members.stream().map(member ->
 				memberMapper.toMemberPreviewResponseDto(member, followQueryService

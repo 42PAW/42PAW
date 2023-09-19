@@ -19,6 +19,8 @@ const ProfilePage = () => {
   const profileQuery = useQuery({
     queryKey: ["profile", Number(memberId)],
     queryFn: fetchProfile,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
   });
   const setBoardCategory = useSetRecoilState<Board>(boardCategoryState);
 
@@ -30,9 +32,9 @@ const ProfilePage = () => {
 
   const boardsQuery = useQuery<IBoardInfo[]>({
     queryKey: ["profileBoards", Board.OTHER, memberId], // 여기서 boardCategory를 그냥 Board.MINE하는게?
-    queryFn: () => {
-      return fetchBoards(0);
-    }, // page는 0으로 고정(일단?)
+    queryFn: () => fetchBoards(Board.OTHER, 0),
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
   });
 
   const isLoading = loading || profileQuery.isLoading || boardsQuery.isLoading;

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ChangeEvent, useState, useRef } from "react";
+import { ChangeEvent, useState, useRef, useEffect } from "react";
 import useParseDate from "@/hooks/useParseDate";
 import { axiosCreateBoard } from "@/api/axios/axios.custom";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
@@ -28,6 +28,8 @@ const ImageUploader = () => {
   const [urlDefaultList, setUrlDefaultList] = useState<string[]>([]);
   const [caption, setCaption] = useState("");
   const [selectedPreviewIndex, setSelectedPreviewIndex] = useState<number>(0);
+  const [uploadClicked, setUploadClicked] = useState(false);
+  const [cropImageCompleted, setCropImageCompleted] = useState(false);
 
   const { popToast } = useToaster();
   const { parseDate } = useParseDate();
@@ -43,33 +45,77 @@ const ImageUploader = () => {
     setUploadFiles(resetFiles);
   };
 
-  const cropImage = (index: number, flag: boolean) => {
+  useEffect(() => {
+    if (cropImageCompleted && uploadFiles.length > 0) {
+      try {
+        axiosCreateBoard({
+          mediaDataList: uploadFiles,
+          categoryList: categoryList,
+          content: caption,
+        });
+        const uploadCompleteMsg = language.uploadComplete;
+        popToast(uploadCompleteMsg, "P");
+        setFilesUploaded(true);
+        goHome();
+      } catch (error) {
+        throw error;
+      }
+      setUploadClicked(false);
+    }
+  }, [cropImageCompleted, uploadFiles, categoryList, caption, language]);
+
+  useEffect(() => {
+    const uploadData = async () => {
+      if (uploadClicked) {
+        if (uploadFiles.length === 0) {
+          const uploadImagesMsg = language.uploadImage;
+          popToast(uploadImagesMsg, "N");
+          setUploadClicked(false);
+          return;
+        }
+        if (categoryList.length === 0) {
+          const selectCategoryMsg = language.selectCategory;
+          popToast(selectCategoryMsg, "N");
+          setUploadClicked(false);
+          return;
+        }
+        cropImage(selectedPreviewIndex);
+        setUploadClicked(false);
+      }
+    };
+    uploadData();
+  }, [uploadClicked]);
+
+  const upload = () => {
+    setUploadClicked(true);
+  };
+
+  const cropImage = (index: number) => {
     const canvas = cropperRef.current?.getCanvas() as HTMLCanvasElement;
     if (canvas) {
       const ctx = canvas.getContext("2d");
-
       const img = new Image();
       img.src = canvas.toDataURL("image/webp");
 
       img.onload = () => {
         canvas.width = img.width;
         canvas.height = img.height;
+
         ctx?.drawImage(img, 0, 0);
 
-        // Convert the canvas to a Blob in WebP format
         canvas.toBlob(async (webpBlob) => {
           if (webpBlob) {
             const webpFile = new File([webpBlob], "image.webp", {
               type: "image/webp",
             });
             let newUploadFiles = [...uploadFiles];
-            newUploadFiles[index] = webpFile;
-            await setUploadFiles(newUploadFiles);
-            if (flag === true) {
-              let newUrlList = [...urlList];
-              newUrlList[index] = URL.createObjectURL(webpFile);
-              await setUrlList(newUrlList);
-            }
+            newUploadFiles.splice(index, 1, webpFile);
+            await setUploadFiles([...newUploadFiles]);
+
+            let newUrlList = [...urlList];
+            newUrlList[index] = URL.createObjectURL(webpFile);
+            await setUrlList(newUrlList);
+            setCropImageCompleted(true);
           }
         }, "image/webp");
       };
@@ -80,7 +126,7 @@ const ImageUploader = () => {
     if (index === selectedPreviewIndex) {
       return;
     }
-    cropImage(selectedPreviewIndex, true);
+    cropImage(selectedPreviewIndex);
     setSelectedPreviewIndex(index);
   };
 
@@ -198,35 +244,6 @@ const ImageUploader = () => {
     setCaption(e.target.value);
   };
 
-  // upload the board & send axios request
-  const upload = async () => {
-    if (uploadFiles.length === 0) {
-      const uploadImagesMsg = language.uploadImage;
-      popToast(uploadImagesMsg, "N");
-      return;
-    }
-    if (categoryList.length === 0) {
-      const selectCategoryMsg = language.selectCategory;
-      popToast(selectCategoryMsg, "N");
-      return;
-    }
-
-    try {
-      await cropImage(selectedPreviewIndex, false);
-      await axiosCreateBoard({
-        mediaDataList: uploadFiles,
-        categoryList: categoryList,
-        content: caption,
-      });
-      const uploadCompleteMsg = language.uploadComplete;
-      await popToast(uploadCompleteMsg, "P");
-      await setFilesUploaded(true);
-      await goHome();
-    } catch (error) {
-      throw error;
-    }
-  };
-
   // go home if u click cancel button
   const goHome = () => {
     moveToMain();
@@ -313,7 +330,6 @@ const ImageUploader = () => {
             onChange={handleImageChange}
             multiple
           />
-
           <UploadDemandStyled htmlFor="imageUploader">
             {language.uploadImage}
           </UploadDemandStyled>
@@ -363,6 +379,7 @@ const WrapperStyled = styled.div`
   justify-content: flex-start;
   align-items: center;
   width: 500px;
+  height: 100%;
 `;
 
 const SmallPreviewStyled = styled.div`
@@ -494,6 +511,7 @@ const CaptionBoxStyled = styled.div`
       color: var(--white);
       opacity: 0.7;
     }
+  }
 `;
 
 const CategoryButtonStyled = styled.div`
@@ -558,7 +576,7 @@ const CancelbuttonStyled = styled.button`
 const ScrollMarginStyled = styled.div`
   display: flex;
   width: 100%;
-  height: 120px;
+  height: 200px;
 `;
 
 // Cropper

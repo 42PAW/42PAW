@@ -5,4 +5,5 @@ export enum Board {
   MINE = "MINE",
   OTHER = "OTHER",
   SCRAPPED = "SCRAPPED",
+  NONE = "NONE",
 }

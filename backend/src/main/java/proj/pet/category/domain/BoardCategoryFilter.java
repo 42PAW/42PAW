@@ -5,8 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import proj.pet.board.domain.Board;
-import proj.pet.utils.domain.ConsumptionCompositeKey;
-import proj.pet.utils.domain.IdDomain;
+import proj.pet.utils.domain.IdentityDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
 
@@ -18,38 +17,30 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "BOARD_CATEGORY_FILTER")
 @Getter
 @ToString
-public class BoardCategoryFilter extends IdDomain<ConsumptionCompositeKey> implements Validatable {
-
-	@EmbeddedId
-	private ConsumptionCompositeKey id;
+public class BoardCategoryFilter extends IdentityDomain implements Validatable {
 
 	@ToString.Exclude
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "CONSUMER_ID", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "BOARD_ID", nullable = false)
 	private Board board;
 
 	@ToString.Exclude
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "PROVIDER_ID", nullable = false, insertable = false, updatable = false)
-	private AnimalCategory animalCategory;
+	@Column(name = "SPECIES", nullable = false)
+	private Species species;
 
-	private BoardCategoryFilter(Board board, AnimalCategory animalCategory) {
-		this.id = ConsumptionCompositeKey.of(board.getId(), animalCategory.getId());
+
+	private BoardCategoryFilter(Board board, Species species) {
 		this.board = board;
-		this.animalCategory = animalCategory;
+		this.species = species;
 		RuntimeExceptionThrower.checkValidity(this);
 	}
 
-	public static BoardCategoryFilter of(Board board, AnimalCategory animalCategory) {
-		return new BoardCategoryFilter(board, animalCategory);
+	public static BoardCategoryFilter of(Board board, Species species) {
+		return new BoardCategoryFilter(board, species);
 	}
 
 	@Override public boolean isValid() {
 		return board != null && !board.isNew()
-				&& animalCategory != null && !animalCategory.isNew();
-	}
-
-	public Species getSpecies() {
-		return this.animalCategory.getSpecies();
+				&& species != null;
 	}
 }

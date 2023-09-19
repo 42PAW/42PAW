@@ -11,7 +11,7 @@ import { IBoardInfo } from "@/types/interface/board.interface";
 import useFetch from "@/hooks/useFetch";
 import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
-import { boardCategoryState, languageState } from "@/recoil/atom";
+import { languageState } from "@/recoil/atom";
 import useDebounce from "@/hooks/useDebounce";
 
 const isOnlyWhitespace = (str: string) => {
@@ -24,7 +24,6 @@ const CommentSection = () => {
   const { debounce } = useDebounce();
   const { fetchComments } = useFetch();
   const [currentBoardId] = useRecoilState<number | null>(currentBoardIdState);
-  const [boardCategory] = useRecoilState<Board>(boardCategoryState);
   const [comment, setComment] = useState<string>("");
   const queryClient = useQueryClient();
   const { data: comments, isLoading } = useQuery({

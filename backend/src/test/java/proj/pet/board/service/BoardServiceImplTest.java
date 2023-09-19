@@ -26,7 +26,6 @@ import proj.pet.testutil.testdouble.board.TestBoardMedia;
 import proj.pet.testutil.testdouble.category.TestBoardCategoryFilter;
 import proj.pet.testutil.testdouble.comment.TestComment;
 import proj.pet.testutil.testdouble.member.TestMember;
-import proj.pet.utils.domain.ConsumptionCompositeKey;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -85,9 +84,9 @@ public class BoardServiceImplTest extends UnitTest {
 		private final LocalDateTime now = LocalDateTime.now();
 		private final List<BoardCategoryFilter> stubbedBoardCategoryFilters = List.of(
 				TestBoardCategoryFilter.builder()
-						.build().asMockEntity(ConsumptionCompositeKey.of(IGNORE_ID, IGNORE_ID)),
+						.build().asMockEntity(IGNORE_ID),
 				TestBoardCategoryFilter.builder()
-						.build().asMockEntity(ConsumptionCompositeKey.of(IGNORE_ID, IGNORE_ID)));
+						.build().asMockEntity(IGNORE_ID));
 		private final List<BoardMedia> stubbedBoardMedias = List.of(
 				TestBoardMedia.builder()
 						.build().asMockEntity(IGNORE_ID),
@@ -102,8 +101,6 @@ public class BoardServiceImplTest extends UnitTest {
 			Member member = TestMember.builder().build().asMockEntity(existMemberId);
 			given(memberRepository.findById(existMemberId)).willReturn(Optional.of(member));
 			given(boardRepository.save(any(Board.class))).willReturn(stubbedBoard);
-			given(animalCategoryRepository.findBySpeciesIn(givenSpecies)).willReturn(
-					stubbedAnimalCategories);
 			given(boardCategoryFilterRepository.saveAll(anyList())).willReturn(
 					stubbedBoardCategoryFilters);
 			given(boardMediaManager.uploadMedia(any(MultipartFile.class),
@@ -154,9 +151,9 @@ public class BoardServiceImplTest extends UnitTest {
 		private final Long boardId = IGNORE_ID;
 		private final List<BoardCategoryFilter> stubbedBoardCategoryFilters = List.of(
 				TestBoardCategoryFilter.builder()
-						.build().asMockEntity(ConsumptionCompositeKey.of(IGNORE_ID, IGNORE_ID)),
+						.build().asMockEntity(IGNORE_ID),
 				TestBoardCategoryFilter.builder()
-						.build().asMockEntity(ConsumptionCompositeKey.of(IGNORE_ID, IGNORE_ID)));
+						.build().asMockEntity(IGNORE_ID));
 		private final List<BoardMedia> stubbedBoardMedias = List.of(
 				TestBoardMedia.builder()
 						.build().asMockEntity(IGNORE_ID),

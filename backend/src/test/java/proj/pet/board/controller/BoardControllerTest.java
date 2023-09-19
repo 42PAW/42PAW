@@ -15,6 +15,7 @@ import proj.pet.board.domain.Board;
 import proj.pet.board.domain.BoardMediaManager;
 import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsPaginationDto;
+import proj.pet.category.domain.Species;
 import proj.pet.follow.domain.Follow;
 import proj.pet.member.domain.Member;
 import proj.pet.member.dto.UserSessionDto;
@@ -31,6 +32,7 @@ import proj.pet.testutil.testdouble.member.TestMember;
 import proj.pet.testutil.testdouble.reaction.TestReaction;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,8 +48,8 @@ class BoardControllerTest extends E2ETest {
 
 	/*------------------------------UTIL------------------------------*/
 	private final static String BEARER = "Bearer ";
+	private final List<Species> categories = List.of(Species.values());
 	private PersistHelper persistHelper;
-
 	/*---------------------------TEST-DOUBLE---------------------------*/
 	@MockBean
 	private AmazonS3 amazonS3;
@@ -88,7 +90,7 @@ class BoardControllerTest extends E2ETest {
 			// given
 
 			persistHelper.persist(author, loginUser)
-					.and().persist(TestMemberCategoryFilter.ofMany(loginUser, animalCategories));
+					.and().persist(TestMemberCategoryFilter.ofMany(loginUser, categories));
 			Board board1 = TestBoard.builder().member(author)
 					.build().asEntity();
 			Board board2 = TestBoard.builder().member(author)
@@ -103,11 +105,11 @@ class BoardControllerTest extends E2ETest {
 					.and().persist(
 							TestBoardCategoryFilter.ofMany(
 									board1,
-									animalCategories.get(0),
-									animalCategories.get(1)),
+									categories.get(0),
+									categories.get(1)),
 							TestBoardCategoryFilter.ofMany(
 									board2,
-									animalCategories.get(0)))
+									categories.get(0)))
 					.and().persist(
 							Reaction.of(board1, loginUser, ReactionType.LIKE, now),
 							Scrap.of(loginUser, board2, now))
@@ -148,11 +150,11 @@ class BoardControllerTest extends E2ETest {
 					.and().persist(
 							TestBoardCategoryFilter.ofMany(
 									board1,
-									animalCategories.get(0),
-									animalCategories.get(1)),
+									categories.get(0),
+									categories.get(1)),
 							TestBoardCategoryFilter.ofMany(
 									board2,
-									animalCategories.get(0)))
+									categories.get(0)))
 					.flushAndClear();
 
 			MockHttpServletRequestBuilder req = get(PATH)
@@ -192,7 +194,7 @@ class BoardControllerTest extends E2ETest {
 		void getHotBoards() throws Exception {
 			// given
 			persistHelper.persist(author, loginUser, randomMember1, randomMember2, randomMember3)
-					.and().persist(TestMemberCategoryFilter.ofMany(loginUser, animalCategories));
+					.and().persist(TestMemberCategoryFilter.ofMany(loginUser, categories));
 			String notHotContent = "this is not hot";
 			Board board1 = TestBoard.asDefaultEntity(author);
 			Board board2 = TestBoard.asDefaultEntity(author);
@@ -210,12 +212,12 @@ class BoardControllerTest extends E2ETest {
 					.build().asEntity();
 			persistHelper.persist(board1, board2, board3, board4, notHotBoard, board5)
 					.and().persist(
-							TestBoardCategoryFilter.ofMany(board1, animalCategories.get(0)),
-							TestBoardCategoryFilter.ofMany(board2, animalCategories.get(0)),
-							TestBoardCategoryFilter.ofMany(board3, animalCategories.get(0)),
-							TestBoardCategoryFilter.ofMany(board4, animalCategories.get(0)),
-							TestBoardCategoryFilter.ofMany(board5, animalCategories.get(0)),
-							TestBoardCategoryFilter.ofMany(notHotBoard, animalCategories.get(0)))
+							TestBoardCategoryFilter.ofMany(board1, categories.get(0)),
+							TestBoardCategoryFilter.ofMany(board2, categories.get(0)),
+							TestBoardCategoryFilter.ofMany(board3, categories.get(0)),
+							TestBoardCategoryFilter.ofMany(board4, categories.get(0)),
+							TestBoardCategoryFilter.ofMany(board5, categories.get(0)),
+							TestBoardCategoryFilter.ofMany(notHotBoard, categories.get(0)))
 					.and().persist(
 							TestReaction.ofMany(board1, ReactionType.LIKE, now,
 									randomMember1, randomMember2, randomMember3),
@@ -360,7 +362,6 @@ class BoardControllerTest extends E2ETest {
 		@DisplayName("로그인한 사용자는 이미지를 업로드하고, 게시글을 생성할 수 있다.")
 		void createBoards() throws Exception {
 			persistHelper.persist(author, loginUser)
-					.and().persist(animalCategories.get(0), animalCategories.get(1))
 					.flushAndClear();
 			MockMultipartFile multipartFile1 = new MockMultipartFile("mediaDataList",
 					"filename-1.jpg", "image/jpeg", "image1".getBytes());
@@ -377,7 +378,7 @@ class BoardControllerTest extends E2ETest {
 							.file(multipartFile2)
 							.file(multipartFile3)
 							.param("content", "content")
-							.param("categoryList", animalCategories.get(0).getSpecies().name())
+							.param("categoryList", categories.get(0).name())
 							.header(HttpHeaders.AUTHORIZATION, BEARER + token)
 							.contentType(MediaType.MULTIPART_FORM_DATA);
 
@@ -398,7 +399,6 @@ class BoardControllerTest extends E2ETest {
 		@Test
 		void createBoards2() throws Exception {
 			persistHelper.persist(author, loginUser)
-					.and().persist(animalCategories.get(0), animalCategories.get(1))
 					.flushAndClear();
 
 			String token = stubToken(loginUser, LocalDateTime.now(), 28);
@@ -406,7 +406,7 @@ class BoardControllerTest extends E2ETest {
 			MockHttpServletRequestBuilder req =
 					multipart("/v1/boards")
 							.param("content", "content")
-							.param("categoryList", animalCategories.get(0).getSpecies().name())
+							.param("categoryList", categories.get(0).name())
 							.header(HttpHeaders.AUTHORIZATION, BEARER + token)
 							.contentType(MediaType.MULTIPART_FORM_DATA);
 

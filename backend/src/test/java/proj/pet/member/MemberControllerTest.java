@@ -42,7 +42,6 @@ public class MemberControllerTest extends E2ETest {
 	@BeforeEach
 	void setup() {
 		persistHelper = PersistHelper.start(em);
-		animalCategories = persistHelper.persistAndReturn(TestAnimalCategory.getAllSpeciesAsCategories());
 	}
 
 	private String randomString() {
@@ -80,7 +79,6 @@ public class MemberControllerTest extends E2ETest {
 					.cookie(new Cookie("access_token", token))
 					.param("memberName", "sanan")
 					.param("statement", "안녕하세요?")
-					.param("categoryFilters", animalCategories.get(0).getCategoryName())
 					.header(AUTHORIZATION, BEARER + token);
 
 			AtomicReference<String> tokenReference = new AtomicReference<>();
@@ -115,7 +113,6 @@ public class MemberControllerTest extends E2ETest {
 					.cookie(new Cookie("access_token", token))
 					.param("memberName", "sanan")
 					.param("statement", "안녕하세요?")
-					.param("categoryFilters", animalCategories.get(0).getCategoryName())
 					.header(AUTHORIZATION, BEARER + token);
 
 			mockMvc.perform(req)

@@ -28,11 +28,10 @@ class CategoryControllerTest extends E2ETest {
 
 	private static final String BEARER = "Bearer ";
 	private static final String JSON_CONTENT_TYPE = "application/json";
+	private final List<Species> categories = List.of(Species.values());
 	private PersistHelper persistHelper;
-
 	private Member loginUser;
 	private Member otherUser;
-
 
 	@BeforeEach
 	void setUp() {
@@ -78,8 +77,7 @@ class CategoryControllerTest extends E2ETest {
 						List<MemberCategoryFilter> categories = member.getMemberCategoryFilters();
 						assertThat(categories).hasSize(3);
 						assertThat(categories)
-								.extracting(MemberCategoryFilter::getAnimalCategory)
-								.extracting(AnimalCategory::getSpecies)
+								.extracting(MemberCategoryFilter::getSpecies)
 								.containsExactlyInAnyOrder(Species.AMPHIBIAN, Species.BIRD,
 										Species.SMALL_ANIMAL);
 					});

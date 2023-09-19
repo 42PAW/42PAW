@@ -363,6 +363,7 @@ const WrapperStyled = styled.div`
   justify-content: flex-start;
   align-items: center;
   width: 500px;
+  height: 100%;
 `;
 
 const SmallPreviewStyled = styled.div`

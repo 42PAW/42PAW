@@ -66,6 +66,8 @@ const CommentSection = () => {
         Board.DEFAULT,
         Board.TRENDING,
         Board.FOLLOWING,
+        Board.MINE,
+        Board.OTHER,
       ];
 
       for (let i = 0; i < mainBoardCategories.length; i++) {
@@ -94,6 +96,7 @@ const CommentSection = () => {
           }
         );
       }
+
       setComment("");
     },
   });

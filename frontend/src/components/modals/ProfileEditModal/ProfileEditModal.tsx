@@ -193,7 +193,7 @@ const ProfileEditModal = () => {
           </LoadingStyled>
         )}
         <MainAreaStyled>
-          <EditImageStyled>
+          <EditImageStyled $buttonEnabled={isLoading}>
             <label htmlFor="uploadPhoto">{language.uploadImageBrief}</label>
             <input
               type="file"
@@ -310,7 +310,7 @@ const MainAreaStyled = styled.div`
   border-radius: 100%;
 `;
 
-const EditImageStyled = styled.div`
+const EditImageStyled = styled.div<{ $buttonEnabled: boolean }>`
   // const ProfileImageStyled = styled.img
   margin-top: 20px;
   margin-bottom: 10px;
@@ -318,6 +318,7 @@ const EditImageStyled = styled.div`
     cursor: pointer;
     margin-right: 15px;
     margin-left: 15px;
+    pointer-events: ${(props) => props.$buttonEnabled && "none"};
     &:hover {
       color: var(--transparent2);
       font-weight: 500;

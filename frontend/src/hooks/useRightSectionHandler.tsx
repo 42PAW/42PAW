@@ -81,6 +81,17 @@ const useRightSectionHandler = () => {
     setIsRightSectionOpened(true);
   };
   const closeRightSection = () => {
+    // rightSection이 닫힐 때 transition 시간이 0.4s로 설정되어 있음. mount 때마다 refetch해오기 위해 닫힐 때마다 모두 false로 바꿔줌.
+    setTimeout(() => {
+      setRightSectionContent({
+        search: false,
+        comment: false,
+        follower: false,
+        following: false,
+        animalFilter: false,
+        bannedMember: false,
+      });
+    }, 400);
     setIsRightSectionOpened(false);
   };
 

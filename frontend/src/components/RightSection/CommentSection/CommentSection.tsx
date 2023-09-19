@@ -11,7 +11,7 @@ import { IBoardInfo } from "@/types/interface/board.interface";
 import useFetch from "@/hooks/useFetch";
 import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
-import { boardCategoryState, languageState } from "@/recoil/atom";
+import { languageState } from "@/recoil/atom";
 import useDebounce from "@/hooks/useDebounce";
 
 const isOnlyWhitespace = (str: string) => {
@@ -24,12 +24,13 @@ const CommentSection = () => {
   const { debounce } = useDebounce();
   const { fetchComments } = useFetch();
   const [currentBoardId] = useRecoilState<number | null>(currentBoardIdState);
-  const [boardCategory] = useRecoilState<Board>(boardCategoryState);
   const [comment, setComment] = useState<string>("");
   const queryClient = useQueryClient();
   const { data: comments, isLoading } = useQuery({
     queryKey: ["comments", currentBoardId],
     queryFn: fetchComments,
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
   });
 
   useEffect(() => {
@@ -61,30 +62,38 @@ const CommentSection = () => {
       const newComments: CommentInfoDTO[] | undefined =
         await queryClient.getQueryData(["comments", currentBoardId]);
 
-      await queryClient.setQueryData(
-        ["boards", boardCategory],
-        (prevData: IBoardInfo[] | any) => {
-          if (!prevData) return prevData;
-          if (!newComments) return prevData;
+      const mainBoardCategories = [
+        Board.DEFAULT,
+        Board.TRENDING,
+        Board.FOLLOWING,
+      ];
 
-          const updatedBoards = prevData.pages.map((page: IBoardInfo[]) =>
-            page.map((board: IBoardInfo) => {
-              if (board.boardId === currentBoardId && newComments) {
-                return {
-                  ...board,
-                  previewCommentUser:
-                    newComments[newComments.length - 1].memberName,
-                  previewComment: newComments[newComments.length - 1].comment,
-                  commentCount: newComments.length,
-                };
-              }
-              return board;
-            })
-          );
+      for (let i = 0; i < mainBoardCategories.length; i++) {
+        await queryClient.setQueryData(
+          ["boards", mainBoardCategories[i]],
+          (prevData: IBoardInfo[] | any) => {
+            if (!prevData) return prevData;
+            if (!newComments) return prevData;
 
-          return { ...prevData, pages: updatedBoards };
-        }
-      );
+            const updatedBoards = prevData.pages.map((page: IBoardInfo[]) =>
+              page.map((board: IBoardInfo) => {
+                if (board.boardId === currentBoardId && newComments) {
+                  return {
+                    ...board,
+                    previewCommentUser:
+                      newComments[newComments.length - 1].memberName,
+                    previewComment: newComments[newComments.length - 1].comment,
+                    commentCount: newComments.length,
+                  };
+                }
+                return board;
+              })
+            );
+
+            return { ...prevData, pages: updatedBoards };
+          }
+        );
+      }
       setComment("");
     },
   });

@@ -37,7 +37,6 @@ const ProfileBoardsPage = () => {
         },
         refetchOnMount: true,
         refetchOnWindowFocus: false,
-        staleTime: Infinity,
       }
     );
   const [currentProfileBoardId] = useRecoilState(currentProfileBoardIdState);

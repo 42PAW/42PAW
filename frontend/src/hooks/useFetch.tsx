@@ -1,6 +1,7 @@
 import { useRecoilState, useSetRecoilState, useResetRecoilState } from "recoil";
 import {
   boardCategoryState,
+  boardsTotalLengthState,
   currentBoardIdState,
   userInfoState,
 } from "@/recoil/atom";
@@ -25,6 +26,7 @@ import {
 import { buttonToggledState } from "@/components/BoardSortToggle";
 import useTranslator from "@/hooks/useTranslator";
 import { boardsLengthState } from "@/recoil/atom";
+import { IBoardTotalLengthInfo } from "@/types/interface/board.interface";
 
 const useFetch = (memberId?: number | null) => {
   const setBoardsLength = useSetRecoilState<number>(boardsLengthState);
@@ -36,6 +38,8 @@ const useFetch = (memberId?: number | null) => {
     userInfoState
   );
   const { translator } = useTranslator();
+  const [boardsTotalLength, setBoardsTotalLength] =
+    useRecoilState<IBoardTotalLengthInfo>(boardsTotalLengthState);
 
   const fetchBoards = async (boardCategory: Board, page?: number) => {
     resetBoardsLength();
@@ -44,16 +48,28 @@ const useFetch = (memberId?: number | null) => {
       if (boardCategory === Board.DEFAULT) {
         const response = await axiosGetBoards(20, page);
         setBoardsLength(response.result.length);
+        setBoardsTotalLength({
+          ...boardsTotalLength,
+          default: response.totalLength,
+        });
         return response.result;
       }
       if (boardCategory === Board.TRENDING) {
         const response = await axiosGetTrendingBoards(20, page);
         setBoardsLength(response.result.length);
+        setBoardsTotalLength({
+          ...boardsTotalLength,
+          trending: response.totalLength,
+        });
         return response.result;
       }
       if (boardCategory === Board.FOLLOWING) {
         const response = await axiosGetFollowingBoards(20, page);
         setBoardsLength(response.result.length);
+        setBoardsTotalLength({
+          ...boardsTotalLength,
+          following: response.totalLength,
+        });
         return response.result;
       }
       if (boardCategory === Board.MINE) {

@@ -1,37 +1,28 @@
 package proj.pet.board.service;
 
-import static proj.pet.exception.ExceptionStatus.ALREADY_DELETED_BOARD;
-import static proj.pet.exception.ExceptionStatus.INVALID_ARGUMENT;
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_BOARD;
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
-import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import proj.pet.board.domain.Board;
-import proj.pet.board.domain.BoardMedia;
-import proj.pet.board.domain.BoardMediaManager;
-import proj.pet.board.domain.MediaType;
-import proj.pet.board.domain.VisibleScope;
+import proj.pet.board.domain.*;
 import proj.pet.board.repository.BoardMediaRepository;
 import proj.pet.board.repository.BoardRepository;
-import proj.pet.category.domain.AnimalCategory;
 import proj.pet.category.domain.BoardCategoryFilter;
 import proj.pet.category.domain.Species;
-import proj.pet.category.repository.AnimalCategoryRepository;
 import proj.pet.category.repository.BoardCategoryFilterRepository;
 import proj.pet.comment.repository.CommentRepository;
 import proj.pet.exception.ExceptionStatus;
 import proj.pet.exception.ServiceException;
 import proj.pet.member.domain.Member;
 import proj.pet.member.repository.MemberRepository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
+import static proj.pet.exception.ExceptionStatus.*;
 
 /**
  * Board의 CUD 비즈니스 로직을 담당하는 서비스 구현체
@@ -46,7 +37,6 @@ public class BoardServiceImpl implements BoardService {
 	private final BoardCategoryFilterRepository boardCategoryFilterRepository;
 	private final BoardMediaManager boardMediaManager;
 	private final BoardMediaRepository boardMediaRepository;
-	private final AnimalCategoryRepository animalCategoryRepository;
 	private final CommentRepository commentRepository;
 
 	// TODO: 책임 분산이 필요할지도? + mediaData의 ContentType이 not null임을 검증해야 함.
@@ -74,11 +64,7 @@ public class BoardServiceImpl implements BoardService {
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		Board board = boardRepository.save(
 				Board.of(member, VisibleScope.PUBLIC, content, now));
-
-		List<AnimalCategory> animalCategories = animalCategoryRepository.findBySpeciesIn(
-				speciesList);
-		List<BoardCategoryFilter> categoryFilters = convertToBoardCategoryFilters(animalCategories,
-				board);
+		List<BoardCategoryFilter> categoryFilters = convertToBoardCategoryFilters(speciesList, board);
 		categoryFilters = boardCategoryFilterRepository.saveAll(categoryFilters);
 		board.addCategoryFilters(categoryFilters);
 
@@ -90,7 +76,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	private List<BoardCategoryFilter> convertToBoardCategoryFilters(
-			List<AnimalCategory> animalCategories, Board board) {
+			List<Species> animalCategories, Board board) {
 		return animalCategories.stream()
 				.map(category -> BoardCategoryFilter.of(board, category))
 				.toList();

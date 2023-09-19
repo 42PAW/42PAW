@@ -20,13 +20,6 @@ create table member
     unique key member_oauth_type_oauth_id_unique_key (oauth_type, oauth_id)
 );
 -- auto-generated definition
-create table animal_category
-(
-    id      bigint auto_increment
-        primary key,
-    species varchar(32) not null
-);
--- auto-generated definition
 create table block
 (
     member_id        bigint      not null,
@@ -55,13 +48,12 @@ create table board
 -- auto-generated definition
 create table board_category_filter
 (
-    provider_id bigint not null,
-    consumer_id bigint not null,
-    primary key (consumer_id, provider_id),
-    constraint FK1prxwta0lkm2dfs1eykf1adal
-        foreign key (provider_id) references animal_category (id),
-    constraint FKdjn9tw74nwr1qx2xrrvtf3iak
-        foreign key (consumer_id) references board (id)
+    id       bigint auto_increment
+        primary key,
+    board_id bigint  not null,
+    species  varchar(32) not null,
+    constraint FKcu3sldeix5qovcuc3ehsb6h0t
+        foreign key (board_id) references board (id)
 );
 -- auto-generated definition
 create table board_media
@@ -82,6 +74,7 @@ create table comment
         primary key,
     board_id   bigint      not null,
     member_id  bigint      not null,
+    comment varchar(128) not null,
     created_at datetime(6) not null,
     deleted_at datetime(6) null,
     constraint FKlij9oor1nav89jeat35s6kbp1
@@ -104,13 +97,12 @@ create table follow
 -- auto-generated definition
 create table member_category_filter
 (
-    provider_id bigint not null,
-    consumer_id bigint not null,
-    primary key (consumer_id, provider_id),
-    constraint FKdb9dep6tmiym2lsnf06wk6ewc
-        foreign key (provider_id) references animal_category (id),
-    constraint FKdre5ucs11eliv4gg0ifp3vcyu
-        foreign key (consumer_id) references member (id)
+    id        bigint auto_increment
+        primary key,
+    member_id bigint  not null,
+    species  varchar(32) not null,
+    constraint FKeuge8jdgtsfm24ssp1x0ewotd
+        foreign key (member_id) references member (id)
 );
 -- auto-generated definition
 create table reaction
@@ -170,16 +162,3 @@ VALUES
     ('FORTY_TWO', '8', 'sunwsong', 'KOREA', 'SEOUL', 'KOREAN', 'PROFILE_IMAGE_URL1', '알고리즘머신', '2023-01-01 00:00:00', '하기싫으면 안하면 된다', 'USER', '2023-01-01 00:00:00', NULL),
     ('FORTY_TWO', '9', 'seonghyu', 'KOREA', 'SEOUL', 'KOREAN', 'PROFILE_IMAGE_URL1', '성뢰딩거', '2023-01-01 00:00:00', '있을 수도, 없을 수도 있다', 'USER', '2023-01-01 00:00:00', NULL),
     ('FORTY_TWO', '10', 'jdoh', 'KOREA', 'SEOUL', 'KOREAN', 'PROFILE_IMAGE_URL1', '이과생의정석', '2023-01-01 00:00:00', '철권은 못 참지', 'USER', '2023-01-01 00:00:00', NULL);
-
-INSERT INTO animal_category
-(species)
-VALUES
-    ('DOG'),
-    ('CAT'),
-    ('FISH'),
-    ('BIRD'),
-    ('SMALL_ANIMAL'),
-    ('REPTILE'),
-    ('AMPHIBIAN'),
-    ('INSECT'),
-    ('ETC');

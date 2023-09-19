@@ -9,17 +9,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import proj.pet.category.domain.AnimalCategory;
+import proj.pet.category.domain.Species;
 import proj.pet.member.domain.Member;
 import proj.pet.member.domain.MemberImageManager;
 import proj.pet.member.domain.MemberRole;
 import proj.pet.member.domain.OauthType;
 import proj.pet.testutil.PersistHelper;
 import proj.pet.testutil.test.E2ETest;
-import proj.pet.testutil.testdouble.category.TestAnimalCategory;
 import proj.pet.testutil.testdouble.member.TestMember;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -36,17 +36,16 @@ public class MemberControllerTest extends E2ETest {
 
 	private final static String BEARER = "Bearer ";
 	private final LocalDateTime now = LocalDateTime.now();
+	private final List<Species> categorieds = Arrays.stream(Species.values()).toList();
 	private PersistHelper persistHelper;
 	@MockBean
 	private AmazonS3 amazonS3;
 	@MockBean
 	private MemberImageManager memberImageManager;
-	private List<AnimalCategory> animalCategories;
 
 	@BeforeEach
 	void setup() {
 		persistHelper = PersistHelper.start(em);
-		animalCategories = persistHelper.persistAndReturn(TestAnimalCategory.getAllSpeciesAsCategories());
 	}
 
 	private String randomString() {
@@ -76,7 +75,6 @@ public class MemberControllerTest extends E2ETest {
 					.build().asMockEntity(1L);
 
 			String token = stubToken(noneRegisteredMember, now, 1);
-			System.out.println("token = " + token);
 
 			MockMultipartFile imageFile = new MockMultipartFile("imageData", "test.jpg", "image/jpeg", "test".getBytes());
 			MockHttpServletRequestBuilder req = multipart(url)
@@ -84,7 +82,7 @@ public class MemberControllerTest extends E2ETest {
 					.cookie(new Cookie("access_token", token))
 					.param("memberName", "sanan")
 					.param("statement", "안녕하세요?")
-					.param("categoryFilters", animalCategories.get(0).getCategoryName())
+					.param("categoryFilters", categorieds.get(0).name())
 					.header(AUTHORIZATION, BEARER + token);
 
 			AtomicReference<String> tokenReference = new AtomicReference<>();
@@ -119,7 +117,7 @@ public class MemberControllerTest extends E2ETest {
 					.cookie(new Cookie("access_token", token))
 					.param("memberName", "sanan")
 					.param("statement", "안녕하세요?")
-					.param("categoryFilters", animalCategories.get(0).getCategoryName())
+					.param("categoryFilters", categorieds.get(0).name())
 					.header(AUTHORIZATION, BEARER + token);
 
 			mockMvc.perform(req)

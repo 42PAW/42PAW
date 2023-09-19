@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import proj.pet.board.domain.Board;
 
 @Repository
-public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom {
-
+public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom,
+		BoardViewRepository {
 
 }

@@ -15,11 +15,9 @@ import proj.pet.member.domain.MemberRole;
 import proj.pet.member.domain.OauthType;
 import proj.pet.testutil.PersistHelper;
 import proj.pet.testutil.test.E2ETest;
-import proj.pet.testutil.testdouble.category.TestAnimalCategory;
 import proj.pet.testutil.testdouble.member.TestMember;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -40,7 +38,6 @@ public class MemberControllerTest extends E2ETest {
 	private AmazonS3 amazonS3;
 	@MockBean
 	private MemberImageManager memberImageManager;
-	private List<AnimalCategory> animalCategories;
 
 	@BeforeEach
 	void setup() {

@@ -25,14 +25,12 @@ import proj.pet.testutil.PersistHelper;
 import proj.pet.testutil.test.E2ETest;
 import proj.pet.testutil.testdouble.board.TestBoard;
 import proj.pet.testutil.testdouble.board.TestBoardMedia;
-import proj.pet.testutil.testdouble.category.TestAnimalCategory;
 import proj.pet.testutil.testdouble.category.TestBoardCategoryFilter;
 import proj.pet.testutil.testdouble.category.TestMemberCategoryFilter;
 import proj.pet.testutil.testdouble.member.TestMember;
 import proj.pet.testutil.testdouble.reaction.TestReaction;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,15 +53,12 @@ class BoardControllerTest extends E2ETest {
 	private AmazonS3 amazonS3;
 	@MockBean
 	private BoardMediaManager boardMediaManager;
-	private List<AnimalCategory> animalCategories;
 	private Member author;
 	private Member loginUser;
 
 	@BeforeEach
 	void setup() {
 		persistHelper = PersistHelper.start(em);
-		animalCategories = persistHelper.persistAndReturn(
-				TestAnimalCategory.getAllSpeciesAsCategories());
 		author = TestMember.asDefaultEntity();
 		loginUser = TestMember.asDefaultEntity();
 	}

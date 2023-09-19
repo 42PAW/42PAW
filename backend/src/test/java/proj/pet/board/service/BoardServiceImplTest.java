@@ -23,7 +23,6 @@ import proj.pet.member.repository.MemberRepository;
 import proj.pet.testutil.test.UnitTest;
 import proj.pet.testutil.testdouble.board.TestBoard;
 import proj.pet.testutil.testdouble.board.TestBoardMedia;
-import proj.pet.testutil.testdouble.category.TestAnimalCategory;
 import proj.pet.testutil.testdouble.category.TestBoardCategoryFilter;
 import proj.pet.testutil.testdouble.comment.TestComment;
 import proj.pet.testutil.testdouble.member.TestMember;
@@ -61,8 +60,6 @@ public class BoardServiceImplTest extends UnitTest {
 	@Mock
 	private BoardMediaRepository boardMediaRepository;
 	@Mock
-	private AnimalCategoryRepository animalCategoryRepository;
-	@Mock
 	private CommentRepository commentRepository;
 
 	private MultipartFile stubMultipartFile() {
@@ -86,11 +83,6 @@ public class BoardServiceImplTest extends UnitTest {
 				stubMultipartFile());
 		private final String givenContent = "content";
 		private final LocalDateTime now = LocalDateTime.now();
-		private final List<AnimalCategory> stubbedAnimalCategories = List.of(
-				TestAnimalCategory.builder()
-						.build().asMockEntity(IGNORE_ID),
-				TestAnimalCategory.builder()
-						.build().asMockEntity(IGNORE_ID));
 		private final List<BoardCategoryFilter> stubbedBoardCategoryFilters = List.of(
 				TestBoardCategoryFilter.builder()
 						.build().asMockEntity(ConsumptionCompositeKey.of(IGNORE_ID, IGNORE_ID)),

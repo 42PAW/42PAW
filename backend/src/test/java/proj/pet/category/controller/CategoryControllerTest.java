@@ -13,7 +13,6 @@ import proj.pet.member.domain.Member;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.testutil.PersistHelper;
 import proj.pet.testutil.test.E2ETest;
-import proj.pet.testutil.testdouble.category.TestAnimalCategory;
 import proj.pet.testutil.testdouble.category.TestMemberCategoryFilter;
 import proj.pet.testutil.testdouble.member.TestMember;
 
@@ -34,12 +33,10 @@ class CategoryControllerTest extends E2ETest {
 	private Member loginUser;
 	private Member otherUser;
 
-	private List<AnimalCategory> categories;
 
 	@BeforeEach
 	void setUp() {
 		persistHelper = PersistHelper.start(em);
-		categories = persistHelper.persistAndReturn(TestAnimalCategory.getAllSpeciesAsCategories());
 		loginUser = TestMember.asDefaultEntity();
 		otherUser = TestMember.builder()
 				.oauthName("otherUser")

@@ -10,6 +10,7 @@ import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.category.domain.MemberCategoryFilter;
+import proj.pet.category.domain.Species;
 import proj.pet.category.repository.MemberCategoryFilterRepository;
 import proj.pet.comment.domain.Comment;
 import proj.pet.follow.domain.FollowType;
@@ -19,6 +20,7 @@ import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -45,13 +47,13 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	private List<BoardInfoDto> getBoardInfoDtos(Long loginUserId, Page<Board> boardPages) {
 		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
 		List<Long> blockIds = blocks.stream().map(block -> block.getTo().getId()).toList();
-		List<AnimalCategory> animalCategories = (loginUserId == 0) ?
-				animalCategoryRepository.findAll() :
+		List<Species> categories = (loginUserId == 0) ?
+				Arrays.stream(Species.values()).toList() :
 				memberCategoryFilterRepository.findAllByMemberIdWithJoin(loginUserId)
-						.stream().map(MemberCategoryFilter::getAnimalCategory).toList();
+						.stream().map(MemberCategoryFilter::getSpecies).toList();
 		return boardPages.filter(board -> !blockIds.contains(board.getMember().getId()))
-				.filter(board -> animalCategories.stream().anyMatch(animalCategory ->
-						board.getCategoriesAsSpecies().contains(animalCategory.getSpecies())))
+				.filter(board -> categories.stream().anyMatch(category ->
+						board.getCategoriesAsSpecies().contains(category)))
 				.map(board -> createBoardInfoDto(loginUserId, board)).toList();
 	}
 

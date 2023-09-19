@@ -28,7 +28,6 @@ public class MemberServiceImpl implements MemberService {
 
 	private final MemberRepository memberRepository;
 	private final MemberImageManager memberImageManager;
-	private final AnimalCategoryRepository animalCategoryRepository;
 	private final MemberMapper memberMapper;
 
 	/**
@@ -60,10 +59,9 @@ public class MemberServiceImpl implements MemberService {
 						statement,
 						MemberRole.USER,
 						now));
-		List<MemberCategoryFilter> filters =
-				animalCategoryRepository.findBySpeciesIn(categoryFilters).stream()
-						.map(category -> MemberCategoryFilter.of(member, category))
-						.toList();
+		List<MemberCategoryFilter> filters = categoryFilters.stream()
+				.map(category -> MemberCategoryFilter.of(member, category))
+				.toList();
 		member.addCategoryFilters(filters);
 		return memberRepository.save(member);
 	}

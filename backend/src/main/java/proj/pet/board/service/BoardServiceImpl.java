@@ -64,11 +64,7 @@ public class BoardServiceImpl implements BoardService {
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		Board board = boardRepository.save(
 				Board.of(member, VisibleScope.PUBLIC, content, now));
-
-		List<AnimalCategory> animalCategories = animalCategoryRepository.findBySpeciesIn(
-				speciesList);
-		List<BoardCategoryFilter> categoryFilters = convertToBoardCategoryFilters(animalCategories,
-				board);
+		List<BoardCategoryFilter> categoryFilters = convertToBoardCategoryFilters(speciesList, board);
 		categoryFilters = boardCategoryFilterRepository.saveAll(categoryFilters);
 		board.addCategoryFilters(categoryFilters);
 
@@ -80,7 +76,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	private List<BoardCategoryFilter> convertToBoardCategoryFilters(
-			List<AnimalCategory> animalCategories, Board board) {
+			List<Species> animalCategories, Board board) {
 		return animalCategories.stream()
 				.map(category -> BoardCategoryFilter.of(board, category))
 				.toList();

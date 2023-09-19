@@ -574,7 +574,7 @@ const CancelbuttonStyled = styled.button`
 const ScrollMarginStyled = styled.div`
   display: flex;
   width: 100%;
-  height: 120px;
+  height: 200px;
 `;
 
 // Cropper

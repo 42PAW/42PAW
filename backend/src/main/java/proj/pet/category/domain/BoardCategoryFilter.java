@@ -21,7 +21,7 @@ public class BoardCategoryFilter extends IdentityDomain implements Validatable {
 
 	@ToString.Exclude
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "BOARD_ID", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "BOARD_ID", nullable = false)
 	private Board board;
 
 	@ToString.Exclude

@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class MemberCategoryFilter extends IdentityDomain implements Validatable {
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "MEMBER_ID", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "MEMBER_ID", nullable = false)
 	private Member member;
 
 	@Column(name = "SPECIES", nullable = false)

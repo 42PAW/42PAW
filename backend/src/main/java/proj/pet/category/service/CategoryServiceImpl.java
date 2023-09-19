@@ -9,7 +9,6 @@ import proj.pet.exception.ServiceException;
 import proj.pet.member.domain.Member;
 import proj.pet.member.repository.MemberRepository;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static proj.pet.exception.ExceptionStatus.INVALID_ARGUMENT;
@@ -29,7 +28,7 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 		Member member = memberRepository.findById(memberId)
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
-		List<MemberCategoryFilter> categories = Arrays.stream(Species.values())
+		List<MemberCategoryFilter> categories = speciesList.stream()
 				.map(category -> MemberCategoryFilter.of(member, category)).toList();
 		member.setCategoryFilters(categories);
 		memberRepository.save(member);

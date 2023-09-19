@@ -10,6 +10,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.util.Streamable;
 import proj.pet.block.domain.Block;
 import proj.pet.block.repository.BlockRepository;
 import proj.pet.board.domain.Board;
@@ -22,7 +23,6 @@ import proj.pet.category.domain.MemberCategoryFilter;
 import proj.pet.category.domain.Species;
 import proj.pet.category.repository.MemberCategoryFilterRepository;
 import proj.pet.comment.domain.Comment;
-import proj.pet.follow.repository.FollowRepository;
 import proj.pet.mapper.BoardMapper;
 import proj.pet.reaction.domain.Reaction;
 import proj.pet.scrap.domain.Scrap;
@@ -35,7 +35,6 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	private final static String EMPTY_STRING = "";
 	private final BoardRepository boardRepository;
 	private final BoardMapper boardMapper;
-	private final FollowRepository followRepository;
 	private final BlockRepository blockRepository;
 	private final MemberCategoryFilterRepository memberCategoryFilterRepository;
 
@@ -47,7 +46,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 * @param boardPages  변환할 게시글
 	 * @return {@link List<BoardInfoDto>}
 	 */
-	private List<Board> filteringBoards(Long loginUserId, Page<Board> boardPages) {
+	private Streamable<Board> filteringBoards(Long loginUserId, Page<Board> boardPages) {
 		List<Block> blocks = blockRepository.findAllByMemberIdToList(loginUserId);
 		List<Long> blockIds = blocks.stream().map(block -> block.getTo().getId()).toList();
 		List<Species> categories = (loginUserId == 0) ?
@@ -56,7 +55,59 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 						.stream().map(MemberCategoryFilter::getSpecies).toList();
 		return boardPages.filter(board -> !blockIds.contains(board.getMember().getId()))
 				.filter(board -> categories.stream().anyMatch(category ->
-						board.getCategoriesAsSpecies().contains(category))).toList();
+						board.getCategoriesAsSpecies().contains(category)));
+	}
+
+	private List<BoardInfoDto> boardMappingToDto(List<Long> boardIds,
+			BoardViewSubDto boardViewSubDto, Page<Board> boardPage) {
+		Map<Long, BoardViewMapDto> boardViewMap = new HashMap<>();
+		boardIds.forEach(boardId -> boardViewMap.put(boardId, new BoardViewMapDto()));
+		boardViewSubDto.getMediaList().forEach(boardMedia -> {
+			Long boardId = boardMedia.getBoard().getId();
+			BoardViewMapDto boardViewMapDto = boardViewMap.get(boardId);
+			if (boardViewMapDto.getImages() == null) {
+				boardViewMapDto.setImages(new ArrayList<>());
+			}
+			boardViewMapDto.getImages().add(boardMedia.getMediaUrl());
+		});
+		boardViewSubDto.getReactionCounts().forEach(boardReactionCountDto -> {
+			Long boardId = boardReactionCountDto.getBoardId();
+			BoardViewMapDto boardViewMapDto = boardViewMap.get(boardId);
+			boardViewMapDto.setReactionCount(boardReactionCountDto.getReactionCount().intValue());
+		});
+		boardViewSubDto.getComments().stream()
+				.sorted(Comparator.comparing(Comment::getCreatedAt))
+				.forEach(comment -> {
+					Long boardId = comment.getBoard().getId();
+					BoardViewMapDto boardViewMapDto = boardViewMap.get(boardId);
+					boardViewMapDto.setCommentCount(boardViewMapDto.getCommentCount() + 1);
+					if (boardViewMapDto.getPreviewCommentUser() == null) {
+						boardViewMapDto.setPreviewCommentUser(comment.getMember().getNickname());
+						boardViewMapDto.setPreviewComment(comment.getContent());
+					}
+				});
+		boardViewSubDto.getMyReaction().forEach(reaction -> {
+			Long boardId = reaction.getBoard().getId();
+			BoardViewMapDto boardViewMapDto = boardViewMap.get(boardId);
+			boardViewMapDto.setReacted(true);
+		});
+		boardViewSubDto.getMyScrap().forEach(scrap -> {
+			Long boardId = scrap.getBoard().getId();
+			BoardViewMapDto boardViewMapDto = boardViewMap.get(boardId);
+			boardViewMapDto.setScrapped(true);
+		});
+		boardViewSubDto.getCategories().forEach(boardCategoryFilter -> {
+			Long boardId = boardCategoryFilter.getBoard().getId();
+			BoardViewMapDto boardViewMapDto = boardViewMap.get(boardId);
+			if (boardViewMapDto.getCategories() == null) {
+				boardViewMapDto.setCategories(new ArrayList<>());
+			}
+			boardViewMapDto.getCategories().add(boardCategoryFilter.getSpecies());
+		});
+		return boardPage.stream().map(board -> {
+			BoardViewMapDto boardViewMapDto = boardViewMap.get(board.getId());
+			return boardMapper.toBoardInfoDto(board, board.getMember(), boardViewMapDto);
+		}).toList();
 	}
 
 	/**
@@ -117,8 +168,8 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	public BoardsPaginationDto getMainViewBoardsRefactoring(
 			Long loginUserId, PageRequest pageRequest) {
 		Page<Board> boardPage = boardRepository.findAll(pageRequest);
-		List<Board> filteredBoard = filteringBoards(loginUserId, boardPage);
-		List<Long> boardIds = filteredBoard.stream().map(Board::getId).toList();
+		Streamable<Board> filteredBoard = filteringBoards(loginUserId, boardPage);
+		List<Long> boardIds = filteredBoard.map(Board::getId).toList();
 		BoardViewSubDto boardViewSubDto =
 				boardRepository.getBoardViewWithBoardIdList(loginUserId, boardIds);
 		List<BoardInfoDto> result = boardMappingToDto(boardIds, boardViewSubDto, boardPage);
@@ -128,9 +179,9 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	@Override
 	public BoardsPaginationDto getHotBoards(Long loginUserId, PageRequest pageRequest) {
 		Page<Board> boardPages = boardRepository.getHotBoards(pageRequest);
-		List<Board> filteredBoard = filteringBoards(loginUserId, boardPages);
-		List<BoardInfoDto> result = filteredBoard.stream()
-				.map(board -> createBoardInfoDto(loginUserId, board)).toList();
+		Streamable<Board> filteredBoard = filteringBoards(loginUserId, boardPages);
+		List<BoardInfoDto> result = filteredBoard.map(board ->
+				createBoardInfoDto(loginUserId, board)).toList();
 		return boardMapper.toBoardsResponseDto(result, boardPages.getTotalElements());
 	}
 
@@ -158,57 +209,5 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 				.map(board -> createBoardInfoDto(memberId, board))
 				.toList();
 		return boardMapper.toBoardsResponseDto(result, followingsBoards.getTotalElements());
-	}
-
-	private List<BoardInfoDto> boardMappingToDto(List<Long> boardIds,
-			BoardViewSubDto boardViewSubDto, Page<Board> boardPage) {
-		Map<Long, BoardViewMapDto> boardViewMap = new HashMap<>();
-		boardIds.forEach(boardId -> boardViewMap.put(boardId, new BoardViewMapDto()));
-		boardViewSubDto.getMediaList().forEach(boardMedia -> {
-			Long boardId = boardMedia.getBoard().getId();
-			BoardViewMapDto boardViewMapDto = boardViewMap.get(boardId);
-			if (boardViewMapDto.getImages() == null) {
-				boardViewMapDto.setImages(new ArrayList<>());
-			}
-			boardViewMapDto.getImages().add(boardMedia.getMediaUrl());
-		});
-		boardViewSubDto.getReactionCounts().forEach(boardReactionCountDto -> {
-			Long boardId = boardReactionCountDto.getBoardId();
-			BoardViewMapDto boardViewMapDto = boardViewMap.get(boardId);
-			boardViewMapDto.setReactionCount(boardReactionCountDto.getReactionCount().intValue());
-		});
-		boardViewSubDto.getComments().stream()
-				.sorted(Comparator.comparing(Comment::getCreatedAt))
-				.forEach(comment -> {
-					Long boardId = comment.getBoard().getId();
-					BoardViewMapDto boardViewMapDto = boardViewMap.get(boardId);
-					boardViewMapDto.setCommentCount(boardViewMapDto.getCommentCount() + 1);
-					if (boardViewMapDto.getPreviewCommentUser() == null) {
-						boardViewMapDto.setPreviewCommentUser(comment.getMember().getNickname());
-						boardViewMapDto.setPreviewComment(comment.getContent());
-					}
-				});
-		boardViewSubDto.getMyReaction().forEach(reaction -> {
-			Long boardId = reaction.getBoard().getId();
-			BoardViewMapDto boardViewMapDto = boardViewMap.get(boardId);
-			boardViewMapDto.setReacted(true);
-		});
-		boardViewSubDto.getMyScrap().forEach(scrap -> {
-			Long boardId = scrap.getBoard().getId();
-			BoardViewMapDto boardViewMapDto = boardViewMap.get(boardId);
-			boardViewMapDto.setScrapped(true);
-		});
-		boardViewSubDto.getCategories().forEach(boardCategoryFilter -> {
-			Long boardId = boardCategoryFilter.getBoard().getId();
-			BoardViewMapDto boardViewMapDto = boardViewMap.get(boardId);
-			if (boardViewMapDto.getCategories() == null) {
-				boardViewMapDto.setCategories(new ArrayList<>());
-			}
-			boardViewMapDto.getCategories().add(boardCategoryFilter.getSpecies());
-		});
-		return boardPage.stream().map(board -> {
-			BoardViewMapDto boardViewMapDto = boardViewMap.get(board.getId());
-			return boardMapper.toBoardInfoDto(board, board.getMember(), boardViewMapDto);
-		}).toList();
 	}
 }

@@ -46,7 +46,7 @@ const ImageUploader = () => {
   };
 
   useEffect(() => {
-    if (cropImageCompleted && uploadFiles.length > 0) {
+    if (uploadClicked && cropImageCompleted && uploadFiles.length > 0) {
       try {
         axiosCreateBoard({
           mediaDataList: uploadFiles,

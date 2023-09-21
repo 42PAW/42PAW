@@ -19,7 +19,6 @@ import useDebounce from "@/hooks/useDebounce";
 import { useRef } from "react";
 import { boardsLengthState, languageState } from "@/recoil/atom";
 import { buttonToggledState } from "@/components/BoardSortToggle";
-import { logoClickObserverState } from "@/recoil/atom";
 import { useQueryClient } from "@tanstack/react-query";
 
 const MainPage = () => {
@@ -36,7 +35,6 @@ const MainPage = () => {
   const resetBoardsTotalLength = useResetRecoilState(boardsTotalLengthState);
   const [boardCategory, setBoardCategory] =
     useRecoilState<Board>(boardCategoryState);
-  const [logoClickObserver] = useRecoilState<number>(logoClickObserverState);
   const { fetchBoards } = useFetch();
   const navigator = useNavigate();
   const [ref, inView] = useInView({
@@ -99,7 +97,7 @@ const MainPage = () => {
     if (rootRef.current) {
       rootRef.current.scrollTop = 0;
     }
-  }, [boardCategory, logoClickObserver]);
+  }, [boardCategory]);
 
   if (loading || isLoading) {
     return (

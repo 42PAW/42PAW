@@ -4,8 +4,10 @@ import useModal from "@/hooks/useModal";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { ModalType } from "@/types/enum/modal.enum";
 import { getCookie } from "@/api/cookie/cookies";
+import BurgerButton from "./BurgerButton/BurgerButton";
 
 const token = getCookie("access_token");
+const reportURL = "https://forms.gle/KSS5gPCTMs8DQLvU8";
 
 interface props {
   children?: ReactNode;
@@ -15,7 +17,6 @@ const SettingButton: React.FC<props> = ({ children }) => {
   const [isToggled, setIsToggled] = useState<boolean>(false);
   const { openModal } = useModal();
   const { openAnimalFilterSection } = useRightSectionHandler();
-  const url = "https://forms.gle/KSS5gPCTMs8DQLvU8";
 
   const handleToggle = (state: string) => {
     if (state === "ON") {
@@ -35,10 +36,9 @@ const SettingButton: React.FC<props> = ({ children }) => {
   };
 
   return (
-    <WrapperStyled onMouseLeave={() => handleToggle("ON")}>
-      <ToggleStyled onClick={() => handleToggle("OFF")}>
-        <img src="/assets/burger.png" />
-      </ToggleStyled>
+    <WrapperStyled>
+      <BurgerButton isToggled={isToggled} setIsToggled={setIsToggled} />
+
       <MenuStyled $isToggled={isToggled}>
         <MenuList onClick={() => handleToggle("OFF")}>
           {children && (
@@ -49,20 +49,20 @@ const SettingButton: React.FC<props> = ({ children }) => {
           <MenuItemWrapperStyled>
             <MenuItemStyled
               onClick={() => {
-                window.open(url);
+                window.open(reportURL);
               }}
             >
-              <img src="/assets/reporting.png" />
+              <img src="/assets/report.svg" />
             </MenuItemStyled>
           </MenuItemWrapperStyled>
           <MenuItemWrapperStyled>
             <MenuItemStyled onClick={() => openModal(ModalType.LANGUAGE)}>
-              <img src="/assets/globalW.png" />
+              <img src="/assets/global.svg" />
             </MenuItemStyled>
           </MenuItemWrapperStyled>
           <MenuItemWrapperStyled>
             <MenuItemStyled onClick={handleOpenAnimalFilterSection}>
-              <img src="/assets/categoryW.png" />
+              <img src="/assets/category.svg" />
             </MenuItemStyled>
           </MenuItemWrapperStyled>
         </MenuList>
@@ -85,20 +85,8 @@ const WrapperStyled = styled.div`
     opacity: 0.6;
     transition: opacity 0.3s ease;
     &:hover {
-      opacity: 0.9;
+      opacity: 0.7;
     }
-  }
-`;
-
-const ToggleStyled = styled.button`
-  height: 40px;
-  width: 40px;
-  background-color: transparent;
-  border: none;
-  img {
-    cursor: pointer;
-    width: 90%;
-    opacity: 1;
   }
 `;
 
@@ -113,10 +101,9 @@ const MenuStyled = styled.div<{ $isToggled: boolean }>`
   right: 38px;
   opacity: ${({ $isToggled }) => ($isToggled ? 1 : 0)};
   visibility: ${({ $isToggled }) => ($isToggled ? "visible" : "hidden")};
-  @media (min-width: 1024px) {
-    transition: all 0.3s;
-  }
+  transition: all 0.3s;
   z-index: 1;
+  top: 0px;
 `;
 
 const MenuList = styled.ul`
@@ -138,6 +125,12 @@ const MenuItemStyled = styled.div`
   img {
     width: 20px;
     height: 20px;
+    opacity: 1;
+    @media (min-width: 1024px) {
+      width: 26px;
+      height: 26px;
+      margin-top: -3px;
+    }
   }
   &:hover {
     color: var(--lightpurple);

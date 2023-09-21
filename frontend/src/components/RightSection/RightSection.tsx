@@ -27,7 +27,7 @@ const RightSection = () => {
       <RightSectionStyled $isRightSectionOpened={isRightSectionOpened}>
         <CloseButtonContainerStyled>
           <CloseButtonStyled onClick={closeRightSection}>
-            <img src="/assets/exitW.png" />
+            <img src="/assets/close.svg" />
           </CloseButtonStyled>
         </CloseButtonContainerStyled>
         <RightSectionBodyStyled>

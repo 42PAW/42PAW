@@ -184,7 +184,7 @@ const ProfileEditModal = () => {
           <img src="/assets/paw.png" />
         </LogoStyled>
         <ProfileImageStyled
-          src={imagePreview ? imagePreview : "/assets/userG.png"}
+          src={imagePreview ? imagePreview : "/assets/profile.svg"}
           $isLoading={isLoading}
         />
         {isLoading && (
@@ -378,6 +378,7 @@ const ButtonContainerStyled = styled.div`
       color: var(--transparent2);
       pointer-events: none;
     }
+    transition: all 0.3s ease;
   }
 `;
 

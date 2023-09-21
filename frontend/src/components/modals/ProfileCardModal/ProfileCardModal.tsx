@@ -82,7 +82,7 @@ const ProfileCardModal = () => {
           )}
         </OptionButtonContainerStyled>
         <ProfileImageStyled
-          src={profileData.profileImageUrl || "/assets/user.png"}
+          src={profileData.profileImageUrl || "/assets/profile.svg"}
         />
         <MainAreaStyled>
           <NickNameStyled>{profileData.memberName}</NickNameStyled>

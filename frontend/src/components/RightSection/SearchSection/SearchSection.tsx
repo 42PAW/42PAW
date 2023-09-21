@@ -93,7 +93,7 @@ const SearchSection = () => {
           onKeyDown={handleKeyDown}
         />
         <button onClick={() => updateSearchResult()}>
-          <img src="/assets/search.png" />
+          <img src="/assets/search.svg" />
         </button>
       </SearchBarStyled>
       <SearchItemWrapperStyled>

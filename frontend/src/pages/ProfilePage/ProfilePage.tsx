@@ -10,6 +10,7 @@ import { IBoardInfo } from "@/types/interface/board.interface";
 import { useParams } from "react-router-dom";
 import useDebounce from "@/hooks/useDebounce";
 import styled from "styled-components";
+import SkeletonProfileTemplate from "@/components/skeletonView/SkeletonProfileTemplate";
 
 const ProfilePage = () => {
   const { debounce } = useDebounce();
@@ -27,7 +28,7 @@ const ProfilePage = () => {
   useEffect(() => {
     setBoardCategory(Board.OTHER);
     setLoading(true);
-    debounce("profileLoading", () => setLoading(false), 200);
+    debounce("profileLoading", () => setLoading(false), 500);
   }, []); // 빈 배열을 넣어 마운트 시 한 번만 실행되도록 함
 
   const boardsQuery = useQuery<IBoardInfo[]>({
@@ -43,7 +44,9 @@ const ProfilePage = () => {
     return (
       <>
         <LoadingAnimation />
-        <WrapperStyled></WrapperStyled>
+        <WrapperStyled>
+          <SkeletonProfileTemplate></SkeletonProfileTemplate>
+        </WrapperStyled>
       </>
     );
   }
@@ -60,6 +63,7 @@ const ProfilePage = () => {
 };
 
 const WrapperStyled = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;

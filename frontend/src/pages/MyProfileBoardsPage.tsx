@@ -28,7 +28,11 @@ const MyProfileBoardsPage = () => {
   const { data, fetchNextPage, hasNextPage, isError, isLoading } =
     useInfiniteQuery(
       ["boards", boardCategory],
-      ({ pageParam = 0 }) => fetchBoards(Board.MINE, pageParam),
+      ({ pageParam = 0 }) =>
+        fetchBoards(
+          boardCategory === Board.MINE ? Board.MINE : Board.SCRAPPED,
+          pageParam
+        ),
       {
         getNextPageParam: (lastPage, allPages) => {
           if (!lastPage || lastPage.length === 0) return undefined;

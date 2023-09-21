@@ -142,7 +142,7 @@ const BoardTemplate = (board: BoardTemplateProps) => {
       <BoardWrapperStyled ref={boardRef}>
         <BoardHeaderStyled>
           <BoardProfileStyled onClick={handleOpenProfile}>
-            <img src={profileImageUrl || "/assets/userW.png"} />
+            <img src={profileImageUrl || "/assets/profile.svg"} />
             <div>
               {memberName} {countryEmoji}
             </div>
@@ -165,28 +165,23 @@ const BoardTemplate = (board: BoardTemplateProps) => {
           <ButtonZoneStyled>
             <ReactionCommentContainerStyled>
               <ReactionStyled onClick={handleClickReaction}>
-                <HeartIcon
-                  style={ReactionAnimation}
-                  src="/assets/pinkHeart.png"
-                />
+                <HeartIcon style={ReactionAnimation} src="/assets/liked.svg" />
                 <img
                   src={
-                    isReactedRender
-                      ? "/assets/pinkHeart.png"
-                      : "/assets/like.png"
+                    isReactedRender ? "/assets/liked.svg" : "/assets/like.svg"
                   }
                 />
               </ReactionStyled>
-              <img
-                src="/assets/comment.png"
+              <CommentStyled
+                src="/assets/comment.svg"
                 onClick={() => handleCommentClick(boardId)}
               />
             </ReactionCommentContainerStyled>
             <ScrapButtonStyled onClick={handleClickScrap}>
               {isScrappedRender ? (
-                <img src="/assets/scrapB.png" />
+                <img src="/assets/scrapped.svg" />
               ) : (
-                <img src="/assets/scrap.png" />
+                <img src="/assets/scrap.svg" />
               )}
             </ScrapButtonStyled>
           </ButtonZoneStyled>
@@ -288,16 +283,13 @@ const ReactionCommentContainerStyled = styled.div`
   display: flex;
   align-items: center;
   width: 33.3%;
+  margin-left: 4.5%;
   img {
     cursor: pointer;
-    margin-left: 7%;
-    width: 22px;
   }
+
   img:hover {
-    opacity: 0.5;
-  }
-  @media (max-width: 1023px) {
-    margin-left: -5px;
+    opacity: 0.7;
   }
 `;
 
@@ -307,16 +299,22 @@ const ReactionStyled = styled.div`
   justify-content: center;
   position: relative;
   img {
-    margin-left: 23px;
+    width: 28px;
   }
+`;
+
+const CommentStyled = styled.img`
+  width: 22px;
+  margin-top: -1.5px;
+  margin-left: 5%;
 `;
 
 const HeartIcon = styled(animated.img)`
   position: absolute;
   top: 0;
   left: 0px;
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
 `;
 
 const ScrapButtonStyled = styled.div`
@@ -326,11 +324,11 @@ const ScrapButtonStyled = styled.div`
   width: 33.3%;
   img {
     cursor: pointer;
-    width: 22px;
-    margin-right: 15%;
+    width: 29px;
+    margin-right: 11%;
   }
   img:hover {
-    opacity: 0.5;
+    opacity: 0.7;
   }
 `;
 
@@ -338,10 +336,9 @@ const BoardContentContainerStyled = styled.div`
   display: flex;
   flex-direction: column;
   height: 11%;
-  margin-top: 1.5%;
+  margin-top: 5px;
   margin-left: 5%;
   margin-right: 5%;
-  margin-bottom: 1%;
   font-size: 13px;
 `;
 
@@ -382,7 +379,7 @@ const PreviewCommentStyled = styled.div`
 const NoCommentStyled = styled.div`
   font-weight: 400;
   color: var(--lightgrey);
-  margin-top: 3%;
+  margin-top: 2%;
 `;
 
 export default BoardTemplate;

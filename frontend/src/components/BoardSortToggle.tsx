@@ -100,6 +100,7 @@ const BoardSortToggleStyled = styled.div<{ $buttonToggled: number }>`
     width: 33.3%;
     min-width: 70px;
     font-size: 1rem;
+    font-weight: 600;
   }
 `;
 

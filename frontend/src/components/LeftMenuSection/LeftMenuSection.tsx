@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import LeftMenuTablet from "@/components/LeftMenuSection/LeftMenuTablet";
 import LeftMenuDesktop from "@/components/LeftMenuSection/LeftMenuDesktop";
 import { userInfoState, languageState } from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
 import { removeCookie } from "@/api/cookie/cookies";
-import useNavigateCustom from "@/hooks/useNavigateCustom";
-import { boardCategoryState } from "@/recoil/atom";
-import { Board } from "@/types/enum/board.category.enum";
-import { useQueryClient } from "@tanstack/react-query";
 import LoadingAnimation from "../loading/LoadingAnimation";
-import { logoClickObserverState } from "@/recoil/atom";
 
 export interface LeftMenuProps {
   handleLogin: () => void;
@@ -21,18 +16,11 @@ export interface LeftMenuProps {
 }
 
 const LeftMenuSection = () => {
-  const setLogoClickObserver = useSetRecoilState<number>(
-    logoClickObserverState
-  );
   const [isDesktopScreen, setIsDesktopScreen] = useState(
     window.matchMedia("(min-width: 1024px)").matches
   );
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [language] = useRecoilState<any>(languageState);
-  const [boardCategory, setBoardCategory] =
-    useRecoilState<Board>(boardCategoryState);
-  const queryClient = useQueryClient();
-  const { moveToMain } = useNavigateCustom();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   useEffect(() => {
     const handleResize = () => {
@@ -60,15 +48,7 @@ const LeftMenuSection = () => {
   };
 
   const handleClickLogo = () => {
-    moveToMain();
-    if (
-      boardCategory === Board.MINE ||
-      boardCategory === Board.OTHER ||
-      boardCategory === Board.SCRAPPED
-    )
-      setBoardCategory(Board.DEFAULT);
-    setLogoClickObserver((prev) => prev + 1);
-    queryClient.invalidateQueries(["boards", boardCategory]);
+    window.location.reload();
   };
 
   return (

@@ -46,7 +46,7 @@ const AnimalFilterSection = () => {
   return (
     <WrapperStyled>
       <CategoryIconContainerStyled>
-        <img src="/assets/categoryW.png" />
+        <img src="/assets/category.svg" />
         {language.filterTitle}
       </CategoryIconContainerStyled>
       {animalCategory && (
@@ -83,8 +83,9 @@ const CategoryIconContainerStyled = styled.div`
   font-weight: bold;
   font-size: 1.3rem;
   img {
+    margin-left: -15px;
     margin-right: 10px;
-    width: 6%;
+    width: 9%;
   }
 `;
 

@@ -167,7 +167,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	@Override
 	public BoardsPaginationDto getMainViewBoardsRefactoring(
 			Long loginUserId, PageRequest pageRequest) {
-		Page<Board> boardPage = boardRepository.findAll(pageRequest);
+		Page<Board> boardPage = boardRepository.finaAllOrderByCreatedAtDesc(pageRequest);
 		Streamable<Board> filteredBoard = filteringBoards(loginUserId, boardPage);
 		List<Long> boardIds = filteredBoard.map(Board::getId).toList();
 		BoardViewSubDto boardViewSubDto =

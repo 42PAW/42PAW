@@ -60,7 +60,6 @@ const ImageUploader = () => {
       } catch (error) {
         throw error;
       }
-      setUploadClicked(false);
     }
   }, [cropImageCompleted, uploadFiles, categoryList, caption, language]);
 
@@ -80,7 +79,6 @@ const ImageUploader = () => {
           return;
         }
         cropImage(selectedPreviewIndex);
-        setUploadClicked(false);
       }
     };
     uploadData();
@@ -92,6 +90,7 @@ const ImageUploader = () => {
 
   const cropImage = (index: number) => {
     const canvas = cropperRef.current?.getCanvas() as HTMLCanvasElement;
+    console.log(canvas);
     if (canvas) {
       const ctx = canvas.getContext("2d");
       const img = new Image();
@@ -185,42 +184,35 @@ const ImageUploader = () => {
             toType: "image/webp",
           });
 
-          const webpFile = new File(
-            [conversionResult as Blob],
-            file.name.split(".")[0] + ".webp",
-            {
-              type: "image/webp",
-              lastModified: new Date().getTime(),
-            }
+          if (blob instanceof Blob) {
+            file = new File(
+              [conversionResult as Blob],
+              file.name.split(".")[0] + ".webp",
+              {
+                type: "image/webp",
+                lastModified: new Date().getTime(),
+              }
+            );
+          }
+        }
+        const compressedFile = await imageCompression(file, options);
+        if (compressedFile.size <= 2097152) {
+          const imageBlob = compressedFile.slice(
+            0,
+            compressedFile.size,
+            compressedFile.type
           );
 
-          return webpFile;
-        } else {
-          const compressedFile = await imageCompression(file, options);
-          if (compressedFile.size <= 10000000) {
-            const imageBitmap = await createImageBitmap(file);
-            const canvas = document.createElement("canvas");
-            canvas.width = imageBitmap.width;
-            canvas.height = imageBitmap.height;
-            const ctx = canvas.getContext("2d");
-
-            if (ctx) {
-              ctx.drawImage(imageBitmap, 0, 0);
-
-              return new Promise((resolve) => {
-                canvas.toBlob((webpBlob) => {
-                  if (webpBlob) {
-                    resolve(webpBlob);
-                  } else {
-                    resolve(null);
-                  }
-                }, "image/webp");
-              });
+          return new Promise((resolve) => {
+            if (imageBlob) {
+              resolve(imageBlob);
+            } else {
+              resolve(null);
             }
-          } else {
-            popToast("10MB 이하의 이미지만 업로드 가능합니다.", "N");
-            return null;
-          }
+          });
+        } else {
+          popToast("이미지 용광을 초과했습니다.", "N");
+          return null;
         }
       })
     );
@@ -301,8 +293,8 @@ const ImageUploader = () => {
                     grid: true,
                   }}
                   stencilSize={{
-                    width: 1500,
-                    height: 1500,
+                    width: 4000,
+                    height: 4000,
                   }}
                   imageRestriction={ImageRestriction.stencil}
                 />
@@ -575,7 +567,7 @@ const CancelbuttonStyled = styled.button`
 const ScrollMarginStyled = styled.div`
   display: flex;
   width: 100%;
-  height: 200px;
+  height: 95px;
 `;
 
 // Cropper

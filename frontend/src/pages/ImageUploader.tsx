@@ -46,9 +46,6 @@ const ImageUploader = () => {
   };
 
   useEffect(() => {
-    console.log(uploadClicked);
-    console.log(cropImageCompleted);
-    console.log(uploadFiles);
     if (uploadClicked && cropImageCompleted && uploadFiles.length > 0) {
       try {
         axiosCreateBoard({
@@ -81,9 +78,7 @@ const ImageUploader = () => {
           setUploadClicked(false);
           return;
         }
-        for (let i = 0; i < uploadFiles.length; i++) {
-          cropImage(i);
-        }
+        cropImage(selectedPreviewIndex);
       }
     };
     uploadData();
@@ -201,8 +196,6 @@ const ImageUploader = () => {
           }
         }
         const compressedFile = await imageCompression(file, options);
-        console.log("compressedFile type: ", compressedFile.type); // true
-        console.log("compressedFile size: ", compressedFile.size); // true
         if (compressedFile.size <= 2097152) {
           const imageBlob = compressedFile.slice(
             0,

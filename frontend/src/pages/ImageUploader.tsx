@@ -90,7 +90,6 @@ const ImageUploader = () => {
 
   const cropImage = (index: number) => {
     const canvas = cropperRef.current?.getCanvas() as HTMLCanvasElement;
-    console.log(canvas);
     if (canvas) {
       const ctx = canvas.getContext("2d");
       const img = new Image();
@@ -211,7 +210,7 @@ const ImageUploader = () => {
             }
           });
         } else {
-          popToast("이미지 용광을 초과했습니다.", "N");
+          popToast("이미지 용량을 초과했습니다.", "N");
           return null;
         }
       })

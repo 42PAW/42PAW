@@ -66,7 +66,7 @@ const ProfileInfoComponent: React.FC<{
       <img
         className="profileImage"
         alt="Profile image"
-        src={profileInfo.profileImageUrl || "/assets/userW.png"}
+        src={profileInfo.profileImageUrl || "/assets/profile.svg"}
       />
       <div className="content-wrapper">
         <UserInfoItems profileInfo={profileInfo} />
@@ -128,7 +128,7 @@ const CountInfoStyled = styled.ul`
     }
 
     &:hover:not(:first-child) {
-      color: var(--button-grey-hover); /* 마우스 오버 시 글자 색 어둡게 설정 */
+      opacity: 0.8;
     }
 
     &:first-child {

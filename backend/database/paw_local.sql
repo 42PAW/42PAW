@@ -74,7 +74,7 @@ create table comment
         primary key,
     board_id   bigint      not null,
     member_id  bigint      not null,
-    content varchar(128) not null,
+    comment varchar(128) not null,
     created_at datetime(6) not null,
     deleted_at datetime(6) null,
     constraint FKlij9oor1nav89jeat35s6kbp1

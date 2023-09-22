@@ -1,5 +1,6 @@
+import { removeCookie } from "@/api/cookie/cookies";
 import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
 
 const phrases = [
@@ -29,7 +30,6 @@ const phrases2 = [
 const NotFoundPage: React.FC = () => {
   const textRef = useRef<HTMLDivElement>(null);
   const textRef2 = useRef<HTMLDivElement>(null);
-  const navigator = useNavigate();
 
   useEffect(() => {
     const el = textRef.current!;
@@ -57,7 +57,16 @@ const NotFoundPage: React.FC = () => {
     <WrapperStyled>
       <Container>
         <Text ref={textRef}></Text>
-        <Text2 ref={textRef2} onClick={() => navigator("/")}></Text2>
+        <Text2
+          ref={textRef2}
+          onClick={() => {
+            removeCookie("access_token", {
+              path: "/",
+              domain: `${import.meta.env.VITE_FE_DOMAIN}`,
+            });
+            window.location.replace("/");
+          }}
+        ></Text2>
       </Container>
     </WrapperStyled>
   );

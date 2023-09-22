@@ -40,7 +40,7 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
         </BannerLogoStyled>
         <SettingButtonContainerStyled>
           <SettingButton>
-            <img src="/assets/logout.png" onClick={handleLoginButton} />
+            <ImageStyled src="/assets/login.svg" onClick={handleLoginButton} />
           </SettingButton>
         </SettingButtonContainerStyled>
       </BannerStyled>
@@ -49,23 +49,23 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
         <nav>
           <MenuListStyled>
             <li onClick={moveToMain}>
-              <ListImageStyled alt="Main" src="/assets/home.png" />
+              <ListImageStyled alt="Main" src="/assets/home.svg" />
             </li>
             <li onClick={openSearchSection}>
-              <ListImageStyled alt="Search" src="/assets/search.png" />
+              <ListImageStyled alt="Search" src="/assets/search.svg" />
             </li>
             <li onClick={moveToUpload}>
-              <ListImageStyled alt="MyProfile" src="/assets/upload.png" />
+              <ListImageStyled alt="MyProfile" src="/assets/add.svg" />
             </li>
             <li>
               {userInfo ? (
                 <ProfileImageStyled
-                  src={userInfo.profileImageUrl || "/assets/userW.png"}
+                  src={userInfo.profileImageUrl || "/assets/profile.svg"}
                   onClick={handleOpenMyProfile}
                 />
               ) : (
                 <ProfileImageStyled
-                  src="/assets/userW.png"
+                  src="/assets/profile.svg"
                   onClick={handleLogin}
                 />
               )}
@@ -119,8 +119,12 @@ const BannerLogoStyled = styled.div`
 `;
 
 const SettingButtonContainerStyled = styled.div`
-  margin-top: 8px;
-  margin-right: 5px;
+  margin-top: 4px;
+`;
+
+const ImageStyled = styled.img`
+  position: fixed;
+  left: 13px;
 `;
 
 const MenuStyled = styled.div`
@@ -157,6 +161,9 @@ const MenuListStyled = styled.ul`
   list-style-type: none;
   padding: 0;
   margin: 0;
+  img {
+    width: 25px;
+  }
 `;
 
 const ListImageStyled = styled.img`

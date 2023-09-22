@@ -77,7 +77,7 @@ const MeatballButton: React.FC<meatballButtonProps> = ({
           openModal(ModalType.MEATBALL);
         }}
       >
-        <img src="/assets/optionW.png" />
+        <img src="/assets/meatball.svg" />
       </ToggleStyled>
     </WrapperStyled>
   );

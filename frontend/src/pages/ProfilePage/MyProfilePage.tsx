@@ -10,6 +10,7 @@ import { IBoardInfo } from "@/types/interface/board.interface";
 import { useNavigate } from "react-router-dom";
 import useDebounce from "@/hooks/useDebounce";
 import styled from "styled-components";
+import SkeletonProfileTemplate from "@/components/skeletonView/SkeletonProfileTemplate";
 
 const MyProfilePage = () => {
   const [loading, setLoading] = useState(true);
@@ -23,12 +24,14 @@ const MyProfilePage = () => {
     queryFn: fetchProfile,
     refetchOnMount: true,
     refetchOnWindowFocus: false,
+    keepPreviousData: true,
   });
   const boardsQuery = useQuery<IBoardInfo[]>({
     queryKey: ["profileBoards", boardCategory], // 여기서 boardCategory를 그냥 Board.MINE하는게?
     queryFn: () => fetchBoards(boardCategory, 0),
     refetchOnMount: true,
     refetchOnWindowFocus: false,
+    keepPreviousData: true,
   });
 
   const handleTabState = (newTabState: Board) => {
@@ -38,7 +41,7 @@ const MyProfilePage = () => {
   useEffect(() => {
     setBoardCategory(Board.MINE);
     setLoading(true);
-    debounce("myProfileLoading", () => setLoading(false), 200);
+    debounce("myProfileLoading", () => setLoading(false), 500);
   }, []); // 컴포넌트가 마운트될 때 한 번만 실행
 
   const isLoading = loading || profileQuery.isLoading || boardsQuery.isLoading;
@@ -48,7 +51,9 @@ const MyProfilePage = () => {
     return (
       <>
         <LoadingAnimation />
-        <WrapperStyled></WrapperStyled>
+        <WrapperStyled>
+          <SkeletonProfileTemplate></SkeletonProfileTemplate>
+        </WrapperStyled>
       </>
     );
   }
@@ -70,6 +75,7 @@ const MyProfilePage = () => {
 
 const WrapperStyled = styled.div`
   display: flex;
+  position: relative;
   flex-direction: column;
   justify-content: center;
   align-items: center;

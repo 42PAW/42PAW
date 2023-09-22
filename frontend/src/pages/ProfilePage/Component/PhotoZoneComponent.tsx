@@ -22,8 +22,8 @@ const PhotoZoneComponent: React.FC<PhotoZoneComponentProps> = ({
             <img
               src={
                 tabState === Board.MINE
-                  ? "/assets/feedWB.png"
-                  : "/assets/feedW.png"
+                  ? "/assets/feed-selected.svg"
+                  : "/assets/feed.svg"
               }
             />
           </button>
@@ -31,8 +31,8 @@ const PhotoZoneComponent: React.FC<PhotoZoneComponentProps> = ({
             <img
               src={
                 tabState === Board.SCRAPPED
-                  ? "/assets/scrapWB.png"
-                  : "/assets/scrapW.png"
+                  ? "/assets/scrapped-w.svg"
+                  : "/assets/scrap-w.svg"
               }
             />
           </button>
@@ -96,7 +96,7 @@ const PhotoCategoryToggleStyled = styled.div<{ $tabState: Board }>`
     background-color: #fdfdfd39;
   }
   img {
-    width: 16px;
+    width: 25px;
   }
 `;
 

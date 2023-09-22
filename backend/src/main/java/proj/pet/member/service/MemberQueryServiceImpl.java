@@ -28,7 +28,6 @@ import static proj.pet.follow.domain.FollowType.NONE;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberQueryServiceImpl implements MemberQueryService {
-
 	private final MemberRepository memberRepository;
 	private final FollowRepository followRepository;
 	private final BoardRepository boardRepository;
@@ -44,8 +43,10 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 	 */
 	@Override
 	public MemberNicknameValidateResponseDto validateMemberNickname(String nickname) {
-		Boolean isValid = memberRepository.findByNickname(nickname).isEmpty();
-		return memberMapper.toMemberNicknameValidateResponseDto(isValid);
+		return memberMapper.toMemberNicknameValidateResponseDto(
+				nickname.matches("^[a-z._]+$")
+						&& memberRepository.findByNickname(nickname).isEmpty()
+		);
 	}
 
 	/**

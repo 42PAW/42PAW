@@ -16,12 +16,12 @@ const SkeletonBoardTemplate = () => {
           <ButtonZoneStyled>
             <ReactionCommentContainerStyled>
               <ReactionStyled>
-                <img src="/assets/like.png" />
+                <img src="/assets/like.svg" />
               </ReactionStyled>
-              <img src="/assets/comment.png" />
+              <img src="/assets/comment.svg" />
             </ReactionCommentContainerStyled>
             <ScrapButtonStyled>
-              <img src="/assets/scrapB.png" />
+              <img src="/assets/scrap.svg" />
             </ScrapButtonStyled>
           </ButtonZoneStyled>
           <BoardContentContainerStyled>
@@ -136,7 +136,7 @@ const ReactionCommentContainerStyled = styled.div`
     opacity: 0;
     cursor: pointer;
     margin-left: 7%;
-    width: 22px;
+    width: 26px;
   }
   img:hover {
     opacity: 0.5;

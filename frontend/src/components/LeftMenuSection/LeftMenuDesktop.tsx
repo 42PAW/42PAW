@@ -30,22 +30,25 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
         <nav>
           <MenuListStyled>
             <li onClick={moveToMain}>
-              <img alt="Main" src="/assets/home.png" />
+              <img alt="Main" src="/assets/home.svg" />
             </li>
             <li onClick={moveToUpload}>
-              <img alt="Upload" src="/assets/upload.png" />
+              <img alt="Upload" src="/assets/add.svg" />
             </li>
             <li onClick={openSearchSection}>
-              <img alt="Search" src="/assets/search.png" />
+              <img alt="Search" src="/assets/search.svg" />
             </li>
           </MenuListStyled>
           {userInfo ? (
             <ProfileImageStyled
-              src={userInfo.profileImageUrl || "/assets/userW.png"}
+              src={userInfo.profileImageUrl || "/assets/profile.svg"}
               onClick={handleOpenMyProfile}
             />
           ) : (
-            <ProfileImageStyled src="/assets/userW.png" onClick={handleLogin} />
+            <ProfileImageStyled
+              src="/assets/profile.svg"
+              onClick={handleLogin}
+            />
           )}
         </nav>
         {userInfo ? (
@@ -79,8 +82,9 @@ const LeftMenuStyled = styled.div`
   div {
     padding: 7px 10px;
     color: var(--white);
-    border: 1px solid var(--white);
+    border: 1.5px solid var(--white);
     border-radius: 30px;
+    font-weight: bold;
   }
   nav {
     display: flex;
@@ -141,7 +145,7 @@ const LoginButtonStyled = styled.div`
 
 const SettingButtonContainerStyled = styled.div`
   top: 4px;
-  right: 7px;
+  right: 0px;
   position: absolute;
 `;
 

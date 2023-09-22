@@ -175,7 +175,6 @@ const ImageUploader = () => {
 
     const convertedFiles = await Promise.all(
       selectedFiles.map(async (file: File) => {
-        console.log("file size: ", file.size);
         if (file.type === "image/heic" || file.type === "image/HEIC") {
           const response = await fetch(URL.createObjectURL(file));
           const blob = await response.blob();

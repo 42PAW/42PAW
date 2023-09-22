@@ -46,6 +46,9 @@ const ImageUploader = () => {
   };
 
   useEffect(() => {
+    console.log(uploadClicked);
+    console.log(cropImageCompleted);
+    console.log(uploadFiles);
     if (uploadClicked && cropImageCompleted && uploadFiles.length > 0) {
       try {
         axiosCreateBoard({
@@ -78,7 +81,9 @@ const ImageUploader = () => {
           setUploadClicked(false);
           return;
         }
-        cropImage(selectedPreviewIndex);
+        for (let i = 0; i < uploadFiles.length; i++) {
+          cropImage(i);
+        }
       }
     };
     uploadData();
@@ -90,7 +95,6 @@ const ImageUploader = () => {
 
   const cropImage = (index: number) => {
     const canvas = cropperRef.current?.getCanvas() as HTMLCanvasElement;
-    console.log(canvas);
     if (canvas) {
       const ctx = canvas.getContext("2d");
       const img = new Image();
@@ -176,6 +180,7 @@ const ImageUploader = () => {
 
     const convertedFiles = await Promise.all(
       selectedFiles.map(async (file: File) => {
+        console.log("file size: ", file.size);
         if (file.type === "image/heic" || file.type === "image/HEIC") {
           const response = await fetch(URL.createObjectURL(file));
           const blob = await response.blob();
@@ -196,6 +201,8 @@ const ImageUploader = () => {
           }
         }
         const compressedFile = await imageCompression(file, options);
+        console.log("compressedFile type: ", compressedFile.type); // true
+        console.log("compressedFile size: ", compressedFile.size); // true
         if (compressedFile.size <= 2097152) {
           const imageBlob = compressedFile.slice(
             0,
@@ -211,7 +218,7 @@ const ImageUploader = () => {
             }
           });
         } else {
-          popToast("이미지 용광을 초과했습니다.", "N");
+          popToast("이미지 용량을 초과했습니다.", "N");
           return null;
         }
       })

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "@/pages/Layout";
 import MainPage from "@/pages/MainPage";
-import NoticePage from "@/pages/NoticePage";
 import ProfilePage from "@/pages/ProfilePage/ProfilePage";
 import MyProfilePage from "@/pages/ProfilePage/MyProfilePage";
 import UploadPage from "@/pages/UploadPage";
@@ -35,7 +34,6 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<MainPage />} />
           <Route path="upload" element={<UploadPage />} />
-          <Route path="notice" element={<NoticePage />} />
           <Route path="my-profile" element={<MyProfilePage />} />
           <Route path="my-profile/boards" element={<MyProfileBoardsPage />} />
           <Route path="my-profile/scrapped" element={<MyProfileBoardsPage />} />

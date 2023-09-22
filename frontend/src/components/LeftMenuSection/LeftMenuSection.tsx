@@ -48,7 +48,7 @@ const LeftMenuSection = () => {
   };
 
   const handleClickLogo = () => {
-    window.location.reload();
+    window.location.replace("/");
   };
 
   return (

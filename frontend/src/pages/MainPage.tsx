@@ -1,7 +1,7 @@
+import { lazy } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import BoardTemplate from "@/components/Board/BoardTemplate";
 import { boardCategoryState, boardsTotalLengthState } from "@/recoil/atom";
 import { Board } from "@/types/enum/board.category.enum";
 import LoadingAnimation from "@/components/loading/LoadingAnimation";
@@ -20,6 +20,8 @@ import { useRef } from "react";
 import { boardsLengthState, languageState } from "@/recoil/atom";
 import { buttonToggledState } from "@/components/BoardSortToggle";
 import { useQueryClient } from "@tanstack/react-query";
+
+const BoardTemplate = lazy(() => import("@/components/Board/BoardTemplate"));
 
 const MainPage = () => {
   //useInview의 ref값을 참조하는 요소에 대한 root 참조값

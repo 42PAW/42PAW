@@ -75,6 +75,9 @@ const WrapperStyled = styled.div<{ $isFading: boolean }>`
     margin-top: -470px;
     font-size: 2.5rem;
     text-align: center;
+    @media (max-width: 767px) {
+      font-size: 2rem;
+    }
   }
 `;
 

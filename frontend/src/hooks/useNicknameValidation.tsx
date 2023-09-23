@@ -8,9 +8,9 @@ const hasWhitespace = (str: string) => {
 };
 
 const hasSpecialLetter = (str: string) => {
-  const forbiddenCharacters =
-  /^[a-zA-Z\u00C0-\u00FF\u0100-\u017F\u0180-\u024F\u0370-\u03FF\u0400-\u04FF\u3040-\u30FF\u3130-\u318F\uAC00-\uD7AF.-][a-zA-Z0-9\u00C0-\u00FF\u0100-\u017F\u0180-\u024F\u0370-\u03FF\u0400-\u04FF\u3040-\u30FF\u3130-\u318F\uAC00-\uD7AF.-_]*$/;
-  return !forbiddenCharacters.test(str);
+  const allowedCharacters =
+    /^[a-zA-Z\u00C0-\u00FF\u0100-\u017F\u0180-\u024F\u0370-\u03FF\u0400-\u04FF\u3040-\u30FF\u3130-\u318F\uAC00-\uD7AF\.\-][a-zA-Z0-9\u00C0-\u00FF\u0100-\u017F\u0180-\u024F\u0370-\u03FF\u0400-\u04FF\u3040-\u30FF\u3130-\u318F\uAC00-\uD7AF\.\_\-]*$/;
+  return !allowedCharacters.test(str);
 };
 
 const useNicknameValidation = () => {

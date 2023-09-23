@@ -209,6 +209,7 @@ const CommentInputContainerStyled = styled.div`
     color: var(--white);
     outline: none;
     font-size: 13px;
+    margin-top: 3px;
   }
   input::placeholder {
     font-size: 13px;
@@ -217,17 +218,12 @@ const CommentInputContainerStyled = styled.div`
   button {
     font-size: 13px;
     cursor: pointer;
-    height: 31px;
-    width: 70px;
+    height: 28px;
+    width: 65px;
     border-radius: 7px;
     border: 1px solid var(--white);
-    background-color: transparent;
-    color: var(--white);
-  }
-  button:hover {
     background-color: var(--white);
     color: var(--pink);
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   }
 `;
 

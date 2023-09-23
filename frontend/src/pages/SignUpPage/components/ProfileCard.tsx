@@ -57,7 +57,9 @@ const ProfileCard = ({
         <ProfileCardEmptyImageStyled>
           <LabelWrapper>
             <LabelStyled htmlFor="profileImage" $isLoading={isLoading}>
-              <img src={imagePreview ? imagePreview : "/assets/userG.png"} />
+              <img
+                src={imagePreview ? imagePreview : "/assets/profile-grey.svg"}
+              />
               {isLoading && (
                 <LoadingStyled>
                   <LoadingDotsAnimation />
@@ -111,7 +113,7 @@ const ProfileCardStyled = styled.div<{ $imageUploadEnabled: boolean }>`
 
 const ProfileCardNicknameStyled = styled.div`
   height: 50px;
-  margin-top: 40px;
+  margin-top: 50px;
   font-size: 1.6rem;
 `;
 
@@ -131,14 +133,15 @@ const ProfileCardEmptyImageStyled = styled.div`
 `;
 
 const ProfileCardFormStyled = styled.form`
-  margin-top: 15px;
-  font-size: 15px;
+  margin-top: 10px;
+  font-size: 1.3rem;
   color: var(--lightgrey);
   input {
     display: none;
   }
   label {
     cursor: pointer;
+
     &:hover {
       color: var(--grey);
       font-weight: 500;
@@ -159,6 +162,7 @@ const LabelStyled = styled.label<{ $isLoading: boolean }>`
   height: 100%;
   display: block;
   position: relative;
+
   img {
     width: 100%;
     height: 100%;

@@ -270,6 +270,7 @@ const ImageUploader = () => {
         ))}
         {uploadFiles.length < 5 && (
           <SmallUploadButtonWrapperStyled>
+            <img src="/assets/plus.svg" />
             <SmallUploadButton
               type="file"
               accept="image/*"
@@ -384,6 +385,7 @@ const SmallPreviewStyled = styled.div`
 `;
 
 const SmallPreviewUnitStyled = styled.div`
+  cursor: pointer;
   display: flex;
   position: relative;
   justify-content: center;
@@ -417,6 +419,7 @@ const DeleteButtonStyled = styled.button`
 
 const SmallUploadButtonWrapperStyled = styled.div`
   display: flex;
+  position: relative;
   background-color: var(--transparent);
   background-size: cover;
   border-radius: 10px;
@@ -425,6 +428,13 @@ const SmallUploadButtonWrapperStyled = styled.div`
   height: 48px;
   justify-content: center;
   align-items: center;
+  img {
+    cursor: pointer;
+    position: absolute;
+    width: 22px;
+    aspect-ratio: 1 / 1;
+    opacity: 0.8;
+  }
 `;
 
 const SmallUploadButton = styled.input`
@@ -493,8 +503,6 @@ const CaptionBoxStyled = styled.div`
   margin-bottom: 10px;
   textarea {
     display: flex;
-    font-family: "Noto Sans KR", sans-serif;
-    font-weight: bolder;
     width: 100%;
     height: 70%;
     background: none;
@@ -525,7 +533,7 @@ const CategoryButtonStyled = styled.div`
 
 const ButtonDivStyled = styled.div`
   display: flex;
-  width: 38%;
+  width: 47%;
   height: 30px;
   justify-content: space-between;
   align-items: center;
@@ -538,8 +546,8 @@ const ButtonStyled = styled.button`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  width: 80px;
-  height: 30px;
+  width: 100px;
+  height: 33px;
   font-size: 12px;
   background-color: transparent;
   color: var(--white);

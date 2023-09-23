@@ -21,8 +21,7 @@ const AnimalFilterSection: React.FC<SectionProps> = ({
 
   const handleOnClick = () => {
     if (categoryList.length === 0) {
-      const selectCategoryMsg = language.SelectCategory;
-      popToast(selectCategoryMsg, "N");
+      popToast(language.selectCategory, "N");
       return;
     }
     setRegisterData({ ...registerData, categoryFilters: [...categoryList] });
@@ -76,6 +75,9 @@ const WrapperStyled = styled.div<{ $isFading: boolean }>`
   h1 {
     font-size: 3rem;
     text-align: center;
+    @media (max-width: 767px) {
+      font-size: 2rem;
+    }
   }
 `;
 

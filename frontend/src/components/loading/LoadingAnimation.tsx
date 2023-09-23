@@ -13,7 +13,7 @@ const rainbowAnimation = keyframes`
 // Create the styled-component
 const LoadingAnimationStyled = styled.div`
   z-index: 10;
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   width: 110vw;

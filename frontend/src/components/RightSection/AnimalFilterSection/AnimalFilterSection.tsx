@@ -74,17 +74,18 @@ const WrapperStyled = styled.div`
 `;
 
 const CategoryIconContainerStyled = styled.div`
-  width: 50%;
+  width: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   margin-top: 30px;
-  margin-left: 19%;
+
   margin-bottom: 50px;
   color: var(--white);
   font-weight: bold;
   font-size: 1.3rem;
   img {
+    margin-left: 17%;
     margin-right: 10px;
     width: 24px;
   }
@@ -92,9 +93,9 @@ const CategoryIconContainerStyled = styled.div`
 
 const SubmitButtonStyled = styled.button`
   cursor: pointer;
-  margin-top: 50px;
+  margin-top: 40px;
   width: 100px;
-  height: 38px;
+  height: 36px;
   border-radius: 10px;
   border: 1px solid var(--white);
   color: var(--white);

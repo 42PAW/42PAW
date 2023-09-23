@@ -237,10 +237,8 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	@Override
 	public BoardsPaginationDto getFollowingsBoards(Long memberId, PageRequest pageRequest) {
 		Page<Board> followingsBoards = boardRepository.getFollowingsBoards(memberId, pageRequest);
-		List<BoardInfoDto> result = followingsBoards
-				.stream()
-				.map(board -> createBoardInfoDto(memberId, board))
-				.toList();
+		List<BoardInfoDto> result = followingsBoards.stream()
+				.map(board -> createBoardInfoDto(memberId, board)).toList();
 		return boardMapper.toBoardsResponseDto(result, followingsBoards.getTotalElements());
 	}
 

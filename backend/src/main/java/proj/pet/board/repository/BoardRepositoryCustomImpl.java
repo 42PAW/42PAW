@@ -3,9 +3,11 @@ package proj.pet.board.repository;
 import static proj.pet.board.domain.QBoard.board;
 import static proj.pet.scrap.domain.QScrap.scrap;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -43,9 +45,13 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 */
 	@Override
 	public Page<Board> getHotBoards(PageRequest pageRequest) {
+		BooleanBuilder builder = new BooleanBuilder();
+		builder.and(board.deletedAt.isNull())
+				.and(board.createdAt.after(LocalDateTime.now().minusDays(7)));
 		return getBoardsWithFetchJoin(
-				board.deletedAt.isNull(),
-				pageRequest, board.reactions.size().desc(), board.createdAt.desc());
+				builder, pageRequest,
+				board.reactions.size().desc(),
+				board.createdAt.desc());
 	}
 
 	/**

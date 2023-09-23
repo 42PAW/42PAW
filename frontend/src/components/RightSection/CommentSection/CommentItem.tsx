@@ -75,7 +75,8 @@ const UserImageContainerStyled = styled.div`
   img {
     cursor: pointer;
     width: 45px;
-    height: 45px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
     border-radius: 100%;
     border: 1px solid var(--transparent);
   }

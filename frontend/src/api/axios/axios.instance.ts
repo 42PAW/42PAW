@@ -30,19 +30,10 @@ instance.interceptors.response.use(
       window.location.href = "/sign-up";
     }
     if (error.response?.status === STATUS_401_UNAUTHORIZED) {
-      if (import.meta.env.VITE_IS_LOCAL === "true") {
-        removeCookie("admin_access_token", {
-          path: "/",
-          domain: "localhost",
-        });
-        removeCookie("access_token");
-      } else {
-        removeCookie("admin_access_token", {
-          path: "/",
-          domain: "42paw.com",
-        });
-        removeCookie("access_token", { path: "/", domain: "42paw.com" });
-      }
+      removeCookie("access_token", {
+        path: "/",
+        domain: `${import.meta.env.VITE_FE_DOMAIN}`,
+      });
     }
     return Promise.reject(error);
   }

@@ -181,6 +181,7 @@ const OptionButtonContainerStyled = styled.div`
 `;
 
 const ProfileImageStyled = styled.img`
+  object-fit: cover;
   @media (max-width: 1023px) {
     width: 110%;
     aspect-ratio: 1 / 1;

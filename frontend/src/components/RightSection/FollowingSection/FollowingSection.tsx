@@ -61,7 +61,9 @@ const WrapperStyled = styled.div`
   align-items: center;
   width: 100%;
   flex: 1;
-  overflow: hidden;
+
+  overflow-x: hidden;
+  overflow-y: scroll;
 `;
 
 const FollowerItemWrapperStyled = styled.div`

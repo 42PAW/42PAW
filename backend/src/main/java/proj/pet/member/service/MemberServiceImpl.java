@@ -103,8 +103,8 @@ public class MemberServiceImpl implements MemberService {
 		Member member = memberRepository.findById(userSessionDto.getMemberId())
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		if (memberName != null) {
-			if (!memberName.matches("^[a-z._]+$"))
-				throw new ServiceException(INVALID_ARGUMENT, "닉네임은 10자 이내의 영문 소문자, 숫자, 특수문자(_), (.)만 가능합니다.");
+			if (!memberName.matches("^[a-zA-Z\\u00C0-\\u00FF\\u0100-\\u017F\\u0180-\\u024F\\u0370-\\u03FF\\u0400-\\u04FF\\u3040-\\u30FF\\u3130-\\u318F\\uAC00-\\uD7AF\\.\\_\\-][a-zA-Z0-9\\u00C0-\\u00FF\\u0100-\\u017F\\u0180-\\u024F\\u0370-\\u03FF\\u0400-\\u04FF\\u3040-\\u30FF\\u3130-\\u318F\\uAC00-\\uD7AF\\.\\_\\-]*$"))
+				throw new ServiceException(INVALID_ARGUMENT, "닉네임은 10자 이내의 한글, 영어, 프랑스, 스페인, 독일, 일본, 프랑스, 포르투갈어가 가능합니다.");
 			LocalDateTime changeableDate = member.getNicknameUpdatedAt().plusDays(30);
 			if (changeableDate.isAfter(LocalDateTime.now())) {
 				throw new ServiceException(NOT_ENOUGH_NICKNAME_CHANGE_PERIOD,

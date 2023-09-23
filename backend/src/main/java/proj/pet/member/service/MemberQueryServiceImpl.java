@@ -44,7 +44,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 	@Override
 	public MemberNicknameValidateResponseDto validateMemberNickname(String nickname) {
 		return memberMapper.toMemberNicknameValidateResponseDto(
-				nickname.matches("^[a-z._]+$")
+				nickname.matches("^[a-zA-Z\\u00C0-\\u00FF\\u0100-\\u017F\\u0180-\\u024F\\u0370-\\u03FF\\u0400-\\u04FF\\u3040-\\u30FF\\u3130-\\u318F\\uAC00-\\uD7AF\\.\\_\\-][a-zA-Z0-9\\u00C0-\\u00FF\\u0100-\\u017F\\u0180-\\u024F\\u0370-\\u03FF\\u0400-\\u04FF\\u3040-\\u30FF\\u3130-\\u318F\\uAC00-\\uD7AF\\.\\_\\-]*$")
 						&& memberRepository.findByNickname(nickname).isEmpty()
 		);
 	}

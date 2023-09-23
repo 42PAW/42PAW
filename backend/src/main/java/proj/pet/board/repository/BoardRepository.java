@@ -15,4 +15,9 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
 			+ "FROM Board b "
 			+ "ORDER BY b.createdAt DESC")
 	Page<Board> finaAllOrderByCreatedAtDesc(PageRequest pageRequest);
+
+	@Query("SELECT b "
+			+ "FROM Board b "
+			+ "ORDER BY count(b.reactions) DESC, b.createdAt DESC")
+	Page<Board> findAllOrderByReactionCountDesc(PageRequest pageRequest);
 }

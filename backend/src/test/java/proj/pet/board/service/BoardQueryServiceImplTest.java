@@ -131,7 +131,7 @@ public class BoardQueryServiceImplTest extends UnitTest {
 		given(boardRepository.getScrapBoards(loginUser.getId(), pageRequest)).willReturn(boards);
 
 		//when
-		boardQueryService.getScraps(loginUser.getId(), pageRequest);
+		boardQueryService.getScrapBoards(loginUser.getId(), pageRequest);
 
 		//then
 		then(boardRepository).should().getScrapBoards(loginUser.getId(), pageRequest);

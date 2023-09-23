@@ -110,6 +110,13 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 		}).toList();
 	}
 
+	private List<BoardInfoDto> getBoardInfoDtos(Long loginUserId, List<Long> boardIds,
+			Page<Board> boardPage) {
+		BoardViewSubDto boardViewSubDto =
+				boardRepository.getBoardViewWithBoardIdList(loginUserId, boardIds);
+		return boardMappingToDto(boardIds, boardViewSubDto, boardPage);
+	}
+
 	/**
 	 * 게시글의 반응과 내용, 그리고 해당 게시글에 대한 사용자의 Scrap과 Reaction 여부를 포함한 {@link BoardInfoDto}로 변환한다.
 	 *
@@ -156,6 +163,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	 * @return {@link BoardsPaginationDto} - 게시글 정보에 대한 페이지네이션
 	 * @see proj.pet.member.domain.UserSession
 	 */
+	//TODO: PROD에서 성능 테스트 후 둘 중 하나 삭제
 	@Override
 	public BoardsPaginationDto getMainViewBoards(Long loginUserId, PageRequest pageRequest) {
 		Page<Board> boardPages = boardRepository.getMainViewBoards(pageRequest);
@@ -168,14 +176,12 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	public BoardsPaginationDto getMainViewBoardsRefactoring(
 			Long loginUserId, PageRequest pageRequest) {
 		Page<Board> boardPage = boardRepository.finaAllOrderByCreatedAtDesc(pageRequest);
-		Streamable<Board> filteredBoard = filteringBoards(loginUserId, boardPage);
-		List<Long> boardIds = filteredBoard.map(Board::getId).toList();
-		BoardViewSubDto boardViewSubDto =
-				boardRepository.getBoardViewWithBoardIdList(loginUserId, boardIds);
-		List<BoardInfoDto> result = boardMappingToDto(boardIds, boardViewSubDto, boardPage);
+		List<Long> boardIds = filteringBoards(loginUserId, boardPage).map(Board::getId).toList();
+		List<BoardInfoDto> result = getBoardInfoDtos(loginUserId, boardIds, boardPage);
 		return boardMapper.toBoardsResponseDto(result, boardPage.getTotalElements());
 	}
 
+	//TODO: PROD에서 성능 테스트 후 둘 중 하나 삭제
 	@Override
 	public BoardsPaginationDto getHotBoards(Long loginUserId, PageRequest pageRequest) {
 		Page<Board> boardPages = boardRepository.getHotBoards(pageRequest);
@@ -186,6 +192,15 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	}
 
 	@Override
+	public BoardsPaginationDto getHotBoardsRefactoring(Long loginUserId, PageRequest pageRequest) {
+		Page<Board> boardPage = boardRepository.findAllOrderByReactionCountDesc(pageRequest);
+		List<Long> boardIds = filteringBoards(loginUserId, boardPage).map(Board::getId).toList();
+		List<BoardInfoDto> result = getBoardInfoDtos(loginUserId, boardIds, boardPage);
+		return boardMapper.toBoardsResponseDto(result, boardPage.getTotalElements());
+	}
+
+	//TODO: PROD에서 성능 테스트 후 둘 중 하나 삭제
+	@Override
 	public BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId,
 			PageRequest pageRequest) {
 		List<BoardInfoDto> result = boardRepository.getMemberBoards(memberId, pageRequest).stream()
@@ -194,10 +209,28 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 	}
 
 	@Override
-	public BoardsPaginationDto getScraps(Long loginUserId, PageRequest pageRequest) {
+	public BoardsPaginationDto getMemberBoardsRefactoring(Long loginUserId, Long memberId,
+			PageRequest pageRequest) {
+		Page<Board> memberBoards = boardRepository.getMemberBoards(memberId, pageRequest);
+		List<Long> boardIds = memberBoards.stream().map(Board::getId).toList();
+		List<BoardInfoDto> result = getBoardInfoDtos(loginUserId, boardIds, memberBoards);
+		return boardMapper.toBoardsResponseDto(result, memberBoards.getTotalElements());
+	}
+
+	@Override
+	public BoardsPaginationDto getScrapBoards(Long loginUserId, PageRequest pageRequest) {
 		Page<Board> scrapBoards = boardRepository.getScrapBoards(loginUserId, pageRequest);
 		List<BoardInfoDto> result =
 				scrapBoards.map(board -> createBoardInfoDto(loginUserId, board)).toList();
+		return boardMapper.toBoardsResponseDto(result, scrapBoards.getTotalElements());
+	}
+
+	@Override
+	public BoardsPaginationDto getScrapBoardsRefactoring(Long loginUserId,
+			PageRequest pageRequest) {
+		Page<Board> scrapBoards = boardRepository.getScrapBoards(loginUserId, pageRequest);
+		List<Long> boardIds = scrapBoards.stream().map(Board::getId).toList();
+		List<BoardInfoDto> result = getBoardInfoDtos(loginUserId, boardIds, scrapBoards);
 		return boardMapper.toBoardsResponseDto(result, scrapBoards.getTotalElements());
 	}
 
@@ -208,6 +241,15 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 				.stream()
 				.map(board -> createBoardInfoDto(memberId, board))
 				.toList();
+		return boardMapper.toBoardsResponseDto(result, followingsBoards.getTotalElements());
+	}
+
+	@Override
+	public BoardsPaginationDto getFollowingsBoardsRefactoring(Long memberId,
+			PageRequest pageRequest) {
+		Page<Board> followingsBoards = boardRepository.getFollowingsBoards(memberId, pageRequest);
+		List<Long> boardIds = followingsBoards.stream().map(Board::getId).toList();
+		List<BoardInfoDto> result = getBoardInfoDtos(memberId, boardIds, followingsBoards);
 		return boardMapper.toBoardsResponseDto(result, followingsBoards.getTotalElements());
 	}
 }

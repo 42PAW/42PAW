@@ -141,9 +141,12 @@ const BoardTemplate = (board: BoardTemplateProps) => {
     <>
       <BoardWrapperStyled ref={boardRef}>
         <BoardHeaderStyled>
-          <BoardProfileStyled onClick={handleOpenProfile}>
-            <img src={profileImageUrl || "/assets/profile.svg"} />
-            <div>
+          <BoardProfileStyled>
+            <img
+              src={profileImageUrl || "/assets/profile.svg"}
+              onClick={handleOpenProfile}
+            />
+            <div onClick={handleOpenProfile}>
               {memberName} {countryEmoji}
             </div>
           </BoardProfileStyled>
@@ -234,18 +237,19 @@ const BoardHeaderStyled = styled.div`
 const BoardProfileStyled = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 4%;
-
+  margin-left: 18px;
+  width: 50%;
   img {
     cursor: pointer;
-    width: 10%;
-    aspect-ratio: 1 / 1;
+    width: 15%;
+    min-width: 24px;
     object-fit: cover;
+    aspect-ratio: 1 / 1;
     border-radius: 100%;
   }
   div {
     cursor: pointer;
-    margin-left: 2%;
+    margin-left: 6px;
     font-size: 1.3rem;
     color: var(--white);
   }

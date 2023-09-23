@@ -342,10 +342,10 @@ const EditInfoStyled = styled.div`
     color: #d9d9d9;
   }
   input {
-    width: 180px;
+    width: 140px;
     height: 20px;
     border: none;
-    border-bottom: 1.5px solid var(--white);
+    border-bottom: 1px solid var(--transparent);
     font-size: 1.2rem;
     text-align: center;
     background-color: transparent;
@@ -361,11 +361,11 @@ const ButtonContainerStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 215px;
+  width: 200px;
   button {
     cursor: pointer;
     height: 33px;
-    width: 90px;
+    min-width: 90px;
     border-radius: 10px;
     border: 1px solid var(--white);
     background-color: transparent;

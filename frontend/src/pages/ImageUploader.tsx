@@ -46,21 +46,24 @@ const ImageUploader = () => {
   };
 
   useEffect(() => {
-    if (uploadClicked && cropImageCompleted && uploadFiles.length > 0) {
-      try {
-        axiosCreateBoard({
-          mediaDataList: uploadFiles,
-          categoryList: categoryList,
-          content: caption,
-        });
-        const uploadCompleteMsg = language.uploadComplete;
-        popToast(uploadCompleteMsg, "P");
-        setFilesUploaded(true);
-        goHome();
-      } catch (error) {
-        throw error;
+    const upload = async () => {
+      if (uploadClicked && cropImageCompleted && uploadFiles.length > 0) {
+        try {
+          await axiosCreateBoard({
+            mediaDataList: uploadFiles,
+            categoryList: categoryList,
+            content: caption,
+          });
+          const uploadCompleteMsg = language.uploadComplete;
+          popToast(uploadCompleteMsg, "P");
+          setFilesUploaded(true);
+          goHome();
+        } catch (error) {
+          throw error;
+        }
       }
-    }
+    };
+    upload();
   }, [cropImageCompleted, uploadFiles, categoryList, caption, language]);
 
   useEffect(() => {
@@ -90,7 +93,6 @@ const ImageUploader = () => {
 
   const cropImage = (index: number) => {
     const canvas = cropperRef.current?.getCanvas() as HTMLCanvasElement;
-    console.log(canvas);
     if (canvas) {
       const ctx = canvas.getContext("2d");
       const img = new Image();
@@ -211,7 +213,7 @@ const ImageUploader = () => {
             }
           });
         } else {
-          popToast("이미지 용광을 초과했습니다.", "N");
+          popToast("이미지 용량을 초과했습니다.", "N");
           return null;
         }
       })
@@ -341,24 +343,23 @@ const ImageUploader = () => {
           placeholder={language.enterCaption}
           value={caption}
           onChange={captionChange}
+          maxLength={100}
         />
       </CaptionBoxStyled>
       <CategoryButtonStyled>
         <AnimalButtonContainer
-          columns={3}
-          buttonRow={17}
+          columns={2}
+          buttonRow={35}
           buttonFontSize={110}
           array={categoryList}
           setter={setCategoryList}
         />
       </CategoryButtonStyled>
       <ButtonDivStyled>
-        <UploadbuttonStyled onClick={upload} disabled={filesUploaded}>
+        <ButtonStyled onClick={upload} disabled={filesUploaded}>
           {language.confirm}
-        </UploadbuttonStyled>
-        <CancelbuttonStyled onClick={goHome}>
-          {language.cancel}
-        </CancelbuttonStyled>
+        </ButtonStyled>
+        <ButtonStyled onClick={goHome}>{language.cancel}</ButtonStyled>
       </ButtonDivStyled>
       <ScrollMarginStyled />
     </WrapperStyled>
@@ -379,47 +380,51 @@ const SmallPreviewStyled = styled.div`
   width: 55%;
   height: 48px;
   border-radius: 10px;
-  margin-top: 2%;
+  margin-top: 5%;
 `;
 
 const SmallPreviewUnitStyled = styled.div`
   display: flex;
   position: relative;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   margin-right: 7px;
   background-color: var(--transparent);
-  border: 4px solid var(--white);
   border-radius: 10px;
   overflow: hidden;
+  &:hover {
+    button {
+      transition: all 0.3s ease;
+      opacity: 1;
+    }
+  }
 `;
 
 const DeleteButtonStyled = styled.button`
   position: absolute;
   top: 2px;
   right: 2px;
-  background-color: red;
-  color: white;
+  background-color: var(--transparent);
+  color: #ffffff;
   border: none;
   border-radius: 50%;
   padding: 3px 6px;
   font-size: 10px;
   cursor: pointer;
-  opacity: 0.7;
+  opacity: 0;
 `;
 
 const SmallUploadButtonWrapperStyled = styled.div`
   display: flex;
-  background-image: url("/assets/upload.png");
+  background-color: var(--transparent);
   background-size: cover;
   border-radius: 10px;
-  pointer: cursor;
+  cursor: pointer;
   width: 48px;
   height: 48px;
   justify-content: center;
   align-items: center;
-  box-shadow: 2px 2px 2px var(--grey);
 `;
 
 const SmallUploadButton = styled.input`
@@ -437,13 +442,17 @@ const UploadMainPreviewWrapperStyled = styled.div`
   align-items: center;
   width: 55%;
   height: 285px;
-  color: var(--white);
-  border-radius: 5px;
-  border: 5px solid var(--white);
+  color: var(--transparent2);
+  border-radius: 15px;
+  background-color: var(--transparent);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+  &:hover {
+    opacity: 1;
+  }
   margin-top: 10px;
   margin-bottom: 10px;
   cursor: pointer;
-  box-shadow: 2px 2px 2px var(--grey);
 `;
 
 const UploadMainPreviewStyled = styled.input`
@@ -459,8 +468,8 @@ const UploadDemandStyled = styled.label`
   width: 100%;
   justify-content: center;
   align-items: center;
-  color: var(--white);
-  font-size: 1.3rem;
+  cursor: pointer;
+  font-size: 1.2rem;
   &:hover {
   }
 `;
@@ -469,15 +478,16 @@ const DivisionLineStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 57%;
+  margin-top: 5px;
+  width: 54%;
   height: 1px;
-  background-color: var(--white);
+  background-color: var(--transparent);
 `;
 
 const CaptionBoxStyled = styled.div`
   display: flex;
   align-items: start;
-  width: 58%;
+  width: 54%;
   min-height: 4%;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -486,20 +496,19 @@ const CaptionBoxStyled = styled.div`
     font-family: "Noto Sans KR", sans-serif;
     font-weight: bolder;
     width: 100%;
-    height: 70%
-    border: none;
+    height: 70%;
     background: none;
     outline: none;
     border: none;
     caret-color: var(--white);
     color: var(--white);
-    font-size: 12px;
+    font-size: 1.2rem;
     font-weight: lighter;
     white-space: pre-wrap;
     overflow-y: scroll;
     text-overflow: clip;
     &::placeholder {
-      color: var(--white);
+      color: var(--transparent2);
       opacity: 0.7;
     }
   }
@@ -507,8 +516,6 @@ const CaptionBoxStyled = styled.div`
 
 const CategoryButtonStyled = styled.div`
   display: flex;
-  width: 80%;
-  height: 80px;
   justify-content: center;
   align-items: center;
   background-color: var(--transparent);
@@ -518,56 +525,40 @@ const CategoryButtonStyled = styled.div`
 
 const ButtonDivStyled = styled.div`
   display: flex;
-  width: 80%;
+  width: 38%;
   height: 30px;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin-top: 5px;
+  margin-top: 4%;
   margin-bottom: 5px;
 `;
 
-const UploadbuttonStyled = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer: cursor;
-  width: 70px;
-  height: 25px;
-  font-size: 12px;
-  background-color: var(--purple);
-  color: var(--white);
-  border: none;
-  border-radius: 10px;
-  margin-right: 10px;
-  box-shadow: 0px 4px 4px var(--grey);
-  &:hover {
-    opacity: 0.5;
-  }
-`;
-
-const CancelbuttonStyled = styled.button`
+const ButtonStyled = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  width: 70px;
-  height: 25px;
+  width: 80px;
+  height: 30px;
   font-size: 12px;
-  background-color: var(--white);
-  color: var(--black);
-  border: none;
-  border-radius: 10px;
-  margin-left: 10px;
-  box-shadow: 0px 4px 4px var(--grey);
+  background-color: transparent;
+  color: var(--white);
+  border: 1px solid white;
+  border-radius: 8px;
   &:hover {
-    opacity: 0.5;
+    background-color: var(--white);
+    color: var(--pink);
+    transition: all 0.3s ease;
   }
 `;
 
 const ScrollMarginStyled = styled.div`
   display: flex;
   width: 100%;
-  height: 95px;
+  height: 110px;
+  @media screen and (display-mode: standalone) {
+    height: 130px;
+  }
 `;
 
 // Cropper
@@ -576,12 +567,11 @@ const FixedCropperStyled = styled(FixedCropper)`
   justify-content: center;
   align-items: center;
   background-color: var(--transparent);
-  width: 53%;
+  width: 55%;
   min-height: 285px;
   max-height: 295px;
   border-radius: 5px;
-  border: 5px solid var(--white);
-  box-shadow: 2px 2px 2px var(--grey);
+
   margin-top: 5px;
 `;
 
@@ -590,7 +580,7 @@ const CropperUtilsStyled = styled.div`
   justify-content: space-between;
   width: 55%;
   height: 20px;
-  margin-top: 5px;
+  margin-top: 10px;
   margin-bottom: 5px;
 `;
 
@@ -599,28 +589,33 @@ const TodayDateStyled = styled.div`
   justify-content: center;
   align-items: center;
   height: 20px;
-  font-size: 10px;
-  color: var(--white);
+  font-size: 1rem;
+  margin-left: 5px;
+  color: #ffffffd6;
   justify-content: flex-start;
-  font-weight: lighter;
+  font-weight: 400;
 `;
 
 const ResetButtonStyled = styled.button`
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
-  background-color: var(--purple);
-  pointer: cursor;
+  background-color: transparent;
+  cursor: pointer;
   width: 40px;
   height: 100%;
   border-radius: 10px;
   cursor: pointer;
   border: none;
   font-weight: lighter;
-  box-shadow: 0px 4px 4px var(--grey);
+  margin-right: 5px;
+  padding: 0;
   img {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
+    &:hover {
+      opacity: 0.8;
+    }
   }
 `;
 

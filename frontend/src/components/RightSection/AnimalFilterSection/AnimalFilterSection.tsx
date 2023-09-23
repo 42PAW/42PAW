@@ -74,7 +74,9 @@ const WrapperStyled = styled.div`
 `;
 
 const CategoryIconContainerStyled = styled.div`
+  width: 50%;
   display: flex;
+  justify-content: flex-start;
   align-items: center;
   margin-top: 30px;
   margin-left: 19%;
@@ -83,9 +85,8 @@ const CategoryIconContainerStyled = styled.div`
   font-weight: bold;
   font-size: 1.3rem;
   img {
-    margin-left: -15px;
     margin-right: 10px;
-    width: 9%;
+    width: 24px;
   }
 `;
 

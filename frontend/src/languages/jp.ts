@@ -44,7 +44,7 @@ export const jp = {
   Amphibians: "両生類",
   Insects: "昆虫",
 
-  uploadImage: "画像をアップロードしてください！",
+  uploadImage: "画像をアップロードしてください",
   enterCaption: "キャプションを入力してください",
   enterUsername: "ユーザー名を入力してください",
   enterIntranameOrNickname: "イントラ名またはニックネームを入力してください",

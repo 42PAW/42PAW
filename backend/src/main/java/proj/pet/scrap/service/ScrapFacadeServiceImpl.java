@@ -32,6 +32,13 @@ public class ScrapFacadeServiceImpl implements ScrapFacadeService {
 	@Transactional(readOnly = true)
 	@Override
 	public BoardsPaginationDto getMyScraps(UserSessionDto userSessionDto, PageRequest pageRequest) {
-		return boardQueryService.getScraps(userSessionDto.getMemberId(), pageRequest);
+		return boardQueryService.getScrapBoards(userSessionDto.getMemberId(), pageRequest);
+	}
+
+	@Override
+	public BoardsPaginationDto getMyScrapsRefactoring(UserSessionDto userSessionDto,
+			PageRequest pageRequest) {
+		return boardQueryService.getScrapBoardsRefactoring(userSessionDto.getMemberId(),
+				pageRequest);
 	}
 }

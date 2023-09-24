@@ -38,4 +38,8 @@ public class Notice extends IdentityDomain {
 	public List<String> extractParameters() {
 		return List.of(parameters.split(","));
 	}
+
+	public void markAsRead() {
+		this.readAt = LocalDateTime.now();
+	}
 }

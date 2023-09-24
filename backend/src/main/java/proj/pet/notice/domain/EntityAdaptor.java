@@ -1,6 +1,5 @@
 package proj.pet.notice.domain;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import proj.pet.board.domain.Board;
 import proj.pet.comment.domain.Comment;
@@ -13,7 +12,6 @@ import java.util.List;
 import static proj.pet.notice.domain.NoticeEntityType.*;
 
 @Component
-@RequiredArgsConstructor
 public class EntityAdaptor {
 
 	public <T extends IdDomain<?>> NoticeParameter toNoticeParameter(T entity) {

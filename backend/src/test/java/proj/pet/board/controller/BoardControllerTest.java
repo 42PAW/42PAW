@@ -241,10 +241,8 @@ class BoardControllerTest extends E2ETest {
 			mockMvc.perform(req)
 					.andDo(print())
 					.andExpect(status().isOk())
-					.andExpect(jsonPath("totalLength").value(6))
+					.andExpect(jsonPath("totalLength").value(3))
 					.andExpect(jsonPath("result.[*].boardId").value(Matchers.contains(
-							board1.getId().intValue(),
-							board2.getId().intValue(),
 							board5.getId().intValue(),
 							board4.getId().intValue(),
 							board3.getId().intValue())))

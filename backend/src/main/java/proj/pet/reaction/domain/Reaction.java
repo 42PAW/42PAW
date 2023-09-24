@@ -1,6 +1,17 @@
 package proj.pet.reaction.domain;
 
-import jakarta.persistence.*;
+import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.board.domain.Board;
@@ -9,15 +20,11 @@ import proj.pet.utils.domain.IdentityDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
 
-import java.time.LocalDateTime;
-
-import static jakarta.persistence.FetchType.LAZY;
-import static lombok.AccessLevel.PROTECTED;
-
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "REACTION",
-		uniqueConstraints = {@UniqueConstraint(name = "UNIQUE_REACTION", columnNames = {"MEMBER_ID", "BOARD_ID"})})
+		uniqueConstraints = {@UniqueConstraint(name = "UNIQUE_REACTION", columnNames = {"MEMBER_ID",
+				"BOARD_ID"})})
 @Getter
 public class Reaction extends IdentityDomain implements Validatable {
 
@@ -50,11 +57,13 @@ public class Reaction extends IdentityDomain implements Validatable {
 		RuntimeExceptionThrower.checkValidity(this);
 	}
 
-	public static Reaction of(Board board, Member member, ReactionType reactionType, LocalDateTime now) {
+	public static Reaction of(Board board, Member member, ReactionType reactionType,
+			LocalDateTime now) {
 		return new Reaction(board, member, reactionType, now);
 	}
 
-	@Override public boolean isValid() {
+	@Override
+	public boolean isValid() {
 		return board != null
 				&& !board.isNew()
 				&& member != null

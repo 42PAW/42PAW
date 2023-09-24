@@ -131,7 +131,7 @@ public class BoardQueryServiceImplTest extends UnitTest {
 		given(boardRepository.getScrapBoards(loginUser.getId(), pageRequest)).willReturn(boards);
 
 		//when
-		boardQueryService.getScraps(loginUser.getId(), pageRequest);
+		boardQueryService.getScrapBoards(loginUser.getId(), pageRequest);
 
 		//then
 		then(boardRepository).should().getScrapBoards(loginUser.getId(), pageRequest);
@@ -153,8 +153,6 @@ public class BoardQueryServiceImplTest extends UnitTest {
 		PageRequest pageRequest = PageRequest.of(0, 10);
 		given(boardRepository.getFollowingsBoards(loginUser.getId(), pageRequest))
 				.willReturn(boards);
-		given(followRepository.existsByFromIdAndToId(loginUser.getId(),
-				following.getId())).willReturn(true);
 
 		//when
 		boardQueryService.getFollowingsBoards(loginUser.getId(), pageRequest);

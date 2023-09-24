@@ -7,11 +7,22 @@ public interface BoardQueryService {
 
 	BoardsPaginationDto getMainViewBoards(Long loginUserId, PageRequest pageRequest);
 
+	BoardsPaginationDto getMainViewBoardsRefactoring(Long loginUserId, PageRequest pageRequest);
+
 	BoardsPaginationDto getHotBoards(Long loginUserId, PageRequest pageRequest);
+
+	BoardsPaginationDto getHotBoardsRefactoring(Long loginUserId, PageRequest pageRequest);
 
 	BoardsPaginationDto getMemberBoards(Long loginUserId, Long memberId, PageRequest pageRequest);
 
-	BoardsPaginationDto getScraps(Long loginUserId, PageRequest pageRequest);
+	BoardsPaginationDto getMemberBoardsRefactoring(Long loginUserId, Long memberId,
+			PageRequest pageRequest);
+
+	BoardsPaginationDto getScrapBoards(Long loginUserId, PageRequest pageRequest);
+
+	BoardsPaginationDto getScrapBoardsRefactoring(Long loginUserId, PageRequest pageRequest);
 
 	BoardsPaginationDto getFollowingsBoards(Long memberId, PageRequest pageRequest);
+
+	BoardsPaginationDto getFollowingsBoardsRefactoring(Long memberId, PageRequest pageRequest);
 }

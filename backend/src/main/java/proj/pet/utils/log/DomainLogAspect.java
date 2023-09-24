@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Slf4j
 public class DomainLogAspect extends LogAspectAbstract implements LogAspect {
-	@Pointcut("execution(* proj.pet..*Domain.*(..))")
+
+	@Pointcut("execution(* proj.pet..*Domain*.*(..))")
 	@Override
 	public void logging() {
 

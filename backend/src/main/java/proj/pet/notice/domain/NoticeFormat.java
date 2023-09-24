@@ -7,6 +7,7 @@ import proj.pet.utils.domain.Validatable;
 @Getter
 public class NoticeFormat implements Validatable {
 	private static final String PLACEHOLDER = "{}";
+	private static final String PLACEHOLDER_REGEX = "\\{\\}";
 	private final String format;
 
 	private NoticeFormat(String format) {
@@ -19,7 +20,7 @@ public class NoticeFormat implements Validatable {
 	}
 
 	public int countPlaceholders() {
-		return format.split(PLACEHOLDER).length - 1;
+		return format.split(PLACEHOLDER_REGEX).length - 1;
 	}
 
 	@Override

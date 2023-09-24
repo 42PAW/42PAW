@@ -1,76 +1,106 @@
-import { useState } from "react";
-import styled from "styled-components";
-import { BoardCategory } from "../types/enum/board.category.enum";
-import { boardCategoryState } from "../recoil/atom";
-import { useSetRecoilState } from "recoil";
+import { atom, useSetRecoilState, useRecoilState } from "recoil";
+import styled, { keyframes } from "styled-components";
+import { Board } from "@/types/enum/board.category.enum";
+import { boardCategoryState } from "@/recoil/atom";
+import { languageState } from "@/recoil/atom";
+
+export const buttonToggledState = atom<0 | 1 | 2>({
+  key: "buttongToggled",
+  default: 0,
+});
 
 const BoardSortToggle = () => {
-  const [buttonToggled, setbuttonToggled] = useState<number>(0);
-  const setBoardCategory = useSetRecoilState<BoardCategory>(boardCategoryState);
+  const [language] = useRecoilState<any>(languageState);
+  const [buttonToggled, setbuttonToggled] = useRecoilState(buttonToggledState);
+  const setBoard = useSetRecoilState<Board>(boardCategoryState);
 
   const handleToggle = (toggle: string) => {
-    if (toggle === BoardCategory.DEFAULT) {
+    if (toggle === Board.DEFAULT) {
       setbuttonToggled(0);
-      setBoardCategory(BoardCategory.DEFAULT);
+      setBoard(Board.DEFAULT);
     }
-    if (toggle === BoardCategory.TRENDING) {
+    if (toggle === Board.TRENDING) {
       setbuttonToggled(1);
-      setBoardCategory(BoardCategory.TRENDING);
+      setBoard(Board.TRENDING);
     }
-    if (toggle === BoardCategory.FOLLOWING) {
+    if (toggle === Board.FOLLOWING) {
       setbuttonToggled(2);
-      setBoardCategory(BoardCategory.FOLLOWING);
+      setBoard(Board.FOLLOWING);
     }
   };
 
   return (
     <BoardSortToggleWrapperStyled>
       <BoardSortToggleStyled $buttonToggled={buttonToggled}>
-        <button onClick={() => handleToggle(BoardCategory.DEFAULT)}>
-          기본순
+        <button onClick={() => handleToggle(Board.DEFAULT)}>
+          {language.defaultBoards}
         </button>
-        <button onClick={() => handleToggle(BoardCategory.TRENDING)}>
-          인기순
+        <button onClick={() => handleToggle(Board.TRENDING)}>
+          {language.trendingBoards}
         </button>
-        <button onClick={() => handleToggle(BoardCategory.FOLLOWING)}>
-          팔로우순
+        <button onClick={() => handleToggle(Board.FOLLOWING)}>
+          {language.followingBoards}
         </button>
-        <div />
       </BoardSortToggleStyled>
+      <SortTabStyled $buttonToggled={buttonToggled} />
     </BoardSortToggleWrapperStyled>
   );
 };
 
+const waveAnimation = keyframes`
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+`;
+
 const BoardSortToggleWrapperStyled = styled.div`
+  border-radius: 30px;
   position: absolute;
   margin-top: 2%;
   z-index: 1;
 `;
 
+const SortTabStyled = styled.div<{ $buttonToggled: number }>`
+  margin-top: -30px;
+  width: 33.3%;
+  height: 100%;
+  position: absolute;
+  background: ${({ $buttonToggled }) =>
+    $buttonToggled === 0
+      ? "linear-gradient(270deg, var(--lightpurple), var(--lightpink))"
+      : $buttonToggled === 1
+      ? "linear-gradient(270deg, var(--lightpurple), var(--lightpink))"
+      : "linear-gradient(270deg, var(--lightpurple), var(--lightpink))"};
+  margin-left: ${({ $buttonToggled }) => $buttonToggled * 33.3}%;
+  transition: all 0.3s ease-in-out;
+  border-radius: 30px;
+  background-size: 200% 200%;
+  animation: ${waveAnimation} 2s ease infinite;
+`;
+
 const BoardSortToggleStyled = styled.div<{ $buttonToggled: number }>`
+  display: flex;
+  justify-content: space-around;
   position: relative;
-  width: 195px;
-  height: 30px;
+  width: 100%;
+  min-height: 30px;
   border-radius: 30px;
   background-color: var(--transparent);
   button {
+    z-index: 1;
+    padding: 0px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
     background-color: transparent;
     color: var(--white);
     border-radius: 30px;
     border: none;
-    height: 100%;
     width: 33.3%;
-    font-size: 30%;
-  }
-  div {
-    height: 30px;
-    width: 65px;
-    margin-top: -30px;
-    margin-left: ${({ $buttonToggled }) => $buttonToggled * 65}px;
-    transition: margin-left 0.3s ease-in-out;
-    border-radius: 30px;
-    background-color: var(--pink);
+    min-width: 70px;
+    font-size: 1rem;
+    font-weight: 600;
   }
 `;
 

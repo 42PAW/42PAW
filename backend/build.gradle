@@ -1,86 +1,105 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.1.0'
-	id 'io.spring.dependency-management' version '1.1.0'
-	id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
+    id 'java'
+    id 'org.springframework.boot' version '3.1.0'
+    id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group = 'proj'
-version = '0.0.1-SNAPSHOT'
+version = '1.0'
 sourceCompatibility = '17'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
-}
-
-def querydslDir = "$buildDir/generated/querydsl"
-
-querydsl {
-	jpa = true
-	querydslSourcesDir = querydslDir
-}
-
-sourceSets {
-	main.java.srcDir querydslDir
-}
-
-configurations {
-	querydsl.extendsFrom compileClasspath
-}
-
-compileQuerydsl {
-	options.annotationProcessorPath = configurations.querydsl
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-	implementation 'com.h2database:h2' // 인메모리 DB(H2) 의존성 추가
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-	//QueryDSL
-	implementation "com.querydsl:querydsl-codegen:5.0.0"
-	implementation "com.querydsl:querydsl-jpa:5.0.0"
-	implementation "com.querydsl:querydsl-apt:5.0.0"
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
-	//AWS
-	implementation 'org.springframework.cloud:spring-cloud-dependencies:2021.0.8'
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-	implementation 'javax.xml.bind:jaxb-api:2.3.1' // java 8 이후 포함되지 않는 파일 업로드 시 사용되던 API
+    // Cache
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation "com.github.ben-manes.caffeine:caffeine:3.1.8"
 
+    // OAUTH, AOP
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.72.Final'
 
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'com.h2database:h2'
+    // Monitoring - Prometheus
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-core:1.11.2'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    //QueryDSL
+    implementation "com.querydsl:querydsl-codegen:5.0.0"
+    implementation "com.querydsl:querydsl-jpa:5.0.0:jakarta"
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+
+    //AWS
+    implementation 'org.springframework.cloud:spring-cloud-dependencies:2021.0.8'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1' // java 8 이후 포함되지 않는 파일 업로드 시 사용되던 API
+
+    //MapStruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'com.h2database:h2'
 }
 
-tasks.named('compileJava') {
-	dependsOn 'compileQuerydsl'
+ext {
+    configDirectory = file("$rootDir/backend_config")
 }
 
-project.afterEvaluate {
-	project.tasks.compileQuerydsl.options.compilerArgs = [
-			"-proc:only",
-			"-processor", project.querydsl.processors() +
-					',lombok.launch.AnnotationProcessorHider$AnnotationProcessor'
-	]
+tasks.register('copyMainConfig', Copy) {
+    from "${configDirectory}/main/resources"
+    into 'src/main/resources'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-	systemProperty 'spring.profiles.active', 'test'
+tasks.register('copyTestConfig', Copy) {
+    from "${configDirectory}/test/resources"
+    into 'src/test/resources'
+}
 
+tasks.named('processResources') {
+    dependsOn 'copyMainConfig'
+}
+
+tasks.named('processTestResources') {
+    dependsOn 'copyTestConfig'
+}
+
+jar {
+    enabled = false
+}
+
+test {
+    useJUnitPlatform()
 }

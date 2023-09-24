@@ -1,6 +1,7 @@
 
 <div align="center">
-  <h1>42pet</h1>
+  <h1>42paw</h1>
+  <h3>Pets Are the World!</h3>
   <br/>
   <div>프로젝트 멤버
     <br/>

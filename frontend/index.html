@@ -2,12 +2,35 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/src/assets/dogLogo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>42펫</title>
+    <link rel="icon" type="image/svg+xml+png" href="/assets/paw.png" />
+    <meta
+      name="viewport"
+      content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#c1c2e1f9" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://42paw.com" />
+    <meta property="og:title" content="42PAW" />
+    <meta property="og:description" content="42PAW. Pets Are the World!" />
+    <link rel="manifest" href="manifest.json" />
+    <title>42PAW</title>
   </head>
   <body>
     <div id="root"></div>
+    <!-- <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/serviceWorker.js")
+          .then((registration) => {
+            console.log("Service worker registration succeeded:", registration);
+          })
+          .catch((err) => {
+            console.log("Service worker registration failed:", error);
+          });
+      } else {
+        console.log("Service workers are not supported.");
+      }
+    </script> -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

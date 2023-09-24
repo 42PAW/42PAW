@@ -1,24 +1,59 @@
 import styled from "styled-components";
-import { CommentInfoDTO } from "../../../types/dto/board.dto";
+import { CommentInfoDTO } from "@/types/dto/board.dto";
+import useParseDate from "@/hooks/useParseDate";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { currentMemberIdState } from "@/recoil/atom";
+import useModal from "@/hooks/useModal";
+import { ModalType } from "@/types/enum/modal.enum";
+import { useCountryEmoji } from "@/hooks/useCountryEmoji";
+import MeatballButton from "@/components/MeatballButton";
+import { currentBoardIdState } from "@/recoil/atom";
 
 const CommentItem = (commentInfo: CommentInfoDTO) => {
-  const { commentId, memberId, memberName, comment, profileImage, createdAt } =
-    commentInfo;
+  const {
+    commentId,
+    memberId,
+    memberName,
+    country,
+    comment,
+    profileImageUrl,
+    createdAt,
+    followType,
+  } = commentInfo;
+
+  const setCurrentMemberId = useSetRecoilState(currentMemberIdState);
+  const [currentBoardId] = useRecoilState(currentBoardIdState);
+  const { openModal } = useModal();
+  const { parseDate } = useParseDate();
+  const parsedDate = parseDate(createdAt);
+
+  const handleOpenProfile = () => {
+    setCurrentMemberId(memberId);
+    openModal(ModalType.PROFILECARD);
+  };
 
   return (
     <CommentItemStyled>
       <UserImageContainerStyled>
-        <img src={profileImage} />
+        <img
+          src={profileImageUrl || "/assets/profile.svg"}
+          onClick={handleOpenProfile}
+        />
       </UserImageContainerStyled>
       <CommentItemRightStyled>
         <NicknameToggleContainerStyled>
-          <NicknameContainerStyled>
-            {memberName}
-            <span>{createdAt}</span>
+          <NicknameContainerStyled onClick={handleOpenProfile}>
+            {memberName} {useCountryEmoji(country)}
+            <span>{parsedDate}</span>
           </NicknameContainerStyled>
-          <ToggleButtonStyled>
-            <img src="/src/assets/optionW.png" />
-          </ToggleButtonStyled>
+          <MeatballButton
+            memberId={memberId}
+            boardId={currentBoardId as number}
+            commentId={commentId}
+            memberName={memberName}
+            followStatus={followType}
+            component="comment"
+          />
         </NicknameToggleContainerStyled>
         <CommentContentContainerStyled>{comment}</CommentContentContainerStyled>
       </CommentItemRightStyled>
@@ -38,8 +73,10 @@ const UserImageContainerStyled = styled.div`
   width: 70px;
   height: 70px;
   img {
+    cursor: pointer;
     width: 45px;
-    height: 45px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
     border-radius: 100%;
     border: 1px solid var(--transparent);
   }
@@ -54,45 +91,39 @@ const CommentItemRightStyled = styled.div`
 `;
 
 const NicknameToggleContainerStyled = styled.div`
-  margin-top: 8px;
+  margin-top: 6px;
+  margin-bottom: -2px;
   display: flex;
+  position: relative;
   align-items: center;
   justify-content: space-between;
   height: 30px;
   font-size: 15px;
   color: var(--white);
-  font-weight: bold;
 `;
 
 const NicknameContainerStyled = styled.div`
+  cursor: pointer;
   width: 60%;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 500;
+  position: relative;
   span {
+    cursor: default;
+    position: absolute;
+    margin-top: 2px;
     margin-left: 5px;
-    font-weight: 300;
-    font-size: 11px;
-  }
-`;
-
-const ToggleButtonStyled = styled.button`
-  height: 35px;
-  width: 35px;
-  background-color: transparent;
-  border: none;
-  img {
-    cursor: pointer;
-    width: 100%;
-  }
-  img:hover {
-    opacity: 0.7;
+    font-weight: 200;
+    font-size: 1rem;
   }
 `;
 
 const CommentContentContainerStyled = styled.div`
   width: 90%;
-  font-size: 13px;
+  font-size: 1.3rem;
   color: var(--white);
-  line-height: 21px;
+  line-height: 17px;
+  font-weight: 400;
 `;
 
 export default CommentItem;

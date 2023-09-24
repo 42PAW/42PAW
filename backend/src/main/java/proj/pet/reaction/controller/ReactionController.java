@@ -1,27 +1,35 @@
 package proj.pet.reaction.controller;
 
-import java.util.Map;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import proj.pet.auth.domain.AuthGuard;
+import proj.pet.auth.domain.AuthLevel;
+import proj.pet.member.domain.UserSession;
+import proj.pet.member.dto.UserSessionDto;
+import proj.pet.reaction.dto.ReactionRequestDto;
 import proj.pet.reaction.service.ReactionFacadeService;
 
-@RestController("/v1/reactions")
+@RestController
+@RequestMapping("/v1/reactions")
 @RequiredArgsConstructor
 public class ReactionController {
 
 	private final ReactionFacadeService reactionFacadeService;
 
-	@PostMapping("/")
-	public void createReaction(@RequestBody Map<String, Long> body) {
-		reactionFacadeService.createReaction(body.get("boardId"));
+	@PostMapping
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
+	public void createReaction(
+			@UserSession UserSessionDto userSessionDto,
+			@Valid @RequestBody ReactionRequestDto reactionRequestDto) {
+		reactionFacadeService.createReaction(userSessionDto, reactionRequestDto);
 	}
 
 	@DeleteMapping("/boards/{boardId}")
-	public void deleteReaction(@PathVariable("boardId") Long boardId) {
-		reactionFacadeService.deleteReaction();
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
+	public void deleteReaction(
+			@UserSession UserSessionDto userSessionDto,
+			@PathVariable("boardId") Long boardId) {
+		reactionFacadeService.deleteReaction(userSessionDto, boardId);
 	}
 }

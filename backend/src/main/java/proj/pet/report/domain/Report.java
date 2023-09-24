@@ -1,49 +1,89 @@
 package proj.pet.report.domain;
 
-import jakarta.persistence.*;
+import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import proj.pet.board.domain.Board;
-import proj.pet.comment.domain.Comment;
+import lombok.ToString;
 import proj.pet.member.domain.Member;
-
-import java.time.LocalDateTime;
-
-import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.AUTO;
-import static lombok.AccessLevel.PROTECTED;
+import proj.pet.utils.domain.IdentityDomain;
+import proj.pet.utils.domain.RuntimeExceptionThrower;
+import proj.pet.utils.domain.Validatable;
 
 @NoArgsConstructor(access = PROTECTED)
 @Entity
+@Table(name = "REPORT")
 @Getter
-public class Report {
-
-	@Id
-	@GeneratedValue(strategy = AUTO)
-	private Long id;
+@ToString
+public class Report extends IdentityDomain implements Validatable {
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "member_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "MEMBER_ID", nullable = false, updatable = false)
 	private Member from;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "reported_member_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "REPORTED_MEMBER_ID", nullable = false, updatable = false)
 	private Member to;
 
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "board_id", nullable = false, updatable = false, insertable = false)
-	private Board board;
+	@Column(name = "BOARD_ID")
+	private Long boardId;
 
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "comment_id", nullable = false, updatable = false, insertable = false)
-	private Comment comment;
+	@Column(name = "COMMENT_ID")
+	private Long commentId;
 
-	@Column(name = "reason", nullable = false)
+	@Column(name = "REASON", nullable = false, length = 32)
+	@Enumerated(EnumType.STRING)
 	private ReportReason reason;
 
-	@Column(name = "content", length = 255)
+	@Column(name = "CONTENT", length = 255)
 	private String content;
 
-	@Column(name = "created_at", nullable = false)
+	@Column(name = "CREATED_AT", nullable = false)
 	private LocalDateTime createdAt;
+
+	private Report(Member from, Member to, ReportReason reason, String content, LocalDateTime now) {
+		this.from = from;
+		this.to = to;
+		this.reason = reason;
+		this.content = content;
+		this.createdAt = now;
+		RuntimeExceptionThrower.checkValidity(this);
+	}
+
+	public static Report ofMember(Member from, Member to, ReportReason reason, String content,
+			LocalDateTime now) {
+		return new Report(from, to, reason, content, now);
+	}
+
+	public static Report ofBoard(Member from, Member to, Long boardId, ReportReason reason,
+			String content, LocalDateTime now) {
+		Report report = new Report(from, to, reason, content, now);
+		report.boardId = boardId;
+		return report;
+	}
+
+	public static Report ofComment(Member from, Member to, Long boardId, Long commentId,
+			ReportReason reason, String content, LocalDateTime now) {
+		Report report = new Report(from, to, reason, content, now);
+		report.boardId = boardId;
+		report.commentId = commentId;
+		return report;
+	}
+
+	@Override
+	public boolean isValid() {
+		return from != null && !from.isNew()
+				&& to != null && !to.isNew()
+				&& reason != null
+				&& createdAt != null;
+	}
 }

@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.member.domain.Member;
+import proj.pet.utils.domain.IdDomain;
 import proj.pet.utils.domain.MemberCompositeKey;
+import proj.pet.utils.domain.RuntimeExceptionThrower;
+import proj.pet.utils.domain.Validatable;
 
 import java.time.LocalDateTime;
 
@@ -14,19 +17,41 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "FOLLOW")
 @Getter
-public class Follow {
+public class Follow extends IdDomain<MemberCompositeKey> implements Validatable {
 
 	@EmbeddedId
 	private MemberCompositeKey id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "MEMBER_ID", nullable = false, insertable = false, updatable = false)
 	private Member from;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "target_member_id", nullable = false, updatable = false, insertable = false)
+	@JoinColumn(name = "TARGET_MEMBER_ID", nullable = false, insertable = false, updatable = false)
 	private Member to;
 
-	@Column(name = "followed_at", nullable = false)
+	@Column(name = "FOLLOWED_AT", nullable = false)
 	private LocalDateTime followedAt;
+
+	private Follow(Member from, Member to, LocalDateTime now) {
+		this.id = MemberCompositeKey.of(from.getId(), to.getId());
+		this.from = from;
+		this.to = to;
+		this.followedAt = now;
+		RuntimeExceptionThrower.checkValidity(this);
+	}
+
+	public static Follow of(Member from, Member to, LocalDateTime now) {
+		return new Follow(from, to, now);
+	}
+
+	@Override
+	public boolean isValid() {
+		return id.isValid()
+				&& from != null
+				&& !from.isNew()
+				&& to != null
+				&& !to.isNew()
+				&& followedAt != null;
+	}
 }

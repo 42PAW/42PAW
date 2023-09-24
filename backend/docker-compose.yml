@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  mariadb:
+    container_name: paw_local
+    build: ./
+    restart: always
+    environment:
+      MARIADB_DATABASE_HOST: localhost
+      MARIADB_DATABASE: paw
+      MARIADB_USER: root
+      MARIADB_PASSWORD: password
+      MARIADB_ROOT_PASSWORD: password
+    ports:
+      - "3311:3306"
+    tty: true
+  gateway:
+    container_name: nginx_gateway
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d/

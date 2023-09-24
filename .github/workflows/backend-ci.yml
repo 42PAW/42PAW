@@ -1,0 +1,78 @@
+name: backend CI
+
+on:
+  push:
+    paths:
+      - "backend/**"
+  pull_request:
+    paths:
+      - "backend/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup SSH key to access private submodule
+        run: |
+          mkdir -p ~/.ssh
+          echo '${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }}' | base64 -d > ~/.ssh/id_rsa
+          chmod 400 ~/.ssh/id_rsa
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+            submodule: true
+      - name: Update config submodule
+        run: |
+          git submodule update --init
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+            java-version: "17"
+            distribution: "corretto"
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Build with Gradle
+        run: |
+          cd backend
+          chmod +x gradlew
+          ./gradlew build
+        shell: bash
+      - name: Configure AWS credentials
+        if: ${{ github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main' }}
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+      - name: Upload build file to S3 and trigger CodeDeploy
+        if: ${{ github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main' }}
+        run: |
+            mkdir -p before-deploy
+            cp backend/build/libs/pet-*.jar before-deploy/
+            cp backend/scripts/deploy.sh before-deploy/deploy.sh
+            cp backend/scripts/appspec.yml before-deploy/appspec.yml
+            cd before-deploy && zip -r before-deploy *
+            cd ../ && mkdir -p deploy
+            mv before-deploy/before-deploy.zip deploy/deploy.zip
+            aws s3 cp deploy/deploy.zip s3://42paw-deploy/deploy.zip
+
+            aws deploy create-deployment \
+            --application-name paw-prod-deploy \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --deployment-group-name paw \
+            --description "Deploying from GitHub Actions" \
+            --file-exists-behavior OVERWRITE \
+            --s3-location bucket=42paw-deploy,bundleType=zip,key=deploy.zip
+      

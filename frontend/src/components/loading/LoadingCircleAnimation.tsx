@@ -13,8 +13,8 @@ const LoadingCircleAnimation = () => {
 const LoadingCircleAnimationStyled = styled.div`
   position: absolute;
   top: 50%;
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
 
   &:before {
     content: "";
@@ -57,17 +57,17 @@ const loaderPathAnimation = keyframes`
 
 const colorAnimation = keyframes`
   0% {
-    stroke: var(--transparent);
+    stroke: var(--transparent2);
   }
   40% {
-    stroke: var(--transparent);
+    stroke: var(--transparent2);
   }
   66% {
-    stroke: var(--transparent);
+    stroke: var(--transparent2);
   }
   80%,
   90% {
-    stroke: var(--transparent);
+    stroke: var(--transparent2);
   }
 `;
 
@@ -79,7 +79,7 @@ const LoaderPath = styled.circle`
   stroke-linecap: round;
   fill: none;
   stroke-width: 2;
-  stroke: var(--transparent);
+  stroke: var(--transparent2);
 `;
 
 export default LoadingCircleAnimation;

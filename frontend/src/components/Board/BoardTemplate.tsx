@@ -1,96 +1,213 @@
+import { useState, useRef, useLayoutEffect } from "react";
 import styled from "styled-components";
-import { axiosGetBoardComments } from "../../api/axios/axios.custom";
-import useRightSectionHandler from "../../hooks/useRightSectionHandler";
-import { currentBoardCommentsState } from "../../recoil/atom";
-import { useSetRecoilState } from "recoil";
-import { CommentInfoDTO } from "../../types/dto/board.dto";
-import { IBoardInfo } from "../../types/interface/board.interface";
-import BoardPhotoBox from "./BoardPhotoBox";
+import useRightSectionHandler from "@/hooks/useRightSectionHandler";
+import { useSetRecoilState, useRecoilState } from "recoil";
+import { IBoardInfo } from "@/types/interface/board.interface";
+import BoardPhotoBox from "@/components/Board/BoardPhotoBox";
+import useModal from "@/hooks/useModal";
+import { ModalType } from "@/types/enum/modal.enum";
+import { languageState } from "@/recoil/atom";
+import { currentBoardIdState, currentMemberIdState } from "@/recoil/atom";
+import useDebounce from "@/hooks/useDebounce";
+import useParseDate from "@/hooks/useParseDate";
+import { useSpring, animated } from "@react-spring/web";
+import { useCountryEmoji } from "@/hooks/useCountryEmoji";
+import { Country } from "@/types/enum/country.enum";
+import { animateScroll as scroll } from "react-scroll";
+import MeatballButton from "../MeatballButton";
+import BoardTemplateUtils from "./BoardTemplateUtils";
 
-const BoardTemplate = (board: IBoardInfo) => {
+interface BoardTemplateProps extends IBoardInfo {
+  scrollIntoView?: boolean;
+}
+
+const BoardTemplate = (board: BoardTemplateProps) => {
   const {
     boardId,
+    memberId,
     memberName,
-    profileImage,
+    profileImageUrl,
+    country,
     images,
-    categories,
     reactionCount,
     commentCount,
-    isScrapped,
-    isReacted,
+    scrapped,
+    reacted,
     content,
     previewCommentUser,
     previewComment,
     createdAt,
+    followType,
+    scrollIntoView,
   } = board;
-
-  const setCurrentBoardComments = useSetRecoilState<CommentInfoDTO[]>(
-    currentBoardCommentsState
+  const boardRef = useRef<HTMLDivElement | null>(null);
+  const [isReactedRender, setIsReactedRender] = useState<boolean>(reacted);
+  const [isScrappedRender, setIsScrappedRender] = useState<boolean>(scrapped);
+  const [lastReaction, setLastReaction] = useState<boolean>(reacted);
+  const [lastScrap, setLastScrap] = useState<boolean>(scrapped);
+  const [reactionCountRender, setReactionCountRender] =
+    useState<number>(reactionCount);
+  const [language] = useRecoilState<any>(languageState);
+  const setCurrentBoardId = useSetRecoilState<number | null>(
+    currentBoardIdState
   );
+  const setCurrentMemberId = useSetRecoilState<number | null>(
+    currentMemberIdState
+  );
+  const { scrapMutation, undoScrapMutation, reactMutation, undoReactMutation } =
+    BoardTemplateUtils(boardId);
   const { openCommentSection } = useRightSectionHandler();
+  const { openModal } = useModal();
+  const { debounce } = useDebounce();
+  const { parseDate } = useParseDate();
+  const ReactionAnimation = useSpring({
+    to: {
+      opacity: isReactedRender ? 1 : 0,
+      transform: isReactedRender ? "scale(1)" : "scale(0)",
+    },
+    config: { tension: 300, friction: 12 },
+  });
+  const countryEmoji = useCountryEmoji(country as Country);
+  const parsedDate = parseDate(createdAt);
+  const parsedPreviewComment =
+    previewComment && previewComment.length > 10
+      ? previewComment.substring(0, 10) + ".."
+      : previewComment;
 
-  const getCommentsData = async (boardId: number) => {
-    try {
-      const result = await axiosGetBoardComments(boardId);
-      setCurrentBoardComments(result);
-    } catch (error) {
-      throw error;
+  useLayoutEffect(() => {
+    if (scrollIntoView && boardRef.current) {
+      scroll.scrollTo(boardRef.current.offsetTop - 10, {
+        duration: 0,
+        smooth: "easeInOutCubic",
+        containerId: "scrollContainer",
+      });
     }
-  };
+  }, [scrollIntoView]);
+
   const handleCommentClick = (boardId: number) => {
     openCommentSection();
-    getCommentsData(boardId);
+    setCurrentBoardId(boardId);
   };
-  console.log("before", images);
+
+  const handleOpenProfile = () => {
+    setCurrentMemberId(memberId);
+    openModal(ModalType.PROFILECARD);
+  };
+
+  const callReactionApi = async () => {
+    try {
+      if (!isReactedRender && !lastReaction) reactMutation.mutate();
+      else if (isReactedRender && lastReaction) undoReactMutation.mutate();
+      setLastReaction(!lastReaction);
+    } catch (error) {
+      //401 발생 -> 기존 isReactedRender 롤백
+      setReactionCountRender(reactionCount);
+      setIsReactedRender((prev) => !prev);
+    }
+  };
+
+  const callScrapApi = async () => {
+    try {
+      if (!isScrappedRender && !lastScrap) {
+        scrapMutation.mutate();
+        setLastScrap(!lastScrap);
+      } else if (isScrappedRender && lastScrap) {
+        undoScrapMutation.mutate();
+        setLastScrap(!lastScrap);
+      }
+    } catch (error) {
+      //401 발생 -> 기존 isReactedRender 롤백
+      setIsScrappedRender((prev) => !prev);
+    }
+  };
+
+  const handleReaction = (action: string) => {
+    if (action === "do") setReactionCountRender(reactionCountRender + 1);
+    if (action === "undo") setReactionCountRender(reactionCountRender - 1);
+    setIsReactedRender((prev) => !prev);
+    debounce("reaction", callReactionApi, 300);
+  };
+
+  const handleClickReaction = () => {
+    handleReaction(isReactedRender ? "undo" : "do");
+  };
+
+  const handleClickScrap = () => {
+    setIsScrappedRender((prev) => !prev);
+    debounce("scrap", callScrapApi, 300);
+  };
+
   return (
     <>
-      <BoardWrapperStyled>
+      <BoardWrapperStyled ref={boardRef}>
         <BoardHeaderStyled>
           <BoardProfileStyled>
-            <img src={profileImage} />
-            <div>{memberName}</div>
-            <div></div>
+            <img
+              src={profileImageUrl || "/assets/profile.svg"}
+              onClick={handleOpenProfile}
+            />
+            <div onClick={handleOpenProfile}>
+              {memberName} {countryEmoji}
+            </div>
           </BoardProfileStyled>
           <BoardOptionButtonStyled>
-            <img src="src/assets/optionW.png" />
+            <MeatballButton
+              memberId={memberId}
+              boardId={boardId}
+              memberName={memberName}
+              followStatus={followType}
+              component="board"
+            />
           </BoardOptionButtonStyled>
         </BoardHeaderStyled>
         <BoardBodyStyled>
-          <BoardPhotoBox boardImages={images} />
+          <BoardPhotoBox
+            boardImages={images}
+            handleClickReaction={handleClickReaction}
+          />
           <ButtonZoneStyled>
-            <LikeCommentContainerStyled>
-              {isReacted ? (
-                <img src="/src/assets/likeR.png" />
-              ) : (
-                <img src="/src/assets/like.png" />
-              )}
-
-              <img
-                src="/src/assets/comment.png"
-                onClick={() => handleCommentClick(1)}
+            <ReactionCommentContainerStyled>
+              <ReactionStyled onClick={handleClickReaction}>
+                <HeartIcon style={ReactionAnimation} src="/assets/liked.svg" />
+                <img
+                  src={
+                    isReactedRender ? "/assets/liked.svg" : "/assets/like.svg"
+                  }
+                />
+              </ReactionStyled>
+              <CommentStyled
+                src="/assets/comment.svg"
+                onClick={() => handleCommentClick(boardId)}
               />
-            </LikeCommentContainerStyled>
-            <ScrapButtonStyled>
-              {isScrapped ? (
-                <img src="/src/assets/scrapB.png" />
+            </ReactionCommentContainerStyled>
+            <ScrapButtonStyled onClick={handleClickScrap}>
+              {isScrappedRender ? (
+                <img src="/assets/scrapped.svg" />
               ) : (
-                <img src="/src/assets/scrap.png" />
+                <img src="/assets/scrap.svg" />
               )}
             </ScrapButtonStyled>
           </ButtonZoneStyled>
           <BoardContentContainerStyled>
-            <DivOne>
+            <ReactionCommentCountStyled>
               <div>
-                좋아요 {reactionCount}개, 댓글 {commentCount}개
+                {reactionCountRender} {language.like}, {commentCount}{" "}
+                {language.comment}
               </div>
-              <span>{createdAt}</span>
-            </DivOne>
-            <DivTwo>{content}</DivTwo>
-            <DivThree>
-              <div>{previewCommentUser}</div>
-              <div>{previewComment}</div>
-              <div onClick={() => handleCommentClick(1)}>..댓글 더 보기</div>
-            </DivThree>
+              <span>{parsedDate}</span>
+            </ReactionCommentCountStyled>
+            <ContentStyled>{content}</ContentStyled>
+            {previewComment ? (
+              <PreviewCommentStyled>
+                <div>{previewCommentUser}</div>
+                <div>{parsedPreviewComment}</div>
+                <div onClick={() => handleCommentClick(boardId)}>
+                  {language.moreComments}
+                </div>
+              </PreviewCommentStyled>
+            ) : (
+              <NoCommentStyled>{language.noComments}</NoCommentStyled>
+            )}
           </BoardContentContainerStyled>
         </BoardBodyStyled>
       </BoardWrapperStyled>
@@ -99,56 +216,62 @@ const BoardTemplate = (board: IBoardInfo) => {
 };
 
 const BoardWrapperStyled = styled.div`
-  width: 90%;
-  min-height: 640px;
+  width: 93%;
+  max-width: 465px;
   margin-top: 3%;
-  margin-bottom: 3%;
-  border-radius: 30px;
-  box-shadow: var(--default-shadow);
+  margin-bottom: 5%;
+  border-radius: 25px;
+  padding-bottom: 7%;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
 `;
 
 const BoardHeaderStyled = styled.div`
   display: flex;
   justify-content: space-between;
   height: 10%;
-  border-top-left-radius: 30px;
-  border-top-right-radius: 30px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
   background-color: var(--transparent);
 `;
 
 const BoardProfileStyled = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 6%;
-  width: 40%;
+  margin-left: 18px;
+  width: 50%;
   img {
-    width: 20%;
+    cursor: pointer;
+    width: 15%;
+    min-width: 24px;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
     border-radius: 100%;
   }
   div {
-    margin-left: 5%;
-    font-size: 120%;
+    cursor: pointer;
+    margin-left: 6px;
+    font-size: 1.3rem;
     color: var(--white);
   }
 `;
 
-const BoardOptionButtonStyled = styled.button`
+const BoardOptionButtonStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: 40%;
-  background-color: transparent;
+  width: 9%;
   border: none;
-  img {
-    width: 13%;
-    margin-right: 10%;
+  margin-right: 3%;
+  &:focus {
+    opacity: 0.6;
   }
 `;
 
 const BoardBodyStyled = styled.div`
-  height: 90%;
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
+  height: 96.8%;
+  width: 100%;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
   background-color: var(--white);
 `;
 
@@ -156,36 +279,57 @@ const ButtonZoneStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 1%;
+  margin-top: 10px;
   height: 5%;
 `;
 
-const LikeCommentContainerStyled = styled.div`
+const ReactionCommentContainerStyled = styled.div`
   display: flex;
   align-items: center;
   width: 33.3%;
-  img:nth-child(1) {
-    margin-left: 15%;
-  }
+  margin-left: 4.5%;
   img {
     cursor: pointer;
-    margin-left: 7%;
-    width: 13%;
   }
+
   img:hover {
     opacity: 0.7;
   }
 `;
 
+const ReactionStyled = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  img {
+    width: 28px;
+  }
+`;
+
+const CommentStyled = styled.img`
+  width: 22px;
+  margin-top: -1.5px;
+  margin-left: 5%;
+`;
+
+const HeartIcon = styled(animated.img)`
+  position: absolute;
+  top: 0;
+  left: 0px;
+  width: 28px;
+  height: 28px;
+`;
+
 const ScrapButtonStyled = styled.div`
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   width: 33.3%;
   img {
-    width: 13%;
-    margin-right: 15%;
+    cursor: pointer;
+    width: 29px;
+    margin-right: 11%;
   }
   img:hover {
     opacity: 0.7;
@@ -195,14 +339,14 @@ const ScrapButtonStyled = styled.div`
 const BoardContentContainerStyled = styled.div`
   display: flex;
   flex-direction: column;
-  height: 14%;
-  margin-top: 1.5%;
+  height: 11%;
+  margin-top: 5px;
   margin-left: 5%;
   margin-right: 5%;
-  font-size: 14px;
+  font-size: 13px;
 `;
 
-const DivOne = styled.div`
+const ReactionCommentCountStyled = styled.div`
   display: flex;
   justify-content: space-between;
   font-size: 100%;
@@ -213,17 +357,17 @@ const DivOne = styled.div`
   }
 `;
 
-const DivTwo = styled.div`
+const ContentStyled = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 2%;
   font-size: 100%;
 `;
 
-const DivThree = styled.div`
+const PreviewCommentStyled = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 3%;
+  margin-top: 2%;
   font-size: 100%;
   div:nth-child(1) {
     margin-right: 1%;
@@ -234,6 +378,12 @@ const DivThree = styled.div`
     margin-left: 2%;
     color: var(--lightgrey);
   }
+`;
+
+const NoCommentStyled = styled.div`
+  font-weight: 400;
+  color: var(--lightgrey);
+  margin-top: 2%;
 `;
 
 export default BoardTemplate;

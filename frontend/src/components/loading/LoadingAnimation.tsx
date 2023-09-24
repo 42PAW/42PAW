@@ -12,24 +12,23 @@ const rainbowAnimation = keyframes`
 
 // Create the styled-component
 const LoadingAnimationStyled = styled.div`
-  position: absolute;
-  left: 0;
-  right: 0;
+  z-index: 10;
+  position: fixed;
   top: 0;
   bottom: 0;
-  width: 100%;
+  width: 110vw;
   height: 4px;
   background: linear-gradient(
     124deg,
-    #3b1784,
+    #7951c9,
     #d1c1cd,
     #e6dade,
-    #3b1784,
+    #7951c9,
     #d1c1cd,
     #e6dade
   );
   background-size: 900% 900%;
-  animation: ${rainbowAnimation} 9s ease infinite;
+  animation: ${rainbowAnimation} 8s ease infinite;
 `;
 
 export default LoadingAnimation;

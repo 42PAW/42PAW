@@ -1,19 +1,23 @@
 import axios from "axios";
-import { getCookie, removeCookie } from "../cookie/cookies";
-import { STATUS_401_UNAUTHORIZED } from "../../constants/StatusCode";
+import { getCookie, removeCookie } from "@/api/cookie/cookies";
+import {
+  STATUS_401_UNAUTHORIZED,
+  STATUS_403_FORBIDDEN,
+} from "@/types/constants/StatusCode";
 
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_BE_HOST,
+  baseURL: import.meta.env.VITE_BE_SERVER,
   withCredentials: true,
 });
 
 instance.interceptors.request.use(async (config: any) => {
-  const token = getCookie("admin_access_token") ?? getCookie("access_token");
+  const token = getCookie("access_token") ?? null;
   config.headers = {
     Authorization: `Bearer ${token}`,
   };
+
   return config;
 });
 
@@ -22,23 +26,14 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
-    // access_token unauthorized
+    if (error.response?.status === STATUS_403_FORBIDDEN) {
+      window.location.href = "/sign-up";
+    }
     if (error.response?.status === STATUS_401_UNAUTHORIZED) {
-      if (import.meta.env.VITE_IS_LOCAL === "true") {
-        removeCookie("admin_access_token", {
-          path: "/",
-          domain: "localhost",
-        });
-        removeCookie("access_token");
-      } else {
-        removeCookie("admin_access_token", {
-          path: "/",
-          domain: "42pet.kr",
-        });
-        removeCookie("access_token", { path: "/", domain: "42pet.kr" });
-      }
-      window.location.href = "login";
-      alert(error.response.data.message);
+      removeCookie("access_token", {
+        path: "/",
+        domain: `${import.meta.env.VITE_FE_DOMAIN}`,
+      });
     }
     return Promise.reject(error);
   }

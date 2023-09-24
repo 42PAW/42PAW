@@ -1,5 +1,9 @@
-export enum BoardCategory {
-  DEFAULT = "default",
-  TRENDING = "trending",
-  FOLLOWING = "following",
+export enum Board {
+  DEFAULT = "DEFAULT",
+  TRENDING = "TRENDING",
+  FOLLOWING = "FOLLOWING",
+  MINE = "MINE",
+  OTHER = "OTHER",
+  SCRAPPED = "SCRAPPED",
+  NONE = "NONE",
 }

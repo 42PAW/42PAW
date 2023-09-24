@@ -1,38 +1,156 @@
-import styled from "styled-components";
-import CommentItem from "./CommentItem";
-import { CommentInfoDTO } from "../../../types/dto/board.dto";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { currentBoardCommentsState } from "../../../recoil/atom";
+import { useQuery } from "@tanstack/react-query";
+import styled from "styled-components";
+import CommentItem from "@/components/RightSection/CommentSection/CommentItem";
+import { currentBoardIdState } from "@/recoil/atom";
+import { axiosCreateComment } from "@/api/axios/axios.custom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Board } from "@/types/enum/board.category.enum";
+import { IBoardInfo } from "@/types/interface/board.interface";
+import useFetch from "@/hooks/useFetch";
+import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation";
+import { CommentInfoDTO } from "@/types/dto/board.dto";
+import { languageState } from "@/recoil/atom";
+import useDebounce from "@/hooks/useDebounce";
+
+const isOnlyWhitespace = (str: string) => {
+  return str.trim() === "";
+};
 
 const CommentSection = () => {
-  const [currentBoardComments] = useRecoilState<CommentInfoDTO[]>(
-    currentBoardCommentsState
-  );
+  const [language] = useRecoilState<any>(languageState);
+  const [loading, setLoading] = useState(true);
+  const { debounce } = useDebounce();
+  const { fetchComments } = useFetch();
+  const [currentBoardId] = useRecoilState<number | null>(currentBoardIdState);
+  const [comment, setComment] = useState<string>("");
+  const queryClient = useQueryClient();
+  const { data: comments, isLoading } = useQuery({
+    queryKey: ["comments", currentBoardId],
+    queryFn: fetchComments,
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
+  });
+
+  useEffect(() => {
+    setLoading(true);
+    debounce("commentsLoading", () => setLoading(false), 400);
+  }, [currentBoardId]);
+
+  const handleOnchange = (e: any) => {
+    setComment(e.target.value);
+  };
+
+  const uploadComment = async () => {
+    if (comment === "" || isOnlyWhitespace(comment)) {
+      setComment("");
+      return;
+    }
+    try {
+      await axiosCreateComment(currentBoardId, comment);
+    } catch (error) {
+      setComment("");
+    }
+  };
+
+  const commentMutation = useMutation(uploadComment, {
+    onSuccess: async () => {
+      if (comment === "" || isOnlyWhitespace(comment)) return;
+
+      await queryClient.invalidateQueries(["comments", currentBoardId]);
+      const newComments: CommentInfoDTO[] | undefined =
+        await queryClient.getQueryData(["comments", currentBoardId]);
+
+      const mainBoardCategories = [
+        Board.DEFAULT,
+        Board.TRENDING,
+        Board.FOLLOWING,
+        Board.MINE,
+        Board.OTHER,
+      ];
+
+      for (let i = 0; i < mainBoardCategories.length; i++) {
+        await queryClient.setQueryData(
+          ["boards", mainBoardCategories[i]],
+          (prevData: IBoardInfo[] | any) => {
+            if (!prevData) return prevData;
+            if (!newComments) return prevData;
+
+            const updatedBoards = prevData.pages.map((page: IBoardInfo[]) =>
+              page.map((board: IBoardInfo) => {
+                if (board.boardId === currentBoardId && newComments) {
+                  return {
+                    ...board,
+                    previewCommentUser:
+                      newComments[newComments.length - 1].memberName,
+                    previewComment: newComments[newComments.length - 1].comment,
+                    commentCount: newComments.length,
+                  };
+                }
+                return board;
+              })
+            );
+
+            return { ...prevData, pages: updatedBoards };
+          }
+        );
+      }
+
+      setComment("");
+    },
+  });
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      if (!event.nativeEvent.isComposing) {
+        event.preventDefault();
+        commentMutation.mutate();
+      }
+    }
+  };
+  if (loading || isLoading) {
+    return (
+      <WrapperStyled>
+        <LoadingCircleAnimation />
+      </WrapperStyled>
+    );
+  }
 
   return (
     <WrapperStyled>
       <CommentItemWrapperStyled>
-        {currentBoardComments ? (
-          currentBoardComments.map((comment: any) => (
+        {comments.length > 0 ? (
+          comments.map((comment: CommentInfoDTO) => (
             <CommentItem
               key={comment.commentId}
               commentId={comment.commentId}
               memberId={comment.memberId}
               memberName={comment.memberName}
+              country={comment.country}
               comment={comment.comment}
-              profileImage={comment.profileImage}
+              profileImageUrl={comment.profileImageUrl}
               createdAt={comment.createdAt}
+              followType={comment.followType}
             />
           ))
         ) : (
           <NoCommentMessageStyled>
-            이 게시글의 첫번째 댓글이 되어주세요 🙈
+            {language.demandFirstComment}
           </NoCommentMessageStyled>
         )}
       </CommentItemWrapperStyled>
       <CommentInputContainerStyled>
-        <input placeholder="댓글을 입력해주세요..." />
-        <button>게시</button>
+        <input
+          value={comment}
+          placeholder={language.enterComment}
+          maxLength={50}
+          onChange={handleOnchange}
+          onKeyDown={handleKeyDown}
+        />
+        <button onClick={() => commentMutation.mutate()}>
+          {language.posting}
+        </button>
       </CommentInputContainerStyled>
     </WrapperStyled>
   );
@@ -41,17 +159,19 @@ const CommentSection = () => {
 const WrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   height: 100%;
+  flex: 1;
   width: 100%;
-  overflow: scroll;
 `;
 
 const CommentItemWrapperStyled = styled.div`
-  margin-top: 1%;
+  padding-top: 5px;
   width: 100%;
-  height: 92%;
-  overflow-y: auto;
+  height: calc(100% - 40px);
+  overflow-y: scroll;
+  overflow-x: hidden;
 `;
 
 const NoCommentMessageStyled = styled.div`
@@ -59,9 +179,9 @@ const NoCommentMessageStyled = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: calc(100% - 40px);
   text-align: center;
-  font-size: 25px;
+  font-size: 2rem;
   color: var(--white);
   opacity: 0.7;
 `;
@@ -69,38 +189,41 @@ const NoCommentMessageStyled = styled.div`
 const CommentInputContainerStyled = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-
+  justify-content: space-evenly;
   width: 100%;
-  height: 7%;
+  height: 40px;
+  @media screen and (display-mode: standalone) {
+    margin-bottom: 40px;
+  }
+  font-size: 1.3rem;
   border-top: 1px solid var(--transparent);
+  padding-top: 2%;
+  padding-bottom: 2%;
   input {
     height: 50%;
-    width: 72%;
-    margin-left: 5%;
+    width: 70%;
     border: none;
+    border-radius: 0;
     border-bottom: 1px solid var(--white);
     background-color: transparent;
     color: var(--white);
     outline: none;
+    font-size: 13px;
+    margin-top: 3px;
   }
   input::placeholder {
+    font-size: 13px;
     color: var(--transparent);
   }
   button {
+    font-size: 13px;
     cursor: pointer;
-    height: 31px;
-    width: 70px;
-    margin-right: 5%;
+    height: 28px;
+    width: 65px;
     border-radius: 7px;
     border: 1px solid var(--white);
-    background-color: transparent;
-    color: var(--white);
-  }
-  button:hover {
     background-color: var(--white);
     color: var(--pink);
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   }
 `;
 

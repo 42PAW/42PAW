@@ -40,6 +40,26 @@ public class NoticeEventTest extends UnitTest {
 			// then
 			assertThat(noticeEvent).isNotNull();
 		}
+	}
+
+	@Nested
+	@DisplayName("Notice 엔티티로 변환할 때")
+	class ExtractParameters {
+		@Test
+		@DisplayName("Parameter를 이어서 반환한다.")
+		void parameters() throws Exception {
+			// given
+			NoticeFormat format = NoticeFormat.of("{}님이 {}님을 팔로우합니다.");
+			NoticeParameter parameter1 = NoticeParameter.of("{MBR/1/sanan}");
+			NoticeParameter parameter2 = NoticeParameter.of("{MBR/2/jpark2}");
+			NoticeEvent noticeEvent = NoticeEvent.of("팔로우 알림", format, List.of(parameter1, parameter2), 1L);
+
+			// when
+			Notice notice = noticeEvent.toNotice();
+
+			// then
+			assertThat(notice.getParameters()).isEqualTo("{MBR/1/sanan},{MBR/2/jpark2}");
+		}
 
 	}
 }

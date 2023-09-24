@@ -16,7 +16,7 @@ public class NoticeEventPublisher {
 	private final ApplicationEventPublisher eventPublisher;
 	private final EntityAdaptor entityAdaptor;
 
-	@SafeVarargs public final <T extends IdDomain<?>> void publish(String title, NoticeFormat format, Long receiverId, T... entities) {
+	@SafeVarargs public final <T extends IdDomain<?>> void publish(String title, Long receiverId, NoticeFormat format, T... entities) {
 		NoticeEvent event = NoticeEvent.of(title, format, entityAdaptor.adapt(Arrays.stream(entities).toList()), receiverId);
 		eventPublisher.publishEvent(event);
 	}

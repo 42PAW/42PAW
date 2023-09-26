@@ -1,8 +1,6 @@
 package proj.pet.notice.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,24 +20,22 @@ public class Notice extends IdentityDomain implements Validatable {
 
 	@Column(name = "RECEIVER_ID", nullable = false)
 	private Long receiverId;
-	@Column(name = "TITLE", nullable = false, length = 32)
-	private String title;
-	@Column(name = "FORMAT", nullable = false) // 추후 구조 변경에 따라 없어질 예정
-	private String format;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "NOTICE_TYPE")
+	private NoticeType noticeType;
 	@Column(name = "PARAMETERS", nullable = false)
 	private String parameters;
 	@Column(name = "READ_AT")
 	private LocalDateTime readAt;
 
-	private Notice(Long receiverId, String title, String format, String parameters) {
+	private Notice(Long receiverId, NoticeType noticeType, String parameters) {
 		this.receiverId = receiverId;
-		this.title = title;
-		this.format = format;
+		this.noticeType = noticeType;
 		this.parameters = parameters;
 	}
 
-	public static Notice of(Long receiverId, String title, String format, String parameters) {
-		return new Notice(receiverId, title, format, parameters);
+	public static Notice of(Long receiverId, NoticeType noticeType, String parameters) {
+		return new Notice(receiverId, noticeType, parameters);
 	}
 
 	public List<String> extractParameters() {
@@ -52,8 +48,6 @@ public class Notice extends IdentityDomain implements Validatable {
 
 	@Override public boolean isValid() {
 		return receiverId != null
-				&& title != null
-				&& format != null
 				&& parameters != null;
 	}
 }

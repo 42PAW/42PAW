@@ -10,25 +10,23 @@ import java.util.stream.Collectors;
 @Getter
 public class NoticeEvent implements Validatable {
 	private static final String DELIMITER = ",";
-	private final String title;
-	private final NoticeFormat format;
+	private final NoticeType noticeType;
 	private final List<NoticeParameter> parameters;
 	private final Long receiverId;
 
-	private NoticeEvent(String title, NoticeFormat format, List<NoticeParameter> parameters, Long receiverId) {
-		this.title = title;
-		this.format = format;
+	private NoticeEvent(NoticeType noticeType, List<NoticeParameter> parameters, Long receiverId) {
+		this.noticeType = noticeType;
 		this.parameters = parameters;
 		this.receiverId = receiverId;
 		RuntimeExceptionThrower.checkValidity(this);
 	}
 
-	public static NoticeEvent of(String title, NoticeFormat format, List<NoticeParameter> parameters, Long receiverId) {
-		return new NoticeEvent(title, format, parameters, receiverId);
+	public static NoticeEvent of(NoticeType noticeType, List<NoticeParameter> parameters, Long receiverId) {
+		return new NoticeEvent(noticeType, parameters, receiverId);
 	}
 
 	public Notice toNotice() {
-		return Notice.of(receiverId, title, format.getFormat(), this.extractParameters());
+		return Notice.of(receiverId, noticeType, this.extractParameters());
 	}
 
 	private String extractParameters() {
@@ -39,9 +37,8 @@ public class NoticeEvent implements Validatable {
 
 	@Override
 	public boolean isValid() {
-		return title != null && !title.isBlank()
-				&& format != null && format.isValid()
-				&& parameters != null && !parameters.isEmpty()
-				&& format.countPlaceholders() == parameters.size();
+		return noticeType != null
+				&& parameters != null
+				&& receiverId != null;
 	}
 }

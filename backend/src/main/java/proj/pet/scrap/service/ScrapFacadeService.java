@@ -12,7 +12,4 @@ public interface ScrapFacadeService {
 	void deleteScrap(UserSessionDto userSessionDto, Long boardId);
 
 	BoardsPaginationDto getMyScraps(UserSessionDto userSessionDto, PageRequest pageRequest);
-
-	BoardsPaginationDto getMyScrapsRefactoring(UserSessionDto userSessionDto,
-			PageRequest pageRequest);
 }

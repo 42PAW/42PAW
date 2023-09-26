@@ -19,7 +19,7 @@ public class NoticeEventTest extends UnitTest {
 		@DisplayName("Format의 PlaceHolder와 Parameter의 수가 일치하지 않으면 예외가 발생한다.")
 		void fail() throws Exception {
 			// given
-			NoticeFormat format = NoticeFormat.of("{}님이 {}님을 팔로우합니다.}");
+			NoticeFormat format = NoticeFormat.of("{}님이 {}님을 팔로우합니다.");
 			NoticeParameter parameter = NoticeParameter.of("{MBR/1/sanan}");
 
 			// when

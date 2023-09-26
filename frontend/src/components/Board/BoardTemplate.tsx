@@ -40,6 +40,7 @@ const BoardTemplate = (board: BoardTemplateProps) => {
     followType,
     scrollIntoView,
   } = board;
+
   const boardRef = useRef<HTMLDivElement | null>(null);
   const [isReactedRender, setIsReactedRender] = useState<boolean>(reacted);
   const [isScrappedRender, setIsScrappedRender] = useState<boolean>(scrapped);

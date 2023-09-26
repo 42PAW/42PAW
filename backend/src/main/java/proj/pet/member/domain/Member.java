@@ -80,7 +80,7 @@ public class Member extends IdentityDomain implements Validatable {
 	private String nickname;
 	@Column(name = "NICKNAME_UPDATED_AT", nullable = false)
 	private LocalDateTime nicknameUpdatedAt;
-	@Column(name = "STATEMENT", length = 30)
+	@Column(name = "STATEMENT", length = 50)
 	private String statement;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "ROLE", nullable = false, length = 32)
@@ -117,6 +117,7 @@ public class Member extends IdentityDomain implements Validatable {
 				&& campus != null
 				&& language != null
 				&& nickname != null
+				&& statement == null || statement.length() <= 50
 				&& memberRole != null
 				&& nicknameUpdatedAt != null
 				&& createdAt != null;

@@ -4,7 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 import CommentItem from "@/components/RightSection/CommentSection/CommentItem";
 import { currentBoardIdState } from "@/recoil/atom";
-import { axiosCreateComment } from "@/api/axios/axios.custom";
+import {
+  axiosCreateComment,
+  axiosGetSearchResults,
+} from "@/api/axios/axios.custom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Board } from "@/types/enum/board.category.enum";
 import { IBoardInfo } from "@/types/interface/board.interface";
@@ -13,6 +16,8 @@ import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation"
 import { CommentInfoDTO } from "@/types/dto/board.dto";
 import { languageState } from "@/recoil/atom";
 import useDebounce from "@/hooks/useDebounce";
+import { MentionsInput, Mention } from "react-mentions";
+import defaultStyle from "./defaultStyle.js";
 
 const isOnlyWhitespace = (str: string) => {
   return str.trim() === "";
@@ -40,6 +45,27 @@ const CommentSection = () => {
 
   const handleOnchange = (e: any) => {
     setComment(e.target.value);
+  };
+
+  const getData = async () => {
+    // if (comment == "") {
+    //   return;
+    // }
+    // const mentions = comment.match(/@[^ ]+/g);
+
+    // if (!mentions) return;
+
+    // const cleanedMentions = mentions[0].slice(1).trim();
+
+    // console.log(cleanedMentions);
+    const result = await axiosGetSearchResults("", 100, 0);
+    console.log("result", result);
+    const revisedResult = result.map((data: any) => ({
+      id: data.memberId,
+      display: `${data.memberName} ${data.intraName} ${data.country}`,
+    }));
+    console.log("revisedResult", revisedResult);
+    return revisedResult;
   };
 
   const uploadComment = async () => {
@@ -102,6 +128,7 @@ const CommentSection = () => {
   });
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    console.log(event.key);
     if (event.key === "Enter") {
       if (!event.nativeEvent.isComposing) {
         event.preventDefault();
@@ -109,6 +136,7 @@ const CommentSection = () => {
       }
     }
   };
+
   if (loading || isLoading) {
     return (
       <WrapperStyled>
@@ -141,13 +169,17 @@ const CommentSection = () => {
         )}
       </CommentItemWrapperStyled>
       <CommentInputContainerStyled>
-        <input
+        <MentionsInput
           value={comment}
+          onChange={handleOnchange}
+          singleLine={true}
           placeholder={language.enterComment}
           maxLength={50}
-          onChange={handleOnchange}
-          onKeyDown={handleKeyDown}
-        />
+          onKeyDown={() => handleKeyDown}
+          style={defaultStyle}
+        >
+          <Mention trigger="@" data={getData} />
+        </MentionsInput>
         <button onClick={() => commentMutation.mutate()}>
           {language.posting}
         </button>
@@ -199,22 +231,6 @@ const CommentInputContainerStyled = styled.div`
   border-top: 1px solid var(--transparent);
   padding-top: 2%;
   padding-bottom: 2%;
-  input {
-    height: 50%;
-    width: 68%;
-    border: none;
-    border-radius: 0;
-    border-bottom: 1px solid var(--white);
-    background-color: transparent;
-    color: var(--white);
-    outline: none;
-    font-size: 13px;
-    margin-top: 3px;
-  }
-  input::placeholder {
-    font-size: 13px;
-    color: var(--transparent);
-  }
   button {
     font-size: 13px;
     cursor: pointer;

@@ -6,18 +6,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import proj.pet.board.domain.Board;
+import proj.pet.board.domain.BoardMedia;
 import proj.pet.member.domain.Member;
 import proj.pet.notice.domain.Notice;
 import proj.pet.notice.domain.NoticeType;
 import proj.pet.testutil.PersistHelper;
 import proj.pet.testutil.test.E2ETest;
 import proj.pet.testutil.testdouble.board.TestBoard;
+import proj.pet.testutil.testdouble.board.TestBoardMedia;
 import proj.pet.testutil.testdouble.member.TestMember;
 
 public class NoticeControllerTest extends E2ETest {
@@ -27,7 +30,6 @@ public class NoticeControllerTest extends E2ETest {
 
 	private Member author;
 	private Member member;
-	private Board board;
 
 	@BeforeEach
 	public void setUp() {
@@ -46,11 +48,23 @@ public class NoticeControllerTest extends E2ETest {
 		@Test
 		@DisplayName("사용자는 본인의 알림을 조회할 수 있다.")
 		void getNotices() throws Exception {
-			Board board = ph.persist(author, member)
-					.and().persistAndReturn(TestBoard.asDefaultEntity(author));
+			ph.persist(author, member);
+			Board board = TestBoard.builder()
+					.member(author)
+					.build().asEntity();
+			ph.persist(board).flushAndClear();
+			BoardMedia boardMedia = TestBoardMedia.asDefaultEntity(board);
+			if (board.getMediaList() == null) {
+				board.addMediaList(List.of(boardMedia));
+			} else {
+				board.getMediaList().add(boardMedia);
+			}
+			ph.persist(boardMedia).flushAndClear();
 			ph.persist(
-					Notice.of(member.getId(), NoticeType.NEW_FOLLOW, "M/1/sanan", now),
-					Notice.of(member.getId(), NoticeType.NEW_BOARD_COMMENT, "B/1,M/1/sanan", now)
+					Notice.of(member.getId(), NoticeType.NEW_FOLLOW,
+							"M/" + member.getId() + "/sanan", now),
+					Notice.of(member.getId(), NoticeType.NEW_BOARD_COMMENT,
+							"B/" + board.getId() + ",M/" + member.getId() + "/sanan", now)
 			).flushAndClear();
 
 			String token = stubToken(member, now, 28);
@@ -67,17 +81,19 @@ public class NoticeControllerTest extends E2ETest {
 					.andExpectAll(
 							jsonPath("$.result[0].type").value("NEW_FOLLOW"),
 							jsonPath("$.result[0].parameters[0].type").value("MEMBER"),
-							jsonPath("$.result[0].parameters[0].id").value(1),
+							jsonPath("$.result[0].parameters[0].id").value(member.getId()),
 							jsonPath("$.result[0].parameters[0].content").value("sanan"),
-							jsonPath("$.result[0].thumbnailUrl").value("PROFILE_IMAGE_URL1"),
+							jsonPath("$.result[0].thumbnailUrl").value(member.getProfileImageUrl()),
+							jsonPath("$.result[0].readAt").doesNotExist(),
 							jsonPath("$.result[1].type").value("NEW_BOARD_COMMENT"),
 							jsonPath("$.result[1].parameters[0].type").value("BOARD"),
-							jsonPath("$.result[1].parameters[0].id").value(1),
+							jsonPath("$.result[1].parameters[0].id").value(board.getId()),
 							jsonPath("$.result[1].parameters[0].content").doesNotExist(),
 							jsonPath("$.result[1].parameters[1].type").value("MEMBER"),
-							jsonPath("$.result[1].parameters[1].id").value(1),
+							jsonPath("$.result[1].parameters[1].id").value(member.getId()),
 							jsonPath("$.result[1].parameters[1].content").value("sanan"),
-							jsonPath("$.result[0].thumbnailUrl").value("PROFILE_IMAGE_URL1"),
+							jsonPath("$.result[1].thumbnailUrl").value(boardMedia.getMediaUrl()),
+							jsonPath("$.result[1].readAt").doesNotExist(),
 							jsonPath("$.totalLength").value(2)
 					);
 		}

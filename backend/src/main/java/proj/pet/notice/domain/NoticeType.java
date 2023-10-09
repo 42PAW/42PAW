@@ -8,8 +8,8 @@ import proj.pet.member.domain.Member;
 @Getter
 public enum NoticeType {
 	NEW_FOLLOW(List.of(Member.class), NoticeEntityType.MEMBER),
-	NEW_BOARD_COMMENT(List.of(Board.class, Member.class), NoticeEntityType.MEMBER),
 	NEW_COMMENT_TAG(List.of(Board.class, Member.class), NoticeEntityType.MEMBER),
+	NEW_BOARD_COMMENT(List.of(Board.class, Member.class), NoticeEntityType.BOARD),
 	REACTION_TEN(List.of(Board.class), NoticeEntityType.BOARD),
 	REACTION_FORTY_TWO(List.of(Board.class), NoticeEntityType.BOARD),
 	REACTION_ONE_HUNDRED(List.of(Board.class), NoticeEntityType.BOARD),

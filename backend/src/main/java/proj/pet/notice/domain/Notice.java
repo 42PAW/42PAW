@@ -27,15 +27,19 @@ public class Notice extends IdentityDomain implements Validatable {
 	private String parameters;
 	@Column(name = "READ_AT")
 	private LocalDateTime readAt;
+	@Column(name = "CREATED_AT", nullable = false)
+	private LocalDateTime createdAt;
 
-	private Notice(Long receiverId, NoticeType noticeType, String parameters) {
+	private Notice(Long receiverId, NoticeType noticeType, String parameters, LocalDateTime readAt, LocalDateTime createdAt) {
 		this.receiverId = receiverId;
 		this.noticeType = noticeType;
 		this.parameters = parameters;
+		this.readAt = readAt;
+		this.createdAt = createdAt;
 	}
 
-	public static Notice of(Long receiverId, NoticeType noticeType, String parameters) {
-		return new Notice(receiverId, noticeType, parameters);
+	public static Notice of(Long receiverId, NoticeType noticeType, String parameters, LocalDateTime createdAt) {
+		return new Notice(receiverId, noticeType, parameters, null, createdAt);
 	}
 
 	public List<String> extractParameters() {

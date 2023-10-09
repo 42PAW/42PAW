@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import proj.pet.notice.domain.NoticeEvent;
 import proj.pet.notice.repository.NoticeRepository;
 
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
 public class NoticeEventHandler {
@@ -13,6 +15,6 @@ public class NoticeEventHandler {
 
 	@EventListener(NoticeEvent.class)
 	public void handle(NoticeEvent event) {
-		noticeRepository.save(event.toNotice());
+		noticeRepository.save(event.toNotice(LocalDateTime.now()));
 	}
 }

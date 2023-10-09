@@ -34,7 +34,8 @@ public enum ExceptionStatus {
 	/*-----------------------------------DOMAIN-----------------------------------*/
 	INVARIANT_VIOLENCE(HttpStatus.BAD_REQUEST, "불변식에 위배되는 생성 매개변수입니다."),
 	INVALID_ARGUMENT(HttpStatus.BAD_REQUEST, "유효하지 않은 입력입니다."),
-	MALFORMED_URL(HttpStatus.BAD_REQUEST, "잘못된 URL입니다.");
+	MALFORMED_URL(HttpStatus.BAD_REQUEST, "잘못된 URL입니다."),
+	MALFORMED_ENTITY(HttpStatus.BAD_REQUEST, "잘못된 엔티티입니다.");
 
 	private final int statusCode;
 	private final String error;

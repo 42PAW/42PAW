@@ -201,7 +201,7 @@ const CommentInputContainerStyled = styled.div`
   padding-bottom: 2%;
   input {
     height: 50%;
-    width: 70%;
+    width: 68%;
     border: none;
     border-radius: 0;
     border-bottom: 1px solid var(--white);
@@ -218,12 +218,17 @@ const CommentInputContainerStyled = styled.div`
   button {
     font-size: 13px;
     cursor: pointer;
-    height: 28px;
-    width: 65px;
-    border-radius: 7px;
+    height: 29px;
+    width: 76px;
+    border-radius: 5px;
     border: 1px solid var(--white);
-    background-color: var(--white);
-    color: var(--pink);
+    background-color: transparent;
+    color: var(--white);
+    transition: all 0.3s ease;
+    &:hover {
+      background-color: var(--white);
+      color: var(--pink);
+    }
   }
 `;
 

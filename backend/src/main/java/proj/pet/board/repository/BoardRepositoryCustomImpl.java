@@ -129,11 +129,11 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 				.offset(pageRequest.getOffset())
 				.limit(pageRequest.getPageSize())
 				.orderBy(orderSpecifiers)
-				.leftJoin(board.member).fetchJoin()
 				.fetch();
-		long count = queryFactory.selectFrom(board)
+		long count = queryFactory.select(board.count())
+				.from(board)
 				.where(predicate)
-				.stream().count();
+				.fetchFirst();
 		return new PageImpl<>(boards, pageRequest, count);
 	}
 	//TODO : https://jojoldu.tistory.com/457 / N+1을 피하는 방법 찾아보기

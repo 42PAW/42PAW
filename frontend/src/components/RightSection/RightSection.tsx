@@ -89,8 +89,9 @@ const RightSectionStyled = styled.div<{
   transition: opacity 0.4s ease-in-out, margin-right 0.4s ease-in-out;
   @media (max-width: 1023px) {
     z-index: 4;
-    display: ${(props) => (props.$isRightSectionOpened ? "flex" : "none")};
-    height: 90%;
+    height: ${(props) => (props.$isRightSectionOpened ? "90%" : "0")};
+    margin-right: 0;
+    transition: height 0.2s ease;
     background-color: #c1c2e1f9;
     position: fixed;
     width: 100%;

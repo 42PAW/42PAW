@@ -11,6 +11,7 @@ import proj.pet.auth.domain.AuthLevel;
 import proj.pet.member.domain.UserSession;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.notice.dto.NoticeResponseDto;
+import proj.pet.notice.service.NoticeEventTestService;
 import proj.pet.notice.service.NoticeFacadeService;
 
 @RestController
@@ -19,6 +20,8 @@ import proj.pet.notice.service.NoticeFacadeService;
 public class NoticeController {
 
 	private final NoticeFacadeService noticeFacadeService;
+	//test
+	private final NoticeEventTestService noticeEventTestService;
 
 	@GetMapping("/me")
 	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
@@ -28,5 +31,13 @@ public class NoticeController {
 			@RequestParam("page") int page) {
 		PageRequest pageRequest = PageRequest.of(page, size);
 		return noticeFacadeService.getMyNotice(userSessionDto, pageRequest);
+	}
+
+	@GetMapping("/test")
+	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
+	public String noticeEventTest(
+			@UserSession UserSessionDto userSessionDto) {
+		noticeEventTestService.publish(userSessionDto);
+		return "test!";
 	}
 }

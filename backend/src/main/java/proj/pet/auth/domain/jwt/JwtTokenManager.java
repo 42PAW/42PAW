@@ -1,9 +1,5 @@
 package proj.pet.auth.domain.jwt;
 
-import static proj.pet.exception.ExceptionStatus.INTERNAL_SERVER_ERROR;
-import static proj.pet.exception.ExceptionStatus.UNAUTHORIZED;
-import static proj.pet.member.domain.OauthType.FORTY_TWO;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,10 +8,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.http.HttpServletRequest;
-import java.security.Key;
-import java.util.Base64;
-import java.util.Map;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -24,6 +16,15 @@ import proj.pet.exception.ServiceException;
 import proj.pet.member.domain.Country;
 import proj.pet.member.domain.MemberRole;
 import proj.pet.member.domain.OauthProfile;
+
+import java.security.Key;
+import java.util.Base64;
+import java.util.Map;
+import java.util.Optional;
+
+import static proj.pet.exception.ExceptionStatus.INTERNAL_SERVER_ERROR;
+import static proj.pet.exception.ExceptionStatus.UNAUTHORIZED;
+import static proj.pet.member.domain.OauthType.FORTY_TWO;
 
 @Log4j2
 @Component
@@ -59,6 +60,7 @@ public class JwtTokenManager {
 		} catch (Exception e) {
 			log.error("JWT 토큰 검사 중 알 수 없는 오류가 발생했습니다.");
 		}
+		System.out.println("token: " + token);
 		return false;
 	}
 

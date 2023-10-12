@@ -1,10 +1,5 @@
 package proj.pet.notice.service;
 
-import static proj.pet.exception.ExceptionStatus.MALFORMED_ENTITY;
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_BOARD;
-import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
-
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +16,10 @@ import proj.pet.notice.dto.NoticeDto;
 import proj.pet.notice.dto.NoticeParameterDto;
 import proj.pet.notice.dto.NoticeResponseDto;
 import proj.pet.notice.repository.NoticeRepository;
+
+import java.util.List;
+
+import static proj.pet.exception.ExceptionStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -51,10 +50,13 @@ public class NoticeServiceImpl implements NoticeService {
 				.map(parameter -> {
 					String[] parameterList = parameter.split("/");
 					NoticeEntityType type = NoticeEntityType.from(parameterList[0]);
-					Long id = Long.parseLong(parameterList[1]);
+					Long id = 0L;
 					if (type.equals(NoticeEntityType.BOARD)) {
+						id = Long.parseLong(parameterList[1]);
 						return noticeMapper.toNoticeParameterDto(type, id, null);
 					}
+					if (type.equals(NoticeEntityType.MEMBER))
+						id = Long.parseLong(parameterList[2]);
 					return noticeMapper.toNoticeParameterDto(type, id, parameterList[2]);
 				}).toList();
 	}

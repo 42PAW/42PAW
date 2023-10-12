@@ -83,7 +83,7 @@ public class NoticeServiceImpl implements NoticeService {
 					}
 					if (type.equals(NoticeEntityType.MEMBER))
 						id = Long.parseLong(parameterList[2]);
-					return noticeMapper.toNoticeParameterDto(type, id, parameterList[2]);
+					return noticeMapper.toNoticeParameterDto(type, id, parameterList[1]);
 				}).toList();
 	}
 

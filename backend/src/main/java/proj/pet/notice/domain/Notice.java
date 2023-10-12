@@ -46,8 +46,8 @@ public class Notice extends IdentityDomain implements Validatable {
 		return List.of(parameters.split(","));
 	}
 
-	public void markAsRead() {
-		this.readAt = LocalDateTime.now();
+	public void markAsRead(LocalDateTime readAt) {
+		this.readAt = readAt;
 	}
 
 	@Override public boolean isValid() {

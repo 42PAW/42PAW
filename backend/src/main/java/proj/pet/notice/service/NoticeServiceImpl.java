@@ -17,6 +17,7 @@ import proj.pet.notice.dto.NoticeParameterDto;
 import proj.pet.notice.dto.NoticeResponseDto;
 import proj.pet.notice.repository.NoticeRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static proj.pet.exception.ExceptionStatus.*;
@@ -43,6 +44,31 @@ public class NoticeServiceImpl implements NoticeService {
 			return noticeMapper.toNoticeDto(notice, parameters, thumbnailUrl);
 		}).toList();
 		return noticeMapper.toNoticeResponseDto(result, notices.getTotalElements());
+	}
+
+	@Override
+	public NoticeResponseDto getUnreadNotice(Long memberId) {
+		List<Notice> notices = noticeRepository.findAllUnreadByReceiverId(memberId);
+		List<NoticeDto> result = notices.stream().map(notice -> {
+			List<NoticeParameterDto> parameters = getParameters(notice);
+			NoticeEntityType thumbnailEntity = notice.getNoticeType().getThumbnailEntity();
+			NoticeParameterDto thumbnailParameter = parameters.stream()
+					.filter(parameter -> parameter.getType().equals(thumbnailEntity)).findFirst()
+					.orElseThrow(() -> new DomainException(MALFORMED_ENTITY));
+			String thumbnailUrl = getThumbnailUrl(thumbnailEntity, thumbnailParameter.getId());
+			return noticeMapper.toNoticeDto(notice, parameters, thumbnailUrl);
+		}).toList();
+		return noticeMapper.toNoticeResponseDto(result, notices.size());
+	}
+
+	@Override
+	public void readNotice(Long memberId, List<Long> noticeIds) {
+		LocalDateTime now = LocalDateTime.now();
+		List<Notice> notices = noticeRepository.findAllById(noticeIds);
+
+		if (notices.stream().anyMatch(notice -> !notice.getReceiverId().equals(memberId)))
+			throw UNAUTHENTICATED.asServiceException();
+		notices.forEach(notice -> notice.markAsRead(now));
 	}
 
 	private List<NoticeParameterDto> getParameters(Notice notice) {

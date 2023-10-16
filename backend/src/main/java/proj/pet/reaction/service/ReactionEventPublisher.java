@@ -21,11 +21,13 @@ public class ReactionEventPublisher {
 
 	@Transactional
 	public void publishByReactionCount(Long boardId, ReactionType reactionType) {
-		Long count = reactionRepository.countByBoardId(boardId);
-		NoticeType noticeType = getNoticeTypeByCount(count);
-		Board board = boardRepository.findById(boardId).orElseThrow(INVALID_ARGUMENT::asServiceException);
-		if (noticeType != null)
-			noticeEventPublisher.publish(noticeType, boardId, board);
+		if (reactionType.equals(ReactionType.LIKE)) {
+			Long count = reactionRepository.countByBoardId(boardId);
+			NoticeType noticeType = getNoticeTypeByCount(count);
+			Board board = boardRepository.findById(boardId).orElseThrow(INVALID_ARGUMENT::asServiceException);
+			if (noticeType != null)
+				noticeEventPublisher.publish(noticeType, boardId, board);
+		}
 	}
 
 	private NoticeType getNoticeTypeByCount(Long reactionCount) {

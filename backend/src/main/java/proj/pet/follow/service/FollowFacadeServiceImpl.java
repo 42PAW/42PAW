@@ -13,10 +13,12 @@ public class FollowFacadeServiceImpl implements FollowFacadeService {
 
 	private final FollowService followService;
 	private final FollowQueryService followQueryService;
+	private final FollowEventPublisher followEventPublisher;
 
 	@Override
 	public void createFollow(UserSessionDto userSessionDto, FollowRequestDto followRequestDto) {
 		followService.createFollow(userSessionDto.getMemberId(), followRequestDto.getMemberId());
+		followEventPublisher.publish(userSessionDto.getMemberId(), followRequestDto.getMemberId());
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package proj.pet.reaction.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import proj.pet.board.domain.Board;
 import proj.pet.board.repository.BoardRepository;
@@ -20,7 +19,7 @@ public class ReactionEventPublisher {
 	private final BoardRepository boardRepository;
 	private final ReactionRepository reactionRepository;
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional
 	public void publishByReactionCount(Long boardId, ReactionType reactionType) {
 		Long count = reactionRepository.countByBoardId(boardId);
 		NoticeType noticeType = getNoticeTypeByCount(count);

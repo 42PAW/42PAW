@@ -1,6 +1,20 @@
 package proj.pet.board.domain;
 
-import jakarta.persistence.*;
+import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -13,13 +27,6 @@ import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.domain.IdentityDomain;
 import proj.pet.utils.domain.RuntimeExceptionThrower;
 import proj.pet.utils.domain.Validatable;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import static jakarta.persistence.FetchType.LAZY;
-import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Table(name = "BOARD")
@@ -82,7 +89,7 @@ public class Board extends IdentityDomain implements Validatable {
 	}
 
 	public static Board of(Member member, VisibleScope visibleScope, String content,
-	                       LocalDateTime now) {
+			LocalDateTime now) {
 		return new Board(member, visibleScope, content, now);
 	}
 

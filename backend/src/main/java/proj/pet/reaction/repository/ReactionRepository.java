@@ -15,4 +15,8 @@ public interface ReactionRepository extends JpaRepository<Reaction, Long> {
 			"WHERE r.board.id = :boardId AND r.member.id = :memberId")
 	Optional<Reaction> findByBoardAndMember(@Param("boardId") Long boardId, @Param("memberId") Long memberId);
 
+	@Query("SELECT COUNT(r) " +
+			"FROM Reaction r " +
+			"WHERE r.board.id = :boardId")
+	Long countByBoardId(Long boardId);
 }

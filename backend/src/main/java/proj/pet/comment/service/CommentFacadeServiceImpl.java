@@ -16,6 +16,7 @@ public class CommentFacadeServiceImpl implements CommentFacadeService {
 
 	private final CommentService commentService;
 	private final CommentQueryService commentQueryService;
+	private final CommentEventPublisher commentEventPublisher;
 
 	@Transactional(readOnly = true)
 	@Override
@@ -23,11 +24,10 @@ public class CommentFacadeServiceImpl implements CommentFacadeService {
 		return commentQueryService.findCommentsByBoardId(userSessionDto.getMemberId(), boardId, pageRequest);
 	}
 
-	@Transactional
 	@Override
 	public void createComment(UserSessionDto userSessionDto, CommentCreateRequestDto commentCreateRequestDto) {
 		commentService.addCommentToBoard(userSessionDto.getMemberId(), commentCreateRequestDto.getBoardId(), commentCreateRequestDto.getContent(), LocalDateTime.now());
-
+		commentEventPublisher.publish(commentCreateRequestDto.getBoardId(), userSessionDto.getMemberId());
 	}
 
 	@Transactional

@@ -1,8 +1,15 @@
 package proj.pet.notice.service;
 
+import static proj.pet.exception.ExceptionStatus.INVALID_ARGUMENT;
+import static proj.pet.exception.ExceptionStatus.MALFORMED_ENTITY;
+import static proj.pet.exception.ExceptionStatus.NOT_FOUND_BOARD;
+import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
+import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
+
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import proj.pet.board.domain.Board;
 import proj.pet.board.repository.BoardRepository;
@@ -17,11 +24,6 @@ import proj.pet.notice.dto.NoticeParameterDto;
 import proj.pet.notice.dto.NoticeResponseDto;
 import proj.pet.notice.repository.NoticeRepository;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static proj.pet.exception.ExceptionStatus.*;
-
 @Service
 @RequiredArgsConstructor
 public class NoticeServiceImpl implements NoticeService {
@@ -32,24 +34,21 @@ public class NoticeServiceImpl implements NoticeService {
 	private final NoticeMapper noticeMapper;
 
 	@Override
-	public NoticeResponseDto getMyNotice(Long loginMemberId, PageRequest pageRequest) {
-		Page<Notice> notices = noticeRepository.findAllByReceiverId(loginMemberId, pageRequest);
-		List<NoticeDto> result = notices.stream().map(notice -> {
-			List<NoticeParameterDto> parameters = getParameters(notice);
-			NoticeEntityType thumbnailEntity = notice.getNoticeType().getThumbnailEntity();
-			NoticeParameterDto thumbnailParameter = parameters.stream()
-					.filter(parameter -> parameter.getType().equals(thumbnailEntity)).findFirst()
-					.orElseThrow(() -> new DomainException(MALFORMED_ENTITY));
-			String thumbnailUrl = getThumbnailUrl(thumbnailEntity, thumbnailParameter.getId());
-			return noticeMapper.toNoticeDto(notice, parameters, thumbnailUrl);
-		}).toList();
-		return noticeMapper.toNoticeResponseDto(result, notices.getTotalElements());
+	public NoticeResponseDto getMyNotice(Long loginMemberId) {
+		List<Notice> notices = noticeRepository.findAllByReceiverId(loginMemberId);
+		List<NoticeDto> result = getNoticeDtoList(notices);
+		return new NoticeResponseDto(result);
 	}
 
 	@Override
 	public NoticeResponseDto getUnreadNotice(Long memberId) {
 		List<Notice> notices = noticeRepository.findAllUnreadByReceiverId(memberId);
-		List<NoticeDto> result = notices.stream().map(notice -> {
+		List<NoticeDto> result = getNoticeDtoList(notices);
+		return new NoticeResponseDto(result);
+	}
+
+	private List<NoticeDto> getNoticeDtoList(List<Notice> notices) {
+		return notices.stream().map(notice -> {
 			List<NoticeParameterDto> parameters = getParameters(notice);
 			NoticeEntityType thumbnailEntity = notice.getNoticeType().getThumbnailEntity();
 			NoticeParameterDto thumbnailParameter = parameters.stream()
@@ -58,7 +57,6 @@ public class NoticeServiceImpl implements NoticeService {
 			String thumbnailUrl = getThumbnailUrl(thumbnailEntity, thumbnailParameter.getId());
 			return noticeMapper.toNoticeDto(notice, parameters, thumbnailUrl);
 		}).toList();
-		return noticeMapper.toNoticeResponseDto(result, notices.size());
 	}
 
 	@Override
@@ -66,8 +64,9 @@ public class NoticeServiceImpl implements NoticeService {
 		LocalDateTime now = LocalDateTime.now();
 		List<Notice> notices = noticeRepository.findAllById(noticeIds);
 
-		if (notices.stream().anyMatch(notice -> !notice.getReceiverId().equals(memberId)))
+		if (notices.stream().anyMatch(notice -> !notice.getReceiverId().equals(memberId))) {
 			throw UNAUTHENTICATED.asServiceException();
+		}
 		notices.forEach(notice -> notice.markAsRead(now));
 	}
 
@@ -77,12 +76,14 @@ public class NoticeServiceImpl implements NoticeService {
 					String[] parameterList = parameter.split("/");
 					NoticeEntityType type = NoticeEntityType.from(parameterList[0]);
 					Long id = id = Long.parseLong(parameterList[1]);
-					if (type.equals(NoticeEntityType.BOARD))
+					if (type.equals(NoticeEntityType.BOARD)) {
 						return noticeMapper.toNoticeParameterDto(type, id, null);
-					if (type.equals(NoticeEntityType.MEMBER))
+					}
+					if (type.equals(NoticeEntityType.MEMBER)) {
 						return noticeMapper.toNoticeParameterDto(type, id, parameterList[2]);
-					else
+					} else {
 						throw INVALID_ARGUMENT.asServiceException();
+					}
 				}).toList();
 	}
 
@@ -98,5 +99,11 @@ public class NoticeServiceImpl implements NoticeService {
 		} else {
 			throw new DomainException(MALFORMED_ENTITY);
 		}
+	}
+
+	@Scheduled(cron = "0 0 0 * * ?")
+	public void deleteAllByCreatedAtBefore() {
+		LocalDateTime date = LocalDateTime.now().minusDays(15);
+		noticeRepository.deleteAllByCreatedAtBefore(date);
 	}
 }

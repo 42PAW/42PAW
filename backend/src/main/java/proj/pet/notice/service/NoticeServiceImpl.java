@@ -76,14 +76,13 @@ public class NoticeServiceImpl implements NoticeService {
 				.map(parameter -> {
 					String[] parameterList = parameter.split("/");
 					NoticeEntityType type = NoticeEntityType.from(parameterList[0]);
-					Long id = 0L;
-					if (type.equals(NoticeEntityType.BOARD)) {
-						id = Long.parseLong(parameterList[1]);
+					Long id = id = Long.parseLong(parameterList[1]);
+					if (type.equals(NoticeEntityType.BOARD))
 						return noticeMapper.toNoticeParameterDto(type, id, null);
-					}
 					if (type.equals(NoticeEntityType.MEMBER))
-						id = Long.parseLong(parameterList[2]);
-					return noticeMapper.toNoticeParameterDto(type, id, parameterList[1]);
+						return noticeMapper.toNoticeParameterDto(type, id, parameterList[2]);
+					else
+						throw INVALID_ARGUMENT.asServiceException();
 				}).toList();
 	}
 

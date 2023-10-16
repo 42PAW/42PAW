@@ -3,6 +3,7 @@ package proj.pet.board.service;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
+import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.category.domain.Species;
 import proj.pet.member.dto.UserSessionDto;
@@ -23,4 +24,5 @@ public interface BoardFacadeService {
 
 	void deleteBoard(UserSessionDto userSessionDto, Long boardId);
 
+	BoardInfoDto getBoard(UserSessionDto userSessionDto, Long boardId);
 }

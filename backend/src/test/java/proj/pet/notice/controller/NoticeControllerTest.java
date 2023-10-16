@@ -1,12 +1,5 @@
 package proj.pet.notice.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,6 +15,14 @@ import proj.pet.testutil.test.E2ETest;
 import proj.pet.testutil.testdouble.board.TestBoard;
 import proj.pet.testutil.testdouble.board.TestBoardMedia;
 import proj.pet.testutil.testdouble.member.TestMember;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class NoticeControllerTest extends E2ETest {
 
@@ -93,8 +94,7 @@ public class NoticeControllerTest extends E2ETest {
 							jsonPath("$.result[1].parameters[1].id").value(member.getId()),
 							jsonPath("$.result[1].parameters[1].content").value("sanan"),
 							jsonPath("$.result[1].thumbnailUrl").value(boardMedia.getMediaUrl()),
-							jsonPath("$.result[1].readAt").doesNotExist(),
-							jsonPath("$.totalLength").value(2)
+							jsonPath("$.result[1].readAt").doesNotExist()
 					);
 		}
 

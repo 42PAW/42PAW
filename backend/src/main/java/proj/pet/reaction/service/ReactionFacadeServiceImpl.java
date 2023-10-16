@@ -11,14 +11,16 @@ import proj.pet.reaction.dto.ReactionRequestDto;
 public class ReactionFacadeServiceImpl implements ReactionFacadeService {
 
 	private final ReactionService reactionService;
-
-	@Transactional
-	@Override public void createReaction(UserSessionDto userSessionDto, ReactionRequestDto reactionRequestDto) {
-		reactionService.createReaction(userSessionDto.getMemberId(), reactionRequestDto.getBoardId(), reactionRequestDto.getReactionType());
-	}
+	private final ReactionEventPublisher reactionEventPublisher;
 
 	@Transactional
 	@Override public void deleteReaction(UserSessionDto userSessionDto, Long boardId) {
 		reactionService.deleteReaction(userSessionDto.getMemberId(), boardId);
+	}
+
+	@Transactional
+	@Override public void createReaction(UserSessionDto userSessionDto, ReactionRequestDto reactionRequestDto) {
+		reactionService.createReaction(userSessionDto.getMemberId(), reactionRequestDto.getBoardId(), reactionRequestDto.getReactionType());
+		reactionEventPublisher.publishByReactionCount(reactionRequestDto.getBoardId(), reactionRequestDto.getReactionType());
 	}
 }

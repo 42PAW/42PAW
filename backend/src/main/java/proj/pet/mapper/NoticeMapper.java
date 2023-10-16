@@ -10,7 +10,6 @@ import proj.pet.notice.domain.Notice;
 import proj.pet.notice.domain.NoticeEntityType;
 import proj.pet.notice.dto.NoticeDto;
 import proj.pet.notice.dto.NoticeParameterDto;
-import proj.pet.notice.dto.NoticeResponseDto;
 
 @Mapper(componentModel = "spring",
 		nullValueMappingStrategy = RETURN_DEFAULT)
@@ -22,6 +21,4 @@ public interface NoticeMapper {
 	@Mapping(target = "parameters", source = "parameters")
 	@Mapping(target = "type", source = "notice.noticeType")
 	NoticeDto toNoticeDto(Notice notice, List<NoticeParameterDto> parameters, String thumbnailUrl);
-
-	NoticeResponseDto toNoticeResponseDto(List<NoticeDto> result);
 }

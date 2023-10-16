@@ -37,14 +37,14 @@ public class NoticeServiceImpl implements NoticeService {
 	public NoticeResponseDto getMyNotice(Long loginMemberId) {
 		List<Notice> notices = noticeRepository.findAllByReceiverId(loginMemberId);
 		List<NoticeDto> result = getNoticeDtoList(notices);
-		return noticeMapper.toNoticeResponseDto(result);
+		return new NoticeResponseDto(result);
 	}
 
 	@Override
 	public NoticeResponseDto getUnreadNotice(Long memberId) {
 		List<Notice> notices = noticeRepository.findAllUnreadByReceiverId(memberId);
 		List<NoticeDto> result = getNoticeDtoList(notices);
-		return noticeMapper.toNoticeResponseDto(result);
+		return new NoticeResponseDto(result);
 	}
 
 	private List<NoticeDto> getNoticeDtoList(List<Notice> notices) {

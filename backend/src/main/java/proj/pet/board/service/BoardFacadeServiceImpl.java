@@ -28,27 +28,11 @@ public class BoardFacadeServiceImpl implements BoardFacadeService {
 	}
 
 	@Override
-	public BoardsPaginationDto getMainViewBoardsRefactoring(UserSessionDto userSessionDto,
-			PageRequest pageRequest) {
-		return boardQueryService.getMainViewBoardsRefactoring(userSessionDto.getMemberId(),
-				pageRequest);
-	}
-
-	//TODO: PROD에서 성능 테스트 후 둘 중 하나 삭제
-	@Override
 	public BoardsPaginationDto getHotBoards(UserSessionDto userSessionDto,
 			PageRequest pageRequest) {
 		return boardQueryService.getHotBoards(userSessionDto.getMemberId(), pageRequest);
 	}
 
-	@Override
-	public BoardsPaginationDto getHotBoardsRefactoring(UserSessionDto userSessionDto,
-			PageRequest pageRequest) {
-		return boardQueryService.getHotBoardsRefactoring(userSessionDto.getMemberId(),
-				pageRequest);
-	}
-
-	//TODO: PROD에서 성능 테스트 후 둘 중 하나 삭제
 	@Override
 	public BoardsPaginationDto getMemberBoards(UserSessionDto userSessionDto, Long memberId,
 			PageRequest pageRequest) {
@@ -57,24 +41,9 @@ public class BoardFacadeServiceImpl implements BoardFacadeService {
 	}
 
 	@Override
-	public BoardsPaginationDto getMemberBoardsRefactoring(UserSessionDto userSessionDto,
-			Long memberId, PageRequest pageRequest) {
-		return boardQueryService.getMemberBoardsRefactoring(userSessionDto.getMemberId(),
-				memberId, pageRequest);
-	}
-
-	//TODO: PROD에서 성능 테스트 후 둘 중 하나 삭제
-	@Override
 	public BoardsPaginationDto getFollowingsBoards(UserSessionDto userSessionDto,
 			PageRequest pageRequest) {
 		return boardQueryService.getFollowingsBoards(userSessionDto.getMemberId(), pageRequest);
-	}
-
-	@Override
-	public BoardsPaginationDto getFollowingsBoardsRefactoring(UserSessionDto userSessionDto,
-			PageRequest pageRequest) {
-		return boardQueryService.getFollowingsBoardsRefactoring(userSessionDto.getMemberId(),
-				pageRequest);
 	}
 
 	@Override

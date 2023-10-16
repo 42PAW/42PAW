@@ -23,5 +23,5 @@ public interface NoticeMapper {
 	@Mapping(target = "type", source = "notice.noticeType")
 	NoticeDto toNoticeDto(Notice notice, List<NoticeParameterDto> parameters, String thumbnailUrl);
 
-	NoticeResponseDto toNoticeResponseDto(List<NoticeDto> result, long totalLength);
+	NoticeResponseDto toNoticeResponseDto(List<NoticeDto> result);
 }

@@ -9,8 +9,6 @@ import static proj.pet.exception.ExceptionStatus.UNAUTHENTICATED;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import proj.pet.board.domain.Board;
@@ -36,24 +34,21 @@ public class NoticeServiceImpl implements NoticeService {
 	private final NoticeMapper noticeMapper;
 
 	@Override
-	public NoticeResponseDto getMyNotice(Long loginMemberId, PageRequest pageRequest) {
-		Page<Notice> notices = noticeRepository.findAllByReceiverId(loginMemberId, pageRequest);
-		List<NoticeDto> result = notices.stream().map(notice -> {
-			List<NoticeParameterDto> parameters = getParameters(notice);
-			NoticeEntityType thumbnailEntity = notice.getNoticeType().getThumbnailEntity();
-			NoticeParameterDto thumbnailParameter = parameters.stream()
-					.filter(parameter -> parameter.getType().equals(thumbnailEntity)).findFirst()
-					.orElseThrow(() -> new DomainException(MALFORMED_ENTITY));
-			String thumbnailUrl = getThumbnailUrl(thumbnailEntity, thumbnailParameter.getId());
-			return noticeMapper.toNoticeDto(notice, parameters, thumbnailUrl);
-		}).toList();
-		return noticeMapper.toNoticeResponseDto(result, notices.getTotalElements());
+	public NoticeResponseDto getMyNotice(Long loginMemberId) {
+		List<Notice> notices = noticeRepository.findAllByReceiverId(loginMemberId);
+		List<NoticeDto> result = getNoticeDtoList(notices);
+		return noticeMapper.toNoticeResponseDto(result);
 	}
 
 	@Override
 	public NoticeResponseDto getUnreadNotice(Long memberId) {
 		List<Notice> notices = noticeRepository.findAllUnreadByReceiverId(memberId);
-		List<NoticeDto> result = notices.stream().map(notice -> {
+		List<NoticeDto> result = getNoticeDtoList(notices);
+		return noticeMapper.toNoticeResponseDto(result);
+	}
+
+	private List<NoticeDto> getNoticeDtoList(List<Notice> notices) {
+		return notices.stream().map(notice -> {
 			List<NoticeParameterDto> parameters = getParameters(notice);
 			NoticeEntityType thumbnailEntity = notice.getNoticeType().getThumbnailEntity();
 			NoticeParameterDto thumbnailParameter = parameters.stream()
@@ -62,7 +57,6 @@ public class NoticeServiceImpl implements NoticeService {
 			String thumbnailUrl = getThumbnailUrl(thumbnailEntity, thumbnailParameter.getId());
 			return noticeMapper.toNoticeDto(notice, parameters, thumbnailUrl);
 		}).toList();
-		return noticeMapper.toNoticeResponseDto(result, notices.size());
 	}
 
 	@Override

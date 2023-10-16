@@ -1,6 +1,7 @@
 package proj.pet.board.service;
 
 import org.springframework.data.domain.PageRequest;
+import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsPaginationDto;
 
 public interface BoardQueryService {
@@ -14,4 +15,6 @@ public interface BoardQueryService {
 	BoardsPaginationDto getScrapBoards(Long loginUserId, PageRequest pageRequest);
 
 	BoardsPaginationDto getFollowingsBoards(Long memberId, PageRequest pageRequest);
+
+	BoardInfoDto getBoard(Long memberId, Long boardId);
 }

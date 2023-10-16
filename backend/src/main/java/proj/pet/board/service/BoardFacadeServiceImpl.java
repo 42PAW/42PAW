@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.category.domain.Species;
 import proj.pet.member.dto.UserSessionDto;
@@ -59,5 +60,10 @@ public class BoardFacadeServiceImpl implements BoardFacadeService {
 	@Override
 	public void deleteBoard(UserSessionDto userSessionDto, Long boardId) {
 		boardService.deleteBoard(userSessionDto.getMemberId(), boardId);
+	}
+
+	@Override
+	public BoardInfoDto getBoard(UserSessionDto userSessionDto, Long boardId) {
+		return boardQueryService.getBoard(userSessionDto.getMemberId(), boardId);
 	}
 }

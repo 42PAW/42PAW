@@ -11,6 +11,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import proj.pet.board.domain.Board;
 import proj.pet.board.repository.BoardRepository;
 import proj.pet.exception.DomainException;
@@ -33,6 +34,7 @@ public class NoticeServiceImpl implements NoticeService {
 	private final BoardRepository boardRepository;
 	private final NoticeMapper noticeMapper;
 
+	@Transactional(readOnly = true)
 	@Override
 	public NoticeResponseDto getMyNotice(Long loginMemberId) {
 		List<Notice> notices = noticeRepository.findAllByReceiverId(loginMemberId);
@@ -40,6 +42,7 @@ public class NoticeServiceImpl implements NoticeService {
 		return new NoticeResponseDto(result);
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public NoticeResponseDto getUnreadNotice(Long memberId) {
 		List<Notice> notices = noticeRepository.findAllUnreadByReceiverId(memberId);
@@ -59,6 +62,7 @@ public class NoticeServiceImpl implements NoticeService {
 		}).toList();
 	}
 
+	@Transactional
 	@Override
 	public void readNotice(Long memberId, List<Long> noticeIds) {
 		LocalDateTime now = LocalDateTime.now();
@@ -101,6 +105,7 @@ public class NoticeServiceImpl implements NoticeService {
 		}
 	}
 
+	@Transactional
 	@Scheduled(cron = "0 0 0 * * ?")
 	public void deleteAllByCreatedAtBefore() {
 		LocalDateTime date = LocalDateTime.now().minusDays(15);

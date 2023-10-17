@@ -1,5 +1,7 @@
 package proj.pet.board.service;
 
+import static proj.pet.exception.ExceptionStatus.NOT_FOUND_BOARD;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -8,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Streamable;
+import org.springframework.transaction.annotation.Transactional;
 import proj.pet.block.domain.Block;
 import proj.pet.block.repository.BlockRepository;
 import proj.pet.board.domain.Board;
@@ -24,6 +27,7 @@ import proj.pet.scrap.domain.Scrap;
 import proj.pet.utils.annotations.QueryService;
 
 @QueryService
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BoardQueryServiceImpl implements BoardQueryService {
 
@@ -138,5 +142,12 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 		List<BoardInfoDto> result = followingsBoards.stream()
 				.map(board -> createBoardInfoDto(memberId, board)).toList();
 		return boardMapper.toBoardsResponseDto(result, followingsBoards.getTotalElements());
+	}
+
+	@Override
+	public BoardInfoDto getBoard(Long memberId, Long boardId) {
+		Board board = boardRepository.findById(boardId)
+				.orElseThrow(NOT_FOUND_BOARD::asServiceException);
+		return createBoardInfoDto(memberId, board);
 	}
 }

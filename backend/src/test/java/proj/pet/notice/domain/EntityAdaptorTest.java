@@ -29,7 +29,7 @@ public class EntityAdaptorTest extends UnitTest {
 
 			// then
 			assertThat(noticeParameter.getParameter()).isEqualTo(String.format(
-					NoticeEntityType.MEMBER.getPlaceholder(), member.getNickname(), member.getId()));
+					NoticeEntityType.MEMBER.getPlaceholder(), member.getId(), member.getNickname()));
 		}
 
 		@Test

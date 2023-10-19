@@ -32,7 +32,7 @@ public class EntityAdaptor {
 	 * @return M/sanan/1
 	 */
 	private String formatToParameter(Member member) {
-		return String.format(MEMBER.getPlaceholder(), member.getNickname(), member.getId());
+		return String.format(MEMBER.getPlaceholder(), member.getId(), member.getNickname());
 	}
 
 	/**

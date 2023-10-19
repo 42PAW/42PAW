@@ -42,7 +42,7 @@ const NotificationItem = ({
 
   return (
     <WrapperStyled $isRead={isRead} onClick={moveToBoard}>
-      <ThumbnailStyled src={thumbnailUrl} />
+      <ThumbnailStyled src={thumbnailUrl || "/assets/profile.svg"} />
       {isUserInteraction && (
         <NameTagStyled
           onClick={(event: React.MouseEvent<HTMLElement>) => {
@@ -85,7 +85,7 @@ const ThumbnailStyled = styled.img`
   height: 80%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
-  background-color: white;
+  background-color: var(--transparent);
   border-radius: 50%;
   margin-left: 5px;
   margin-right: 8px;

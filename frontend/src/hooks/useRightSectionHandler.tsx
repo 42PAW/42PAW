@@ -4,6 +4,11 @@ import {
   rightSectionContentState,
 } from "@/recoil/atom";
 import { IRightSectionContentInfo } from "@/types/interface/right.section.interface";
+import { getCookie } from "@/api/cookie/cookies";
+import useModal from "@/hooks/useModal";
+import { ModalType } from "@/types/enum/modal.enum";
+
+const token = getCookie("access_token");
 
 /**오른쪽 섹션을 닫거나, 어떤 섹션을 열지 핸들링하기 위한 훅*/
 const useRightSectionHandler = () => {
@@ -13,6 +18,7 @@ const useRightSectionHandler = () => {
   const setRightSectionContent = useSetRecoilState<IRightSectionContentInfo>(
     rightSectionContentState
   );
+  const { openModal } = useModal();
 
   const openSearchSection = () => {
     setRightSectionContent({
@@ -22,6 +28,7 @@ const useRightSectionHandler = () => {
       following: false,
       animalFilter: false,
       bannedMember: false,
+      notification: false,
     });
     setIsRightSectionOpened(true);
   };
@@ -33,6 +40,7 @@ const useRightSectionHandler = () => {
       following: false,
       animalFilter: true,
       bannedMember: false,
+      notification: false,
     });
     setIsRightSectionOpened(true);
   };
@@ -44,6 +52,7 @@ const useRightSectionHandler = () => {
       following: false,
       animalFilter: false,
       bannedMember: false,
+      notification: false,
     });
     setIsRightSectionOpened(true);
   };
@@ -55,6 +64,7 @@ const useRightSectionHandler = () => {
       following: false,
       animalFilter: false,
       bannedMember: false,
+      notification: false,
     });
     setIsRightSectionOpened(true);
   };
@@ -66,6 +76,7 @@ const useRightSectionHandler = () => {
       following: true,
       animalFilter: false,
       bannedMember: false,
+      notification: false,
     });
     setIsRightSectionOpened(true);
   };
@@ -77,6 +88,23 @@ const useRightSectionHandler = () => {
       following: false,
       animalFilter: false,
       bannedMember: true,
+      notification: false,
+    });
+    setIsRightSectionOpened(true);
+  };
+  const openNotificationSection = () => {
+    if (token === undefined) {
+      openModal(ModalType.LOGIN);
+      return;
+    }
+    setRightSectionContent({
+      search: false,
+      comment: false,
+      follower: false,
+      following: false,
+      animalFilter: false,
+      bannedMember: false,
+      notification: true,
     });
     setIsRightSectionOpened(true);
   };
@@ -90,6 +118,7 @@ const useRightSectionHandler = () => {
         following: false,
         animalFilter: false,
         bannedMember: false,
+        notification: false,
       });
     }, 400);
     setIsRightSectionOpened(false);
@@ -102,6 +131,7 @@ const useRightSectionHandler = () => {
     openFollowerSection,
     openFollowingSection,
     openBannedMemberSection,
+    openNotificationSection,
     closeRightSection,
   };
 };

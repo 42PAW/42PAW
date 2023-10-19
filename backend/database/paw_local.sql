@@ -74,7 +74,7 @@ create table comment
         primary key,
     board_id   bigint      not null,
     member_id  bigint      not null,
-    comment varchar(128) not null,
+    content varchar(128) not null,
     created_at datetime(6) not null,
     deleted_at datetime(6) null,
     constraint FKlij9oor1nav89jeat35s6kbp1
@@ -104,6 +104,20 @@ create table member_category_filter
     constraint FKeuge8jdgtsfm24ssp1x0ewotd
         foreign key (member_id) references member (id)
 );
+
+create table notice
+(
+    id        bigint auto_increment
+        primary key,
+    receiver_id bigint  not null,
+    notice_type  varchar(32) not null,
+    parameters  varchar(255) not null,
+    created_at datetime(6) not null,
+    read_at datetime(6) null,
+    constraint FKeuge8jdgtsfm24ssp1x0ewotd
+        foreign key (receiver_id) references member (id)
+);
+
 -- auto-generated definition
 create table reaction
 (

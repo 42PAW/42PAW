@@ -13,9 +13,11 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
   handleClickLogo,
   userInfo,
   language,
+  notificationCount,
 }) => {
   const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
-  const { openSearchSection } = useRightSectionHandler();
+  const { openSearchSection, openNotificationSection } =
+    useRightSectionHandler();
   const setCurrentMemberId = useSetRecoilState<number | null>(
     currentMemberIdState
   );
@@ -34,6 +36,12 @@ const LeftMenuDesktop: React.FC<LeftMenuProps> = ({
             </li>
             <li onClick={moveToUpload}>
               <img alt="Upload" src="/assets/add.svg" />
+            </li>
+            <li onClick={openNotificationSection}>
+              <NotificationCountStyled $notificationCount={notificationCount}>
+                {notificationCount}
+              </NotificationCountStyled>
+              <img alt="Notification" src="/assets/notification.svg" />
             </li>
             <li onClick={openSearchSection}>
               <img alt="Search" src="/assets/search.svg" />
@@ -79,13 +87,7 @@ const LeftMenuStyled = styled.div`
   overflow: hidden;
   min-width: 100px;
   border-right: 1px solid var(--transparent);
-  div {
-    padding: 7px 10px;
-    color: var(--white);
-    border: 1.5px solid var(--white);
-    border-radius: 30px;
-    font-weight: bold;
-  }
+
   nav {
     display: flex;
     flex-direction: column;
@@ -112,10 +114,28 @@ const MenuListStyled = styled.ul`
     width: 25px;
     transition: all 0.3s ease;
     border-radius: 30%;
+    &:hover {
+      background-color: var(--transparent);
+    }
   }
-  img:hover {
-    background-color: var(--transparent);
+  li {
+    position: relative;
   }
+`;
+
+const NotificationCountStyled = styled.div<{ $notificationCount: number }>`
+  position: absolute;
+  display: ${(props) => (props.$notificationCount ? "flex" : "none")};
+  align-items: center;
+  justify-content: center;
+  right: 0;
+  width: 17px;
+  height: 17px;
+  border-radius: 100%;
+  border: none;
+  color: var(--white);
+  background-color: var(--red);
+  cursor: pointer;
 `;
 
 const ProfileImageStyled = styled.img`
@@ -131,6 +151,11 @@ const ProfileImageStyled = styled.img`
 
 const LoginButtonStyled = styled.div`
   cursor: pointer;
+  padding: 7px 10px;
+  color: var(--white);
+  border: 1.5px solid var(--white);
+  border-radius: 30px;
+  font-weight: bold;
   text-align: center;
   min-width: 45px;
   margin-bottom: 20%;

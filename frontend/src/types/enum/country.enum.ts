@@ -29,6 +29,7 @@ export enum Country {
   MALAYSIA = "MALAYSIA",
   BELGIUM = "BELGIUM",
   MOROCCO = "MOROCCO",
+  SINGAPORE = "SINGAPORE",
   ETC = "ETC",
 }
 
@@ -63,5 +64,6 @@ export enum CountryEmoji {
   MALAYSIA = "🇲🇾",
   BELGIUM = "🇧🇪",
   MOROCCO = "🇲🇦",
+  SINGAPORE = "🇸🇬",
   ETC = "🌍",
 }

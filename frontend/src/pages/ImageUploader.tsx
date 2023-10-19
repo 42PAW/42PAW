@@ -161,10 +161,6 @@ const ImageUploader = () => {
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
-    const options = {
-      maxSizeMB: 2,
-      maxWidthOrHeight: 2520,
-    };
 
     if (!fileList) return;
 
@@ -179,25 +175,26 @@ const ImageUploader = () => {
     const convertedFiles = await Promise.all(
       selectedFiles.map(async (file: File) => {
         if (file.type === "image/heic" || file.type === "image/HEIC") {
-          const response = await fetch(URL.createObjectURL(file));
-          const blob = await response.blob();
-          const conversionResult = await heic2any({
-            blob,
-            toType: "image/webp",
-          });
+          const blob = await fetch(URL.createObjectURL(file))
+            .then((res) => res.blob())
+            .then((blob) => heic2any({ blob, toType: "image/webp" }))
+            .catch((error) => {
+              console.log(error);
+              return null;
+            });
 
           if (blob instanceof Blob) {
-            file = new File(
-              [conversionResult as Blob],
-              file.name.split(".")[0] + ".webp",
-              {
-                type: "image/webp",
-                lastModified: new Date().getTime(),
-              }
-            );
+            file = new File([blob], file.name.split(".")[0] + ".webp", {
+              type: "image/webp",
+              lastModified: new Date().getTime(),
+            });
           }
         }
-        const compressedFile = await imageCompression(file, options);
+        const compressedFile = await imageCompression(file, {
+          maxSizeMB: 0.5,
+          maxWidthOrHeight: 1080,
+        });
+
         if (compressedFile.size <= 2097152) {
           const imageBlob = compressedFile.slice(
             0,
@@ -273,7 +270,7 @@ const ImageUploader = () => {
             <img src="/assets/plus.svg" />
             <SmallUploadButton
               type="file"
-              accept="image/*"
+              accept="image/*,.heic,.heif"
               onChange={handleImageChange}
               multiple
             />

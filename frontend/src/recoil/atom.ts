@@ -61,6 +61,7 @@ export const rightSectionContentState = atom<IRightSectionContentInfo>({
     following: false,
     animalFilter: false,
     bannedMember: false,
+    notification: false,
   },
 });
 
@@ -148,4 +149,19 @@ export const boardsTotalLengthState = atom<IBoardTotalLengthInfo>({
     trending: Infinity,
     following: Infinity,
   },
+});
+
+export const notificationsState = atom<any[] | null>({
+  key: "notifications",
+  default: null,
+});
+
+export const notificationCountState = atom<number>({
+  key: "notificationCount",
+  default: 0,
+});
+
+export const unreadNotificationIdsState = atom<number[]>({
+  key: "unreadNotificationIds",
+  default: [],
 });

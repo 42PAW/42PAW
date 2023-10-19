@@ -10,6 +10,7 @@ import AnimalFilterSection from "@/components/RightSection/AnimalFilterSection/A
 import FollowerSection from "@/components/RightSection/FollowerSection/FollowerSection";
 import FollowingSection from "@/components/RightSection/FollowingSection/FollowingSection";
 import BannedMemberSection from "@/components/RightSection/BannedMemberSection/BannedMemberSection";
+import NotificationSection from "./NotificationSection/NotificationSection";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
 import { IRightSectionContentInfo } from "@/types/interface/right.section.interface";
 
@@ -37,6 +38,7 @@ const RightSection = () => {
           {rightSectionContent.follower && <FollowerSection />}
           {rightSectionContent.following && <FollowingSection />}
           {rightSectionContent.bannedMember && <BannedMemberSection />}
+          {rightSectionContent.notification && <NotificationSection />}
         </RightSectionBodyStyled>
       </RightSectionStyled>
       {isRightSectionOpened && <OverlayStyled onClick={closeRightSection} />}
@@ -89,8 +91,9 @@ const RightSectionStyled = styled.div<{
   transition: opacity 0.4s ease-in-out, margin-right 0.4s ease-in-out;
   @media (max-width: 1023px) {
     z-index: 4;
-    display: ${(props) => (props.$isRightSectionOpened ? "flex" : "none")};
-    height: 90%;
+    height: ${(props) => (props.$isRightSectionOpened ? "90%" : "0")};
+    margin-right: 0;
+    transition: height 0.2s ease;
     background-color: #c1c2e1f9;
     position: fixed;
     width: 100%;

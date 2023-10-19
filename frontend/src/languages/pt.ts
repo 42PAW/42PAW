@@ -105,4 +105,12 @@ export const pt = {
   loginDemand: "O login é necessário para este serviço.",
   uploadImageBrief: "Carregar imagem",
   deleteImageBrief: "Excluir imagem",
+
+  // notification
+  followMessage: "começou a seguir",
+  commentMessage: "comentou",
+  tagMessage: "te marcou",
+  reactionTenMessage: "🐱 O número de curtidas ultrapassou 10 🐱",
+  reactionFortyTwoMessage: "🐶 O número de curtidas ultrapassou 42 🐶",
+  reactionOneHundredMessage: "🐼 O número de curtidas ultrapassou 100 🐼",
 };

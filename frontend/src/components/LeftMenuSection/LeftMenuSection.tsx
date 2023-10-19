@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import LeftMenuTablet from "@/components/LeftMenuSection/LeftMenuTablet";
 import LeftMenuDesktop from "@/components/LeftMenuSection/LeftMenuDesktop";
-import { userInfoState, languageState } from "@/recoil/atom";
+import {
+  userInfoState,
+  languageState,
+  notificationsState,
+  notificationCountState,
+  unreadNotificationIdsState,
+} from "@/recoil/atom";
 import { UserInfoDTO } from "@/types/dto/member.dto";
 import { removeCookie } from "@/api/cookie/cookies";
 import LoadingAnimation from "../loading/LoadingAnimation";
@@ -13,15 +19,24 @@ export interface LeftMenuProps {
   handleClickLogo: () => void;
   userInfo: UserInfoDTO | null;
   language?: any;
+  notificationCount: number;
 }
 
 const LeftMenuSection = () => {
   const [isDesktopScreen, setIsDesktopScreen] = useState(
     window.matchMedia("(min-width: 1024px)").matches
   );
+  const setUnreadNotificationIds = useSetRecoilState<number[]>(
+    unreadNotificationIdsState
+  );
   const [userInfo] = useRecoilState<UserInfoDTO | null>(userInfoState);
   const [language] = useRecoilState<any>(languageState);
+  const [notifications] = useRecoilState<any[] | null>(notificationsState);
+  const [notificationCount, setNotificationCount] = useRecoilState<number>(
+    notificationCountState
+  );
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+
   useEffect(() => {
     const handleResize = () => {
       setIsDesktopScreen(window.matchMedia("(min-width: 1024px)").matches);
@@ -31,6 +46,20 @@ const LeftMenuSection = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    if (!notifications) return;
+    let unreadNotificationCount = 0;
+    let unreadNotificationsIds: number[] = [];
+    notifications.map((notification) => {
+      if (notification.readAt === null) {
+        unreadNotificationsIds.push(notification.id);
+        unreadNotificationCount++;
+      }
+    });
+    setNotificationCount(unreadNotificationCount);
+    setUnreadNotificationIds(unreadNotificationsIds);
+  }, [notifications]);
 
   const handleLogin = () => {
     window.location.replace(
@@ -61,6 +90,7 @@ const LeftMenuSection = () => {
           handleClickLogo={handleClickLogo}
           userInfo={userInfo}
           language={language}
+          notificationCount={notificationCount}
         />
       ) : (
         <LeftMenuTablet
@@ -68,6 +98,7 @@ const LeftMenuSection = () => {
           handleLogout={handleLogout}
           handleClickLogo={handleClickLogo}
           userInfo={userInfo}
+          notificationCount={notificationCount}
         />
       )}
     </>

@@ -14,4 +14,5 @@ export interface IRightSectionContentInfo {
   following: boolean;
   animalFilter: boolean;
   bannedMember: boolean;
+  notification: boolean;
 }

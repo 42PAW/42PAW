@@ -22,10 +22,11 @@ import {
   axiosGetMyFollowingList,
   axiosGetFollowingList,
   axiosMyInfo,
+  axiosGetNotifications,
 } from "@/api/axios/axios.custom";
 import { buttonToggledState } from "@/components/BoardSortToggle";
 import useTranslator from "@/hooks/useTranslator";
-import { boardsLengthState } from "@/recoil/atom";
+import { boardsLengthState, notificationsState } from "@/recoil/atom";
 import { IBoardTotalLengthInfo } from "@/types/interface/board.interface";
 
 const useFetch = (memberId?: number | null) => {
@@ -37,6 +38,7 @@ const useFetch = (memberId?: number | null) => {
   const [userInfo, setUserInfo] = useRecoilState<UserInfoDTO | null>(
     userInfoState
   );
+  const setNotifications = useSetRecoilState(notificationsState);
   const { translator } = useTranslator();
   const [boardsTotalLength, setBoardsTotalLength] =
     useRecoilState<IBoardTotalLengthInfo>(boardsTotalLengthState);
@@ -150,10 +152,20 @@ const useFetch = (memberId?: number | null) => {
 
   const fetchMyInfo = async () => {
     try {
-      const { data: myInfo } = await axiosMyInfo();
+      const myInfoResponse = await axiosMyInfo();
+      const notificationResponse = await axiosGetNotifications();
+      setUserInfo(myInfoResponse);
+      setNotifications(notificationResponse);
+      translator(myInfoResponse.language);
+    } catch (error) {
+      throw error;
+    }
+  };
 
-      setUserInfo(myInfo);
-      translator(myInfo.language);
+  const fetchNewNotifications = async () => {
+    try {
+      const response = await axiosGetNotifications();
+      setNotifications(response);
     } catch (error) {
       throw error;
     }
@@ -166,6 +178,7 @@ const useFetch = (memberId?: number | null) => {
     fetchFollowerList,
     fetchFollowingList,
     fetchMyInfo,
+    fetchNewNotifications,
   };
 };
 

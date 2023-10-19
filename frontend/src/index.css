@@ -63,6 +63,11 @@ h1 {
   cursor: default;
 }
 
+::selection {
+  color: white;
+  background: #878abea0;
+}
+
 .swiper-pagination-bullet-active {
   color: white;
   background: var(--white, var(--transparent2));

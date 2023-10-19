@@ -109,4 +109,12 @@ export const ger = {
   loginDemand: "Für diesen Dienst ist eine Anmeldung erforderlich.",
   uploadImageBrief: "Bild hochladen",
   deleteImageBrief: "Bild löschen",
+
+  // notification
+  followMessage: "hat angefangen zu folgen",
+  commentMessage: "hat kommentiert",
+  tagMessage: "hat dich markiert",
+  reactionTenMessage: "🐱 Die Anzahl der Likes hat 10 überschritten 🐱",
+  reactionFortyTwoMessage: "🐶 Die Anzahl der Likes hat 42 überschritten 🐶",
+  reactionOneHundredMessage: "🐼 Die Anzahl der Likes hat 100 überschritten 🐼",
 };

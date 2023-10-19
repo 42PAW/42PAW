@@ -1,8 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
-import { isRightSectionOpenedState } from "../recoil/atom";
+import { currentBoardIdState, isRightSectionOpenedState } from "@/recoil/atom";
 import { boardCategoryState } from "@/recoil/atom";
 import { Board } from "@/types/enum/board.category.enum";
+import { getCookie } from "@/api/cookie/cookies";
+import useModal from "./useModal";
+import { ModalType } from "@/types/enum/modal.enum";
+
+const token = getCookie("access_token");
 
 /**useNavigate를 통해 라우트 간 이동할 때마다 RightSection을 Close해 주기 위한 훅 */
 const useNavigateCustom = () => {
@@ -10,7 +15,11 @@ const useNavigateCustom = () => {
     isRightSectionOpenedState
   );
   const setBoard = useSetRecoilState<Board>(boardCategoryState);
+  const setCurrentBoardId = useSetRecoilState<number | null>(
+    currentBoardIdState
+  );
   const navigator = useNavigate();
+  const { openModal } = useModal();
 
   const moveToMain = () => {
     setBoard(Board.DEFAULT);
@@ -40,7 +49,10 @@ const useNavigateCustom = () => {
   };
 
   const moveToUpload = () => {
-    // 라우트 전환 시, Board를 default로 전환해 주지 않으면 이전 카테고리 게시글이 남아있는 현상을 방지
+    if (token === undefined) {
+      openModal(ModalType.LOGIN);
+      return;
+    }
     setBoard(Board.DEFAULT);
     setIsRightSectionOpened(false);
     navigator("/upload");
@@ -61,6 +73,12 @@ const useNavigateCustom = () => {
     navigator("/profile/" + memberId.toString() + "/boards");
   };
 
+  const moveToSingleBoard = (boardId: number) => {
+    setIsRightSectionOpened(false);
+    setCurrentBoardId(boardId);
+    navigator("/board");
+  };
+
   return {
     moveToMain,
     moveToNotice,
@@ -70,6 +88,7 @@ const useNavigateCustom = () => {
     moveToMyProfileBoards,
     moveToMyProfileScrapped,
     moveToProfileBoards,
+    moveToSingleBoard,
   };
 };
 

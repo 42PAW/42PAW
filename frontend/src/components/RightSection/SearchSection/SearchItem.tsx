@@ -88,6 +88,10 @@ const SearchItemStyled = styled.div`
   margin-right: 10px;
   border-radius: 30px;
   background: var(--transparent);
+  transition: all 0.3s ease;
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
 const UserImageContainerStyled = styled.div`

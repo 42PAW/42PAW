@@ -108,4 +108,12 @@ export const fr = {
   loginDemand: "La connexion est nécessaire pour ce service.",
   uploadImageBrief: "Télécharger une image",
   deleteImageBrief: "Supprimer une image",
+
+  // notification
+  followMessage: "a commencé à suivre",
+  commentMessage: "a commenté",
+  tagMessage: "vous a identifié",
+  reactionTenMessage: "🐱 Le nombre de likes a dépassé 10 🐱",
+  reactionFortyTwoMessage: "🐶 Le nombre de likes a dépassé 42 🐶",
+  reactionOneHundredMessage: "🐼 Le nombre de likes a dépassé 100 🐼",
 };

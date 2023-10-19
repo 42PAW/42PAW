@@ -104,4 +104,12 @@ export const jp = {
   loginDemand: "このサービスにはログインが必要です。",
   uploadImageBrief: "画像をアップロード",
   deleteImageBrief: "画像を削除",
+
+  // notification
+  followMessage: " がフォローし始めました",
+  commentMessage: " がコメントしました",
+  tagMessage: " があなたをタグしました",
+  reactionTenMessage: "🐱 いいね数が10を超えました 🐱",
+  reactionFortyTwoMessage: "🐶 いいね数が42を超えました 🐶",
+  reactionOneHundredMessage: "🐼 いいね数が100を超えました 🐼",
 };

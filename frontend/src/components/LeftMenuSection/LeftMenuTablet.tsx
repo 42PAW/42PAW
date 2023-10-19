@@ -15,9 +15,11 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
   handleLogout,
   handleClickLogo,
   userInfo,
+  notificationCount,
 }) => {
   const { moveToMain, moveToMyProfile, moveToUpload } = useNavigateCustom();
-  const { openSearchSection } = useRightSectionHandler();
+  const { openSearchSection, openNotificationSection } =
+    useRightSectionHandler();
   const setCurrentMemberId = useSetRecoilState<number | null>(
     currentMemberIdState
   );
@@ -56,6 +58,12 @@ const LeftMenuTablet: React.FC<LeftMenuProps> = ({
             </li>
             <li onClick={moveToUpload}>
               <ListImageStyled alt="MyProfile" src="/assets/add.svg" />
+            </li>
+            <li onClick={openNotificationSection}>
+              <NotificationCountStyled $notificationCount={notificationCount}>
+                {notificationCount}
+              </NotificationCountStyled>
+              <img alt="Notification" src="/assets/notification.svg" />
             </li>
             <li>
               {userInfo ? (
@@ -133,17 +141,10 @@ const MenuStyled = styled.div`
   display: flex;
   border-top: 1px solid var(--transparent);
   flex-direction: row;
-
   width: 100vw;
   background-color: #c1c2e1f9;
   bottom: 0;
   height: 48px;
-  div {
-    padding: 7px 10px;
-    color: var(--white);
-    border: 1px solid var(--white);
-    border-radius: 30px;
-  }
   nav {
     padding-top: 10px;
   }
@@ -162,8 +163,29 @@ const MenuListStyled = styled.ul`
   padding: 0;
   margin: 0;
   img {
+    cursor: pointer;
     width: 25px;
   }
+  li {
+    position: relative;
+  }
+`;
+
+const NotificationCountStyled = styled.div<{ $notificationCount: number }>`
+  cursor: pointer;
+  position: absolute;
+  display: ${(props) => (props.$notificationCount ? "flex" : "none")};
+  align-items: center;
+  justify-content: center;
+  right: -6px;
+  top: -6px;
+  width: 17px;
+  height: 15px;
+  border-radius: 100%;
+  border: none;
+  color: var(--white);
+  background-color: var(--red);
+  padding-bottom: 2px;
 `;
 
 const ListImageStyled = styled.img`

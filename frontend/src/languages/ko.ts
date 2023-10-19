@@ -104,4 +104,12 @@ export const ko = {
   loginDemand: "로그인이 필요한 서비스입니다",
   uploadImageBrief: "이미지 수정",
   deleteImageBrief: "이미지 제거",
+
+  // notification
+  followMessage: "님이 팔로우하기 시작했습니다",
+  commentMessage: "님이 댓글을 달았습니다",
+  tagMessage: "님이 회원님을 태그했습니다",
+  reactionTenMessage: "🐱 좋아요 수가 10개를 돌파했습니다 🐱",
+  reactionFortyTwoMessage: "🐶 좋아요 수가 42개를 돌파했습니다 🐶",
+  reactionOneHundredMessage: "🐼 좋아요 수가 100개를 돌파했습니다 🐼",
 };

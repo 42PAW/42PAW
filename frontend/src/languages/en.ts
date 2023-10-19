@@ -104,4 +104,12 @@ export const en = {
   loginDemand: "Login is required for this service.",
   uploadImageBrief: "Upload Image",
   deleteImageBrief: "Delete Image",
+
+  // notification
+  followMessage: "has started following",
+  commentMessage: "has commented",
+  tagMessage: "tagged you",
+  reactionTenMessage: "🐱 Like count has surpassed 10 🐱",
+  reactionFortyTwoMessage: "🐶 Like count has surpassed 42 🐶",
+  reactionOneHundredMessage: "🐼 Like count has surpassed 100 🐼",
 };

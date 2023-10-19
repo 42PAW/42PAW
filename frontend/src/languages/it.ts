@@ -104,4 +104,12 @@ export const it = {
   loginDemand: "L'accesso è richiesto per questo servizio.",
   uploadImageBrief: "Carica immagine",
   deleteImageBrief: "Elimina immagine",
+
+  // notification
+  followMessage: "ha iniziato a seguire",
+  commentMessage: "ha commentato",
+  tagMessage: "ti ha taggato",
+  reactionTenMessage: "🐱 Il numero di mi piace ha superato 10 🐱",
+  reactionFortyTwoMessage: "🐶 Il numero di mi piace ha superato 42 🐶",
+  reactionOneHundredMessage: "🐼 Il numero di mi piace ha superato 100 🐼",
 };

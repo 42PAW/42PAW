@@ -107,4 +107,12 @@ export const spa = {
   loginDemand: "Es necesario iniciar sesión para este servicio.",
   uploadImageBrief: "Subir imagen",
   deleteImageBrief: "Eliminar imagen",
+
+  // notification
+  followMessage: "ha comenzado a seguirte",
+  commentMessage: "comentó",
+  tagMessage: "te etiquetó",
+  reactionTenMessage: "🐱 ¡El número de me gusta superó los 10 🐱",
+  reactionFortyTwoMessage: "🐶 ¡El número de me gusta superó los 42 🐶",
+  reactionOneHundredMessage: "🐼 ¡El número de me gusta superó los 100 🐼",
 };

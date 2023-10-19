@@ -7,9 +7,10 @@ import MyProfilePage from "@/pages/ProfilePage/MyProfilePage";
 import UploadPage from "@/pages/UploadPage";
 import SignUpPage from "@/pages/SignUpPage/SignUpPage";
 import NotFoundPage from "@/pages/NotFoundPage";
-import LoadingPage from "./pages/LoadingPage";
-import MyProfileBoardsPage from "./pages/MyProfileBoardsPage";
-import ProfileBoardsPage from "./pages/ProfileBoardsPage";
+import LoadingPage from "@/pages/LoadingPage";
+import MyProfileBoardsPage from "@/pages/MyProfileBoardsPage";
+import ProfileBoardsPage from "@/pages/ProfileBoardsPage";
+import SingleBoardPage from "@/pages/SingleBoardPage";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -17,7 +18,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 300);
   }, []);
 
   function setScreenSize() {
@@ -42,6 +43,7 @@ function App() {
             path="profile/:memberId/boards"
             element={<ProfileBoardsPage />}
           />
+          <Route path="board" element={<SingleBoardPage />} />
           <Route path="*" element={<Navigate to="/error" />} />
         </Route>
         <Route path="/sign-up" element={<SignUpPage />} />

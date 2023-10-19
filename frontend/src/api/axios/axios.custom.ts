@@ -630,3 +630,49 @@ export const axiosUpdateAnimalCategory = async (
     throw error;
   }
 };
+
+const axiosGetNotificationsURL = "/v1/notices/me";
+export const axiosGetNotifications = async (): Promise<any> => {
+  try {
+    const response = await instance.get(axiosGetNotificationsURL);
+    return response.data.result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosReadNotificationsURL = "/v1/notices/me";
+export const axiosReadNotifications = async (
+  noticeIds: number[]
+): Promise<any> => {
+  try {
+    const response = await instance.post(axiosReadNotificationsURL, {
+      noticeIds,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetNewNotificationsURL = "/v1/notices/me/unread";
+export const axiosGetNewNotifications = async (): Promise<any> => {
+  try {
+    const response = await instance.get(axiosGetNewNotificationsURL);
+    return response.data.result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetSingleBoardURL = "/v1/boards/";
+export const axiosGetSingleBoard = async (boardId: number): Promise<any> => {
+  try {
+    const response = await instance.get(
+      axiosGetSingleBoardURL + boardId.toString()
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

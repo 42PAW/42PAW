@@ -1,15 +1,15 @@
 package proj.pet.notice.domain;
 
-import static proj.pet.exception.ExceptionStatus.MALFORMED_ENTITY;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import proj.pet.exception.DomainException;
 
+import static proj.pet.exception.ExceptionStatus.MALFORMED_ENTITY;
+
 @Getter
 @RequiredArgsConstructor
 public enum NoticeEntityType {
-	MEMBER("M/%s/%d"), // M/1/sanan
+	MEMBER("M/%d/%s"), // M/1/sanan
 	BOARD("B/%d"), // B/3/hyungnoh
 	; // %d = 멤버 아이디, %s = 멤버 닉네임
 

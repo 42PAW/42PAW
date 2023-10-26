@@ -69,7 +69,7 @@ const axiosMyInfoURL = "/v1/members/me";
 export const axiosMyInfo = async (): Promise<any> => {
   try {
     const response = await instance.get(axiosMyInfoURL);
-    return response;
+    return response.data;
   } catch (error) {
     throw error;
   }

@@ -8,6 +8,7 @@ import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 import { axiosUpdateAnimalCategory } from "@/api/axios/axios.custom";
 import useToaster from "@/hooks/useToaster";
 import useRightSectionHandler from "@/hooks/useRightSectionHandler";
+import useFetch from "@/hooks/useFetch";
 
 const AnimalFilterSection = () => {
   const [language] = useRecoilState<any>(languageState);
@@ -17,10 +18,12 @@ const AnimalFilterSection = () => {
   );
   const { popToast } = useToaster();
   const { closeRightSection } = useRightSectionHandler();
+  const { fetchMyInfo } = useFetch();
 
   useEffect(() => {
     //로그인 상태에서 유저 정보 카테고리 불러오기
     if (userInfo) {
+      console.log(userInfo);
       setAnimalCategory(userInfo.animalCategories);
       return;
     }
@@ -28,7 +31,7 @@ const AnimalFilterSection = () => {
     setAnimalCategory(allAnimalSpecies);
   }, []);
 
-  const updateAnimalCategory = () => {
+  const updateAnimalCategory = async () => {
     if (!animalCategory || animalCategory.length === 0) {
       const selectedCategoryMsg = language.selectCategory;
       popToast(selectedCategoryMsg, "N");
@@ -36,7 +39,8 @@ const AnimalFilterSection = () => {
     }
     // 로그인 상태 -> api에 실제 데이터 변경 요청
     if (userInfo) {
-      axiosUpdateAnimalCategory(animalCategory as AnimalSpecies[]);
+      await axiosUpdateAnimalCategory(animalCategory as AnimalSpecies[]);
+      fetchMyInfo();
       const categoryChangedToastMsg = language.categoryChangedToast;
       popToast(categoryChangedToastMsg, "P");
     }

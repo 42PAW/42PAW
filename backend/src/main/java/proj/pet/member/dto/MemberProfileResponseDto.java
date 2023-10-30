@@ -1,13 +1,14 @@
 package proj.pet.member.dto;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import proj.pet.follow.domain.FollowType;
 import proj.pet.member.domain.Country;
 
-import java.time.LocalDateTime;
-
 @Getter
+@ToString
 @AllArgsConstructor
 public class MemberProfileResponseDto {
 

@@ -31,6 +31,7 @@ import proj.pet.utils.annotations.QueryService;
 @Transactional(readOnly = true)
 public class MemberQueryServiceImpl implements MemberQueryService {
 
+	private static final String regex = "^[a-zA-Z\\u00C0-\\u00FF\\u0100-\\u017F\\u0180-\\u024F\\u0370-\\u03FF\\u0400-\\u04FF\\u3040-\\u30FF\\u3130-\\u318F\\uAC00-\\uD7AF\\.\\_\\-][a-zA-Z0-9\\u00C0-\\u00FF\\u0100-\\u017F\\u0180-\\u024F\\u0370-\\u03FF\\u0400-\\u04FF\\u3040-\\u30FF\\u3130-\\u318F\\uAC00-\\uD7AF\\.\\_\\-]*$";
 	private final MemberRepository memberRepository;
 	private final FollowRepository followRepository;
 	private final BoardRepository boardRepository;
@@ -45,11 +46,8 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 	 */
 	@Override
 	public MemberNicknameValidateResponseDto validateMemberNickname(String nickname) {
-		return memberMapper.toMemberNicknameValidateResponseDto(
-				nickname.matches(
-						"^[a-zA-Z\\u00C0-\\u00FF\\u0100-\\u017F\\u0180-\\u024F\\u0370-\\u03FF\\u0400-\\u04FF\\u3040-\\u30FF\\u3130-\\u318F\\uAC00-\\uD7AF\\.\\_\\-][a-zA-Z0-9\\u00C0-\\u00FF\\u0100-\\u017F\\u0180-\\u024F\\u0370-\\u03FF\\u0400-\\u04FF\\u3040-\\u30FF\\u3130-\\u318F\\uAC00-\\uD7AF\\.\\_\\-]*$")
-						&& memberRepository.findByNickname(nickname).isEmpty()
-		);
+		return new MemberNicknameValidateResponseDto(nickname.matches(regex)
+				&& memberRepository.findByNickname(nickname).isEmpty());
 	}
 
 	/**
@@ -139,6 +137,13 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 		return memberMapper.toMemberSearchResponseDto(result, members.getTotalElements());
 	}
 
+	/**
+	 * 태깅을 누르면 해당 이름을 가진 멤버를 검색하여 반환
+	 *
+	 * @param loginUserId 로그인 유저 id
+	 * @param name        닉네임
+	 * @return MemberProfileResponseDto 멤버 프로필
+	 */
 	@Override
 	public MemberProfileResponseDto getTaggingMember(Long loginUserId, String name) {
 		Member taggingMember = memberRepository.findByNickname(name)

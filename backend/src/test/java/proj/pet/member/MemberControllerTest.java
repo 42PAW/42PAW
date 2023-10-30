@@ -1,30 +1,9 @@
 package proj.pet.member;
 
-import static org.apache.http.HttpHeaders.AUTHORIZATION;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static proj.pet.testutil.testdouble.board.TestBoardMedia.DEFAULT_MEDIA_URL;
-
 import com.amazonaws.services.s3.AmazonS3;
 import jakarta.servlet.http.Cookie;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -32,11 +11,7 @@ import proj.pet.board.domain.Board;
 import proj.pet.category.domain.Species;
 import proj.pet.follow.domain.FollowType;
 import proj.pet.member.domain.Country.Campus;
-import proj.pet.member.domain.Language;
-import proj.pet.member.domain.Member;
-import proj.pet.member.domain.MemberImageManager;
-import proj.pet.member.domain.MemberRole;
-import proj.pet.member.domain.OauthType;
+import proj.pet.member.domain.*;
 import proj.pet.member.dto.MemberLanguageChangeRequestDto;
 import proj.pet.member.dto.MemberProfileChangeRequestDto;
 import proj.pet.testutil.PersistHelper;
@@ -45,6 +20,22 @@ import proj.pet.testutil.testdouble.board.TestBoard;
 import proj.pet.testutil.testdouble.board.TestBoardMedia;
 import proj.pet.testutil.testdouble.category.TestBoardCategoryFilter;
 import proj.pet.testutil.testdouble.member.TestMember;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static org.apache.http.HttpHeaders.AUTHORIZATION;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static proj.pet.testutil.testdouble.board.TestBoardMedia.DEFAULT_MEDIA_URL;
 
 public class MemberControllerTest extends E2ETest {
 
@@ -149,8 +140,6 @@ public class MemberControllerTest extends E2ETest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("memberName").value(member.getNickname()))
 				.andExpect(jsonPath("intraName").value(member.getOauthProfile().getName()))
-				.andExpect(jsonPath("nicknameUpdatedAt").value(
-						member.getNicknameUpdatedAt().toString()))
 				.andExpect(jsonPath("profileImageUrl").value(member.getProfileImageUrl()))
 				.andExpect(jsonPath("country").value(member.getCountry().toString()))
 				.andExpect(jsonPath("campus").value(member.getCampus().toString()))

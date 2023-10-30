@@ -75,25 +75,28 @@ export const axiosMyInfo = async (): Promise<any> => {
   }
 };
 
-const axiosCreateBoardURL = "/v1/boards";
+const axiosCreateBoardURL = "/v1/boards/new";
+const axiosGetPresignedURL =
+  "https://qnzcpqw7ui.execute-api.ap-northeast-2.amazonaws.com/default/42paw-presigned-url-bucket-lambda";
+const objectURL =
+  "https://42paw-presigned-url-bucket.s3.ap-northeast-2.amazonaws.com/";
 export const axiosCreateBoard = async ({
   mediaDataList,
   categoryList,
   content,
 }: CreateBoardDTO): Promise<any> => {
   try {
-    const formData = new FormData();
-    mediaDataList.forEach((file) => {
-      formData.append(`mediaDataList`, file);
-    });
-    categoryList.forEach((category) => {
-      formData.append(`categoryList`, category);
-    });
-    formData.append("content", content);
-    const response = await instance.post(axiosCreateBoardURL, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+    const mediaDataListLength = mediaDataList.length;
+    let mediaUrlList = [];
+    for (let i = 0; i < mediaDataListLength; i++) {
+      const response = await axios.get(axiosGetPresignedURL);
+      await axios.put(response.data.uploadURL, mediaDataList[i]);
+      mediaUrlList.push(objectURL + response.data.filename);
+    }
+    const response = await instance.post(axiosCreateBoardURL, {
+      mediaUrlList,
+      categoryList,
+      content,
     });
     return response.data;
   } catch (error) {
@@ -672,24 +675,6 @@ export const axiosGetSingleBoard = async (boardId: number): Promise<any> => {
       axiosGetSingleBoardURL + boardId.toString()
     );
     return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const axiosCreateBoard2URL =
-  "https://qnzcpqw7ui.execute-api.ap-northeast-2.amazonaws.com/default/42paw-presigned-url-bucket-lambda";
-export const axiosCreateBoard2 = async ({
-  mediaDataList,
-}: any): Promise<any> => {
-  try {
-    const mediaDataListLength = mediaDataList.length;
-    let mediaDataListURL = [];
-    for (let i = 0; i < mediaDataListLength; i++) {
-      const response = await axios.get(axiosCreateBoard2URL);
-      await axios.put(response.data.uploadURL, mediaDataList[i]);
-      mediaDataListURL.push(response.data.uploadURL);
-    }
   } catch (error) {
     throw error;
   }

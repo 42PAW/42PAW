@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { ChangeEvent, useState, useRef, useEffect } from "react";
 import useParseDate from "@/hooks/useParseDate";
-import { axiosCreateBoard } from "@/api/axios/axios.custom";
+import { axiosCreateBoard, axiosCreateBoard2 } from "@/api/axios/axios.custom";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 import AnimalButtonContainer from "@/components/AnimalButtonContainer";
 import useToaster from "@/hooks/useToaster";
@@ -49,6 +49,7 @@ const ImageUploader = () => {
     const upload = async () => {
       if (uploadClicked && cropImageCompleted && uploadFiles.length > 0) {
         try {
+          await axiosCreateBoard2({ mediaDataList: uploadFiles });
           await axiosCreateBoard({
             mediaDataList: uploadFiles,
             categoryList: categoryList,

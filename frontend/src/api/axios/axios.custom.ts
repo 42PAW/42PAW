@@ -635,7 +635,6 @@ const axiosGetNotificationsURL = "/v1/notices/me";
 export const axiosGetNotifications = async (): Promise<any> => {
   try {
     const response = await instance.get(axiosGetNotificationsURL);
-    console.log(response.data.result);
     return response.data.result;
   } catch (error) {
     throw error;
@@ -673,6 +672,24 @@ export const axiosGetSingleBoard = async (boardId: number): Promise<any> => {
       axiosGetSingleBoardURL + boardId.toString()
     );
     return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosCreateBoard2URL =
+  "https://qnzcpqw7ui.execute-api.ap-northeast-2.amazonaws.com/default/42paw-presigned-url-bucket-lambda";
+export const axiosCreateBoard2 = async ({
+  mediaDataList,
+}: any): Promise<any> => {
+  try {
+    const mediaDataListLength = mediaDataList.length;
+    let mediaDataListURL = [];
+    for (let i = 0; i < mediaDataListLength; i++) {
+      const response = await axios.get(axiosCreateBoard2URL);
+      await axios.put(response.data.uploadURL, mediaDataList[i]);
+      mediaDataListURL.push(response.data.uploadURL);
+    }
   } catch (error) {
     throw error;
   }

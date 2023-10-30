@@ -1,4 +1,4 @@
-import ImageUploader from "@/pages/ImageUploader";
+import ImageUploader from "@/pages/UploadPage/components/ImageUploader";
 import styled from "styled-components";
 
 const UploadPage = () => {

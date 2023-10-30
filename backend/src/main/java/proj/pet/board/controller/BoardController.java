@@ -92,7 +92,7 @@ public class BoardController {
 	@AuthGuard(level = AuthLevel.USER_OR_ADMIN)
 	public void createBoard2(
 			@UserSession UserSessionDto userSessionDto,
-			@Valid BoardCreateRequestDto2 boardCreateRequestDto) {
+			@RequestBody @Valid BoardCreateRequestDto2 boardCreateRequestDto) {
 		boardFacadeService.createBoard2(userSessionDto,
 				boardCreateRequestDto.getMediaUrlList(),
 				boardCreateRequestDto.getCategoryList(),

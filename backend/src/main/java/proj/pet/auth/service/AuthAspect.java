@@ -51,7 +51,6 @@ public class AuthAspect {
 			return;
 		}
 		String token = jwtTokenManager.extractTokenFrom(request);
-		System.out.println("token: " + token);
 		if (token == null || !jwtTokenManager.isTokenValid(token, jwtProperties.createSigningKey())) {
 			cookieManager.deleteCookie(response, jwtProperties.getTokenName());
 			throw new ServiceException(UNAUTHORIZED);

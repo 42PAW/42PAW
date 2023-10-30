@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import proj.pet.category.domain.Species;
 
 import java.util.List;
@@ -14,11 +15,12 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class MemberCreateRequestDto {
 	@NotNull
-	private final String memberName;
-	private final String imageUrl;
-	private final String statement;
+	private String memberName;
+	private String imageUrl;
+	private String statement;
 	@NotNull
-	private final List<Species> categoryFilters;
+	private List<Species> categoryFilters;
 }

@@ -149,7 +149,8 @@ public class MemberControllerTest extends E2ETest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("memberName").value(member.getNickname()))
 				.andExpect(jsonPath("intraName").value(member.getOauthProfile().getName()))
-				.andExpect(jsonPath("nicknameUpdatedAt").value(member.getNicknameUpdatedAt()))
+				.andExpect(jsonPath("nicknameUpdatedAt").value(
+						member.getNicknameUpdatedAt().toString()))
 				.andExpect(jsonPath("profileImageUrl").value(member.getProfileImageUrl()))
 				.andExpect(jsonPath("country").value(member.getCountry().toString()))
 				.andExpect(jsonPath("campus").value(member.getCampus().toString()))
@@ -182,7 +183,8 @@ public class MemberControllerTest extends E2ETest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("memberName").value(member.getNickname()))
 				.andExpect(jsonPath("intraName").value(member.getOauthProfile().getName()))
-				.andExpect(jsonPath("nicknameUpdatedAt").value(member.getNicknameUpdatedAt()))
+				.andExpect(jsonPath("nicknameUpdatedAt").value(
+						member.getNicknameUpdatedAt().toString()))
 				.andExpect(jsonPath("profileImageUrl").value(member.getProfileImageUrl()))
 				.andExpect(jsonPath("country").value(member.getCountry().toString()))
 				.andExpect(jsonPath("campus").value(member.getCampus().toString()))

@@ -75,6 +75,32 @@ public class BoardServiceImpl implements BoardService {
 		return boardRepository.save(board);
 	}
 
+	public Board createBoard2(
+			Long memberId,
+			List<Species> speciesList,
+			List<String> mediaDataList,
+			String content,
+			LocalDateTime now
+	) {
+		// TODO: 컨트롤러 & 정책으로 빼기
+		if (speciesList == null || speciesList.isEmpty()) {
+			throw new ServiceException(INVALID_ARGUMENT, "동물 카테고리를 선택해주세요.");
+		}
+		Member member = memberRepository.findById(memberId)
+				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
+		Board board = boardRepository.save(
+				Board.of(member, VisibleScope.PUBLIC, content, now));
+		List<BoardCategoryFilter> categoryFilters = convertToBoardCategoryFilters(speciesList, board);
+		categoryFilters = boardCategoryFilterRepository.saveAll(categoryFilters);
+		board.addCategoryFilters(categoryFilters);
+
+		List<BoardMedia> mediaList = convertToBoardMedia2(mediaDataList, board);
+		mediaList = boardMediaRepository.saveAll(mediaList);
+		board.addMediaList(mediaList);
+
+		return boardRepository.save(board);
+	}
+
 	private List<BoardCategoryFilter> convertToBoardCategoryFilters(
 			List<Species> animalCategories, Board board) {
 		return animalCategories.stream()
@@ -91,6 +117,16 @@ public class BoardServiceImpl implements BoardService {
 					return BoardMedia.of(board, mediaUrl, index.getAndIncrement(),
 							MediaType.from(data));
 				}).collect(Collectors.toList());
+		return mediaList;
+	}
+
+	private List<BoardMedia> convertToBoardMedia2(List<String> mediaUrlList, Board board) {
+		AtomicInteger index = new AtomicInteger(0);
+		List<BoardMedia> mediaList = mediaUrlList.stream().map(url -> {
+					return BoardMedia.of(board, url, index.getAndIncrement(), MediaType.IMAGE);
+					//TODO MEDIA TYPE 유동적으로 받도록 하는 부분 필요
+				})
+				.toList();
 		return mediaList;
 	}
 

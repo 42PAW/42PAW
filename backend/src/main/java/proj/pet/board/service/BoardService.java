@@ -24,6 +24,8 @@ public interface BoardService {
 	 */
 	Board createBoard(Long memberId, List<Species> categoryList, List<MultipartFile> mediaDataList, String content, LocalDateTime now);
 
+	Board createBoard2(Long memberId, List<Species> categoryList, List<String> mediaUrlList, String content, LocalDateTime now);
+
 	/**
 	 * 게시글을 삭제한다.
 	 *

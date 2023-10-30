@@ -31,7 +31,7 @@ export interface CommentInfoDTO {
 }
 
 export interface CreateBoardDTO {
-  mediaDataList: Blob[];
+  mediaDataList: File[];
   categoryList: AnimalSpecies[];
   content: string;
 }

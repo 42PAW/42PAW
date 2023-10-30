@@ -84,7 +84,7 @@ export const axiosCreateBoard = async ({
   mediaDataList,
   categoryList,
   content,
-}: any): Promise<any> => {
+}: CreateBoardDTO): Promise<any> => {
   try {
     const mediaDataListLength = mediaDataList.length;
     let mediaUrlList = [];

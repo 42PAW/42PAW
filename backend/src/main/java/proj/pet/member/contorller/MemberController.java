@@ -37,7 +37,7 @@ public class MemberController {
 	public void createMember(
 			@UserSession UserSessionDto userSessionDto,
 			HttpServletRequest req, HttpServletResponse res,
-			@Valid @ModelAttribute MemberCreateRequestDto memberCreateRequestDto
+			@Valid @RequestBody MemberCreateRequestDto memberCreateRequestDto
 	) {
 		memberFacadeService.createMember(userSessionDto, req, res, memberCreateRequestDto);
 	}
@@ -107,7 +107,7 @@ public class MemberController {
 	@AuthGuard(level = USER_OR_ADMIN)
 	public MemberProfileChangeResponseDto changeMyProfile(
 			@UserSession UserSessionDto userSessionDto,
-			@Valid @ModelAttribute MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
+			@Valid @RequestBody MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
 		return memberFacadeService.changeMemberProfile(userSessionDto,
 				memberProfileChangeRequestDto);
 	}

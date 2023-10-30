@@ -24,10 +24,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import proj.pet.category.domain.Species;
+import proj.pet.follow.domain.FollowType;
+import proj.pet.member.domain.Country.Campus;
 import proj.pet.member.domain.Member;
 import proj.pet.member.domain.MemberImageManager;
 import proj.pet.member.domain.MemberRole;
 import proj.pet.member.domain.OauthType;
+import proj.pet.member.dto.MemberMyInfoResponseDto;
 import proj.pet.member.dto.MemberNicknameValidateResponseDto;
 import proj.pet.member.dto.MemberProfileResponseDto;
 import proj.pet.testutil.PersistHelper;
@@ -92,7 +95,7 @@ public class MemberControllerTest extends E2ETest {
 	}
 
 	@Test
-	@DisplayName("내 프로필을 조회할 수 있다.")
+	@DisplayName("간단한 내 정보를 조회할 수 있다.")
 	void getMyInfo() throws Exception {
 		Member member = TestMember.builder()
 				.nickname("ccobi")
@@ -100,6 +103,8 @@ public class MemberControllerTest extends E2ETest {
 				.oauthType(OauthType.FORTY_TWO)
 				.oauthName("jpark2")
 				.memberRole(MemberRole.USER)
+				.profileImageUrl("profileUrl")
+				.campus(Campus.SEOUL)
 				.createdAt(now)
 				.build().asEntity();
 		em.persist(member);
@@ -114,14 +119,94 @@ public class MemberControllerTest extends E2ETest {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(result -> {
+					MemberMyInfoResponseDto dto = objectMapper.readValue(
+							result.getResponse().getContentAsString(),
+							MemberMyInfoResponseDto.class);
+					assertThat(dto.getMemberName()).isEqualTo(member.getNickname());
+					assertThat(dto.getIntraName()).isEqualTo(member.getOauthProfile().getName());
+					assertThat(dto.getProfileImageUrl()).isEqualTo(member.getProfileImageUrl());
+					assertThat(dto.getLanguage()).isEqualTo(member.getLanguage());
+				});
+	}
+
+	@Test
+	@DisplayName("내 프로필을 조회할 수 있다.")
+	void getMyProfile() throws Exception {
+		Member member = TestMember.builder()
+				.nickname("ccobi")
+				.oauthId("123")
+				.oauthType(OauthType.FORTY_TWO)
+				.oauthName("jpark2")
+				.memberRole(MemberRole.USER)
+				.profileImageUrl("profileUrl")
+				.campus(Campus.SEOUL)
+				.statement("꼬비가 최고다")
+				.createdAt(now)
+				.build().asEntity();
+		em.persist(member);
+		String token = stubToken(member, now, 1);
+
+		String url = "/v1/members/me/profile";
+		MockHttpServletRequestBuilder req = get(url)
+				.cookie(new Cookie("access_token", token))
+				.header(AUTHORIZATION, BEARER + token);
+
+		mockMvc.perform(req)
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(result -> {
 					MemberProfileResponseDto dto = objectMapper.readValue(
 							result.getResponse().getContentAsString(),
 							MemberProfileResponseDto.class);
 					assertThat(dto.getMemberName()).isEqualTo(member.getNickname());
-					assertThat(dto.getIntraName()).isEqualTo(
-							member.getOauthProfile().getName());
+					assertThat(dto.getIntraName()).isEqualTo(member.getOauthProfile().getName());
+					assertThat(dto.getNicknameUpdatedAt()).isEqualTo(member.getNicknameUpdatedAt());
+					assertThat(dto.getProfileImageUrl()).isEqualTo(member.getProfileImageUrl());
+					assertThat(dto.getCountry()).isEqualTo(member.getCountry());
+					assertThat(dto.getCampus()).isEqualTo(member.getCampus());
+					assertThat(dto.getStatement()).isEqualTo(member.getStatement());
+					assertThat(dto.getFollowType()).isEqualTo(FollowType.NONE);
 				});
 	}
+
+	@Test
+	@DisplayName("내 프로필을 조회할 수 있다.")
+	void getMemberProfile() throws Exception {
+		Member member = TestMember.builder()
+				.nickname("ccobi")
+				.oauthId("123")
+				.oauthType(OauthType.FORTY_TWO)
+				.oauthName("jpark2")
+				.memberRole(MemberRole.USER)
+				.profileImageUrl("profileUrl")
+				.campus(Campus.SEOUL)
+				.statement("꼬비가 최고다")
+				.createdAt(now)
+				.build().asEntity();
+		em.persist(member);
+
+		Long memberId = member.getId();
+		String url = "/v1/members/" + memberId + "/profile";
+		MockHttpServletRequestBuilder req = get(url);
+
+		mockMvc.perform(req)
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(result -> {
+					MemberProfileResponseDto dto = objectMapper.readValue(
+							result.getResponse().getContentAsString(),
+							MemberProfileResponseDto.class);
+					assertThat(dto.getMemberName()).isEqualTo(member.getNickname());
+					assertThat(dto.getIntraName()).isEqualTo(member.getOauthProfile().getName());
+					assertThat(dto.getNicknameUpdatedAt()).isEqualTo(member.getNicknameUpdatedAt());
+					assertThat(dto.getProfileImageUrl()).isEqualTo(member.getProfileImageUrl());
+					assertThat(dto.getCountry()).isEqualTo(member.getCountry());
+					assertThat(dto.getCampus()).isEqualTo(member.getCampus());
+					assertThat(dto.getStatement()).isEqualTo(member.getStatement());
+					assertThat(dto.getFollowType()).isEqualTo(FollowType.NONE);
+				});
+	}
+
 
 	@Nested
 	@DisplayName("POST /v1/members")

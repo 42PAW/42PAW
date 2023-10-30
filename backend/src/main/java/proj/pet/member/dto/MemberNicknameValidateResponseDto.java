@@ -2,10 +2,14 @@ package proj.pet.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
+@ToString
 @AllArgsConstructor
+@NoArgsConstructor
 public class MemberNicknameValidateResponseDto {
 
-	private final boolean isValid;
+	private boolean valid;
 }

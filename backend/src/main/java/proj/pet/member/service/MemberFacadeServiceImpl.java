@@ -46,8 +46,7 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 				memberCreateRequestDto.getCategoryFilters(),
 				LocalDateTime.now()
 		);
-		memberService.uploadMemberProfileImage(member.getId(),
-				memberCreateRequestDto.getImageData());
+		member.changeProfileImageUrl(memberCreateRequestDto.getImageUrl());
 		oauthService.refreshRoleOfServerToken(req, res, LocalDateTime.now());
 	}
 
@@ -108,7 +107,7 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 			UserSessionDto userSessionDto,
 			MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
 		return memberService.changeMemberProfile(userSessionDto, memberProfileChangeRequestDto.getMemberName(),
-				memberProfileChangeRequestDto.getProfileImage(), memberProfileChangeRequestDto.getStatement(),
+				memberProfileChangeRequestDto.getProfileImageUrl(), memberProfileChangeRequestDto.getStatement(),
 				memberProfileChangeRequestDto.isProfileImageChanged());
 	}
 

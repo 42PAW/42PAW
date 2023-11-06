@@ -2,6 +2,7 @@ package proj.pet.member.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,15 @@ import proj.pet.auth.service.OauthService;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.board.service.BoardQueryService;
 import proj.pet.member.domain.Member;
-import proj.pet.member.dto.*;
-
-import java.time.LocalDateTime;
+import proj.pet.member.dto.MemberCreateRequestDto;
+import proj.pet.member.dto.MemberLanguageChangeRequestDto;
+import proj.pet.member.dto.MemberMyInfoResponseDto;
+import proj.pet.member.dto.MemberNicknameValidateResponseDto;
+import proj.pet.member.dto.MemberProfileChangeRequestDto;
+import proj.pet.member.dto.MemberProfileChangeResponseDto;
+import proj.pet.member.dto.MemberProfileResponseDto;
+import proj.pet.member.dto.MemberSearchPaginationDto;
+import proj.pet.member.dto.UserSessionDto;
 
 @Service
 @RequiredArgsConstructor
@@ -35,9 +42,9 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 	 */
 	@Override
 	public void createMember(UserSessionDto userSessionDto,
-	                         HttpServletRequest req,
-	                         HttpServletResponse res,
-	                         MemberCreateRequestDto memberCreateRequestDto) {
+			HttpServletRequest req,
+			HttpServletResponse res,
+			MemberCreateRequestDto memberCreateRequestDto) {
 		JwtPayload payload = oauthService.extractPayloadFromServerToken(req);
 		Member member = memberService.createMember(
 				payload,
@@ -107,8 +114,10 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 	public MemberProfileChangeResponseDto changeMemberProfile(
 			UserSessionDto userSessionDto,
 			MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
-		return memberService.changeMemberProfile(userSessionDto, memberProfileChangeRequestDto.getMemberName(),
-				memberProfileChangeRequestDto.getProfileImage(), memberProfileChangeRequestDto.getStatement(),
+		return memberService.changeMemberProfile(userSessionDto,
+				memberProfileChangeRequestDto.getMemberName(),
+				memberProfileChangeRequestDto.getProfileImage(),
+				memberProfileChangeRequestDto.getStatement(),
 				memberProfileChangeRequestDto.isProfileImageChanged());
 	}
 
@@ -121,7 +130,8 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 	 */
 	@Override
 	public BoardsPaginationDto getMyBoards(UserSessionDto userSessionDto, PageRequest pageable) {
-		return boardQueryService.getMemberBoards(userSessionDto.getMemberId(), userSessionDto.getMemberId(), pageable);
+		return boardQueryService.getMemberBoards(userSessionDto.getMemberId(),
+				userSessionDto.getMemberId(), pageable);
 	}
 
 	/**
@@ -134,7 +144,7 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 	 */
 	@Override
 	public BoardsPaginationDto getMemberBoards(UserSessionDto userSessionDto, Long memberId,
-	                                           PageRequest pageable) {
+			PageRequest pageable) {
 		return boardQueryService.getMemberBoards(userSessionDto.getMemberId(), memberId, pageable);
 	}
 
@@ -148,7 +158,7 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 	 */
 	@Override
 	public MemberSearchPaginationDto searchMemberByName(UserSessionDto userSessionDto,
-	                                                    String partialName, PageRequest pageable) {
+			String partialName, PageRequest pageable) {
 		return memberQueryService.searchMemberByName(userSessionDto.getMemberId(), partialName,
 				pageable);
 	}
@@ -161,8 +171,13 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 	 */
 	@Override
 	public void changeLanguage(UserSessionDto userSession,
-	                           MemberLanguageChangeRequestDto memberLanguageChangeRequestDto) {
+			MemberLanguageChangeRequestDto memberLanguageChangeRequestDto) {
 		memberService.changeLanguage(userSession.getMemberId(),
 				memberLanguageChangeRequestDto.getLanguage());
+	}
+
+	@Override
+	public MemberProfileResponseDto getTaggingMember(UserSessionDto userSessionDto, String name) {
+		return memberQueryService.getTaggingMember(userSessionDto.getMemberId(), name);
 	}
 }

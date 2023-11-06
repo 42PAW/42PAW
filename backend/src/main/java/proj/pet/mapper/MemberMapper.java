@@ -10,7 +10,6 @@ import proj.pet.category.domain.Species;
 import proj.pet.follow.domain.FollowType;
 import proj.pet.member.domain.Member;
 import proj.pet.member.dto.MemberMyInfoResponseDto;
-import proj.pet.member.dto.MemberNicknameValidateResponseDto;
 import proj.pet.member.dto.MemberPreviewResponseDto;
 import proj.pet.member.dto.MemberProfileChangeResponseDto;
 import proj.pet.member.dto.MemberProfileResponseDto;
@@ -33,8 +32,6 @@ public interface MemberMapper {
 	@Mapping(target = "intraName", source = "member.oauthProfile.name")
 	MemberMyInfoResponseDto toMemberMyInfoResponseDto(Member member,
 			List<Species> animalCategories);
-
-	MemberNicknameValidateResponseDto toMemberNicknameValidateResponseDto(Boolean isValid);
 
 	@Mapping(target = "memberName", source = "member.nickname")
 	@Mapping(target = "intraName", source = "member.oauthProfile.name")

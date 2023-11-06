@@ -65,7 +65,7 @@ const WrapperStyled = styled.div`
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
   @media (min-width: 1024px) {
-    // 모바일 뷰에서 게시물 짤림 현상 해결
+    // 모바일 뷰에서 게시물 짤림 현상 해결!
     justify-content: center;
   }
 `;

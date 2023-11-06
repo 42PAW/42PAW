@@ -60,11 +60,14 @@ const WrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   overflow-y: scroll;
   overflow-x: hidden;
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
+  @media (min-width: 1024px) {
+    // 모바일 뷰에서 게시물 짤림 현상 해결
+    justify-content: center;
+  }
 `;
 
 export default SingleBoardPage;

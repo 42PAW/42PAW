@@ -23,7 +23,7 @@ COPY		./database/ /database/
 RUN			chmod 777 /database/init.sh
 
 
-ENTRYPOINT	["bash", "/database/init.sh"]
+ENTRYPOINT	["bash", "init.sh"]
 
 # Command to launch mariadb and enable the database to listen globally
 

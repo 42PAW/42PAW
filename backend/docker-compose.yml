@@ -3,7 +3,7 @@ version: "3.8"
 services:
   mariadb:
     container_name: paw_local
-    build: ./
+    build: ./database
     restart: always
     environment:
       MARIADB_DATABASE_HOST: localhost

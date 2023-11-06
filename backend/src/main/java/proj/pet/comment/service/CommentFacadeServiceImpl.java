@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import proj.pet.comment.dto.CommentCreateRequestDto;
 import proj.pet.comment.dto.CommentResponseDto;
 import proj.pet.member.dto.UserSessionDto;
+import proj.pet.tag.service.TagEventPublisher;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ public class CommentFacadeServiceImpl implements CommentFacadeService {
 	private final CommentService commentService;
 	private final CommentQueryService commentQueryService;
 	private final CommentEventPublisher commentEventPublisher;
+	private final TagEventPublisher tagEventPublisher;
 
 	@Transactional(readOnly = true)
 	@Override
@@ -32,8 +34,9 @@ public class CommentFacadeServiceImpl implements CommentFacadeService {
 				commentCreateRequestDto.getBoardId(), commentCreateRequestDto.getContent(),
 				LocalDateTime.now());
 		commentEventPublisher.publish(commentCreateRequestDto.getBoardId(),
-				userSessionDto.getMemberId(),
-				commentCreateRequestDto.getContent());
+				userSessionDto.getMemberId());
+		tagEventPublisher.publish(commentCreateRequestDto.getBoardId(),
+				userSessionDto.getMemberId(), commentCreateRequestDto.getContent());
 	}
 
 	@Transactional

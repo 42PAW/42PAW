@@ -7,13 +7,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import proj.pet.category.domain.Species;
 import proj.pet.member.domain.Member;
 import proj.pet.member.domain.MemberImageManager;
 import proj.pet.member.domain.MemberRole;
 import proj.pet.member.domain.OauthType;
+import proj.pet.member.dto.MemberCreateRequestDto;
 import proj.pet.testutil.PersistHelper;
 import proj.pet.testutil.test.E2ETest;
 import proj.pet.testutil.testdouble.member.TestMember;
@@ -28,7 +28,8 @@ import static org.apache.http.HttpHeaders.AUTHORIZATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -76,13 +77,11 @@ public class MemberControllerTest extends E2ETest {
 
 			String token = stubToken(noneRegisteredMember, now, 1);
 
-			MockMultipartFile imageFile = new MockMultipartFile("imageData", "test.jpg", "image/jpeg", "test".getBytes());
-			MockHttpServletRequestBuilder req = multipart(url)
-					.file(imageFile)
+			MemberCreateRequestDto memberCreateRequestDto = new MemberCreateRequestDto("sanan", "profileImageUrl", "안녕하세요?", categorieds);
+			MockHttpServletRequestBuilder req = post(url)
+					.contentType(APPLICATION_JSON)
 					.cookie(new Cookie("access_token", token))
-					.param("memberName", "sanan")
-					.param("statement", "안녕하세요?")
-					.param("categoryFilters", categorieds.get(0).name())
+					.content(objectMapper.writeValueAsString(memberCreateRequestDto))
 					.header(AUTHORIZATION, BEARER + token);
 
 			AtomicReference<String> tokenReference = new AtomicReference<>();
@@ -113,11 +112,13 @@ public class MemberControllerTest extends E2ETest {
 
 			String token = stubToken(noneRegisteredMember, now, 1);
 
-			MockHttpServletRequestBuilder req = multipart(url)
+
+			MemberCreateRequestDto memberCreateRequestDto = new MemberCreateRequestDto("sanan", null, "안녕하세요?", categorieds);
+
+			MockHttpServletRequestBuilder req = post(url)
+					.contentType(APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(memberCreateRequestDto))
 					.cookie(new Cookie("access_token", token))
-					.param("memberName", "sanan")
-					.param("statement", "안녕하세요?")
-					.param("categoryFilters", categorieds.get(0).name())
 					.header(AUTHORIZATION, BEARER + token);
 
 			mockMvc.perform(req)

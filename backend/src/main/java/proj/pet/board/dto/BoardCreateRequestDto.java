@@ -3,20 +3,18 @@ package proj.pet.board.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.NoArgsConstructor;
 import proj.pet.category.domain.Species;
 
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
-@ToString
-public class BoardCreateRequestDto {
-
+public class BoardCreateRequestDto2 {
 	@NotNull
-	private final List<MultipartFile> mediaDataList;
+	private List<String> mediaUrlList;
 	@NotNull
-	private final List<Species> categoryList;
-	private final String content;
+	private List<Species> categoryList;
+	private String content;
 }

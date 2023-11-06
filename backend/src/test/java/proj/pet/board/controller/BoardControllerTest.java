@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import proj.pet.board.domain.Board;
 import proj.pet.board.domain.BoardMediaManager;
+import proj.pet.board.dto.BoardCreateRequestDto;
 import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.category.domain.Species;
@@ -361,24 +361,19 @@ class BoardControllerTest extends E2ETest {
 		void createBoards() throws Exception {
 			persistHelper.persist(author, loginUser)
 					.flushAndClear();
-			MockMultipartFile multipartFile1 = new MockMultipartFile("mediaDataList",
-					"filename-1.jpg", "image/jpeg", "image1".getBytes());
-			MockMultipartFile multipartFile2 = new MockMultipartFile("mediaDataList",
-					"filename-2.jpg", "image/jpeg", "image2".getBytes());
-			MockMultipartFile multipartFile3 = new MockMultipartFile("mediaDataList",
-					"filename-3.jpg", "image/jpeg", "image3".getBytes());
 
 			String token = stubToken(loginUser, LocalDateTime.now(), 28);
 
+			BoardCreateRequestDto reqDto = BoardCreateRequestDto.builder()
+					.content("content")
+					.categoryList(categories.subList(0, 1))
+					.mediaUrlList(List.of("mediaUrl1", "mediaUrl2", "mediaUrl3"))
+					.build();
 			MockHttpServletRequestBuilder req =
-					multipart("/v1/boards")
-							.file(multipartFile1)
-							.file(multipartFile2)
-							.file(multipartFile3)
-							.param("content", "content")
-							.param("categoryList", categories.get(0).name())
+					post("/v1/boards")
+							.content(objectMapper.writeValueAsString(reqDto))
 							.header(HttpHeaders.AUTHORIZATION, BEARER + token)
-							.contentType(MediaType.MULTIPART_FORM_DATA);
+							.contentType(MediaType.APPLICATION_JSON);
 
 			mockMvc.perform(req)
 					.andDo(print())
@@ -391,26 +386,6 @@ class BoardControllerTest extends E2ETest {
 						assertThat(board.getMediaList()).hasSize(3);
 						assertThat(board.getCategoryFilters()).hasSize(1);
 					});
-		}
-
-		@DisplayName("빈 미디어 파일을 업로드하면 게시글을 생성할 수 없다.")
-		@Test
-		void createBoards2() throws Exception {
-			persistHelper.persist(author, loginUser)
-					.flushAndClear();
-
-			String token = stubToken(loginUser, LocalDateTime.now(), 28);
-
-			MockHttpServletRequestBuilder req =
-					multipart("/v1/boards")
-							.param("content", "content")
-							.param("categoryList", categories.get(0).name())
-							.header(HttpHeaders.AUTHORIZATION, BEARER + token)
-							.contentType(MediaType.MULTIPART_FORM_DATA);
-
-			mockMvc.perform(req)
-					.andDo(print())
-					.andExpect(status().isBadRequest());
 		}
 	}
 

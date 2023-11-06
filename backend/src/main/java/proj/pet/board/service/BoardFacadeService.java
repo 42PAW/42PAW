@@ -1,7 +1,6 @@
 package proj.pet.board.service;
 
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.category.domain.Species;
@@ -20,11 +19,8 @@ public interface BoardFacadeService {
 
 	BoardsPaginationDto getFollowingsBoards(UserSessionDto userSessionDto, PageRequest pageRequest);
 
-	void createBoard(UserSessionDto userSessionDto, List<MultipartFile> mediaDataList,
+	void createBoard(UserSessionDto userSessionDto, List<String> mediaUrlList,
 	                 List<Species> categoryList, String content);
-
-	void createBoard2(UserSessionDto userSessionDto, List<String> mediaUrlList,
-	                  List<Species> categoryList, String content);
 
 	void deleteBoard(UserSessionDto userSessionDto, Long boardId);
 

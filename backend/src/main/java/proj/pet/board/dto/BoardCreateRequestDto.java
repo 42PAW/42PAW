@@ -2,6 +2,7 @@ package proj.pet.board.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import proj.pet.category.domain.Species;
@@ -10,8 +11,9 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
-public class BoardCreateRequestDto2 {
+public class BoardCreateRequestDto {
 	@NotNull
 	private List<String> mediaUrlList;
 	@NotNull

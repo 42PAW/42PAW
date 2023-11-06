@@ -27,6 +27,10 @@ const SingleBoardPage = () => {
     return setCurrentBoardId(null); // unmount 시, currentBoardId를 null로 초기화
   }, []);
 
+  useEffect(() => {
+    getSingleBoard();
+  }, [currentBoardId]);
+
   return (
     <WrapperStyled>
       {board ? (

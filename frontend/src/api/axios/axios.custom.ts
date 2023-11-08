@@ -54,7 +54,7 @@ export const axiosChangeMyProfile = async ({
     const payload = {
       profileImageChanged: profileImageChanged,
       memberName: nameChanged ? memberName : undefined,
-      imageUrl: profileImageChanged ? imageUrl : undefined,
+      profileImageUrl: profileImageChanged ? imageUrl : undefined,
       statement: statementChanged ? statement : undefined,
     };
     const response = await instance.post(axiosChangeMyProfileURL, payload);

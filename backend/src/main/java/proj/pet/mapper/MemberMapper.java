@@ -33,6 +33,7 @@ public interface MemberMapper {
 	MemberMyInfoResponseDto toMemberMyInfoResponseDto(Member member,
 			List<Species> animalCategories);
 
+	@Mapping(target = "memberId", source = "member.id")
 	@Mapping(target = "memberName", source = "member.nickname")
 	@Mapping(target = "intraName", source = "member.oauthProfile.name")
 	MemberProfileResponseDto toMemberProfileResponseDto(Member member, long followingCount,

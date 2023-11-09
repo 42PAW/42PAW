@@ -12,6 +12,7 @@ import proj.pet.member.domain.Country;
 @AllArgsConstructor
 public class MemberProfileResponseDto {
 
+	private final Long memberId;
 	private final String memberName;
 	private final String intraName;
 	private final LocalDateTime nicknameUpdatedAt;

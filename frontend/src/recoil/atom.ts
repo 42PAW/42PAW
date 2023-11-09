@@ -94,6 +94,7 @@ export const currentOpenModalState = atom<ICurrentModalStateInfo>({
     languageModal: false,
     loginModal: false,
     meatballModal: false,
+    userNotFoundModal: false,
   },
 });
 

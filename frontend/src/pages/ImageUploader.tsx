@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import { ChangeEvent, useState, useRef, useEffect } from "react";
 import useParseDate from "@/hooks/useParseDate";
-import { axiosCreateBoard } from "@/api/axios/axios.custom";
+import {
+  axiosCreateBoard,
+  axiosGetSearchResults,
+} from "@/api/axios/axios.custom";
 import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 import AnimalButtonContainer from "@/components/AnimalButtonContainer";
 import useToaster from "@/hooks/useToaster";
@@ -16,6 +19,8 @@ import imageCompression from "browser-image-compression";
 import { languageState } from "@/recoil/atom";
 import { useRecoilState } from "recoil";
 import useNavigateCustom from "@/hooks/useNavigateCustom";
+import { MemberSearchResponseDTO } from "@/types/dto/member.dto";
+import { useCountryEmoji } from "@/hooks/useCountryEmoji";
 
 const ImageUploader = () => {
   const cropperRef = useRef<FixedCropperRef>(null);
@@ -30,6 +35,10 @@ const ImageUploader = () => {
   const [selectedPreviewIndex, setSelectedPreviewIndex] = useState<number>(0);
   const [uploadClicked, setUploadClicked] = useState(false);
   const [cropImageCompleted, setCropImageCompleted] = useState(false);
+  const [tagSearchInput, setTagSearchInput] = useState<string>("");
+  const [tagSearchResults, setTagSearchResults] = useState([]);
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
 
   const { popToast } = useToaster();
   const { parseDate } = useParseDate();
@@ -86,6 +95,28 @@ const ImageUploader = () => {
     };
     uploadData();
   }, [uploadClicked]);
+
+  useEffect(() => {
+    if (tagSearchInput !== "") updateTagSearchResult();
+  }, [tagSearchInput]);
+
+  useEffect(() => {
+    if (showDropdown) {
+      const inputElement = document.getElementById(
+        "expanding-input"
+      ) as HTMLTextAreaElement;
+      if (inputElement) {
+        const cursorPosition = inputElement.selectionStart;
+        const textBeforeCursor = caption.substring(0, cursorPosition);
+        const lines = textBeforeCursor.split("\n");
+        const rect = inputElement.getBoundingClientRect();
+        const lineHeight = 16;
+        const top = rect.top - (lines.length - 1) * lineHeight;
+        const left = rect.left / 2;
+        setDropdownPosition({ top, left });
+      }
+    }
+  }, [showDropdown, caption]);
 
   const upload = () => {
     setUploadClicked(true);
@@ -231,8 +262,43 @@ const ImageUploader = () => {
     setUrlDefaultList([...urlDefaultList, ...webpDataURLs]);
   };
 
+  const updateTagSearchResult = async () => {
+    if (tagSearchInput === "") {
+      setTagSearchResults([]);
+      return;
+    }
+    const result = await axiosGetSearchResults(tagSearchInput, 100, 0);
+    setTagSearchResults(result);
+  };
+
   const captionChange = (e: any) => {
-    setCaption(e.target.value);
+    const value = e.target.value;
+    setCaption(value);
+    const lastWord = value.split(/[\s\n]+/).pop();
+    if (lastWord.startsWith("@")) {
+      const searchInput = lastWord.slice(1);
+      setTagSearchInput(searchInput);
+      setShowDropdown(true);
+    } else {
+      setTagSearchInput("");
+      setTagSearchResults([]);
+      setShowDropdown(false);
+    }
+  };
+
+  const selectUsertoTag = (userName: string) => {
+    // let newCaption = caption.split(' ');
+    // newCaption[newCaption.length - 1] = `@[${userName}](/profile/${userName}) `;
+    // setCaption(newCaption.join(' '));
+    // const newCaption =
+    //     caption.replace("@" + tagSearchInput, `<a href="${import.meta.env.VITE_FE_DOMAIN}/profile/${userName}">@${userName}</a>`) + " ";
+
+    const newCaption =
+      caption.replace("@" + tagSearchInput, "") + `@${userName} `;
+    setCaption(newCaption);
+    setTagSearchInput("");
+    setTagSearchResults([]);
+    setShowDropdown(false);
   };
 
   // go home if u click cancel button
@@ -343,6 +409,32 @@ const ImageUploader = () => {
           onChange={captionChange}
           maxLength={100}
         />
+        {showDropdown && tagSearchResults.length > 0 && (
+          <DropdownStyled
+            id="search-result"
+            top={dropdownPosition.top}
+            left={dropdownPosition.left}
+          >
+            {tagSearchResults.map((user: MemberSearchResponseDTO) => (
+              <DropdownItemStyled
+                key={user.memberId}
+                onClick={() => selectUsertoTag(user.memberName)}
+              >
+                <UserImageContainerStyled>
+                  <img src={user.profileImageUrl || "/assets/userW.png"} />
+                </UserImageContainerStyled>
+                <SearchItemRightStyled>
+                  <NameContainerStyled>
+                    <MemberNameStyled>
+                      {user.memberName} {useCountryEmoji(user.country)}
+                    </MemberNameStyled>
+                    <IntraNameStyled>{user.intraName}</IntraNameStyled>
+                  </NameContainerStyled>
+                </SearchItemRightStyled>
+              </DropdownItemStyled>
+            ))}
+          </DropdownStyled>
+        )}
       </CaptionBoxStyled>
       <CategoryButtonStyled>
         <AnimalButtonContainer
@@ -516,6 +608,94 @@ const CaptionBoxStyled = styled.div`
       color: var(--transparent2);
       opacity: 0.7;
     }
+  }
+`;
+
+const DropdownStyled = styled.div<{
+  top: number;
+  left: number;
+}>`
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  height: 100px;
+  background-color: var(--transparent);
+  border-radius: 30px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  z-index: 1;
+  position: absolute;
+  top: ${(props) => props.top}px;
+  left: ${(props) => props.left}px;
+`;
+
+const DropdownItemStyled = styled.div`
+  height: 52px;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 15px;
+  //margin-left: 10px;
+  //margin-right: 10px;
+  border-radius: 30px;
+  background: var(--transparent);
+  transition: all 0.3s ease;
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const UserImageContainerStyled = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 11px;
+  img {
+    cursor: pointer;
+    width: 34px;
+    height: 34px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 100%;
+    border: 1px solid var(--transparent);
+  }
+`;
+
+const SearchItemRightStyled = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+`;
+
+const NameContainerStyled = styled.div`
+  display: flex;
+  width: 60%;
+  font-weight: 500;
+  padding-left: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+const MemberNameStyled = styled.div`
+  cursor: pointer;
+  font-size: 1.3rem;
+  color: var(--white);
+`;
+
+const IntraNameStyled = styled.div`
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--transparent2);
+  transition: all 0.3s ease;
+  &:hover {
+    color: var(--white);
   }
 `;
 

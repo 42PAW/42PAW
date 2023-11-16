@@ -13,6 +13,7 @@ import { Board } from "@/types/enum/board.category.enum";
 import { IBoardInfo } from "@/types/interface/board.interface";
 import useFetch from "@/hooks/useFetch";
 import LoadingCircleAnimation from "@/components/loading/LoadingCircleAnimation";
+import LoadingDotsAnimation from "@/components/loading/LoadingDotsAnimation";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
 import { languageState } from "@/recoil/atom";
 import useDebounce from "@/hooks/useDebounce";
@@ -286,7 +287,9 @@ const CommentSection = () => {
             top={dropdownPosition.top}
             left={dropdownPosition.left}
           >
-            <LoadingCircleAnimation />
+            <DropdownLoadingAnimationContainerStyled>
+              <LoadingDotsAnimation />
+            </DropdownLoadingAnimationContainerStyled>
           </DropdownStyled>
         ) : (
           showDropdown &&
@@ -447,6 +450,14 @@ const DropdownStyled = styled.div<{
   position: absolute;
   top: ${(props) => props.top}px;
   left: ${(props) => props.left}px;
+`;
+
+const DropdownLoadingAnimationContainerStyled = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 `;
 
 const DropdownItemStyled = styled.div`

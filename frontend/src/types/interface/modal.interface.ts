@@ -14,4 +14,5 @@ export interface ICurrentModalStateInfo {
   languageModal: boolean;
   loginModal: boolean;
   meatballModal: boolean;
+  userNotFoundModal: boolean;
 }

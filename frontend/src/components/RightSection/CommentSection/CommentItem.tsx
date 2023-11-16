@@ -1,13 +1,14 @@
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { CommentInfoDTO } from "@/types/dto/board.dto";
-import useParseDate from "@/hooks/useParseDate";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import { currentMemberIdState } from "@/recoil/atom";
 import useModal from "@/hooks/useModal";
-import { ModalType } from "@/types/enum/modal.enum";
+import useParseDate from "@/hooks/useParseDate";
 import { useCountryEmoji } from "@/hooks/useCountryEmoji";
+import { ModalType } from "@/types/enum/modal.enum";
 import MeatballButton from "@/components/MeatballButton";
 import { currentBoardIdState } from "@/recoil/atom";
+import { axiosGetTaggedUser } from "@/api/axios/axios.custom";
 
 const CommentItem = (commentInfo: CommentInfoDTO) => {
   const {
@@ -30,6 +31,54 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
   const handleOpenProfile = () => {
     setCurrentMemberId(memberId);
     openModal(ModalType.PROFILECARD);
+  };
+
+  const handleTagClick = async (taggedUser: string) => {
+    const userName = taggedUser.slice(1);
+    try {
+      const userData = await axiosGetTaggedUser(userName);
+      setCurrentMemberId(userData.memberId);
+      openModal(ModalType.PROFILECARD);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const renderCommentText = (commentText: string) => {
+    // match @ followed by word characters or dots until a space, comma, or end
+    const tagRegex = /@[\p{L}\p{N}]+/gu;
+    const matches = [...commentText.matchAll(tagRegex)];
+    const renderedComment = [];
+    let lastIndex = 0;
+
+    matches.forEach((match, index) => {
+      const matchStart = match.index;
+      const matchEnd = match.index! + match[0]?.length!;
+      if (lastIndex! < matchStart!) {
+        renderedComment.push(
+          <span key={`text-${index}`}>
+            {commentText.substring(lastIndex!, matchStart!)}
+          </span>
+        );
+      }
+      renderedComment.push(
+        <TaggedUserStyled
+          key={`tag-${index}`}
+          onClick={() => handleTagClick(match[0])}
+        >
+          {match[0]}
+        </TaggedUserStyled>
+      );
+      lastIndex = matchEnd;
+    });
+    if (lastIndex < commentText.length) {
+      renderedComment.push(
+        <span key="text-end">
+          {commentText.substring(lastIndex, commentText.length)}
+        </span>
+      );
+    }
+    return <>{renderedComment}</>;
   };
 
   return (
@@ -55,7 +104,9 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
             component="comment"
           />
         </NicknameToggleContainerStyled>
-        <CommentContentContainerStyled>{comment}</CommentContentContainerStyled>
+        <CommentContentContainerStyled>
+          {renderCommentText(comment)}
+        </CommentContentContainerStyled>
       </CommentItemRightStyled>
     </CommentItemStyled>
   );
@@ -124,6 +175,13 @@ const CommentContentContainerStyled = styled.div`
   color: var(--white);
   line-height: 17px;
   font-weight: 400;
+`;
+
+const TaggedUserStyled = styled.span`
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+  color: #dcdddf;
 `;
 
 export default CommentItem;

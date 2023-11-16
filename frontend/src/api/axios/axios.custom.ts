@@ -69,7 +69,7 @@ const axiosMyInfoURL = "/v1/members/me";
 export const axiosMyInfo = async (): Promise<any> => {
   try {
     const response = await instance.get(axiosMyInfoURL);
-    return response;
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -672,6 +672,18 @@ export const axiosGetSingleBoard = async (boardId: number): Promise<any> => {
     const response = await instance.get(
       axiosGetSingleBoardURL + boardId.toString()
     );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetTaggedUserURL = "/v1/members/tagging";
+export const axiosGetTaggedUser = async (name: string): Promise<any> => {
+  try {
+    const response = await instance.get(axiosGetTaggedUserURL, {
+      params: { name: name },
+    });
     return response.data;
   } catch (error) {
     throw error;

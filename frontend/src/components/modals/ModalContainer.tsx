@@ -16,6 +16,7 @@ import {
 } from "@/types/constants/StatusCode";
 import useModal from "@/hooks/useModal";
 import { ModalType } from "@/types/enum/modal.enum";
+import UserNotFoundModal from "./UserNotFoundModal/UserNotFoundModal";
 
 const ModalContainer = () => {
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
@@ -28,10 +29,9 @@ const ModalContainer = () => {
       return response;
     },
     (error) => {
-      if (
-        error.response?.status === STATUS_401_UNAUTHORIZED ||
-        error.response?.status === STATUS_404_NOT_FOUND
-      ) {
+      if (error.response?.status === STATUS_404_NOT_FOUND) {
+        openModal(ModalType.USERNOTFOUND);
+      } else if (error.response?.status === STATUS_401_UNAUTHORIZED) {
         openModal(ModalType.LOGIN);
       }
       return Promise.reject(error);
@@ -48,6 +48,7 @@ const ModalContainer = () => {
       {currentOpenModal.languageModal && <LanguageModal />}
       {currentOpenModal.loginModal && <LoginModal />}
       {currentOpenModal.meatballModal && <MeatballMoadal />}
+      {currentOpenModal.userNotFoundModal && <UserNotFoundModal />}
     </>
   );
 };

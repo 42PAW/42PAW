@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { ModalType } from "@/types/enum/modal.enum";
 import ModalLayout from "@/components/modals/ModalLayout";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
-import { currentOpenModalState, languageState } from "@/recoil/atom";
+import { currentOpenModalState } from "@/recoil/atom";
 
 const UserNotFoundModal = () => {
   // const [language] = useRecoilState<any>(languageState);

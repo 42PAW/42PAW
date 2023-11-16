@@ -23,7 +23,6 @@ const AnimalFilterSection = () => {
   useEffect(() => {
     //로그인 상태에서 유저 정보 카테고리 불러오기
     if (userInfo) {
-      console.log(userInfo);
       setAnimalCategory(userInfo.animalCategories);
       return;
     }

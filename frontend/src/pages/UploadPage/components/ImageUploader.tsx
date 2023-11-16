@@ -179,7 +179,6 @@ const ImageUploader = () => {
             .then((res) => res.blob())
             .then((blob) => heic2any({ blob, toType: "image/webp" }))
             .catch((error) => {
-              console.log(error);
               return null;
             });
 

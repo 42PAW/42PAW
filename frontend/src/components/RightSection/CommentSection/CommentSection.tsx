@@ -116,12 +116,15 @@ const CommentSection = () => {
     let left = commentRef.current?.offsetLeft || 0;
     if (commentRef.current && mirrorRef.current) {
       const mirrorDiv = mirrorRef.current;
+      const characterWidth = 6;
       mirrorDiv.textContent = commentRef.current.value.substring(
         0,
         commentRef.current.value.lastIndexOf("@") + tagSearchInput.length + 1
       );
-      const characterWidth = 6;
       left += mirrorDiv.textContent.length * characterWidth;
+      if (left + 180 > window.innerWidth) {
+        left = dropdownPosition.left;
+      }
     }
     setDropdownPosition({ top, left });
   };
@@ -433,9 +436,11 @@ const DropdownStyled = styled.div<{
   flex-direction: column;
   align-items: center;
   /* width: 50%; */
+  min-width: 180px;
   height: 160px;
   background-color: var(--lightpurple);
   border-radius: 20px;
+  padding: 10px 0 10px 0;
   overflow-y: scroll;
   overflow-x: hidden;
   z-index: 1;
@@ -465,15 +470,16 @@ const UserImageContainerStyled = styled.div`
   align-items: center;
   justify-content: center;
 
-  margin-left: 11px;
+  margin-left: 5px;
   img {
     cursor: pointer;
-    width: 34px;
-    height: 34px;
+    width: 20px;
+    height: 20px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 100%;
     border: 1px solid var(--transparent);
+    margin-right: 5px;
   }
 `;
 
@@ -483,8 +489,8 @@ const SearchItemRightStyled = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-left: 10px;
-  margin-right: 10px;
+  /* margin-left: 10px;
+  margin-right: 10px; */
 `;
 
 const NameContainerStyled = styled.div`

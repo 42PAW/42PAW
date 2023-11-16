@@ -43,4 +43,6 @@ public interface MemberFacadeService {
 
 	void changeLanguage(UserSessionDto userSession,
 			MemberLanguageChangeRequestDto memberLanguageChangeRequestDto);
+
+	MemberProfileResponseDto getTaggingMember(UserSessionDto userSessionDto, String name);
 }

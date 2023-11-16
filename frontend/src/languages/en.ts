@@ -104,6 +104,7 @@ export const en = {
   loginDemand: "Login is required for this service.",
   uploadImageBrief: "Upload Image",
   deleteImageBrief: "Delete Image",
+  userNotFound: "User not found",
 
   // notification
   followMessage: "has started following",

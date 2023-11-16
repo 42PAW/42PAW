@@ -450,13 +450,13 @@ const DropdownStyled = styled.div<{
 `;
 
 const DropdownItemStyled = styled.div`
-  height: 55px;
-  min-height: 52px;
+  height: 45px;
+  min-height: 40px;
   display: flex;
   align-items: center;
   width: 90%;
   margin: 5px 0px 5px 0px;
-  padding: 5px 0 5px 0;
+  padding-bottom: 5px;
   border-radius: 15px;
   background: var(--transparent);
   transition: all 0.3s ease;
@@ -469,10 +469,9 @@ const UserImageContainerStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
   margin-left: 5px;
+  cursor: pointer;
   img {
-    cursor: pointer;
     width: 20px;
     height: 20px;
     aspect-ratio: 1 / 1;
@@ -489,18 +488,17 @@ const SearchItemRightStyled = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  /* margin-left: 10px;
-  margin-right: 10px; */
+  cursor: pointer;
 `;
 
 const NameContainerStyled = styled.div`
-  /* display: flex; */
-  width: 60%;
+  width: 100%;
   font-weight: 500;
   padding-left: 2px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  cursor: pointer;
 `;
 
 const MemberNameStyled = styled.div`

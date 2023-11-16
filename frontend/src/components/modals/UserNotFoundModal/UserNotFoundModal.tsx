@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { ModalType } from "@/types/enum/modal.enum";
 import ModalLayout from "@/components/modals/ModalLayout";
 import { ICurrentModalStateInfo } from "@/types/interface/modal.interface";
-import { currentOpenModalState } from "@/recoil/atom";
+import { currentOpenModalState, languageState } from "@/recoil/atom";
 
 const UserNotFoundModal = () => {
-  // const [language] = useRecoilState<any>(languageState);
+  const [language] = useRecoilState<any>(languageState);
   const [currentOpenModal] = useRecoilState<ICurrentModalStateInfo>(
     currentOpenModalState
   );
@@ -17,7 +17,7 @@ const UserNotFoundModal = () => {
     >
       <WrapperStyled>
         <h1>🐶</h1>
-        <ContentStyled>유저를 찾을 수 없습니다.</ContentStyled>
+        <ContentStyled>{language.userNotFound}</ContentStyled>
       </WrapperStyled>
     </ModalLayout>
   );

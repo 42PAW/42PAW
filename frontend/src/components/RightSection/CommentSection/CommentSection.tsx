@@ -114,17 +114,15 @@ const CommentSection = () => {
     let top = commentRef.current?.offsetTop || 0;
     top -= 180;
     let left = commentRef.current?.offsetLeft || 0;
-    console.log("top: " + top, " left: " + left);
     if (commentRef.current && mirrorRef.current) {
       const mirrorDiv = mirrorRef.current;
       mirrorDiv.textContent = commentRef.current.value.substring(
         0,
         commentRef.current.value.lastIndexOf("@") + tagSearchInput.length + 1
       );
-      const mirrorWidth = mirrorDiv.scrollWidth;
-      left = mirrorWidth;
+      const characterWidth = 6;
+      left += mirrorDiv.textContent.length * characterWidth;
     }
-    console.log("top: " + top, " left: " + left);
     setDropdownPosition({ top, left });
   };
 
@@ -263,7 +261,9 @@ const CommentSection = () => {
           </NoCommentMessageStyled>
         )}
       </CommentItemWrapperStyled>
-      <MirrorInputStyled ref={mirrorRef} />
+      <MirrorInputContainerStyled>
+        <MirrorInputStyled ref={mirrorRef} />
+      </MirrorInputContainerStyled>
       <CommentInputContainerStyled>
         <input
           id="expanding-input"
@@ -395,9 +395,66 @@ const CommentInputContainerStyled = styled.div`
   }
 `;
 
+const MirrorInputContainerStyled = styled.div`
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 40px;
+  @media screen and (display-mode: standalone) {
+    margin-bottom: 40px;
+  }
+  font-size: 1.3rem;
+  border-top: 1px solid var(--transparent);
+  padding-top: 2%;
+  padding-bottom: 2%;
+  input {
+    height: 50%;
+    width: 68%;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid var(--white);
+    background-color: transparent;
+    color: var(--white);
+    outline: none;
+    font-size: 13px;
+    margin-top: 3px;
+  }
+  input::placeholder {
+    font-size: 13px;
+    color: var(--transparent);
+  }
+  button {
+    font-size: 13px;
+    cursor: pointer;
+    height: 29px;
+    width: 76px;
+    border-radius: 5px;
+    border: 1px solid var(--white);
+    background-color: transparent;
+    color: var(--white);
+    transition: all 0.3s ease;
+    &:hover {
+      background-color: var(--white);
+      color: var(--pink);
+    }
+  }
+`;
+
 const MirrorInputStyled = styled.div`
   visibility: hidden;
-  white-space: pre-wrap;
+  height: 50%;
+  width: 68%;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid var(--white);
+  background-color: transparent;
+  color: var(--white);
+  outline: none;
+  font-size: 13px;
+  margin-top: 3px;
+  /* white-space: pre-wrap;
   position: absolute;
   height: auto;
   top: 0;
@@ -413,7 +470,7 @@ const MirrorInputStyled = styled.div`
   margin-top: 3px;
   @media (max-width: 1023px) {
     width: 0%;
-  }
+  } */
 `;
 
 const DropdownStyled = styled.div<{

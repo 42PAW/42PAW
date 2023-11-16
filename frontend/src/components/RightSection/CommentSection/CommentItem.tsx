@@ -63,18 +63,12 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
         );
       }
       renderedComment.push(
-        <span
+        <TaggedUserStyled
           key={`tag-${index}`}
-          style={{
-            textDecoration: "underline",
-            cursor: "pointer",
-            fontWeight: 600,
-            color: "#DCDDDF",
-          }}
           onClick={() => handleTagClick(match[0])}
         >
           {match[0]}
-        </span>
+        </TaggedUserStyled>
       );
       lastIndex = matchEnd;
     });
@@ -182,6 +176,16 @@ const CommentContentContainerStyled = styled.div`
   color: var(--white);
   line-height: 17px;
   font-weight: 400;
+`;
+
+const TaggedUserStyled = styled.span`
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+  color: #dcdddf;
+  &:hover {
+    font-style: italic;
+  }
 `;
 
 export default CommentItem;

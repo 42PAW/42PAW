@@ -182,9 +182,6 @@ const TaggedUserStyled = styled.span`
   cursor: pointer;
   font-weight: 600;
   color: #dcdddf;
-  &:hover {
-    font-style: italic;
-  }
 `;
 
 export default CommentItem;

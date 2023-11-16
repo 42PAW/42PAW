@@ -409,37 +409,6 @@ const MirrorInputContainerStyled = styled.div`
   border-top: 1px solid var(--transparent);
   padding-top: 2%;
   padding-bottom: 2%;
-  input {
-    height: 50%;
-    width: 68%;
-    border: none;
-    border-radius: 0;
-    border-bottom: 1px solid var(--white);
-    background-color: transparent;
-    color: var(--white);
-    outline: none;
-    font-size: 13px;
-    margin-top: 3px;
-  }
-  input::placeholder {
-    font-size: 13px;
-    color: var(--transparent);
-  }
-  button {
-    font-size: 13px;
-    cursor: pointer;
-    height: 29px;
-    width: 76px;
-    border-radius: 5px;
-    border: 1px solid var(--white);
-    background-color: transparent;
-    color: var(--white);
-    transition: all 0.3s ease;
-    &:hover {
-      background-color: var(--white);
-      color: var(--pink);
-    }
-  }
 `;
 
 const MirrorInputStyled = styled.div`
@@ -454,23 +423,6 @@ const MirrorInputStyled = styled.div`
   outline: none;
   font-size: 13px;
   margin-top: 3px;
-  /* white-space: pre-wrap;
-  position: absolute;
-  height: auto;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  font-size: 13px;
-  height: 50%;
-  width: 68%;
-  border: none;
-  border-radius: 0;
-  border-bottom: 1px solid var(--white);
-  outline: none;
-  margin-top: 3px;
-  @media (max-width: 1023px) {
-    width: 0%;
-  } */
 `;
 
 const DropdownStyled = styled.div<{

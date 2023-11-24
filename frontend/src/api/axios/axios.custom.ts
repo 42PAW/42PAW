@@ -635,7 +635,6 @@ const axiosGetNotificationsURL = "/v1/notices/me";
 export const axiosGetNotifications = async (): Promise<any> => {
   try {
     const response = await instance.get(axiosGetNotificationsURL);
-    console.log(response.data.result);
     return response.data.result;
   } catch (error) {
     throw error;

@@ -144,16 +144,25 @@ const CommentSection = () => {
   const handleOnchange = (e: any) => {
     const value = e.target.value;
     setComment(value);
-    const lastWord = value.split(/[\s\n]+/).pop();
-    if (lastWord.startsWith("@")) {
-      const searchInput = lastWord.slice(1);
-      setTagSearchInput(searchInput);
-      setShowDropdown(true);
-    } else {
-      setTagSearchInput("");
-      setTagSearchResults([]);
-      setShowDropdown(false);
+    const atPositions = [...value.matchAll(/@/g)].map((match) => match.index);
+
+    const lastAtPos =
+      atPositions.length > 0 ? atPositions[atPositions.length - 1] : -1;
+
+    if (lastAtPos !== -1) {
+      const afterAtText = value.substring(lastAtPos + 1);
+      const pos = e.target.selectionStart;
+      const isInTaggingArea =
+        pos > lastAtPos && afterAtText.indexOf(" ") === -1;
+      if (isInTaggingArea) {
+        const tag = afterAtText.split(/\s/)[0];
+        setTagSearchInput(tag);
+        setShowDropdown(true);
+        return;
+      }
     }
+    setTagSearchInput("");
+    setShowDropdown(false);
   };
 
   const selectUsertoTag = (userName: string) => {

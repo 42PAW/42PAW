@@ -45,8 +45,7 @@ const CommentItem = (commentInfo: CommentInfoDTO) => {
   };
 
   const renderCommentText = (commentText: string) => {
-    // match @ followed by word characters or dots until a space, comma, or end
-    const tagRegex = /@[\p{L}\p{N}]+/gu;
+    const tagRegex = /@[^@\s]+/gu;
     const matches = [...commentText.matchAll(tagRegex)];
     const renderedComment = [];
     let lastIndex = 0;

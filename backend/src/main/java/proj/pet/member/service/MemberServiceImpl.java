@@ -1,5 +1,12 @@
 package proj.pet.member.service;
 
+import static proj.pet.exception.ExceptionStatus.INVALID_ARGUMENT;
+import static proj.pet.exception.ExceptionStatus.NOT_ENOUGH_NICKNAME_CHANGE_PERIOD;
+import static proj.pet.exception.ExceptionStatus.NOT_FOUND_MEMBER;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,16 +16,14 @@ import proj.pet.category.domain.MemberCategoryFilter;
 import proj.pet.category.domain.Species;
 import proj.pet.exception.ServiceException;
 import proj.pet.mapper.MemberMapper;
-import proj.pet.member.domain.*;
+import proj.pet.member.domain.Country;
+import proj.pet.member.domain.Language;
+import proj.pet.member.domain.Member;
+import proj.pet.member.domain.MemberImageManager;
+import proj.pet.member.domain.MemberRole;
 import proj.pet.member.dto.MemberProfileChangeResponseDto;
 import proj.pet.member.dto.UserSessionDto;
 import proj.pet.member.repository.MemberRepository;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
-import static proj.pet.exception.ExceptionStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -103,8 +108,11 @@ public class MemberServiceImpl implements MemberService {
 		Member member = memberRepository.findById(userSessionDto.getMemberId())
 				.orElseThrow(NOT_FOUND_MEMBER::asServiceException);
 		if (memberName != null) {
-			if (!memberName.matches("^[a-zA-Z\\u00C0-\\u00FF\\u0100-\\u017F\\u0180-\\u024F\\u0370-\\u03FF\\u0400-\\u04FF\\u3040-\\u30FF\\u3130-\\u318F\\uAC00-\\uD7AF\\.\\_\\-][a-zA-Z0-9\\u00C0-\\u00FF\\u0100-\\u017F\\u0180-\\u024F\\u0370-\\u03FF\\u0400-\\u04FF\\u3040-\\u30FF\\u3130-\\u318F\\uAC00-\\uD7AF\\.\\_\\-]*$"))
-				throw new ServiceException(INVALID_ARGUMENT, "닉네임은 10자 이내의 한글, 영어, 프랑스, 스페인, 독일, 일본, 프랑스, 포르투갈어가 가능합니다.");
+			if (!memberName.matches(
+					"^[a-zA-Z\\u00C0-\\u00FF\\u0100-\\u017F\\u0180-\\u024F\\u0370-\\u03FF\\u0400-\\u04FF\\u3040-\\u30FF\\u3130-\\u318F\\uAC00-\\uD7AF\\.\\_\\-][a-zA-Z0-9\\u00C0-\\u00FF\\u0100-\\u017F\\u0180-\\u024F\\u0370-\\u03FF\\u0400-\\u04FF\\u3040-\\u30FF\\u3130-\\u318F\\uAC00-\\uD7AF\\.\\_\\-]*$")) {
+				throw new ServiceException(INVALID_ARGUMENT,
+						"닉네임은 10자 이내의 한글, 영어, 프랑스, 스페인, 독일, 일본, 프랑스, 포르투갈어가 가능합니다.");
+			}
 			LocalDateTime changeableDate = member.getNicknameUpdatedAt().plusDays(30);
 			if (changeableDate.isAfter(LocalDateTime.now())) {
 				throw new ServiceException(NOT_ENOUGH_NICKNAME_CHANGE_PERIOD,

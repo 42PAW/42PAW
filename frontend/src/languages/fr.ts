@@ -108,6 +108,7 @@ export const fr = {
   loginDemand: "La connexion est nécessaire pour ce service.",
   uploadImageBrief: "Télécharger une image",
   deleteImageBrief: "Supprimer une image",
+  userNotFound: "Utilisateur non trouvé",
 
   // notification
   followMessage: "a commencé à suivre",

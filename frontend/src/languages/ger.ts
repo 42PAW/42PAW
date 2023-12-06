@@ -109,6 +109,7 @@ export const ger = {
   loginDemand: "Für diesen Dienst ist eine Anmeldung erforderlich.",
   uploadImageBrief: "Bild hochladen",
   deleteImageBrief: "Bild löschen",
+  userNotFound: "Benutzer nicht gefunden",
 
   // notification
   followMessage: "hat angefangen zu folgen",

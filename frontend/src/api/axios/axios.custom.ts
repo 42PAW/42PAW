@@ -678,3 +678,15 @@ export const axiosGetSingleBoard = async (boardId: number): Promise<any> => {
     throw error;
   }
 };
+
+const axiosGetTaggedUserURL = "/v1/members/tagging";
+export const axiosGetTaggedUser = async (name: string): Promise<any> => {
+  try {
+    const response = await instance.get(axiosGetTaggedUserURL, {
+      params: { name: name },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

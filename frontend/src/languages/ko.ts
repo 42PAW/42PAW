@@ -104,6 +104,7 @@ export const ko = {
   loginDemand: "로그인이 필요한 서비스입니다",
   uploadImageBrief: "이미지 수정",
   deleteImageBrief: "이미지 제거",
+  userNotFound: "유저를 찾을 수 없습니다",
 
   // notification
   followMessage: "님이 팔로우하기 시작했습니다",

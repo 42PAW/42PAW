@@ -107,6 +107,7 @@ export const spa = {
   loginDemand: "Es necesario iniciar sesión para este servicio.",
   uploadImageBrief: "Subir imagen",
   deleteImageBrief: "Eliminar imagen",
+  userNotFound: "Usuario no encontrado",
 
   // notification
   followMessage: "ha comenzado a seguirte",

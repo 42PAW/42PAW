@@ -105,6 +105,7 @@ export const pt = {
   loginDemand: "O login é necessário para este serviço.",
   uploadImageBrief: "Carregar imagem",
   deleteImageBrief: "Excluir imagem",
+  userNotFound: "Utilizador não encontrado",
 
   // notification
   followMessage: "começou a seguir",

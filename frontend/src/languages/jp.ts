@@ -104,6 +104,7 @@ export const jp = {
   loginDemand: "このサービスにはログインが必要です。",
   uploadImageBrief: "画像をアップロード",
   deleteImageBrief: "画像を削除",
+  userNotFound: "ユーザーが見つかりません",
 
   // notification
   followMessage: " がフォローし始めました",

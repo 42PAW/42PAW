@@ -104,6 +104,7 @@ export const it = {
   loginDemand: "L'accesso è richiesto per questo servizio.",
   uploadImageBrief: "Carica immagine",
   deleteImageBrief: "Elimina immagine",
+  userNotFound: "Utente non trovato",
 
   // notification
   followMessage: "ha iniziato a seguire",

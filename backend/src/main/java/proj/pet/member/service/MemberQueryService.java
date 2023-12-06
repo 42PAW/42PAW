@@ -18,4 +18,6 @@ public interface MemberQueryService {
 
 	MemberSearchPaginationDto searchMemberByName(Long memberId, String partialName,
 			PageRequest pageable);
+
+	MemberProfileResponseDto getTaggingMember(Long loginUserId, String name);
 }

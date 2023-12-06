@@ -74,7 +74,7 @@ export const axiosMyInfo = async (): Promise<any> => {
   }
 };
 
-const axiosCreateBoardURL = "/v1/boards/new";
+const axiosCreateBoardURL = "/v1/boards";
 const axiosGetPresignedURL =
   "https://qnzcpqw7ui.execute-api.ap-northeast-2.amazonaws.com/default/42paw-presigned-url-bucket-lambda";
 const boardObjectURL =
@@ -92,6 +92,7 @@ export const axiosCreateBoard = async ({
       await axios.put(response.data.uploadURL, mediaDataList[i]);
       mediaUrlList.push(boardObjectURL + response.data.filename);
     }
+
     const response = await instance.post(axiosCreateBoardURL, {
       mediaUrlList,
       categoryList,

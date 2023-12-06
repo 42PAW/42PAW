@@ -3,7 +3,6 @@ package proj.pet.board.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.domain.*;
 import proj.pet.board.repository.BoardMediaRepository;
 import proj.pet.board.repository.BoardRepository;
@@ -18,9 +17,7 @@ import proj.pet.member.repository.MemberRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import static proj.pet.exception.ExceptionStatus.*;
 
@@ -52,7 +49,7 @@ public class BoardServiceImpl implements BoardService {
 	public Board createBoard(
 			Long memberId,
 			List<Species> speciesList,
-			List<MultipartFile> mediaDataList,
+			List<String> mediaDataList,
 			String content,
 			LocalDateTime now
 	) {
@@ -82,15 +79,13 @@ public class BoardServiceImpl implements BoardService {
 				.toList();
 	}
 
-	private List<BoardMedia> convertToBoardMedia(List<MultipartFile> mediaDataList, Board board) {
+	private List<BoardMedia> convertToBoardMedia(List<String> mediaUrlList, Board board) {
 		AtomicInteger index = new AtomicInteger(0);
-		List<BoardMedia> mediaList = mediaDataList.stream()
-				.map(data -> {
-					String mediaUrl = boardMediaManager.uploadMedia(data,
-							UUID.randomUUID().toString());
-					return BoardMedia.of(board, mediaUrl, index.getAndIncrement(),
-							MediaType.from(data));
-				}).collect(Collectors.toList());
+		List<BoardMedia> mediaList = mediaUrlList.stream().map(url -> {
+					return BoardMedia.of(board, url, index.getAndIncrement(), MediaType.IMAGE);
+					//TODO MEDIA TYPE 유동적으로 받도록 하는 부분 필요
+				})
+				.toList();
 		return mediaList;
 	}
 
@@ -117,7 +112,6 @@ public class BoardServiceImpl implements BoardService {
 			commentRepository.deleteAll(board.getComments());
 		}
 		boardCategoryFilterRepository.deleteAll(board.getCategoryFilters());
-		boardMediaManager.deleteMediaByList(board.getMediaList());
 		boardMediaRepository.deleteAll(board.getMediaList());
 		board.delete();
 	}

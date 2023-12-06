@@ -18,8 +18,7 @@ public interface MemberService {
 	void uploadMemberProfileImage(Long memberId, MultipartFile profileImageData);
 
 	MemberProfileChangeResponseDto changeMemberProfile(UserSessionDto userSessionDto,
-			String memberName, MultipartFile profileImage, String statement,
-			boolean profileImageChanged);
+	                                                   String memberName, String profileImageUrl, String statement, boolean profileImageChanged);
 
 	void changeLanguage(Long memberId, Language language);
 }

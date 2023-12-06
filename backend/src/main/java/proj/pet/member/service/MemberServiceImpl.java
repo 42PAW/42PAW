@@ -102,7 +102,7 @@ public class MemberServiceImpl implements MemberService {
 	public MemberProfileChangeResponseDto changeMemberProfile(
 			UserSessionDto userSessionDto,
 			String memberName,
-			MultipartFile profileImage,
+			String profileImageUrl,
 			String statement,
 			boolean profileImageChanged) {
 		Member member = memberRepository.findById(userSessionDto.getMemberId())
@@ -121,9 +121,7 @@ public class MemberServiceImpl implements MemberService {
 			}
 			member.changeNickname(memberName, LocalDateTime.now());
 		}
-		if (profileImage != null) {
-			memberImageManager.deleteMemberProfileImage(member.getProfileImageUrl());
-			String profileImageUrl = memberImageManager.uploadMemberProfileImage(profileImage);
+		if (profileImageUrl != null) {
 			member.changeProfileImageUrl(profileImageUrl);
 		} else if (profileImageChanged) {
 			memberImageManager.deleteMemberProfileImage(member.getProfileImageUrl());

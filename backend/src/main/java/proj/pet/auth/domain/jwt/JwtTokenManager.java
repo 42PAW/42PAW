@@ -60,7 +60,6 @@ public class JwtTokenManager {
 		} catch (Exception e) {
 			log.error("JWT 토큰 검사 중 알 수 없는 오류가 발생했습니다.");
 		}
-		System.out.println("token: " + token);
 		return false;
 	}
 

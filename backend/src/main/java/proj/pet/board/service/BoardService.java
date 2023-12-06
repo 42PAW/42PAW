@@ -1,6 +1,5 @@
 package proj.pet.board.service;
 
-import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.domain.Board;
 import proj.pet.category.domain.Species;
 
@@ -22,7 +21,8 @@ public interface BoardService {
 	 * @param now           생성시각
 	 * @return 영속화된 게시글 엔티티
 	 */
-	Board createBoard(Long memberId, List<Species> categoryList, List<MultipartFile> mediaDataList, String content, LocalDateTime now);
+
+	Board createBoard(Long memberId, List<Species> categoryList, List<String> mediaUrlList, String content, LocalDateTime now);
 
 	/**
 	 * 게시글을 삭제한다.

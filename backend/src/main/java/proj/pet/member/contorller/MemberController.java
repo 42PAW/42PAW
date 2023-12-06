@@ -48,12 +48,12 @@ public class MemberController {
 	 * @param res                    응답
 	 * @param memberCreateRequestDto 회원 가입 정보
 	 */
-	@PostMapping(consumes = "multipart/form-data")
+	@PostMapping
 	@AuthGuard(level = ANYONE)
 	public void createMember(
 			@UserSession UserSessionDto userSessionDto,
 			HttpServletRequest req, HttpServletResponse res,
-			@Valid @ModelAttribute MemberCreateRequestDto memberCreateRequestDto
+			@Valid @RequestBody MemberCreateRequestDto memberCreateRequestDto
 	) {
 		memberFacadeService.createMember(userSessionDto, req, res, memberCreateRequestDto);
 	}
@@ -119,11 +119,11 @@ public class MemberController {
 	 * @param memberProfileChangeRequestDto 수정할 프로필 정보
 	 * @return MemberProfileChangeResponseDto   수정된 프로필 정보
 	 */
-	@PostMapping(value = "/me/profile", consumes = "multipart/form-data")
+	@PostMapping(value = "/me/profile")
 	@AuthGuard(level = USER_OR_ADMIN)
 	public MemberProfileChangeResponseDto changeMyProfile(
 			@UserSession UserSessionDto userSessionDto,
-			@Valid @ModelAttribute MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
+			@Valid @RequestBody MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
 		return memberFacadeService.changeMemberProfile(userSessionDto,
 				memberProfileChangeRequestDto);
 	}

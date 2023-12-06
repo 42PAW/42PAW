@@ -113,10 +113,8 @@ public class MemberFacadeServiceImpl implements MemberFacadeService {
 	public MemberProfileChangeResponseDto changeMemberProfile(
 			UserSessionDto userSessionDto,
 			MemberProfileChangeRequestDto memberProfileChangeRequestDto) {
-		return memberService.changeMemberProfile(userSessionDto,
-				memberProfileChangeRequestDto.getMemberName(),
-				memberProfileChangeRequestDto.getProfileImageUrl(),
-				memberProfileChangeRequestDto.getStatement(),
+		return memberService.changeMemberProfile(userSessionDto, memberProfileChangeRequestDto.getMemberName(),
+				memberProfileChangeRequestDto.getProfileImageUrl(), memberProfileChangeRequestDto.getStatement(),
 				memberProfileChangeRequestDto.isProfileImageChanged());
 	}
 

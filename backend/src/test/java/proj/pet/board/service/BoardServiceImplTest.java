@@ -40,7 +40,6 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static proj.pet.exception.ExceptionStatus.*;
 
 public class BoardServiceImplTest extends UnitTest {
@@ -78,8 +77,7 @@ public class BoardServiceImplTest extends UnitTest {
 		private final Board stubbedBoard = TestBoard.builder().build().asMockEntity(IGNORE_ID);
 
 		private final List<Species> givenSpecies = List.of(Species.DOG, Species.REPTILE);
-		private final List<MultipartFile> givenMedia = List.of(stubMultipartFile(),
-				stubMultipartFile());
+		private final List<String> givenMedia = List.of(RANDOM_STRING, RANDOM_STRING);
 		private final String givenContent = "content";
 		private final LocalDateTime now = LocalDateTime.now();
 		private final List<BoardCategoryFilter> stubbedBoardCategoryFilters = List.of(
@@ -103,8 +101,6 @@ public class BoardServiceImplTest extends UnitTest {
 			given(boardRepository.save(any(Board.class))).willReturn(stubbedBoard);
 			given(boardCategoryFilterRepository.saveAll(anyList())).willReturn(
 					stubbedBoardCategoryFilters);
-			given(boardMediaManager.uploadMedia(any(MultipartFile.class),
-					any(String.class))).willReturn(RANDOM_STRING);
 			given(boardMediaRepository.saveAll(anyList())).willReturn(stubbedBoardMedias);
 
 			//when
@@ -112,8 +108,6 @@ public class BoardServiceImplTest extends UnitTest {
 
 			//then
 			then(stubbedBoard).should().addCategoryFilters(stubbedBoardCategoryFilters);
-			then(boardMediaManager).should(times(stubbedBoardMedias.size()))
-					.uploadMedia(any(MultipartFile.class), any(String.class));
 			then(stubbedBoard).should().addMediaList(stubbedBoardMedias);
 			then(boardRepository).should().save(stubbedBoard);
 		}

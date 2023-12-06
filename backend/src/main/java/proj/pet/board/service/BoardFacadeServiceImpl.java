@@ -3,7 +3,6 @@ package proj.pet.board.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import proj.pet.board.dto.BoardInfoDto;
 import proj.pet.board.dto.BoardsPaginationDto;
 import proj.pet.category.domain.Species;
@@ -48,18 +47,10 @@ public class BoardFacadeServiceImpl implements BoardFacadeService {
 		return boardQueryService.getFollowingsBoards(userSessionDto.getMemberId(), pageRequest);
 	}
 
-	@Override
-	public void createBoard(UserSessionDto userSessionDto, List<MultipartFile> mediaDataList,
-	                        List<Species> categoryList, String content) {
-		boardService.createBoard(userSessionDto.getMemberId(),
-				categoryList,
-				mediaDataList,
-				content,
-				LocalDateTime.now());
-	}
 
-	public void createBoard2(UserSessionDto userSessionDto, List<String> mediaUrlList, List<Species> categoryList, String content) {
-		boardService.createBoard2(userSessionDto.getMemberId(),
+	@Override
+	public void createBoard(UserSessionDto userSessionDto, List<String> mediaUrlList, List<Species> categoryList, String content) {
+		boardService.createBoard(userSessionDto.getMemberId(),
 				categoryList,
 				mediaUrlList,
 				content,

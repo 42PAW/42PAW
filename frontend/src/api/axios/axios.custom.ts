@@ -11,6 +11,10 @@ import { AnimalSpecies } from "@/types/enum/animal.filter.enum";
 const token = getCookie("access_token") ?? null;
 
 const axiosSignUpURL = "/v1/members";
+const axiosGetProfilePresignedURL =
+  "https://r6pl3zkpoj.execute-api.ap-northeast-2.amazonaws.com/default/42paw-profile-images-presigned-url";
+const profileObjectURL =
+  "https://42paw-profile-images.s3.ap-northeast-2.amazonaws.com/";
 export const axiosSignUp = async ({
   memberName,
   imageData,
@@ -18,17 +22,14 @@ export const axiosSignUp = async ({
   categoryFilters,
 }: SignUpInfoDTO): Promise<any> => {
   try {
-    const formData = new FormData();
-    formData.append("memberName", memberName);
-    if (imageData) formData.append("imageData", imageData);
-    formData.append("statement", statement);
-    categoryFilters.map((categoryFilter) => {
-      formData.append("categoryFilters", categoryFilter);
-    });
-    const response = await instance.post(axiosSignUpURL, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+    const presignedResponse = await axios.get(axiosGetProfilePresignedURL);
+    await axios.put(presignedResponse.data.uploadURL, imageData);
+    const imageUrl = profileObjectURL + presignedResponse.data.filename;
+    const response = await instance.post(axiosSignUpURL, {
+      memberName,
+      imageUrl,
+      statement,
+      categoryFilters,
     });
     return response.data;
   } catch (error) {
@@ -46,20 +47,18 @@ export const axiosChangeMyProfile = async ({
   statementChanged,
 }: IChangeProfileInfo): Promise<any> => {
   try {
-    const formData = new FormData();
-    if (nameChanged) formData.append("memberName", memberName);
-    if (imageData) formData.append("profileImage", imageData);
-    if (statementChanged) formData.append("statement", statement);
-    formData.append(
-      "profileImageChanged",
-      profileImageChanged ? "true" : "false"
-    );
-    const response = await instance.post(axiosChangeMyProfileURL, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    return response;
+    const presignedResponse = await axios.get(axiosGetProfilePresignedURL);
+    await axios.put(presignedResponse.data.uploadURL, imageData);
+
+    const imageUrl = profileObjectURL + presignedResponse.data.filename;
+    const payload = {
+      profileImageChanged: profileImageChanged,
+      memberName: nameChanged ? memberName : undefined,
+      profileImageUrl: profileImageChanged ? imageUrl : undefined,
+      statement: statementChanged ? statement : undefined,
+    };
+    const response = await instance.post(axiosChangeMyProfileURL, payload);
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -75,25 +74,28 @@ export const axiosMyInfo = async (): Promise<any> => {
   }
 };
 
-const axiosCreateBoardURL = "/v1/boards";
+const axiosCreateBoardURL = "/v1/boards/new";
+const axiosGetPresignedURL =
+  "https://qnzcpqw7ui.execute-api.ap-northeast-2.amazonaws.com/default/42paw-presigned-url-bucket-lambda";
+const boardObjectURL =
+  "https://42paw-presigned-url-bucket.s3.ap-northeast-2.amazonaws.com/";
 export const axiosCreateBoard = async ({
   mediaDataList,
   categoryList,
   content,
 }: CreateBoardDTO): Promise<any> => {
   try {
-    const formData = new FormData();
-    mediaDataList.forEach((file) => {
-      formData.append(`mediaDataList`, file);
-    });
-    categoryList.forEach((category) => {
-      formData.append(`categoryList`, category);
-    });
-    formData.append("content", content);
-    const response = await instance.post(axiosCreateBoardURL, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+    const mediaDataListLength = mediaDataList.length;
+    let mediaUrlList = [];
+    for (let i = 0; i < mediaDataListLength; i++) {
+      const response = await axios.get(axiosGetPresignedURL);
+      await axios.put(response.data.uploadURL, mediaDataList[i]);
+      mediaUrlList.push(boardObjectURL + response.data.filename);
+    }
+    const response = await instance.post(axiosCreateBoardURL, {
+      mediaUrlList,
+      categoryList,
+      content,
     });
     return response.data;
   } catch (error) {

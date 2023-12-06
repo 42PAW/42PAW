@@ -4,7 +4,7 @@ import Layout from "@/pages/Layout";
 import MainPage from "@/pages/MainPage";
 import ProfilePage from "@/pages/ProfilePage/ProfilePage";
 import MyProfilePage from "@/pages/ProfilePage/MyProfilePage";
-import UploadPage from "@/pages/UploadPage";
+import UploadPage from "./pages/UploadPage/UploadPage";
 import SignUpPage from "@/pages/SignUpPage/SignUpPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import LoadingPage from "@/pages/LoadingPage";

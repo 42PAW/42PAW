@@ -24,8 +24,6 @@ jobs:
       - name: 종속 모듈들 설치
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install --prefix frontend
-      # - name: lint 체크
-      #   run: npm run lint --prefix frontend
       - name: env 파일 생성
         run: |
           echo "${{ secrets.FRONTEND_ENV }}" > frontend/.env
@@ -33,11 +31,6 @@ jobs:
           echo "${{ secrets.FRONTEND_ENV_PRODUCTION }}" > frontend/.env.production
       - name: 빌드 체크
         run: npm run build --prefix frontend
-      # - name: 단위 테스트 체크
-      #   run: npm run test --prefix frontend
-      # - name: 통합 테스트 체크
-      #   run: npm run test:e2e --prefix frontend
-
       - name: Configure AWS credentials
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: aws-actions/configure-aws-credentials@v1
